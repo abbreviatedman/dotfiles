@@ -1,0 +1,40 @@
+[legacy/profiles:]
+list=['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', '6b59b1aa-6312-4df5-80db-7074443b3cdc']
+default='6b59b1aa-6312-4df5-80db-7074443b3cdc'
+
+[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+background-color='rgb(0,43,54)'
+scrollbar-policy='never'
+use-theme-colors=false
+foreground-color='rgb(131,148,150)'
+scrollback-unlimited=true
+
+[legacy/profiles:/:6b59b1aa-6312-4df5-80db-7074443b3cdc]
+foreground-color='rgb(131,148,150)'
+highlight-background-color='#657b83'
+scrollbar-policy='never'
+use-theme-transparency=false
+palette=['rgb(7,54,66)', 'rgb(220,50,47)', 'rgb(133,153,0)', 'rgb(181,137,0)', 'rgb(38,139,210)', 'rgb(211,54,130)', 'rgb(42,161,152)', 'rgb(238,232,213)', 'rgb(0,43,54)', 'rgb(203,75,22)', 'rgb(88,110,117)', 'rgb(101,123,131)', 'rgb(131,148,150)', 'rgb(108,113,196)', 'rgb(147,161,161)', 'rgb(253,246,227)']
+bold-is-bright=false
+visible-name='Regolith'
+cursor-background-color='#657b83'
+use-system-font=false
+cursor-colors-set=true
+highlight-colors-set=true
+use-theme-colors=false
+use-transparent-background=false
+cursor-foreground-color='#dc322f'
+font='Source Code Pro 24'
+scrollback-unlimited=true
+use-theme-background=false
+bold-color-same-as-fg=false
+cursor-blink-mode='off'
+background-color='rgb(0,43,54)'
+audible-bell=false
+bold-color='#268bd2'
+highlight-foreground-color='#002b36'
+
+[legacy]
+schema-version=uint32 3
+theme-variant='dark'
+default-show-menubar=false

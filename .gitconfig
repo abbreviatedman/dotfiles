@@ -1,0 +1,9 @@
+[user]
+	name = Colin Jaffe
+	email = balloonasaurus@gmail.com
+[diff]
+	tool = vimdiff
+[core]
+	excludesFile = ~/.gitignore-global
+[interactive]
+        singleKey = true

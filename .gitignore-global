@@ -1,0 +1,4 @@
+node_modules
+.*\.sw.
+\.dir-locals\.el
+\.projectile
