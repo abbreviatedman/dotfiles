@@ -16,19 +16,13 @@ export ZSH=/home/abbreviatedman/.oh-my-zsh
 export ALTERNATE_EDITOR=""
 
 VIM_MODE_VICMD_KEY='^Q'
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 eval `dircolors /home/abbreviatedman/.dir_colors`
-
-# Set list of themes to load
-# Setting this variable when ZSH_THEME=random
-# cause zsh load theme from this variable instead of
-# looking in ~/.oh-my-zsh/themes/
-# An empty array have no effect
-ZSH_THEME_RANDOM_CANDIDATES=( "terminalparty" "arrow" "wedisagree" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -81,7 +75,6 @@ plugins=(
   zsh-autosuggestions
   zsh-vim-mode
 )
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -101,11 +94,8 @@ MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR=/usr/sbin/vim
+export EDITOR=/usr/sbin/emacsclient
 export VISUAL=$EDITOR
-
-# sets vim keybindings
-# bindkey -v
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
