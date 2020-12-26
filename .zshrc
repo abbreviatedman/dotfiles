@@ -139,6 +139,7 @@ alias zshconfig="e /home/abbreviatedman/.zshrc"
 alias i3config="e /home/abbreviatedman/.i3/config"
 alias vimconfig="e /home/abbreviatedman/.vimrc"
 alias kittyconfig="e /home/abbreviatedman/.config/kitty/kitty.conf"
+alias qtileconfig="e /home/abbreviatedman/.config/qtile/config.py"
 
 # open scratchpad files
 alias scratchjs="vim ~/Documents/scratchpad/scratchpad.js"
@@ -391,7 +392,8 @@ export HOMEBREW_NO_ENV_FILTERING=1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH=/usr/local/bin:/home/abbreviatedman/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/abbreviatedman/Android/Sdk/tools:/home/abbreviatedman/Android/Sdk/tools/bin:/home/abbreviatedman/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/home/abbreviatedman/.fzf/bin:/home/abbreviatedman/Android/Sdk/tools:/home/abbreviatedman/Android/Sdk/tools/bin:/home/abbreviatedman/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/home/abbreviatedman/.emacs.d/bin:/home/abbreviatedman/.local/kitty.app/bin
+export PATH=/usr/local/anaconda/bin:/usr/local/bin:/home/abbreviatedman/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/abbreviatedman/Android/Sdk/tools:/home/abbreviatedman/Android/Sdk/tools/bin:/home/abbreviatedman/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/home/abbreviatedman/.fzf/bin:/home/abbreviatedman/Android/Sdk/tools:/home/abbreviatedman/Android/Sdk/tools/bin:/home/abbreviatedman/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/home/abbreviatedman/.emacs.d/bin:/home/abbreviatedman/.local/kitty.app/bin
+
 
 
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
