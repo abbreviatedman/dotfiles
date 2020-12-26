@@ -89,8 +89,12 @@
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
 
-;; prettier integration
+;;
+;; automatic code reformatting
+;;
+
+;; prettier (web development)
 (package! prettier)
 
-;; cursor highlighting when scrolling or switching buffers
-(package! beacon)
+;; black (python)
+(package! python-black)
