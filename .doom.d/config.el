@@ -4,7 +4,7 @@
 (load-library "config-org-agenda")
 (load-library "completion")
 (load-library "snipe-and-transpose")
-(load-library "space-lorry")
+(load-library "space-liner")
 
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
