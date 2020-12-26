@@ -96,14 +96,6 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
-;; absolute numbers in insert mode
-(setq-default display-line-numbers 'visual
-              display-line-numbers-widen t
-              ;; this is the default
-              display-line-numbers-current-absolute t)
-(add-hook 'evil-insert-state-entry-hook (lambda () (setq-local display-line-numbers t)))
-(add-hook 'evil-insert-state-exit-hook (lambda () (setq-local display-line-numbers 'visual)))
-
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
