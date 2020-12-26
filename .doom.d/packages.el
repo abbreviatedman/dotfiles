@@ -82,6 +82,9 @@
 ;; Non-DOOM Solarized themes.
 (package! solarized-theme)
 
+;; cursor highlighting when scrolling or switching buffers
+(package! beacon)
+
 ;; MORE Solarized themes??
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
