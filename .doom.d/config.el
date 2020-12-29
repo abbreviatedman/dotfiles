@@ -244,3 +244,20 @@
 
 (dotimes (i 10)
   (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
+
+(defun do.minimal.line-numbers/toggle-line-numbers (&optional relative)
+  "Toggle the display of line numbers in the buffer. I am not sure why I need this."
+  (interactive)
+  (cond (display-line-numbers (display-line-numbers-mode nil)
+                              (setq display-line-numbers nil))
+        (t (display-line-numbers-mode t)
+           (setq display-line-numbers (or relative t)))))
+
+(defun do.minimal.line-numbers/toggle-relative-line-numbers ()
+  "Toggle the display of relative line numbers."
+  (interactive)
+  (do.minimal.line-numbers/toggle-line-numbers 'relative))
+
+(global-set-key (kbd  "<f2>") #'do.minimal.line-numbers/toggle-line-numbers)
+(global-set-key (kbd  "<f5>") #'do.minimal.line-numbers/toggle-relative-line-numbers)
+
