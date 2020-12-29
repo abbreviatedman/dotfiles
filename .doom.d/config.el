@@ -225,3 +225,22 @@
 ;; SPC l
 ;; SPC v
 ;; SPC y
+
+(global-set-key (kbd "M-y") #'counsel-yank-pop)
+
+(defun ivy-call-number (n)
+  (interactive
+   (list (let* ((type (event-basic-type last-command-event))
+                (char (if (characterp type)
+                          ;; Number on the main row.
+                          type
+                        ;; Keypad number, if bound directly.
+                        (car (last (string-to-list (symbol-name type))))))
+                (n (- char ?0)))
+           (if (zerop n) 10 n))))
+  (ivy-set-index (1- n))
+  (ivy--exhibit)
+  (ivy-done))
+
+(dotimes (i 10)
+  (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
