@@ -56,6 +56,7 @@
 
 ;; whitespace settings
 (setq! show-trailing-whitespace 1)
+
 ;; Transparency and zoom.
 (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
 (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
@@ -76,7 +77,11 @@
                                            (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
                                            )
        ))
+
+;; Tabs should be 2 spaces by default.
+(setq! indent-tabs-mode nil)
 (setq! tab-width 2)
+(setq! tab-stop-list (number-sequence 2 120 2))
 
 ;; stop clobbering my system cliboard, emacs you fiend
 (setq save-interprogram-paste-before-kill t)
@@ -148,27 +153,20 @@
 ;; now good mappings
 (map! :map gfm-mode :leader
       (:prefix-map ("e" . "editing")
-      :desc "Add markdown item" "i" #'markdown-insert-list-item
-      :desc "Go to next section" "j" #'markdown-forward-same-level
-      :desc "Go to previous section" "k" #'markdown-backward-same-level
-      :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
-      ))
-
-(map! :map evil-normal-state-map :leader
-      (:prefix-map ("z" . "zoom")
-       :desc "zoom in" "i" #'doom/increase-font-size
-       :desc "zoom out" "o" #'doom/decrease-font-size
-       :desc "zoom reset" "z" #'doom/reset-font-size
+       :desc "Add markdown item" "i" #'markdown-insert-list-item
+       :desc "Go to next section" "j" #'markdown-forward-same-level
+       :desc "Go to previous section" "k" #'markdown-backward-same-level
+       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
        ))
 
 (map! :map evil-markdown-mode :leader
       (:prefix-map ("e" . "editing")
-      :desc "Add markdown item" "i" #'markdown-insert-list-item
-      :desc "Go to next section" "j" #'markdown-forward-same-level
-      :desc "Go to previous section" "k" #'markdown-backward-same-level
-      :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
+       :desc "Add markdown item" "i" #'markdown-insert-list-item
+       :desc "Go to next section" "j" #'markdown-forward-same-level
+       :desc "Go to previous section" "k" #'markdown-backward-same-level
+       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
+       )
       )
-)
 
 (defun open-terminal-other-frame ()
   (interactive)
