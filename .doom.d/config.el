@@ -56,6 +56,26 @@
 
 ;; whitespace settings
 (setq! show-trailing-whitespace 1)
+;; Transparency and zoom.
+(set-frame-parameter (selected-frame) 'alpha '(85 . 75))
+(add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+
+(map! :map evil-normal-state-map :leader
+      (:prefix-map ("z" . "zoom")
+       :desc "zoom in" "i" #'doom/increase-font-size
+       :desc "zoom out" "o" #'doom/decrease-font-size
+       :desc "zoom reset" "z" #'doom/reset-font-size
+       :desc "turn transparency on" "t" (lambda ()
+                                          (interactive)
+                                          (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
+                                          (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+                                          )
+       :desc "turn transparency off" "T" (lambda ()
+                                           (interactive)
+                                           (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
+                                           (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
+                                           )
+       ))
 (setq! tab-width 2)
 
 ;; stop clobbering my system cliboard, emacs you fiend
