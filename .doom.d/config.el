@@ -83,7 +83,7 @@
 (setq! tab-width 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
 
-;; stop clobbering my system cliboard, emacs you fiend
+;; Stop clobbering my system cliboard, emacs you fiend.
 (setq save-interprogram-paste-before-kill t)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
@@ -176,10 +176,11 @@
     (switch-to-buffer-other-frame buf))
   (+vterm/here nil))
 
-; open the result of a search in a new frame
+
+;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
-; open a terminal in a new frame
+;; open a terminal in a new frame
 (map! :leader
       :desc "open terminal other frame" "o T" #'open-terminal-other-frame)
 
