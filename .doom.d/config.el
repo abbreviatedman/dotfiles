@@ -14,6 +14,10 @@
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
 
+;; Except composed from things like "8)" (ascii emojis).
+;; And I don't want GitHub's alternate set clogging things up, either.
+(setq emojify-emoji-styles '(unicode))
+
 ;; don't show mode-line
 (global-hide-mode-line-mode)
 
