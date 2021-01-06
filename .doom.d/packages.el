@@ -85,9 +85,13 @@
 ;; cursor highlighting when scrolling or switching buffers
 (package! beacon)
 
+
 ;; MORE Solarized themes??
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
+
+;; Modus themes
+(package! modus-themes)
 
 ;; pomodoro
 (package! org-pomodoro)
