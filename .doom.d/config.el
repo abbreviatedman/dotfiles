@@ -16,6 +16,7 @@
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
 
+
 ;; Except composed from things like "8)" (ascii emojis).
 ;; And I don't want GitHub's alternate set clogging things up, either.
 (setq emojify-emoji-styles '(unicode))
@@ -64,6 +65,8 @@
 (setq! show-trailing-whitespace 1)
 
 ;; Transparency and zoom.
+
+;; turn on transparency to start with
 (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
 (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
 
@@ -78,6 +81,7 @@
                      ((numberp (cadr alpha)) (cadr alpha)))
                100)
           '(85 . 50) '(100 . 100)))))
+
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("z" . "zoom")
        :desc "zoom in" "i" #'doom/increase-font-size
@@ -136,7 +140,7 @@
 (global-visual-line-mode 1)
 
 
-;; line number settings
+;; ;; line number settings
 
 ;; always display line numbers
 (global-display-line-numbers-mode t)
