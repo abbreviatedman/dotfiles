@@ -89,6 +89,8 @@
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
 
+;; pomodoro
+(package! org-pomodoro)
 
 (package! company-posframe)
 
