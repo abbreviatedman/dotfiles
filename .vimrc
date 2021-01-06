@@ -108,7 +108,7 @@ call plug#begin()
   Plug '907th/vim-auto-save'
   " Undo tree visualization
   Plug 'simnalamburt/vim-mundo'
-  " fnq9QV9KG2ANkxvzf
+  " fzf
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   " easymotion
