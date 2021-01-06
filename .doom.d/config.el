@@ -111,7 +111,18 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-solarized-dark)
+(require 'modus-themes)
+(setq modus-themes-bold-constructs t)
+(setq modus-themes-slanted-constructs t)
+(setq modus-themes-syntax 'alt-syntax-yellow-comments)
+(setq modus-themes-paren-match 'intense-bold)
+(setq modus-themes-headings
+      '((t . rainbow)))
+(setq modus-themes-scale-headings t)
+(setq modus-themes-completions 'opinionated)
+(setq doom-theme 'modus-vivendi)
+
+
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
