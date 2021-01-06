@@ -67,22 +67,23 @@
 (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
 (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
 
+(defun toggle-transparency ()
+   (interactive)
+   (let ((alpha (frame-parameter nil 'alpha)))
+     (set-frame-parameter
+      nil 'alpha
+      (if (eql (cond ((numberp alpha) alpha)
+                     ((numberp (cdr alpha)) (cdr alpha))
+                     ;; Also handle undocumented (<active> <inactive>) form.
+                     ((numberp (cadr alpha)) (cadr alpha)))
+               100)
+          '(85 . 50) '(100 . 100)))))
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("z" . "zoom")
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
        :desc "zoom reset" "z" #'doom/reset-font-size
-       :desc "turn transparency on" "t" (lambda ()
-                                          (interactive)
-                                          (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
-                                          (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
-                                          )
-       :desc "turn transparency off" "T" (lambda ()
-                                           (interactive)
-                                           (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
-                                           (add-to-list 'default-frame-alist '(alpha . (100 . 100)))
-                                           )
-       ))
+       :desc "toggle transparency" "t" #'toggle-transparency))
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
