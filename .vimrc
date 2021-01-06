@@ -100,6 +100,8 @@ endif
 "The above block will have installed vim-plug, and the below block will tell vim-plug which plugins to install.
 
 call plug#begin()
+" Drawing!
+  Plug 'vim-scripts/DrawIt'
 " org mode
   Plug 'jceb/vim-orgmode'
   " autosave
