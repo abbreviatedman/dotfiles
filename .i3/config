@@ -6,7 +6,7 @@ exec xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal
 exec --no-startup-id i3-battery-popup -n -L 30
 
 # recover desktop image settings
-exec_always --no-startup-id "nitrogen --restore"
+exec_always --no-startup-id  exec "sleep 5; nitrogen --restore"
 
 # video compositor
 exec --no-startup-id picom
@@ -66,13 +66,13 @@ mode "display" {
 #  keybindings for changing display setups
 
 # Just a laptop screen.
-bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off --output DP2-1 --off --output DP2-2 --off; nitrogen --restore"
+bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off --output DP2-1 --off --output DP2-2 --off; i3-msg 'exec \\"nitrogen --restore\\"'
 
 # thinkpad dock with 2 external monitors (fhd on the let and 4k on the right)
-bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 1920x1080 --rotate normal --output DP1 --off --output DP2 --off --output DP2-1 --mode 3840x2160 --pos 3840x0 --rotate normal --output DP2-2 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP2-3 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; nitrogen --restore"
+bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 1920x1080 --rotate normal --output DP1 --off --output DP2 --off --output DP2-1 --mode 3840x2160 --pos 3840x0 --rotate normal --output DP2-2 --mode 1920x1080 --pos 0x1080 --rotate normal --output DP2-3 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 # laptop plus 4k monitor
-bindsym $mod+e exec xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --mode 3840x2160 --pos 1920x0 --rotate normal --output VIRTUAL1 --off && nitrogen restore
+bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --mode 3840x2160 --pos 1920x0 --rotate normal --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 # Caps Lock indicators
 mode "caps" {
