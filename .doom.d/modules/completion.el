@@ -41,6 +41,10 @@ If all failed, try to complete the common part with `company-complete-common'"
 (setq tide-sort-completions-by-kind t)
 (setq tide-completion-ignore-case t)
 
+(company-posframe-mode 1)
+(require 'desktop)
+(push '(company-posframe-mode . nil)
+      desktop-minor-mode-table)
 
 ;; remove . and .. from ivy completion buffers
 (setq ivy-extra-directories nil)

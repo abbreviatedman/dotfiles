@@ -89,6 +89,9 @@
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
 
+
+(package! company-posframe)
+
 ;;
 ;; automatic code reformatting
 ;;
