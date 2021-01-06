@@ -85,6 +85,10 @@
        :desc "zoom reset" "z" #'doom/reset-font-size
        :desc "toggle transparency" "t" #'toggle-transparency))
 
+;; start every emacs frame with transparency
+(add-hook 'emacs-startup-hook 'toggle-transparency)
+
+
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
 (setq! tab-width 2)
