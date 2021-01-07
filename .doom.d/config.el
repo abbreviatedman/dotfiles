@@ -22,7 +22,7 @@
 ;; And I don't want GitHub's alternate set clogging things up, either.
 (setq emojify-emoji-styles '(unicode))
 
- ;; don't show mode-line
+;; don't show mode-line
 (global-hide-mode-line-mode 1)
 
 (setq ivy-re-builders-alist
@@ -254,22 +254,23 @@
 
 (global-set-key (kbd "M-y") #'counsel-yank-pop)
 
-(defun ivy-call-number (n)
-  (interactive
-   (list (let* ((type (event-basic-type last-command-event))
-                (char (if (characterp type)
-                          ;; Number on the main row.
-                          type
-                        ;; Keypad number, if bound directly.
-                        (car (last (string-to-list (symbol-name type))))))
-                (n (- char ?0)))
-           (if (zerop n) 10 n))))
-  (ivy-set-index (1- n))
-  (ivy--exhibit)
-  (ivy-done))
+;; broken in some way??
+;; (defun ivy-call-number (n)
+;;   (interactive
+;;    (list (let* ((type (event-basic-type last-command-event))
+;;                 (char (if (characterp type)
+;;                           ;; Number on the main row.
+;;                           type
+;;                         ;; Keypad number, if bound directly.
+;;                         (car (last (string-to-list (symbol-name type))))))
+;;                 (n (- char ?0)))
+;;            (if (zerop n) 10 n))))
+;;   (ivy-set-index (1- n))
+;;   (ivy--exhibit)
+;;   (ivy-done))
 
-(dotimes (i 10)
-  (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
+;; (dotimes (i 10)
+;;   (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
 
 (defun do.minimal.line-numbers/toggle-line-numbers (&optional relative)
   "Toggle the display of line numbers in the buffer. I am not sure why I need this."
