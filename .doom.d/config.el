@@ -7,6 +7,7 @@
 (load-library "space-liner")
 (load-library "frame-fns")
 (load-library "frame-cmds")
+(load-library "fira-code-mode")
 
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
@@ -64,34 +65,40 @@
 ;; whitespace settings
 (setq! show-trailing-whitespace 1)
 
-;; Transparency and zoom.
+;; Commands for changing the general look of fonts.
+;; These are mostly for presenting things to others.
 
 ;; turn on transparency to start with
 (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
 (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
 
 (defun toggle-transparency ()
-   (interactive)
-   (let ((alpha (frame-parameter nil 'alpha)))
-     (set-frame-parameter
-      nil 'alpha
-      (if (eql (cond ((numberp alpha) alpha)
-                     ((numberp (cdr alpha)) (cdr alpha))
-                     ;; Also handle undocumented (<active> <inactive>) form.
-                     ((numberp (cadr alpha)) (cadr alpha)))
-               100)
-          '(85 . 50) '(100 . 100)))))
+  (interactive)
+  (let ((alpha (frame-parameter nil 'alpha)))
+    (set-frame-parameter
+     nil 'alpha
+     (if (eql (cond ((numberp alpha) alpha)
+                    ((numberp (cdr alpha)) (cdr alpha))
+                    ;; Also handle undocumented (<active> <inactive>) form.
+                    ((numberp (cadr alpha)) (cadr alpha)))
+              100)
+         '(85 . 50) '(100 . 100)))))
 
 (map! :map evil-normal-state-map :leader
-      (:prefix-map ("z" . "zoom")
+      (:prefix-map ("z" . "font presentation")
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
        :desc "zoom reset" "z" #'doom/reset-font-size
+       :desc "toggle ligatures" "l" '(lambda ()
+                                       (interactive)
+                                       (fira-code-mode 'toggle))
        :desc "toggle transparency" "t" #'toggle-transparency))
 
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
+;; and every code buffer with ligatures
+(add-hook 'prog-mode-hook '(lambda () (interactive) (fira-code-mode 1)))
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
@@ -114,7 +121,7 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
-(setq doom-font (font-spec :family "Hack" :size 24))
+(setq doom-font (font-spec :family "Fira Code" :size 24))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -216,14 +223,6 @@
 
 
 
-
-;; zooming in and out
-(map! :map evil-normal-state-map :leader
-      (:prefix-map ("z" . "zoom")
-       :desc "zoom in" "i" #'doom/increase-font-size
-       :desc "zoom out" "o" #'doom/decrease-font-size
-       :desc "zoom reset" "z" #'doom/reset-font-size
-       ))
 
 ;; Snipe settings
 ;; Look through whole buffer, not just line
