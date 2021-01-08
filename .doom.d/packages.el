@@ -96,7 +96,9 @@
 ;; pomodoro
 (package! org-pomodoro)
 
+;; company improvements
 (package! company-posframe)
+(package! company-box)
 
 ;;
 ;; automatic code reformatting
