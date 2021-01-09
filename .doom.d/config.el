@@ -100,6 +100,7 @@
 ;; and every code buffer with ligatures
 (add-hook 'prog-mode-hook '(lambda () (interactive) (fira-code-mode 1)))
 
+
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
 (setq! tab-width 2)
