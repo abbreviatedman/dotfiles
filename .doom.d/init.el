@@ -13,6 +13,7 @@
 ;;
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
+
         (doom! :input
        ;;chinese
        ;;japanese
@@ -144,7 +145,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +present +pomodoro)         ; organize your plain life in plain text
+       (org +present +pomodoro +pandoc)         ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -183,5 +184,5 @@
 
 (use-package-hook! company
   :pre-config
-  (push '(company-tide company-capf company-yasnippet) company-backends)
+  (push '(company-yasnippet company-tide ) company-backends)
   nil)
