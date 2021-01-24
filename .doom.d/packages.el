@@ -100,6 +100,11 @@
 (package! company-posframe)
 (package! company-box)
 
+;; Smooth scrolling.
+(package! scroll-on-jump
+  :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
+
+
 ;;
 ;; automatic code reformatting
 ;;

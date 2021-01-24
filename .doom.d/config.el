@@ -282,3 +282,47 @@
 (global-set-key (kbd  "<f2>") #'do.minimal.line-numbers/toggle-line-numbers)
 (global-set-key (kbd  "<f5>") #'do.minimal.line-numbers/toggle-relative-line-numbers)
 
+;; smooth scrolling config
+
+(require 'scroll-on-jump)
+
+;; most of the "Scroll Smoother!" advices below are from the default "Complete Example" config (https://gitlab.com/ideasman42/emacs-scroll-on-jump)
+;; I've added the following advices:
+;; * goto-first-line
+;; * goto-line
+;; * the better-jumper ones
+;; * the scroll-page ones
+
+(with-eval-after-load 'evil
+  (scroll-on-jump-advice-add evil-undo)
+  (scroll-on-jump-advice-add evil-redo)
+  (scroll-on-jump-advice-add evil-jump-item)
+  (scroll-on-jump-advice-add evil-jump-forward)
+  (scroll-on-jump-advice-add evil-jump-backward)
+  (scroll-on-jump-advice-add evil-ex-search-next)
+  (scroll-on-jump-advice-add evil-ex-search-previous)
+  (scroll-on-jump-advice-add evil-forward-paragraph)
+  (scroll-on-jump-advice-add evil-backward-paragraph)
+  (scroll-on-jump-advice-add evil-goto-first-line)
+  (scroll-on-jump-advice-add better-jumper-jump-forward)
+  (scroll-on-jump-advice-add better-jumper-jump-backward)
+
+  ;; Actions that themselves scroll.
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-page-up)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
+  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom)
+  (scroll-on-jump-with-scroll-advice-add evil-goto-line))
+
+(with-eval-after-load 'goto-chg
+  (scroll-on-jump-advice-add goto-last-change)
+  (scroll-on-jump-advice-add goto-last-change-reverse))
+
+(global-set-key (kbd "<C-M-next>") (scroll-on-jump-interactive 'diff-hl-next-hunk))
+(global-set-key (kbd "<C-M-prior>") (scroll-on-jump-interactive 'diff-hl-previous-hunk))
+
+(setq scroll-on-jump-duration 1)
+
