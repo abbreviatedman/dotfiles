@@ -52,6 +52,9 @@ popup_during_fullscreen smart
 # is used in the bar {} block below.
 font xft:URWGothic-Book 16
 
+# Highlight the Pointer
+bindsym $mod+$alt+Shift+h exec killall highlight-pointer
+bindsym $mod+$alt+h exec ./Applications/highlight-pointer -r 30 --auto-hide-highlight
 
 # Caps Lock indicators
 mode caps {
@@ -132,7 +135,7 @@ bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart du
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
-bindsym $mod+$alt+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
+# bindsym $mod+$alt+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 # change focus
