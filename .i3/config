@@ -23,7 +23,7 @@ set $alt Mod1
 exec_always --no-startup-id ~/trackpad-and-trackpoint-speed.sh
 
 # writing terminal
-bindsym $mod+$alt+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.org'"
+bindsym $mod+$alt+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
 
 # Move specific apps to specific workspaces.
 assign [class="Firefox"] "1"
