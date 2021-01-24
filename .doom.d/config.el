@@ -34,13 +34,6 @@
 
 
 
-(map! :map evil-normal-state-map :leader
-      (:prefix-map ("y" . "space-yank")
-       (:prefix-map ("s" . "send line")
-        :desc "send line up" "k" #'space-yank-send-line-up
-        :desc "send line down" "j" #'space-yank-send-line-down)))
-
-
 (map! :map evil-normal-state-map "SPC DEL" #'evil-switch-to-windows-last-buffer)
 (map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
 
@@ -255,23 +248,23 @@
 
 (global-set-key (kbd "M-y") #'counsel-yank-pop)
 
-;; broken in some way??
-;; (defun ivy-call-number (n)
-;;   (interactive
-;;    (list (let* ((type (event-basic-type last-command-event))
-;;                 (char (if (characterp type)
-;;                           ;; Number on the main row.
-;;                           type
-;;                         ;; Keypad number, if bound directly.
-;;                         (car (last (string-to-list (symbol-name type))))))
-;;                 (n (- char ?0)))
-;;            (if (zerop n) 10 n))))
-;;   (ivy-set-index (1- n))
-;;   (ivy--exhibit)
-;;   (ivy-done))
+;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
+(defun ivy-call-number (n)
+  (interactive
+   (list (let* ((type (event-basic-type last-command-event))
+                (char (if (characterp type)
+                          ;; Number on the main row.
+                          type
+                        ;; Keypad number, if bound directly.
+                        (car (last (string-to-list (symbol-name type))))))
+                (n (- char ?0)))
+           (if (zerop n) 10 n))))
+  (ivy-set-index (1- n))
+  (ivy--exhibit)
+  (ivy-done))
 
-;; (dotimes (i 10)
-;;   (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
+(dotimes (i 10)
+  (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
 
 (defun do.minimal.line-numbers/toggle-line-numbers (&optional relative)
   "Toggle the display of line numbers in the buffer. I am not sure why I need this."
