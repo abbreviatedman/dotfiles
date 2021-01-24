@@ -326,3 +326,5 @@
 
 (setq scroll-on-jump-duration 1)
 
+;; Use org to open links.
+(map! :m "z u" #'org-open-at-point)
