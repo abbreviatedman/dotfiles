@@ -7,3 +7,5 @@
 	excludesFile = ~/.gitignore-global
 [interactive]
         singleKey = true
+[init]
+	defaultBranch = main
