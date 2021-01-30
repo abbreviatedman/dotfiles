@@ -104,7 +104,7 @@
 (package! scroll-on-jump
   :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
 
-
+(package! fira-code-mode)
 ;;
 ;; automatic code reformatting
 ;;
