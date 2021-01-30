@@ -381,7 +381,7 @@ export PATH=/usr/local/anaconda/bin:/usr/local/bin:/home/abbreviatedman/.local/b
 
 
 
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # use asdf
 # . $HOME/.asdf/asdf.sh
