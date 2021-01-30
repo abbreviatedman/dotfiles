@@ -1,5 +1,4 @@
 ;; set up yadm to work with magit
-(require 'tramp)
 (add-to-list 'tramp-methods
  '("yadm"
    (tramp-login-program "yadm")

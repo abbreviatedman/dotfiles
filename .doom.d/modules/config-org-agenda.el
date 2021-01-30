@@ -26,5 +26,5 @@
 ;; allow manual breaks in pomodoro
 (setq org-pomodoro-manual-break t)
 
-;; symc which org file handles which gcal
+;; sync which org file handles which gcal
 (setq org-gcal-fetch-file-alist '(("colin.jaffe@gmail.com" . "~/Sync/org/gcal/colin.jaffe.org")))

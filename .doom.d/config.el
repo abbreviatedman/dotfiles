@@ -9,6 +9,7 @@
 ; (load-library "frame-cmds")
 ;; (load-library "fira-code-mode")
 
+(require 'tramp)
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
 

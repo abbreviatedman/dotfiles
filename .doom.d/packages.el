@@ -53,9 +53,6 @@
 ;; adds browsing for links
 (package! browse-at-remote)
 
-;; remote text editing
-(package! tramp)
-
 ;; internal ssh handling
 (package! ssh-agency)
 
