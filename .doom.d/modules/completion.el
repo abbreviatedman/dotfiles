@@ -64,3 +64,14 @@ If all failed, try to complete the common part with `company-complete-common'"
 (defun no-final-newline-in-buffer ()
   (setq-local require-final-newline nil))
 (add-hook! 'snippet-mode-hook 'no-final-newline-in-buffer)
+
+;; tide and lsp
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1))
+
+(add-hook 'js2-mode-hook #'setup-tide-mode)
