@@ -1,13 +1,13 @@
 (add-to-list 'load-path "~/.doom.d/modules/")
-(load-library "secrets")
 (load-library "version-control")
+(load-library "secrets")
 (load-library "config-org-agenda")
 (load-library "completion")
 (load-library "snipe-and-transpose")
 (load-library "space-liner")
-(load-library "frame-fns")
-(load-library "frame-cmds")
 (load-library "fira-code-mode")
+; (load-library "frame-fns")
+; (load-library "frame-cmds")
 
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
@@ -53,7 +53,8 @@
 ;; uppercase markdown checkboxes
 (setq markdown-gfm-uppercase-checkbox 1)
 ;; always be gfm-ing
-(add-hook 'markdown-mode-hook 'gfm-mode)
+;; (add-hook 'markdown-mode-hook 'gfm-mode)
+(remove-hook 'markdown-mode-hook 'gfm-mode)
 
 ;; whitespace settings
 (setq! show-trailing-whitespace 1)
@@ -249,30 +250,30 @@
 (global-set-key (kbd "M-y") #'counsel-yank-pop)
 
 ;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
-(defun ivy-call-number (n)
-  (interactive
-   (list (let* ((type (event-basic-type last-command-event))
-                (char (if (characterp type)
-                          ;; Number on the main row.
-                          type
-                        ;; Keypad number, if bound directly.
-                        (car (last (string-to-list (symbol-name type))))))
-                (n (- char ?0)))
-           (if (zerop n) 10 n))))
-  (ivy-set-index (1- n))
-  (ivy--exhibit)
-  (ivy-done))
+;; (defun ivy-call-number (n)
+;;   (interactive
+;;    (list (let* ((type (event-basic-type last-command-event))
+;;                 (char (if (characterp type)
+;;                           ;; Number on the main row.
+;;                           type
+;;                         ;; Keypad number, if bound directly.
+;;                         (car (last (string-to-list (symbol-name type))))))
+;;                 (n (- char ?0)))
+;;            (if (zerop n) 10 n))))
+;;   (ivy-set-index (1- n))
+;;   (ivy--exhibit)
+;;   (ivy-done))
 
-(dotimes (i 10)
-  (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
+;; (dotimes (i 10)
+;;   (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
 
-(defun do.minimal.line-numbers/toggle-line-numbers (&optional relative)
-  "Toggle the display of line numbers in the buffer. I am not sure why I need this."
-  (interactive)
-  (cond (display-line-numbers (display-line-numbers-mode nil)
-                              (setq display-line-numbers nil))
-        (t (display-line-numbers-mode t)
-           (setq display-line-numbers (or relative t)))))
+;; (defun do.minimal.line-numbers/toggle-line-numbers (&optional relative)
+;;   "Toggle the display of line numbers in the buffer. I am not sure why I need this."
+;;   (interactive)
+;;   (cond (display-line-numbers (display-line-numbers-mode nil)
+;;                               (setq display-line-numbers nil))
+        ;; (t (display-line-numbers-mode t)
+        ;;    (setq display-line-numbers (or relative t)))))
 
 (defun do.minimal.line-numbers/toggle-relative-line-numbers ()
   "Toggle the display of relative line numbers."
