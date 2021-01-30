@@ -2,6 +2,7 @@
 exec xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off
 
 # battery warning
+
 # warns at 30% and half that (15)
 exec --no-startup-id i3-battery-popup -n -L 30
 
@@ -157,8 +158,8 @@ bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
 # split orientation
-bindsym $mod+x split h;exec notify-send 'tile horizontally'
-bindsym $mod+v split v;exec notify-send 'tile vertically'
+bindsym $mod+x split h; exec notify-send 'tile horizontally'
+bindsym $mod+v split v; exec notify-send 'tile vertically'
 bindsym $mod+apostrophe split toggle
 
 # toggle fullscreen mode for the focused container
