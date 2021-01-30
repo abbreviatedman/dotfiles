@@ -91,9 +91,6 @@
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
-;; and every code buffer with ligatures
-(add-hook 'prog-mode-hook '(lambda () (interactive) (fira-code-mode 1)))
-
 ;; start with ligatures
 (global-fira-code-mode)
 
@@ -234,7 +231,12 @@
 
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
-(setenv "NODE_PATH" "/home/abbreviatedman/.asdf/installs/nodejs/14.9.0/.npm/lib/node_modules")
+
+;; set where node is located
+(setenv "NODE_PATH" "/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin/node")
+(setenv "PATH" (concat (getenv "PATH") ":/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin"))
+(setq exec-path (append exec-path '("/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin")))
+
 
 (beacon-mode 1)
 (setq beacon-size 10)
