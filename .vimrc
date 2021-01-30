@@ -307,7 +307,8 @@ vmap gx <Plug>(openbrowser-smart-search)
 " many many MANY COC settings
 
 " path to node
-let g:coc_node_path = '/home/abbreviatedman/.asdf/shims/node'
+let g:coc_node_path = '/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin/node'
+
 " TextEdit might fail if hidden is not set.
 set hidden
 
