@@ -106,6 +106,9 @@
 ;; automatic code reformatting
 ;;
 
+;; nvm (node version manager)
+;; (package! nvm)
+
 ;; prettier (web development)
 (package! prettier)
 

@@ -83,7 +83,6 @@ MODE_CURSOR_VICMD="green block"
 MODE_CURSOR_SEARCH="#ff00ff steady underline"
 MODE_CURSOR_VISUAL="$MODE_CURSOR_VICMD steady bar"
 MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -358,10 +357,9 @@ export PATH=$PATH:/snap/bin
 export BROWSER=firefox
 
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
-export FZF_DEFAULT_OPTS="--ansi"export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--ansi"
-
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="--ansi"
 
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/Applications
