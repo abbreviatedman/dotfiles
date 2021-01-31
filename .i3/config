@@ -80,7 +80,7 @@ bindsym $mod+$alt+t exec "kitty"
 bindsym $mod+$alt+r exec "chromium"
 
 # start browser 2
-bindsym $mod+g exec "google-chrome-unstable"
+bindsym $mod+g exec "google-chrome-stable"
 
 # start browser 3
 bindsym $mod+$alt+f exec "firefox"
