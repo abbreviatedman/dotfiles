@@ -234,9 +234,9 @@
 (add-hook 'after-init-hook #'global-prettier-mode)
 
 ;; set where node is located
-(setenv "NODE_PATH" "/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin/node")
-(setenv "PATH" (concat (getenv "PATH") ":/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin"))
-(setq exec-path (append exec-path '("/home/abbreviatedman/.nvm/versions/node/v15.7.0/bin")))
+(setenv "NODE_PATH" nil)
+(setenv "PATH" (concat (getenv "PATH") ":/home/abbreviatedman/.asdf/shims"))
+(setq exec-path (append exec-path '("/home/abbreviatedman/.asdf/shims")))
 
 
 (beacon-mode 1)

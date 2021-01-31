@@ -378,10 +378,8 @@ export PATH=/usr/local/anaconda/bin:/usr/local/bin:/home/abbreviatedman/.local/b
 # eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # use asdf
-# . $HOME/.asdf/asdf.sh
+. $HOME/.asdf/asdf.sh
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# # source /usr/share/nvm/init-nvm.sh
