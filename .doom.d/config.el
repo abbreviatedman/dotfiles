@@ -226,7 +226,7 @@
 (setq evil-snipe-repeat-scope 'whole-buffer)
 
 
-
+(setq ispell-dictionary "en")
 
 (setq undo-fu-allow-undo-in-region t)
 
