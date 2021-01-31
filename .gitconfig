@@ -9,3 +9,5 @@
         singleKey = true
 [init]
 	defaultBranch = main
+[pull]
+	rebase = false
