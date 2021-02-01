@@ -102,15 +102,11 @@
   :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
 
 (package! fira-code-mode)
+
+
 ;;
 ;; automatic code reformatting
 ;;
 
-;; nvm (node version manager)
-;; (package! nvm)
-
 ;; prettier (web development)
 (package! prettier)
-
-;; black (python)
-(package! python-black)

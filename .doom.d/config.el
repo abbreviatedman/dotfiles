@@ -242,14 +242,12 @@
 (setq beacon-size 10)
 (setq beacon-blink-duration 0.1)
 
-(python-black-on-save-mode)
-(setq python-black-command "/home/abbreviatedman/.local/bin/black")
-
 ;; some available keybinding prefixes
 ;; SPC d
 ;; SPC l
 ;; SPC v
 ;; SPC y
+
 
 (global-set-key (kbd "M-y") #'counsel-yank-pop)
 
