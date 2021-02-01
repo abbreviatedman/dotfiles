@@ -27,6 +27,8 @@ This takes a while, but can be done in one line that also includes all the items
 - zoom
 - signal-desktop
 - code
+- chromium
+- kitty
 
 # Install CLI Tools From Repos
 
@@ -43,6 +45,8 @@ This takes a while, but can be done in one line that also includes all the items
 - aspell-en
 - cmake
 - "highlight pointer"?
+- pandoc
+- "markdown"?
 
 # Github Integration
 
@@ -63,7 +67,7 @@ This takes a while, but can be done in one line that also includes all the items
 # Add Global NPM Packages
 
 - `npm i -g prettier` (this can take a while)
-- optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon`
+- optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon live-server`
 
 # Install Doom Emacs
 
