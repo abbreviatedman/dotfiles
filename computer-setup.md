@@ -42,6 +42,7 @@ This takes a while, but can be done in one line that also includes all the items
 - aspell
 - aspell-en
 - cmake
+- "highlight pointer"?
 
 # Github Integration
 
@@ -77,3 +78,4 @@ This takes a while, but can be done in one line that also includes all the items
 - `source ~/.zshrc`
 - `doom sync && doom doctor` (this can take a WHILE)
 - launch `vim` and run a `:PlugInstall`
+- check `.config/i3` for anything irrelevant and then reload i3 (or log out and back in)
