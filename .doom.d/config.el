@@ -53,8 +53,8 @@
 ;; uppercase markdown checkboxes
 (setq markdown-gfm-uppercase-checkbox 1)
 ;; always be gfm-ing
-;; (add-hook 'markdown-mode-hook 'gfm-mode)
-(remove-hook 'markdown-mode-hook 'gfm-mode)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
 
 ;; whitespace settings
 (setq! show-trailing-whitespace 1)
