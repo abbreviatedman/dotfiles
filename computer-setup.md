@@ -1,7 +1,7 @@
 # Manjaro
 
 - install Manjaro
-- restart and update (`sudo pacman -Syyu`) (this takes a while)
+- restart and update with `sudo pacman -Syyu` (this takes a while)
 
 # Improve The Terminal
 
@@ -14,7 +14,7 @@
 
 # Install Apps From Repos
 
-This takes a while, but can be done in one line that also includes all the items from the next section.
+This takes a while, but can be done in one line that ALSO includes all the items from the next section.
 
 `yay -S`:
 
@@ -44,7 +44,7 @@ This takes a while, but can be done in one line that also includes all the items
 - aspell
 - aspell-en
 - cmake
-- "highlight pointer"?
+- "highlight-pointer"?
 - pandoc
 - "markdown"?
 
@@ -66,7 +66,7 @@ This takes a while, but can be done in one line that also includes all the items
 
 # Add Global NPM Packages
 
-- `npm i -g prettier` (this can take a while)
+- `npm i -g prettier`
 - optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon live-server`
 
 # Install Doom Emacs
