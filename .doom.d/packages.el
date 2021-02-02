@@ -103,6 +103,8 @@
 
 (package! fira-code-mode)
 
+(package! eradio)
+
 
 ;;
 ;; automatic code reformatting

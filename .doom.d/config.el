@@ -331,3 +331,19 @@
 
 ;; Use org to open links.
 (map! :m "z u" #'org-open-at-point)
+
+(setq eradio-channels '(
+                        ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
+                        ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
+                        ("SomaFM - Beat Blender" . "https://somafm.com/beatblender.pls")
+                        ("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
+                        ("SomaFM - Secret Agent" . "https://somafm.com/secretagent.pls")
+                        ("SomaFM - DEF CON" . "https://somafm.com/defcon.pls")
+                        ("SomaFM - Space Station Soma" . "https://somafm.com/spacestation.pls")
+                        ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
+                        ("SomaFM - Groove Sala." . "https://somafm.com/groovesalad.pls")))
+
+(map! :map evil-normal-state-map :leader
+      (:prefix-map ("t" . "toggle")
+       :desc "toggle radio" "m" #'eradio-toggle
+       :desc "play radio channel" "M" #'eradio-play))
