@@ -83,9 +83,7 @@
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
        :desc "zoom hydra" "z" #'+hydra/text-zoom/body
-       :desc "toggle ligatures" "l" '(lambda ()
-                                       (interactive)
-                                       (fira-code-mode))
+       :desc "toggle ligatures" "l" #'global-fira-code-mode
        :desc "toggle transparency" "t" #'toggle-transparency))
 
 ;; start every emacs frame with transparency
