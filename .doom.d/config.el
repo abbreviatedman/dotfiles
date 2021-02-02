@@ -247,7 +247,8 @@
 ;; SPC y
 
 
-(global-set-key (kbd "M-y") #'counsel-yank-pop)
+;; Pick from kill ring... with completion!
+(global-set-key (kbd "M-p") #'counsel-yank-pop)
 
 ;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
 ;; (defun ivy-call-number (n)
