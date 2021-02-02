@@ -321,7 +321,7 @@
 (setq scroll-on-jump-duration 1)
 
 ;; Use org to open links.
-(map! :m "z u" #'org-open-at-point)
+(map! :m "g b" #'org-open-at-point)
 
 (setq eradio-channels '(
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
