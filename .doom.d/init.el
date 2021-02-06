@@ -181,3 +181,5 @@
        :config
        ;;literate
        (default +bindings +smartparens))
+
+(require 'tramp)
