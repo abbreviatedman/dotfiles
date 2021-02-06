@@ -181,9 +181,3 @@
        :config
        ;;literate
        (default +bindings +smartparens))
-
-(use-package-hook! company
-  :pre-config
-  (push '(company-css company-yasnippet company-tide ) company-backends)
-  nil)
-(require 'tramp)

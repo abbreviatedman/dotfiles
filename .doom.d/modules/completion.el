@@ -2,9 +2,6 @@
   :diminish company-mode
   :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode) . company-mode)
   :bind
-  (:map company-active-map
-   ([tab] . smarter-tab-to-complete)
-   ([tab] . smarter-tab-to-complete))
   :custom
   (company-minimum-prefix-length 1)
   (company-tooltip-align-annotations t)
@@ -56,7 +53,7 @@ If all failed, try to complete the common part with `company-complete-common'"
 (use-package! yasnippet
   :config
   (yas-global-mode 1)
-  (setq yas-snippet-dirs '("/home/abbreviatedman/.snippets")))
+  (setq yas-snippet-dirs '("/home/abbreviatedman/.doom.d/snippets")))
 
 (yas-reload-all)
 
