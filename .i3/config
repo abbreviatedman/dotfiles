@@ -1,12 +1,10 @@
-exec xrandr --output LVDS1 --primary --mode 1366x768 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output DP3 --off --output HDMI1 --off --output HDMI2 --off --output HDMI3 --off --output VGA1 --off --output VIRTUAL1 --off
+# Set initial resolution
+exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
 # battery warning
 
 # warns at 30% and half that (15)
 exec --no-startup-id i3-battery-popup -n -L 30
-
-# recover desktop image settings
-exec_always --no-startup-id  exec "sleep 5; nitrogen --restore"
 
 # video compositor
 exec --no-startup-id picom
@@ -386,24 +384,24 @@ exec_always --no-startup-id fix_xcursor
 # to:
 # background $term_background
 # Same logic applied to everything else.
-# set_from_resource $term_background background
-# set_from_resource $term_foreground foreground
-# set_from_resource $term_color0     color0
-# set_from_resource $term_color1     color1
-# set_from_resource $term_color2     color2
-# set_from_resource $term_color3     color3
-# set_from_resource $term_color4     color4
-# set_from_resource $term_color5     color5
-# set_from_resource $term_color6     color6
-# set_from_resource $term_color7     color7
-# set_from_resource $term_color8     color8
-# set_from_resource $term_color9     color9
-# set_from_resource $term_color10    color10
-# set_from_resource $term_color11    color11
-# set_from_resource $term_color12    color12
-# set_from_resource $term_color13    color13
-# set_from_resource $term_color14    color14
-# set_from_resource $term_color15    color15
+set_from_resource $term_background background
+set_from_resource $term_foreground foreground
+set_from_resource $term_color0     color0
+set_from_resource $term_color1     color1
+set_from_resource $term_color2     color2
+set_from_resource $term_color3     color3
+set_from_resource $term_color4     color4
+set_from_resource $term_color5     color5
+set_from_resource $term_color6     color6
+set_from_resource $term_color7     color7
+set_from_resource $term_color8     color8
+set_from_resource $term_color9     color9
+set_from_resource $term_color10    color10
+set_from_resource $term_color11    color11
+set_from_resource $term_color12    color12
+set_from_resource $term_color13    color13
+set_from_resource $term_color14    color14
+set_from_resource $term_color15    color15
 
 # Start i3bar to display a workspace bar (plus the system information i3status if available)
 bar {
@@ -508,10 +506,11 @@ mode "$mode_gaps_outer" {
 #  keybindings for changing display setups
 
 # Just a laptop screen.
-bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP1-1 --off --output DP1-2 --off --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 # One external monitor.
 bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP1-2 --off --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
-# laptop plus 4k monitor
-bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x1671 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 5760x1523 --rotate normal --output DP1-2 --mode 3840x2160 --pos 1920x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+
+# ThinkPad dock with 4K and FHD.
+bindsym $mod+e exec "xrandr --output eDP1 --mode 2560x1440 --pos 0x1699 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1765 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
