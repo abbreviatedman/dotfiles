@@ -30,9 +30,6 @@
 ;; initialize the targets package
 (targets-setup t)
 
-
-
-
 (map! :map evil-normal-state-map "SPC DEL" #'evil-switch-to-windows-last-buffer)
 (map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
 
@@ -119,6 +116,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
 (setq modus-themes-slanted-constructs t)
@@ -129,6 +127,7 @@
 (setq modus-themes-scale-headings t)
 (setq modus-themes-completions 'opinionated)
 (setq doom-theme 'modus-vivendi)
+
 
 
 
