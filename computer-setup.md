@@ -26,7 +26,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - pavucontrol
 - zoom
 - signal-desktop
-- code
+- visual-studio-code-bin
 - chromium
 - kitty
 
