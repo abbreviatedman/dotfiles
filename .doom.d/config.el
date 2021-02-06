@@ -7,7 +7,6 @@
 (load-library "space-liner")
 ; (load-library "frame-fns")
 ; (load-library "frame-cmds")
-;; (load-library "fira-code-mode")
 
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
@@ -83,14 +82,16 @@
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
        :desc "zoom hydra" "z" #'+hydra/text-zoom/body
-       :desc "toggle ligatures" "l" #'global-fira-code-mode
+       :desc "toggle ligatures globally" "l" #'global-fira-code-mode
+       :desc "toggle ligatures for this file" "L" #'fira-code-mode
        :desc "toggle transparency" "t" #'toggle-transparency))
 
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
-;; start with ligatures
-(global-fira-code-mode)
+;; start with ligatures in programming modes
+(add-hook 'prog-mode-hook 'fira-code-mode)
+(setq fira-code-mode-disabled-ligatures '("x"))
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
