@@ -86,6 +86,8 @@
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
+;; TODO remove markdown meta-p mapping
+
 ;; start with ligatures in programming modes
 (add-hook 'prog-mode-hook 'fira-code-mode)
 (setq fira-code-mode-disabled-ligatures '("x" "[]"))
