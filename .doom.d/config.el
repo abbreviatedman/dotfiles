@@ -88,7 +88,7 @@
 
 ;; start with ligatures in programming modes
 (add-hook 'prog-mode-hook 'fira-code-mode)
-(setq fira-code-mode-disabled-ligatures '("x"))
+(setq fira-code-mode-disabled-ligatures '("x" "[]"))
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
