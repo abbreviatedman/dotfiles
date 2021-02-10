@@ -105,6 +105,7 @@
 
 (package! eradio)
 
+(package! ox-reveal)
 
 ;;
 ;; automatic code reformatting

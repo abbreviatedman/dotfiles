@@ -340,3 +340,9 @@
        :desc "play radio channel" "M" #'eradio-play))
 
 (map! :i [C-tab] #'yas-expand)
+
+(setq org-re-reveal-title-slide nil)
+(setq org-re-reveal-theme "league")
+(require 'org-tempo)
+(require 'ox-reveal)
+(setq org-reveal-highlight-css "%r/lib/css/vs.css")
