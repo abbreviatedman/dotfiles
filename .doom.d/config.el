@@ -5,8 +5,6 @@
 (load-library "completion")
 (load-library "snipe-and-transpose")
 (load-library "space-liner")
-; (load-library "frame-fns")
-; (load-library "frame-cmds")
 
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
@@ -97,7 +95,7 @@
 (setq! tab-width 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
 
-;; Stop clobbering my system cliboard, emacs you fiend.
+;; Stop clobbering my system clipboard, emacs you fiend.
 (setq save-interprogram-paste-before-kill t)
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
