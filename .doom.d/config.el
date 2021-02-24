@@ -76,15 +76,19 @@
       (:prefix-map ("z" . "font presentation")
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
+       :desc "zoom in buffer" "I" #'text-scale-increase
+       :desc "zoom out buffer" "O" #'text-scale-decrease
        :desc "zoom hydra" "z" #'+hydra/text-zoom/body
        :desc "toggle ligatures globally" "l" #'global-fira-code-mode
        :desc "toggle ligatures for this file" "L" #'fira-code-mode
        :desc "toggle transparency" "t" #'toggle-transparency))
 
+
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 ;; TODO remove markdown meta-p mapping
+;; TODO add mapping for org-list-repair
 
 ;; start with ligatures in programming modes
 (add-hook 'prog-mode-hook 'fira-code-mode)
@@ -223,7 +227,9 @@
 (setq evil-snipe-repeat-scope 'whole-buffer)
 
 
+;; set spelling dictionary
 (setq ispell-dictionary "en")
+
 
 (setq undo-fu-allow-undo-in-region t)
 
@@ -346,3 +352,6 @@
 (require 'org-tempo)
 (require 'ox-reveal)
 (setq org-reveal-highlight-css "%r/lib/css/vs.css")
+
+
+(setq indium-chrome-executable "google-chrome-stable")

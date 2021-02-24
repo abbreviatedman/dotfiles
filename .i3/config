@@ -52,7 +52,7 @@ font xft:URWGothic-Book 16
 
 # Highlight the Pointer
 bindsym $mod+$alt+Shift+h exec killall highlight-pointer
-bindsym $mod+$alt+h exec ./Applications/highlight-pointer -r 30 --auto-hide-highlight
+bindsym $mod+$alt+h exec highlight-pointer -r 30 --auto-hide-highlight
 
 # Caps Lock indicators
 mode caps {
@@ -513,4 +513,4 @@ bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 
 
 
 # ThinkPad dock with 4K and FHD.
-bindsym $mod+e exec "xrandr --output eDP1 --mode 2560x1440 --pos 0x1699 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1765 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"

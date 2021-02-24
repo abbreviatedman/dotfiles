@@ -134,6 +134,7 @@ alias inbox='vim ~/Sync/gtd/inbox.md'
 alias na='vim ~/Sync/gtd/next-actions.md'
 
 # common directories
+alias cdga='cd ~/Documents/work/ga'
 alias cdt1='cd ~/Documents/code-immersives/term-1'
 alias cdjp='cd ~/Documents/code-immersives/term-1/javascript-playground/'
 alias cdsc='cd ~/Documents/scratchpad'
