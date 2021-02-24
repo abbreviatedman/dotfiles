@@ -86,7 +86,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 
 # Clone Down And Activate Dotfiles
 
-- `yadm clone https://www.github.com/abbreviatedman/dotfiles`
+- `yadm clone git@github.com:abbreviatedman/dotfiles`
 - `source ~/.zshrc`
 - `doom sync && doom doctor` (this can take a WHILE)
 - launch `vim` and run a `:PlugInstall`
