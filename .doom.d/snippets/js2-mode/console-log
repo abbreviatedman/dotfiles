@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Console Log Snippet
+# key: l
+# uuid: l
+# --
+console.log($0);

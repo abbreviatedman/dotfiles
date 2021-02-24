@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: HTML Skeleton
+# key: h
+# uuid: h
+# --
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>$1</title>
+    <link href="${2:style.css}" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    $0
+
+    <script src="${3:main.js}"></script>
+  </body>
+</html>
