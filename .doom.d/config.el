@@ -79,8 +79,7 @@
        :desc "zoom in buffer" "I" #'text-scale-increase
        :desc "zoom out buffer" "O" #'text-scale-decrease
        :desc "zoom hydra" "z" #'+hydra/text-zoom/body
-       :desc "toggle ligatures globally" "l" #'global-fira-code-mode
-       :desc "toggle ligatures for this file" "L" #'fira-code-mode
+       :desc "toggle ligatures for this file" "l" #'fira-code-mode
        :desc "toggle transparency" "t" #'toggle-transparency))
 
 
