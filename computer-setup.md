@@ -14,6 +14,7 @@
     - change generator to passphrase with caps and a number
   - vimium-c
     - bind moveWindowToNewTab to W
+    - add css: .LH { font-size 1.5em }
     - pages may not steal focus
   - Dark Reader
   - set all extensions to work in private/incognito windows
@@ -21,13 +22,18 @@
 
 # Improve The Terminal
 
-- get zsh (`yay -S zsh`) (Manjaro might already come with it)
+- get zsh (`yay -S zsh`)
 - install oh-my-zsh (https://ohmyz.sh/)
 - get dangerroom on the vim-indicator branch (https://github.com/abbreviatedman/dangerroom/blob/vim-indicator/dangerroom.zsh-theme)
-- enter "dangerroom" into the .zshrc for the variable `plugins`
+- enter "dangerroom" into the .zshrc for the variable `theme`
 - enter `bindkey -v` somewhere in `.zshrc`
+- add zsh plugins
+  - autosuggest
+  - syntax highlighting
+  - vim mode
+- `source ~/.zshrc`
 - run `source ~/.zshrc`
-- `sudo visudo`
+- `sudo visudo` and enter `Defaults pwfeedback` to get stars while typing your pw.
 
 # Install Apps From Repos
 
@@ -44,8 +50,9 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - signal-desktop
 - visual-studio-code-bin
 - chromium
-- xclip
-- ttf-fira-code
+- transmission-gtk
+- postman-bin
+- pgadmin4
 
 # Install CLI Tools From Repos
 
@@ -62,6 +69,9 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - aspell-en
 - cmake
 - pandoc
+- xclip
+- ttf-fira-code
+- postgresql
 
 # Github Integration
 
@@ -71,11 +81,6 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - copy the token to the clipboard
 - use `hub` to clone something (maybe dangerroom)
 - enter the access token as the password and say yes to adding it permanently
-
-# Add Global NPM Packages
-
-- `npm i -g prettier`
-- optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon live-server`
 
 # Install Doom Emacs
 
@@ -87,7 +92,6 @@ This takes a while, but can be done in one line that ALSO includes all the items
 # Clone Down And Activate Dotfiles
 
 - `yadm clone git@github.com:abbreviatedman/dotfiles`
-- `source ~/.zshrc`
 - `doom sync && doom doctor` (this can take a WHILE)
 - launch `vim` and run a `:PlugInstall`
 - check `.config/i3` for anything irrelevant and then reload i3 (or log out and back in)
@@ -96,9 +100,15 @@ This takes a while, but can be done in one line that ALSO includes all the items
 
 - install `asdf` using `git` (https://asdf-vm.com/#/core-manage-asdf)
 - add the `nodejs` plugin with `asdf plugin add nodejs`
-- install gpg keyring for asdf-nodejs (BEFORE adding nodejs plugin?) with `bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'`
+- install gpg keyring for asdf-nodejs with `bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'`
 - install the latest version with `asdf install nodejs latest`
 - set it as the global version with `asdf global nodejs [the version number installed with previous step]`
+
+# Add Global NPM Packages
+
+- `npm i -g prettier`
+- optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon live-server`
+- either way: `asdf reshim nodejs`
 
 # Extras
 
