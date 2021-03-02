@@ -107,6 +107,35 @@ bindsym $mod+space exec --no-startup-id dmenu_recency -sf '#93a1a1' -sb '#002b36
 # launch categorized menu
 bindsym $mod+$alt+space exec --no-startup-id morc_menu
 
+
+## Volume control.
+
+### All audio sources.
+
+#### raise volume a little
+bindsym Shift+XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +2000"
+bindsym Shift+XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -2000"
+
+#### raise volume a lot
+bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +10000"
+bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -10000"
+
+#### Mute volume
+bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+
+### Just emacs' radio (or any audio stream)
+
+#### Raise volume a little.
+bindsym $alt+Shift+XF86AudioRaiseVolume exec "ponymix --sink-input -d 'audio' increase 2"
+bindsym $alt+Shift+XF86AudioLowerVolume exec "ponymix --sink-input -d 'audio' decrease 2"
+
+#### Raise volume a lot.
+bindsym $alt+XF86AudioRaiseVolume exec "ponymix --sink-input -d 'audio' increase 10"
+bindsym $alt+XF86AudioLowerVolume exec "ponymix --sink-input -d 'audio' decrease 10"
+
+#### Mute volume
+bindsym $alt+XF86AudioMute exec "ponymix --sink-input -d 'audio' toggle"
+
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
 ################################################################################################
