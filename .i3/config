@@ -89,6 +89,9 @@ bindsym $mod+s exec "slack"
 # start video conference app
 bindsym $mod+z exec "zoom"
 
+# start IDE
+bindsym $mod+$alt+e exec "emacs"
+
 # start Alternate IDE
 bindsym $mod+c exec "code"
 
