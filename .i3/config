@@ -505,12 +505,16 @@ mode "$mode_gaps_outer" {
 
 #  keybindings for changing display setups
 
-# Just a laptop screen.
-bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+# Just a laptop screen - T480
+# bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+
 
 # One external monitor.
 bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP1-2 --off --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 
 # ThinkPad dock with 4K and FHD.
-bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"
+# bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"
+
+# galp3 - external monitors with laptop screen off
+bindsym $mod+e exec "xrandr --output eDP1 --off --output DP1 --primary --mode 1920x1080 --pos 3840x1526 --rotate normal --output HDMI1 --off --output HDMI2 --mode 3840x2160 --pos 0x0 --rotate normal --output VIRTUAL1 --off; sleep 2; nitrogen --restore"
