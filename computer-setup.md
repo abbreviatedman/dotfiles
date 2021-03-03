@@ -72,6 +72,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - xclip
 - ttf-fira-code
 - postgresql
+- ponymix
 
 # Github Integration
 
@@ -95,6 +96,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - `doom sync && doom doctor` (this can take a WHILE)
 - launch `vim` and run a `:PlugInstall`
 - check `.config/i3` for anything irrelevant and then reload i3 (or log out and back in)
+- M-x `fira-code-mode-install-fonts`, quit and re-start emacs to get ligatures
 
 # Add Node
 
@@ -107,9 +109,9 @@ This takes a while, but can be done in one line that ALSO includes all the items
 # Add Global NPM Packages
 
 - `npm i -g prettier`
-- optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon live-server`
+- optional (if in a hurry, takes a while and you can do it later): `npm i -g jest surge typescript nodemon live-server sequelize-cli`
 - either way: `asdf reshim nodejs`
 
 # Extras
 
-- highlight-pointer https://github.com/swillner/highlight-pointer
+- [i3-battery-popup](https://github.com/rjekker/i3-battery-popup)
