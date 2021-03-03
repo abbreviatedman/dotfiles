@@ -73,6 +73,13 @@
               100)
          '(85 . 50) '(100 . 100)))))
 
+(defun add-fira-code-mode-hook ()
+  (interactive)
+  (add-hook 'prog-mode-hook 'fira-code-mode))
+(defun remove-fira-code-mode-hook ()
+  (interactive)
+  (remove-hook 'prog-mode-hook 'fira-code-mode))
+
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("z" . "font presentation")
        :desc "zoom in" "i" #'doom/increase-font-size
