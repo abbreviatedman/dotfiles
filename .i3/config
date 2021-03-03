@@ -106,6 +106,14 @@ bindsym $mod+space exec --no-startup-id dmenu_recency -sf '#93a1a1' -sb '#002b36
 # launch categorized menu
 bindsym $mod+$alt+space exec --no-startup-id morc_menu
 
+# sleep management
+
+## turn sleep on
+bindsym  $mod+$alt+Ctrl+c exec "caffeine -a"
+
+## turn sleep off
+bindsym  $mod+$alt+Ctrl+Shift+c exec "caffeine kill"
+
 
 ## Volume control.
 
