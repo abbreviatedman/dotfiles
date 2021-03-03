@@ -95,7 +95,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - `yadm clone git@github.com:abbreviatedman/dotfiles`
 - `doom sync && doom doctor` (this can take a WHILE)
 - launch `vim` and run a `:PlugInstall`
-- check `.config/i3` for anything irrelevant and then reload i3 (or log out and back in)
+- check `.config/i3` for anything computer-specific to comment out and then reload i3 (or log out and back in)
 - M-x `fira-code-mode-install-fonts`, quit and re-start emacs to get ligatures
 
 # Add Node
