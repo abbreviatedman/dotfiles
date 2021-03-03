@@ -3,4 +3,4 @@
 # key: l
 # uuid: l
 # --
-console.log($0);
+console.log($0)
