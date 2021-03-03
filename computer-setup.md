@@ -76,9 +76,9 @@ This takes a while, but can be done in one line that ALSO includes all the items
 
 # Github Integration
 
-- generate ssh key and add it to the agent (https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-- add the key to the GitHub account (https://docs.github.com/en/github-ae@latest/articles/adding-a-new-ssh-key-to-your-github-account)
-- add a personal access token with `gist`, `repo`, and `workflow` access (https://github.com/settings/tokens)
+- [generate ssh key and add it to the agent](https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [add the key to the GitHub account](https://docs.github.com/en/github-ae@latest/articles/adding-a-new-ssh-key-to-your-github-account)
+- add a [personal access token](https://github.com/settings/tokens) with `gist`, `repo`, and `workflow` access
 - copy the token to the clipboard
 - use `hub` to clone something (maybe dangerroom)
 - enter the access token as the password and say yes to adding it permanently
@@ -100,7 +100,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 
 # Add Node
 
-- install `asdf` using `git` (https://asdf-vm.com/#/core-manage-asdf)
+- install [asdf](https://asdf-vm.com/#/core-manage-asdf) using `git`
 - add the `nodejs` plugin with `asdf plugin add nodejs`
 - install gpg keyring for asdf-nodejs with `bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'`
 - install the latest version with `asdf install nodejs latest`
