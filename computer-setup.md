@@ -53,6 +53,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - transmission-gtk
 - postman-bin
 - zsa-wally
+- discord
 
 # Install CLI Tools From Repos
 
