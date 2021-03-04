@@ -52,7 +52,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - chromium
 - transmission-gtk
 - postman-bin
-- pgadmin4
+- zsa-wally
 
 # Install CLI Tools From Repos
 
@@ -73,7 +73,6 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - ttf-fira-code
 - postgresql
 - ponymix
-- zsa-wally
 - caffeine-ng-git
 
 # Github Integration
