@@ -142,6 +142,9 @@ alias cdsp='cd ~/Documents/side-projects'
 alias cdtc='cd ~/Documents/side-projects/techniconsole'
 alias cdgtd='cd ~/Sync/gtd'
 
+# database management
+alias smg='sequelize model:generate'
+
 # open emacs
 # open file(s) in emacs
 alias emacs='emacsclient --no-wait -c -a ""'
