@@ -20,9 +20,6 @@
 ;; And I don't want GitHub's alternate set clogging things up, either.
 (setq emojify-emoji-styles '(unicode))
 
-;; don't show mode-line
-(global-hide-mode-line-mode 1)
-
 (setq ivy-re-builders-alist
       '((t . ivy--regex-fuzzy)))
 
