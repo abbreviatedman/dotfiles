@@ -118,3 +118,5 @@
 
 (package! indium)
 
+
+(package! peep-dired)
