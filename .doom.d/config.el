@@ -254,13 +254,6 @@
 (setq beacon-size 10)
 (setq beacon-blink-duration 0.1)
 
-;; some available keybinding prefixes
-;; SPC d
-;; SPC l
-;; SPC v
-;; SPC y
-
-
 ;; Pick from kill ring... with completion!
 (global-set-key (kbd "M-p") #'counsel-yank-pop)
 
@@ -361,3 +354,9 @@
 
 
 (setq indium-chrome-executable "google-chrome-stable")
+
+;; some available keybinding prefixes
+;; SPC d
+;; SPC l
+;; SPC v
+;; SPC y
