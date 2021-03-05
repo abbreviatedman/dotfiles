@@ -5,6 +5,7 @@
 (load-library "completion")
 (load-library "snipe-and-transpose")
 (load-library "space-liner")
+(load-library "config-dired")
 
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook 'vterm)
