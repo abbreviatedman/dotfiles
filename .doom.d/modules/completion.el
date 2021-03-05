@@ -72,3 +72,7 @@ If all failed, try to complete the common part with `company-complete-common'"
   (tide-hl-identifier-mode +1))
 
 (add-hook 'js2-mode-hook #'setup-tide-mode)
+
+
+(map! :i [C-tab] nil)
+(map! :i [M-tab] #'yas-expand)
