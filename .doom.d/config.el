@@ -221,6 +221,8 @@
 ;; open a terminal in a new frame
 (map! :leader
       :desc "open terminal other frame" "o T" #'open-terminal-other-frame)
+(map! :leader
+      :desc "open terminal current frame" "o t" #'+vterm/here)
 
 ;; titlecase the selection
 (map! :map evil-visual-state-map "g t" #'upcase-initials-region)
