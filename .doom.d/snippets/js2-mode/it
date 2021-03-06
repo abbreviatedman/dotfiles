@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # name: It Block Snippet
-# key: i
-# uuid: i
+# key: it
+# uuid: it
 # --
 it("$1", () => {
   $0
