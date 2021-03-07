@@ -368,6 +368,7 @@
 
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("v" . "view")
+       :desc "ibuffer filter by content" "u" #'ibuffer-update
        :desc "ibuffer filter by content" "/" #'ibuffer-filter-by-content
        :desc "ibuffer filter by mode" "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
