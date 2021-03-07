@@ -342,7 +342,7 @@
 ;; Config for when it's on:
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)
 (remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
-(setq doom-modeline-buffer-state-icon nil)
+(setq doom-modeline-buffer-state-icon t)
 
 
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
