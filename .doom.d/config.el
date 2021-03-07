@@ -180,15 +180,8 @@
 
 
 ;; markdown (and some org) key-bindings
-;; first, switch gj and gk back to regular evil standards
-(map! :map evil-markdown-mode "g j" nil)
-(map! :map evil-markdown-mode "g k" nil)
-(map! :map gfm-mode "g j" nil)
-(map! :map gfm-mode "g k" nil)
-(map! :map org-mode "g j" nil)
-(map! :map org-mode "g k" nil)
-
 ;; now good mappings
+
 (map! :map gfm-mode :leader
       (:prefix-map ("e" . "editing")
        :desc "Add markdown item" "i" #'markdown-insert-list-item
