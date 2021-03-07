@@ -6,12 +6,8 @@
 (load-library "snipe-and-transpose")
 (load-library "space-liner")
 (load-library "config-dired")
+(load-library "terminals")
 
-;; start every emacs frame as a terminal by default
-(add-hook 'emacs-startup-hook 'vterm)
-(setq vterm-shell "/usr/sbin/zsh")
-
-;; TODO command to close all vterm buffers
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
