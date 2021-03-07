@@ -344,9 +344,12 @@
 ;; Config for when it's on:
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)
 (remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
-(setq doom-modeline-buffer-state-icon t)
+(setq doom-modeline-buffer-encoding nil)
+(setq doom-modeline-lsp nil)
+(setq doom-modeline-env-version nil)
+(line-number-mode 0)
 
-
+;; Turn the modeline on and off.
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
 (defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
