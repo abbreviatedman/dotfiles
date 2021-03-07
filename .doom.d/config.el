@@ -180,15 +180,8 @@
 
 
 ;; markdown (and some org) key-bindings
-;; first, switch gj and gk back to regular evil standards
-(map! :map evil-markdown-mode "g j" nil)
-(map! :map evil-markdown-mode "g k" nil)
-(map! :map gfm-mode "g j" nil)
-(map! :map gfm-mode "g k" nil)
-(map! :map org-mode "g j" nil)
-(map! :map org-mode "g k" nil)
-
 ;; now good mappings
+
 (map! :map gfm-mode :leader
       (:prefix-map ("e" . "editing")
        :desc "Add markdown item" "i" #'markdown-insert-list-item
@@ -348,9 +341,17 @@
 ;; Keep modeline off by default
 (global-hide-mode-line-mode 1)
 
-;; When it is there, make it short.
-(setq! +modeline-height 20)
+;; Config for when it's on:
+(remove-hook 'doom-modeline-mode-hook 'column-number-mode)
+(remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
+(setq doom-modeline-buffer-encoding nil)
+(setq doom-modeline-lsp nil)
+(setq doom-modeline-env-version nil)
+(line-number-mode 0)
 
+(map! :map :n :leader (:prefix-map ("b" . "buffer") :desc "Rename buffer" "R" #'rename-buffer))
+
+;; Turn the modeline on and off.
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
 (defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
@@ -374,13 +375,12 @@
 
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("v" . "view")
+       :desc "ibuffer filter by content" "u" #'ibuffer-update
        :desc "ibuffer filter by content" "/" #'ibuffer-filter-by-content
        :desc "ibuffer filter by mode" "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
 
 
 ;; some available keybinding prefixes
-;; SPC d
 ;; SPC l
-;; SPC v
 ;; SPC y
