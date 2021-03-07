@@ -239,6 +239,8 @@
 
 ;; set spelling dictionary
 (setq ispell-dictionary "en")
+;; spelling dictonary location
+(setq ispell-personal-dictionary "/home/abbreviatedman/.doom.d/spelling/en.pws")
 
 
 (setq undo-fu-allow-undo-in-region t)
