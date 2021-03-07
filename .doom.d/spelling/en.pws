@@ -1,4 +1,4 @@
-personal_ws-1.1 en 84
+personal_ws-1.1 en 86
 Brinn
 Buzzfeed
 Ctrl
@@ -29,6 +29,7 @@ config
 dangerroom
 devs
 ejs
+elisp
 favoriting
 fira
 forEach
@@ -60,6 +61,7 @@ postgres
 pulseaudio
 pwfeedback
 repo
+req
 reshim
 ripgrep
 sammich
