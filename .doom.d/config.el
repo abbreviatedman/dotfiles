@@ -195,23 +195,9 @@
        )
       )
 
-(defun open-terminal-other-frame ()
-  (interactive)
-  (make-frame-command)
-  (let ((buf (current-buffer)))
-    (switch-to-buffer buf)
-    (switch-to-buffer-other-frame buf))
-  (+vterm/here nil))
-
-
 ;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
-;; open a terminal in a new frame
-(map! :leader
-      :desc "open terminal other frame" "o T" #'open-terminal-other-frame)
-(map! :leader
-      :desc "open terminal current frame" "o t" #'+vterm/here)
 
 ;; titlecase the selection
 (map! :map evil-visual-state-map "g t" #'upcase-initials-region)
