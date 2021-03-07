@@ -380,7 +380,5 @@
 
 
 ;; some available keybinding prefixes
-;; SPC d
 ;; SPC l
-;; SPC v
 ;; SPC y
