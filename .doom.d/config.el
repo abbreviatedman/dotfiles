@@ -349,6 +349,8 @@
 (setq doom-modeline-env-version nil)
 (line-number-mode 0)
 
+(map! :map :n :leader (:prefix-map ("b" . "buffer") :desc "Rename buffer" "R" #'rename-buffer))
+
 ;; Turn the modeline on and off.
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
