@@ -1,8 +1,7 @@
-;; TODO command to close all vterm buffers
   (defun kill-terminals ()
 	 (interactive)
 	 (mapc (lambda (buffer)
-           (when (eq 'vterm-mode (buffer-local-value 'major-mode buffer))
+           (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
              (kill-buffer buffer)))
          (buffer-list)))
 
