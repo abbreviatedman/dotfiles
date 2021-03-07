@@ -346,8 +346,11 @@
 ;; Keep modeline off by default
 (global-hide-mode-line-mode 1)
 
-;; When it is there, make it short.
-(setq! +modeline-height 20)
+;; Config for when it's on:
+(remove-hook 'doom-modeline-mode-hook 'column-number-mode)
+(remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
+(setq doom-modeline-buffer-state-icon nil)
+
 
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
