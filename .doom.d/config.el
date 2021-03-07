@@ -343,9 +343,21 @@
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
                         ("SomaFM - Groove Sala." . "https://somafm.com/groovesalad.pls")))
 
+;; Keep modeline off by default
+(global-hide-mode-line-mode 1)
+
+;; When it is there, make it short.
+(setq! +modeline-height 20)
+
+(defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
+
+(defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
+
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("t" . "toggle")
        :desc "toggle radio" "m" #'eradio-toggle
+       :desc "toggle modeline for buffer" "d" #'toggle-mode-line-buffer
+       :desc "toggle modeline" "D" #'toggle-mode-line-global
        :desc "play radio channel" "M" #'eradio-play))
 
 (setq org-re-reveal-title-slide nil)
