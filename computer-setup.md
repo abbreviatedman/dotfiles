@@ -75,6 +75,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - postgresql
 - ponymix
 - caffeine-ng-git
+- spectacle
 
 # Github Integration
 
