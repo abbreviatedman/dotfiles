@@ -2,7 +2,7 @@
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
 # enable caffeine by default
-exec --no-startup-id "caffeine -a"
+# exec --no-startup-id "caffeine -a"
 
 # battery warning
 # warns at 30% and half that (15)
@@ -35,6 +35,7 @@ assign [class="Google-chrome"] "9"
 assign [class="Google-chrome-unstable"] "9"
 assign [class="zoom"] "10"
 assign [class="Slack"] "11"
+assign [class="discord"] "11"
 assign [class="pulse-sms"] "11"
 assign [class="Signal"] "11"
 assign [class="vlc"] "12"
