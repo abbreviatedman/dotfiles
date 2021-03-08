@@ -13,7 +13,7 @@
     - set it to auto-fill
     - change generator to passphrase with caps and a number
   - vimium-c
-    - bind moveWindowToNewTab to W
+    - bind moveTabToNewWindow to W
     - add css: .LH { font-size 1.5em }
     - pages may not steal focus
   - Dark Reader
@@ -23,8 +23,8 @@
 # Improve The Terminal
 
 - get zsh (`yay -S zsh`)
-- install oh-my-zsh (https://ohmyz.sh/)
-- get dangerroom on the vim-indicator branch (https://github.com/abbreviatedman/dangerroom/blob/vim-indicator/dangerroom.zsh-theme)
+- [install oh-my-zsh](https://ohmyz.sh/)
+- [get dangerroom on the vim-indicator branch](https://github.com/abbreviatedman/dangerroom/blob/vim-indicator/dangerroom.zsh-theme)
 - enter "dangerroom" into the .zshrc for the variable `theme`
 - enter `bindkey -v` somewhere in `.zshrc`
 - add zsh plugins
