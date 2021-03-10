@@ -200,6 +200,9 @@ alias sar='sudo apt remove -y'
 alias sauu='sudo apt update && sudo apt upgrade'
 alias update='sudo pkcon refresh && sudo pkcon update'
 
+# React
+alias cra='create-react-app'
+
 # npm aliases
 alias ni='npm install'
 alias niy='npm init -y'
