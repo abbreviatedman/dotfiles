@@ -92,7 +92,6 @@
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 ;; TODO remove markdown meta-p mapping
-;; TODO add mapping for org-list-repair
 
 ;; start with ligatures in programming modes
 (add-hook 'prog-mode-hook 'fira-code-mode)
@@ -178,22 +177,13 @@
 ;; markdown (and some org) key-bindings
 ;; now good mappings
 
-(map! :map gfm-mode :leader
+(map! :map (evil-markdown-mode gfm-mode) :leader
       (:prefix-map ("e" . "editing")
        :desc "Add markdown item" "i" #'markdown-insert-list-item
        :desc "Go to next section" "j" #'markdown-forward-same-level
        :desc "Go to previous section" "k" #'markdown-backward-same-level
-       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
-       ))
-
-(map! :map evil-markdown-mode :leader
-      (:prefix-map ("e" . "editing")
-       :desc "Add markdown item" "i" #'markdown-insert-list-item
-       :desc "Go to next section" "j" #'markdown-forward-same-level
-       :desc "Go to previous section" "k" #'markdown-backward-same-level
-       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
-       )
-      )
+       :desc "Repair list" "r" #'org-list-repair
+       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox))
 
 ;; open the result of a search in a new frame
 (map! :leader
