@@ -3,8 +3,8 @@
 
 ;; Normal Mode Versions
 
-;; move line up by COUNT lines, bringing point
 (defun space-liner-bring-line-up (&optional n)
+"Moves line up by COUNT lines, bringing point."
   (interactive "p")
   (evil-with-single-undo
     (kill-whole-line)
@@ -12,8 +12,8 @@
     (yank)
     (forward-line -1)))
 
-;; move line down by COUNT lines, bringing point
 (defun space-liner-bring-line-down (&optional n)
+"Moves line down by COUNT lines, bringing point."
   (interactive "p")
   (evil-with-single-undo
     (kill-whole-line)
@@ -25,9 +25,9 @@
 
 ;; Visual Mode Versions
 
-;; Moves visual selection down by count lines, bringing point.
-;; Currently is slightly off-kilter for non-Visual-Block visual modes.
 (defun space-liner-bring-line-down-visual-mode (&optional n)
+  "Moves visual selection down by count lines, bringing point.
+Currently is slightly off-kilter for non-Visual-Block visual modes."
   (interactive "p")
   (evil-with-single-undo
     (kill-region evil-visual-beginning evil-visual-end)
@@ -36,17 +36,16 @@
   (evil-visual-line)
   (forward-line -1))
 
-;; Moves visual selection up by count lines, bringing point.
-;; Currently is slightly off-kilter for non-Visual-Block visual modes.
 (defun space-liner-bring-line-up-visual-mode (&optional n)
+  "Moves visual selection up by count lines, bringing point.
+Currently is slightly off-kilter for non-Visual-Block visual modes."
   (interactive "p")
   (evil-with-single-undo
     (kill-region evil-visual-beginning evil-visual-end)
     (forward-line (or (* n -1) -1))
     (yank))
   (evil-visual-line)
-  (forward-line -1)
-  )
+  (forward-line -1))
 
 
 
