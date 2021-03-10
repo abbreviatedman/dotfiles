@@ -1,4 +1,4 @@
-personal_ws-1.1 en 89
+personal_ws-1.1 en 92
 Brinn
 Buzzfeed
 Ctrl
@@ -19,6 +19,8 @@ Uncomment
 abbreviatedman
 asdf
 autosuggest
+axios
+bcrypt
 bindkey
 bindsym
 bitwarden
@@ -45,6 +47,7 @@ keychain
 keyring
 lifecycle
 lol
+lotr
 mmm
 moveTabToNewWindow
 moveWindowToNewTab
