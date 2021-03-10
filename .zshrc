@@ -179,20 +179,6 @@ mkcd ()
       cd -P -- "$1"
 }
 
-# Make each directory list contents upon entering.
-# chpwd() ls -a
-
-
-# # Show all color codes.
-
-# ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris}
-
-# function spectrum_ls() {
-#   for code in {000..255}; do
-#     print -P -- "$code: %{$FG[$code]%}$ZSH_SPECTRUM_TEXT%{$reset_color%}"
-#   done
-# }
-
 # apt/pkcon
 alias sai='sudo apt install -y'
 alias saa='sudo apt autoremove -y'
