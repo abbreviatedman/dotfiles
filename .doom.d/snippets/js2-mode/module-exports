@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Module Exports Snippet
+# key: me
+# uuid: emed
+# --
+module.exports = $0
