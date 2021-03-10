@@ -215,6 +215,13 @@ alias ns='npm start'
 alias nf='npm cache clean && rm -rf node_modules && npm install'
 alias nlg='npm list --global --depth=0'
 
+# nodemon
+alias nm='nodemon'
+
+# hub
+alias hcl='hub clone'
+alias hcr='hub create'
+
 # git aliases I do/should use
 alias g='git'
 alias gn='rm -rf .git && git init'
