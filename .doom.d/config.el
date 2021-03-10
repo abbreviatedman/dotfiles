@@ -183,6 +183,7 @@
        :desc "Add markdown item" "i" #'markdown-insert-list-item
        :desc "Go to next section" "j" #'markdown-forward-same-level
        :desc "Go to previous section" "k" #'markdown-backward-same-level
+       :desc "Repair list" "r" #'org-list-repair
        :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox))
 
 ;; open the result of a search in a new frame
