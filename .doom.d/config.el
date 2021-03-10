@@ -92,7 +92,6 @@
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 ;; TODO remove markdown meta-p mapping
-;; TODO add mapping for org-list-repair
 
 ;; start with ligatures in programming modes
 (add-hook 'prog-mode-hook 'fira-code-mode)
