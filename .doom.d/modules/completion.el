@@ -94,4 +94,4 @@ If all failed, try to complete the common part with `company-complete-common'"
 
 
 (map! :i [C-tab] nil)
-(map! :i [M-tab] #'yas-expand)
+(map! :i [M-tab] #'+web/indent-or-yas-or-emmet-expand)
