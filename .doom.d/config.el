@@ -204,7 +204,7 @@
 
 ;; set spelling dictionary
 (setq ispell-dictionary "en")
-;; spelling dictonary location
+;; spelling dictionary location
 (setq ispell-personal-dictionary "/home/abbreviatedman/.doom.d/spelling/en.pws")
 
 
