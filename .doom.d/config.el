@@ -189,11 +189,16 @@
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
 
-;; titlecase the selection
-(map! :map evil-visual-state-map "g t" #'upcase-initials-region)
+(evil-define-operator evil-titlecase (beg end type)
+  "Convert text to title case."
+  (if (eq type 'block)
+      (evil-apply-on-block #'evil-titlecase beg end nil)
+    (upcase-initials-region beg end)))
 
+(map! :nm "g o" #'evil-titlecase)
 
-
+;; use org to open links.
+(map! :n "g b" #'org-open-at-point)
 
 ;; Snipe settings
 ;; Look through whole buffer, not just line
@@ -284,9 +289,6 @@
 (global-set-key (kbd "<C-M-prior>") (scroll-on-jump-interactive 'diff-hl-previous-hunk))
 
 (setq scroll-on-jump-duration 1)
-
-;; Use org to open links.
-(map! :m "g b" #'org-open-at-point)
 
 (setq eradio-channels '(
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
