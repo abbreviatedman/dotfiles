@@ -59,9 +59,6 @@
 ;; adds gcal integration
 (package! org-gcal)
 
-;; allows for automatic actions on todos
-(package! org-edna)
-
 ;; decent emoji support
 (package! emojify)
 

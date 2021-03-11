@@ -1,8 +1,6 @@
 ;; org agenda setup
 (setq! org-agenda-files '("~/Sync/org"))
 (after! org
-  (org-edna-mode)
-
   (setq org-startup-folded 'content)
 
   (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)"))))
