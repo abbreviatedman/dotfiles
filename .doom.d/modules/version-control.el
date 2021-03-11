@@ -9,8 +9,8 @@
 
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
-(map! :map evil-normal-state-map :leader
-      :desc "magit with yadm" "g d" (lambda () (interactive (magit-status "/yadm::"))))
+(map! :map :n :leader (:prefix-map ("g" . "go")
+                       :desc "magit with yadm" "g d" (lambda () (interactive (magit-status "/yadm::")))))
 
 ;;
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
