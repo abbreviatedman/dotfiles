@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: Arrow Function Snippet
-# key: a
-# uuid: a
+# key: ar
+# uuid: ar
 # --
 ($1) => $0
