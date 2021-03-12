@@ -172,6 +172,15 @@
 ;; they are implemented.
 
 
+;; TODO
+;; mark todo done and mark next todo next
+;; SPC m N
+;; (org-todo 'done)
+;; org forward same level
+;; (org-todo 2)
+;;
+
+(map! :map :n :leader :desc "Find file with new cache." "SPC" #'(lambda () (interactive) (projectile-find-file t)))
 
 
 ;; markdown (and some org) key-bindings
