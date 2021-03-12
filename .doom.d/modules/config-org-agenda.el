@@ -2,7 +2,7 @@
 (setq! org-agenda-files '("~/Sync/org"))
 (after! org
   (setq org-startup-folded 'content)
-  (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-proj))
+  (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
   (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAIT(w)" "|" "DONE(d)" "CANCELED(c)"))))
 
 (map! :map evil-normal-state-map :leader
