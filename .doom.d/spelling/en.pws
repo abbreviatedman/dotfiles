@@ -1,4 +1,4 @@
-personal_ws-1.1 en 93
+personal_ws-1.1 en 104
 Brinn
 Buzzfeed
 Ctrl
@@ -12,10 +12,14 @@ IAs
 Jaffe
 Manjaro
 Mongo
+Mongo's
+Nakisha
 PlugInstall
 Repos
 Syyu
 Uncomment
+Whoo
+WidgetShow
 abbreviatedman
 asdf
 autosuggest
@@ -25,11 +29,15 @@ bindkey
 bindsym
 bitwarden
 bootcamp
+bugapalooza
 charset
 cli
 cmake
 config
+const
+curlies
 dangerroom
+destructuring
 devs
 ejs
 elisp
@@ -43,9 +51,11 @@ href
 https
 init
 js
+jsx
 keychain
 keyring
 lifecycle
+localhost
 lol
 lotr
 mmm
@@ -59,6 +69,7 @@ ohmyz
 pacman
 pandoc
 params
+parens
 pavucontrol
 picom
 ponymix
