@@ -72,7 +72,10 @@ bindsym Caps_Lock mode "caps"
 floating_modifier $mod
 
 # start terminal 1
-bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+vterm/here 1)\\"'"
+# bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+vterm/here 1)\\"'"
+# use eshell instead?
+bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+eshell/here)\\"'"
+
 
 # start terminal 2
 bindsym $mod+$alt+t exec "kitty"
