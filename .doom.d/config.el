@@ -180,6 +180,14 @@
 ;; (org-todo 2)
 ;;
 
+(map! :map org-mode-map :leader
+      (:prefix-map ("m" . "mark")
+       :desc "Next todo GTD-style" "m" '(lambda ()
+                                          (interactive)
+                                          (org-todo 'done)
+                                          (org-forward-heading-same-level 1)
+                                          (org-todo 2))))
+
 (map! :map :n :leader :desc "Find file with new cache." "SPC" #'(lambda () (interactive) (projectile-find-file t)))
 
 
