@@ -20,7 +20,3 @@ alias grv git remote -v
 
 # react
 alias cra 'create-react-app $1'
-
-# npm
-
-# mongo
