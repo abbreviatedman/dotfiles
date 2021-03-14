@@ -1,0 +1,2 @@
+# easy sudo
+alias s *sudo $*
