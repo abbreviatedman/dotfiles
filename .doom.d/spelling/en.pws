@@ -1,4 +1,4 @@
-personal_ws-1.1 en 109
+personal_ws-1.1 en 114
 Brinn
 Buzzfeed
 Ctrl
@@ -6,6 +6,7 @@ Dagm
 Dinos
 Dotfiles
 Dygma
+Eshell
 Gcal
 Gmail
 Heeeeey
@@ -18,11 +19,13 @@ Moonlander
 Nakisha
 PlugInstall
 Repos
+Roomba
 Syyu
 Uncomment
 Whoo
 WidgetShow
 abbreviatedman
+arg
 asdf
 autosuggest
 axios
@@ -63,6 +66,7 @@ lotr
 mmm
 moveTabToNewWindow
 moveWindowToNewTab
+ncurses
 nextcloud
 nodejs
 nodemon
@@ -93,6 +97,7 @@ standups
 stylesheet
 sudo
 swappable
+syncthing
 ttf
 userId
 userapp
