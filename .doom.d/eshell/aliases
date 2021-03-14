@@ -1,2 +1,23 @@
 # easy sudo
 alias s *sudo $*
+
+# yadm
+alias yp yadm push
+alias ypu yadm pull
+
+# git
+alias gst git status
+alias ga 'git add $*'
+alias gco git commit
+alias gcm 'git commit -m $1'
+alias gp git push
+alias gpu git pull
+alias grv git remote -v
+
+
+# react
+alias cra 'create-react-app $1'
+
+# npm
+
+# mongo
