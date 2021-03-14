@@ -25,8 +25,20 @@
 (map! :leader
       :desc "open terminal current frame" "o t" #'+vterm/here)
 
+;; set up did-you-mean suggestions
+(eshell-did-you-mean-setup)
+
+
 ; aliases
 
-;; open a terminal here
+;; open a vterm terminal here
 (defun eshell/th ()
   (open-terminal-other-frame))
+
+;; open a non-emacs terminal here
+(defun eshell/kh ()
+  (shell-command "kitty"))
+
+;; search parent directories by search string
+(defun eshell/up (match)
+  (eshell-up match))
