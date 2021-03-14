@@ -1,6 +1,9 @@
 # easy sudo
 alias s *sudo $*
 
+# dired
+alias d 'dired $1'
+
 # yadm
 alias yp yadm push
 alias ypu yadm pull
