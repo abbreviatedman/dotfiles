@@ -28,8 +28,12 @@
 ;; set up did-you-mean suggestions
 (eshell-did-you-mean-setup)
 
+;; switches doom's default terminal opening shortcuts
+(map! :map :n :leader (:prefix-map ("o" . "open")
+                       :desc "Open eshell buffer" "e" #'+eshell/here
+                       :desc "Toggle eshell popup" "E" #'+eshell/toggle))
 
-; aliases
+;aliases
 
 ;; open a vterm terminal here
 (defun eshell/th ()
