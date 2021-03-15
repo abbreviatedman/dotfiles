@@ -2,6 +2,7 @@
 alias s *sudo $*
 
 # dired
+# TODO make function that handles zero or no arguments
 alias d 'dired $1'
 
 # yadm
