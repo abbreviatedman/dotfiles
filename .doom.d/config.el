@@ -341,6 +341,7 @@
        :desc "toggle radio" "m" #'eradio-toggle
        :desc "toggle modeline for buffer" "d" #'toggle-mode-line-buffer
        :desc "toggle modeline" "D" #'toggle-mode-line-global
+       :desc "toggle pomodoro clock" "c" #'org-pomodoro
        :desc "play radio channel" "M" #'eradio-play))
 
 (setq org-re-reveal-title-slide nil)
