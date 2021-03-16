@@ -1,4 +1,4 @@
-personal_ws-1.1 en 119
+personal_ws-1.1 en 122
 Brinn
 Buzzfeed
 Ctrl
@@ -67,6 +67,7 @@ localhost
 lol
 lotr
 mmm
+moar
 moveTabToNewWindow
 moveWindowToNewTab
 ncurses
@@ -93,6 +94,7 @@ req
 reshim
 ripgrep
 sammich
+sbin
 sequelize
 signup
 slidedeck
@@ -103,6 +105,7 @@ stylesheet
 sudo
 swappable
 syncthing
+toggleable
 ttf
 userId
 userapp
