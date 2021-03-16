@@ -7,6 +7,7 @@
 (load-library "space-liner")
 (load-library "config-dired")
 (load-library "terminals")
+(load-library "aliases")
 
 
 ;; always show emojis

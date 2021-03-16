@@ -1,10 +1,6 @@
 # easy sudo
 alias s *sudo $*
 
-# dired
-# TODO make function that handles zero or no arguments
-alias d 'dired $1'
-
 # yadm
 alias yp yadm push
 alias ypu yadm pull
@@ -17,6 +13,7 @@ alias gcm 'git commit -m $1'
 alias gp git push
 alias gpu git pull
 alias grv git remote -v
+alias gn rm -rf .git && git init
 
 
 # react
