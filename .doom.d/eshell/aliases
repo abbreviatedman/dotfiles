@@ -2,6 +2,7 @@
 alias s *sudo $*
 
 # yadm
+alias yst yadm status
 alias ya yadm add $*
 alias yp yadm push
 alias ypu yadm pull
@@ -19,3 +20,17 @@ alias gn rm -rf .git && git init
 
 # react
 alias cra 'create-react-app $1'
+
+# doom
+alias ds doom sync
+alias dmd doom doctor
+
+# package management
+alias yay yay --color=always $*
+alias pacman pacman --color=always $*
+
+# TDD
+alias jest jest --color $*
+
+# database management
+alias smg sequelize model:generate $*
