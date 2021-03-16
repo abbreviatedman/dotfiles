@@ -19,6 +19,14 @@
     (switch-to-buffer-other-frame buf))
   (+vterm/here nil))
 
+(defun open-eshell-other-frame ()
+  (interactive)
+  (make-frame-command)
+  (let ((buf (current-buffer)))
+    (switch-to-buffer buf)
+    (switch-to-buffer-other-frame buf))
+  (+eshell/here nil))
+
 ;; open a terminal in a new frame
 (map! :leader
       :desc "open terminal other frame" "o T" #'open-terminal-other-frame)
@@ -31,9 +39,14 @@
 ;; switches doom's default terminal opening shortcuts
 (map! :map :n :leader (:prefix-map ("o" . "open")
                        :desc "Open eshell buffer" "e" #'+eshell/here
-                       :desc "Toggle eshell popup" "E" #'+eshell/toggle))
+                       :desc "Open eshell in other frame" "E" #'open-eshell-other-frame))
 
 ;aliases
+;; Toggleable vterm/eshell popups
+(map! :map evil-normal-state-map :leader
+      (:prefix-map ("t" . "toggle")
+       :desc "Toggle eshell popup" "e" #'+eshell/toggle
+       :desc "Toggle vterm popup" "v" #'+vterm/toggle))
 
 ;; open a vterm terminal here
 (defun eshell/th ()
