@@ -47,6 +47,7 @@
        :desc "Toggle eshell popup" "e" #'+eshell/toggle
        :desc "Toggle vterm popup" "v" #'+vterm/toggle))
 
+;; TODO switch eshell buffers
 
 ;; remember moar better
 (setq eshell-history-size 100000)

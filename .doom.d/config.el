@@ -76,7 +76,7 @@
   (remove-hook 'prog-mode-hook 'fira-code-mode))
 
 (map! :map evil-normal-state-map :leader
-      (:prefix-map ("z" . "font presentation")
+      (:prefix-map ("z" . "presentation")
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
        :desc "zoom in buffer" "I" #'text-scale-increase

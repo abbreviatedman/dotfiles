@@ -1,3 +1,6 @@
+# TODO
+# vim in new kitty window
+
 # easy sudo
 alias s *sudo $*
 
