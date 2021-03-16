@@ -41,21 +41,12 @@
                        :desc "Open eshell buffer" "e" #'+eshell/here
                        :desc "Open eshell in other frame" "E" #'open-eshell-other-frame))
 
-;aliases
 ;; Toggleable vterm/eshell popups
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("t" . "toggle")
        :desc "Toggle eshell popup" "e" #'+eshell/toggle
        :desc "Toggle vterm popup" "v" #'+vterm/toggle))
 
-;; open a vterm terminal here
-(defun eshell/th ()
-  (open-terminal-other-frame))
 
-;; open a non-emacs terminal here
-(defun eshell/kh ()
-  (shell-command "kitty"))
 
-;; search parent directories by search string
-(defun eshell/up (match)
-  (eshell-up match))
+
