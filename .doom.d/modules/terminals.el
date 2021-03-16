@@ -8,10 +8,12 @@
 (map! :map :n :leader (:prefix-map ("q" . "quit/session") :desc "Kill all terminals." "t" #'kill-terminals))
 
 ;; start every emacs frame as a terminal by default
-(add-hook 'emacs-startup-hook 'vterm)
+(add-hook 'emacs-startup-hook '+eshell/here)
+
+;; zsh baby
 (setq vterm-shell "/usr/sbin/zsh")
 
-(defun open-terminal-other-frame ()
+(defun open-vterm-other-frame ()
   (interactive)
   (make-frame-command)
   (let ((buf (current-buffer)))
@@ -27,17 +29,13 @@
     (switch-to-buffer-other-frame buf))
   (+eshell/here nil))
 
-;; open a terminal in a new frame
-(map! :leader
-      :desc "open terminal other frame" "o T" #'open-terminal-other-frame)
-(map! :leader
-      :desc "open terminal current frame" "o t" #'+vterm/here)
-
 ;; set up did-you-mean suggestions
 (eshell-did-you-mean-setup)
 
-;; switches doom's default terminal opening shortcuts
+;; open terminals
 (map! :map :n :leader (:prefix-map ("o" . "open")
+                       :desc "Open vterm buffer" "v" #'+vterm/here
+                       :desc "Open vterm in other frame" "V" #'open-vterm-other-frame
                        :desc "Open eshell buffer" "e" #'+eshell/here
                        :desc "Open eshell in other frame" "E" #'open-eshell-other-frame))
 
