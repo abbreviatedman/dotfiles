@@ -29,3 +29,15 @@ Open dired in the current directory.
   "read in history from other eshell buffers"
   (interactive)
   (eshell-read-history))
+
+; hub
+
+;; clone a repo
+(defun eshell/hcl (repo)
+  "Clones one repo from GitHub."
+  (shell-command (concat "hub clone " repo)))
+
+;; create a repo
+(defun eshell/hcr (repo)
+  "Creates a repo on GitHub."
+  (shell-command (concat "hub create " repo)))

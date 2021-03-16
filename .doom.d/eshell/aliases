@@ -44,7 +44,3 @@ alias ni npm install $*
 alias nid npm install --save-dev $*
 alias ng npm install --global $*
 alias niy npm init -y
-
-# Hub
-alias hcl 'hub clone $1'
-alias hcr 'hub create $1'
