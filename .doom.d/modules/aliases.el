@@ -12,3 +12,20 @@ Open dired in the current directory.
   (if dir
       (dired-jump nil dir)
     (dired-jump)))
+
+;; open a vterm terminal here
+(defun eshell/th ()
+  (open-terminal-other-frame))
+
+;; open a non-emacs terminal here
+(defun eshell/kh ()
+  (shell-command "kitty"))
+
+(defun eshell/up (match)
+"search parent directories by search string"
+  (eshell-up match))
+
+(defun eshell/r ()
+  "read in history from other eshell buffers"
+  (interactive)
+  (eshell-read-history))
