@@ -1,4 +1,4 @@
-personal_ws-1.1 en 117
+personal_ws-1.1 en 119
 Brinn
 Buzzfeed
 Ctrl
@@ -46,6 +46,7 @@ curlies
 dangerroom
 destructuring
 devs
+dired
 ejs
 elisp
 favoriting
@@ -94,6 +95,7 @@ ripgrep
 sammich
 sequelize
 signup
+slidedeck
 sms
 src
 standups
