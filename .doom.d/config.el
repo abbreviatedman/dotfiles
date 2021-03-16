@@ -361,6 +361,10 @@
        :desc "ibuffer filter by mode" "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
 
+;; use web mode for ejs
+
+
+(add-to-list 'auto-mode-alist '("\\.ejs\\'" . gfm-mode))
 
 
 ;; some available keybinding prefixes
