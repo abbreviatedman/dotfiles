@@ -39,3 +39,7 @@ Open dired in the current directory.
 (defun eshell/hcr (repo)
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
+
+(defun eshell/v (file)
+  "Open a file in vim in an external terminal."
+  (shell-command (concat "kitty --detach vim " file)))
