@@ -318,9 +318,6 @@
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
                         ("SomaFM - Groove Sala." . "https://somafm.com/groovesalad.pls")))
 
-;; Keep modeline off by default
-(global-hide-mode-line-mode 1)
-
 ;; Config for when it's on:
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)
 (remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
