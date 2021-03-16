@@ -2,12 +2,13 @@
 alias s *sudo $*
 
 # yadm
+alias ya yadm add $*
 alias yp yadm push
 alias ypu yadm pull
 
 # git
 alias gst git status
-alias ga 'git add $*'
+alias ga git add $*
 alias gco git commit
 alias gcm 'git commit -m $1'
 alias gp git push
