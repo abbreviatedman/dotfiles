@@ -189,7 +189,6 @@
                                           (org-forward-heading-same-level 1)
                                           (org-todo 2))))
 
-(map! :map :n :leader :desc "Find file with new cache." "SPC" #'(lambda () (interactive) (projectile-find-file t)))
 
 
 ;; markdown (and some org) key-bindings
