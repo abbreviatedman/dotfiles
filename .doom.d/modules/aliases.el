@@ -13,12 +13,12 @@ Open dired in the current directory.
       (dired-jump nil dir)
     (dired-jump)))
 
-;; open a vterm terminal here
 (defun eshell/th ()
+"open a vterm terminal here"
   (open-terminal-other-frame))
 
-;; open a non-emacs terminal here
 (defun eshell/kh ()
+"Open a non-emacs terminal here"
   (shell-command "kitty"))
 
 (defun eshell/up (match)
@@ -32,12 +32,10 @@ Open dired in the current directory.
 
 ; hub
 
-;; clone a repo
 (defun eshell/hcl (repo)
   "Clones one repo from GitHub."
   (shell-command (concat "hub clone " repo)))
 
-;; create a repo
 (defun eshell/hcr (repo)
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
