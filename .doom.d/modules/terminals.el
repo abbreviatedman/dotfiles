@@ -48,5 +48,27 @@
        :desc "Toggle vterm popup" "v" #'+vterm/toggle))
 
 
+;; remember moar better
+(setq eshell-history-size 100000)
 
 
+;; read in history
+(map! :map evil-normal-state-map :leader
+      (:prefix-map ("z" . "presentation")
+       :desc "read eshell history in" "r" #'eshell/r))
+
+
+
+;; turn off their history saving so we can do it more often
+(setq eshell-save-history-on-exit nil)
+
+(defun eshell-append-history ()
+  "Append to eshell's command history."
+  (when eshell-history-ring
+    (let ((newest-cmd-ring (make-ring 1)))
+      (ring-insert newest-cmd-ring (car (ring-elements eshell-history-ring)))
+      (let ((eshell-history-ring newest-cmd-ring))
+        (eshell-write-history eshell-history-file-name t)))))
+
+;; always write to eshell history after every command
+(add-hook 'eshell-pre-command-hook #'eshell-append-history)
