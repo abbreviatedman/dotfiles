@@ -4,6 +4,10 @@
 ;;; hub fork
 
 
+(defun eshell/ni (&rest args)
+  "Run npm install with an arbitrary number of arguments."
+  (shell-command (mapconcat 'identity (cons "npm install" args) " ")))
+
 (defun eshell/mkcd (dir)
   "Create a directory then cd into it."
   (make-directory dir t)
@@ -19,13 +23,6 @@ Open dired in the current directory.
       (dired-jump nil dir)
     (dired-jump)))
 
-(defun eshell/th ()
-"open a vterm terminal here"
-  (open-terminal-other-frame))
-
-(defun eshell/kh ()
-"Open a non-emacs terminal here"
-  (shell-command "kitty"))
 
 (defun eshell/up (match)
 "search parent directories by search string"
@@ -36,7 +33,22 @@ Open dired in the current directory.
   (interactive)
   (eshell-read-history))
 
-; hub
+
+;; Terminals And External Programs
+
+(defun eshell/th ()
+  "open a vterm terminal here"
+  (open-terminal-other-frame))
+
+(defun eshell/kh ()
+"Open a non-emacs terminal here"
+  (shell-command "kitty"))
+
+(defun eshell/v (file)
+  "Open a file in vim in an external terminal."
+  (shell-command (concat "kitty --detach vim " file)))
+
+;; hub
 
 (defun eshell/hcl (repo)
   "Clones one repo from GitHub."
@@ -46,10 +58,3 @@ Open dired in the current directory.
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
 
-(defun eshell/v (file)
-  "Open a file in vim in an external terminal."
-  (shell-command (concat "kitty --detach vim " file)))
-
-(defun eshell/ni (&rest args)
-  "Run npm install with an arbitrary number of arguments."
-  (shell-command (mapconcat 'identity (cons "npm install" args) " ")))
