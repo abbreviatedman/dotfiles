@@ -51,4 +51,5 @@ Open dired in the current directory.
   (shell-command (concat "kitty --detach vim " file)))
 
 (defun eshell/ni (&rest args)
+  "Run npm install with an arbitrary number of arguments."
   (shell-command (mapconcat 'identity (cons "npm install" args) " ")))
