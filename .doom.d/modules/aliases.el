@@ -1,5 +1,5 @@
 ;; TODO
-;;; genralize
+;;; generalize from ni alias
 ;;; git remote -v
 ;;; hub fork
 
