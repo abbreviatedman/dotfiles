@@ -1,3 +1,9 @@
+;; TODO
+;;; genralize
+;;; git remote -v
+;;; hub fork
+
+
 (defun eshell/mkcd (dir)
   "Create a directory then cd into it."
   (make-directory dir t)
