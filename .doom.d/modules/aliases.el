@@ -49,3 +49,6 @@ Open dired in the current directory.
 (defun eshell/v (file)
   "Open a file in vim in an external terminal."
   (shell-command (concat "kitty --detach vim " file)))
+
+(defun eshell/ni (&rest args)
+  (shell-command (mapconcat 'identity (cons "npm install" args) " ")))
