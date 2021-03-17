@@ -40,7 +40,6 @@ alias jest jest --color $*
 alias smg sequelize model:generate $*
 
 # Node
-alias ni npm install $*
 alias nid npm install --save-dev $*
 alias ng npm install --global $*
 alias niy npm init -y
