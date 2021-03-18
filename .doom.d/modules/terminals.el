@@ -7,6 +7,13 @@
 
 (map! :map :n :leader (:prefix-map ("q" . "quit/session") :desc "Kill all terminals." "t" #'kill-terminals))
 
+(map! :map :n :leader (:prefix-map ("p" . "project")
+                       :desc "Edit project dir-locals" "E" #'projectile-edit-dir-locals
+                       :desc "Open eshell in project root" "e" #'projectile-run-eshell))
+
+(map! :map :n :leader (:prefix-map ("v" . "view")
+                       :desc "View available eshell buffers." "e" #'+eshell/switch-to))
+
 ;; start every emacs frame as a terminal by default
 (add-hook 'emacs-startup-hook '+eshell/here)
 
