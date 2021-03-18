@@ -1,4 +1,5 @@
-personal_ws-1.1 en 124
+personal_ws-1.1 en 139
+APIs
 Brinn
 Buzzfeed
 Ctrl
@@ -14,6 +15,7 @@ IAs
 Jaffe
 Jargondome
 Manjaro
+Middleware
 Mongo
 Mongo's
 Moonlander
@@ -24,14 +26,18 @@ Repos
 Roomba
 Sunil
 Syyu
+TAs
 Uncomment
 Whoo
 WidgetShow
 abbreviatedman
+allStarLineup
+amazonaws
 arg
 asdf
 autosuggest
 axios
+backend
 bcrypt
 bindkey
 bindsym
@@ -41,6 +47,7 @@ bugapalooza
 charset
 cli
 cmake
+codebase
 config
 const
 curlies
@@ -53,6 +60,7 @@ elisp
 favoriting
 fira
 forEach
+frontend
 gpg
 gtk
 hlissner
@@ -68,10 +76,12 @@ localhost
 lol
 loooong
 lotr
+mins
 mmm
 moar
 moveTabToNewWindow
 moveWindowToNewTab
+nav
 ncurses
 nextcloud
 nodejs
@@ -89,9 +99,12 @@ png
 ponymix
 popsicles
 postgres
+pre
 pulseaudio
 pwfeedback
+readme
 repo
+repo's
 req
 reshim
 ripgrep
@@ -108,6 +121,7 @@ sudo
 swappable
 syncthing
 toggleable
+trello
 ttf
 userId
 userapp
@@ -116,6 +130,7 @@ viewport
 vimium
 visudo
 vterm
+wireframes
 workspaces
 xclip
 yadm
