@@ -25,7 +25,7 @@ Open dired in the current directory.
 
 (defun eshell/th ()
 "open a vterm terminal here"
-  (open-terminal-other-frame))
+  (open-vterm-other-frame))
 
 (defun eshell/kh ()
 "Open a non-emacs terminal here"
