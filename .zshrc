@@ -100,7 +100,7 @@ export VISUAL=$EDITOR
 
 # doom emacs
 alias ds='doom sync'
-alias ddoc='doom doctor'
+alias dmd='doom doctor'
 
 # pacman and yay
 alias yay='yay --color=always'
