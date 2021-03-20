@@ -38,7 +38,7 @@ Open dired in the current directory.
 
 (defun eshell/th ()
   "open a vterm terminal here"
-  (open-terminal-other-frame))
+  (open-vterm-other-frame))
 
 (defun eshell/kh ()
 "Open a non-emacs terminal here"
@@ -58,3 +58,16 @@ Open dired in the current directory.
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
 
+
+;; sequelize
+
+(defun eshell/sdm ()
+  (shell-command "sequelize db:migrate"))
+
+;; asdf
+
+(defun eshell/arn ()
+  (shell-command "asdf reshim nodejs"))
+
+(defun eshell/arp ()
+  (shell-command "asdf reshim python"))
