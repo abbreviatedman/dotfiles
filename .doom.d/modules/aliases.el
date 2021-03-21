@@ -40,7 +40,21 @@ Open dired in the current directory.
   (interactive)
   (eshell-read-history))
 
-; hub
+;; Terminals And External Programs
+
+(defun eshell/th ()
+  "open a vterm terminal here"
+  (open-vterm-other-frame))
+
+(defun eshell/kh ()
+"Open a non-emacs terminal here"
+  (shell-command "kitty"))
+
+(defun eshell/v (file)
+  "Open a file in vim in an external terminal."
+  (shell-command (concat "kitty --detach vim " file)))
+
+;; hub
 
 (defun eshell/hcl (repo)
   "Clones one repo from GitHub."
@@ -50,6 +64,15 @@ Open dired in the current directory.
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
 
-(defun eshell/v (file)
-  "Open a file in vim in an external terminal."
-  (shell-command (concat "kitty --detach vim " file)))
+;; sequelize
+
+(defun eshell/sdm ()
+  (shell-command "sequelize db:migrate"))
+
+;; asdf
+
+(defun eshell/arn ()
+  (shell-command "asdf reshim nodejs"))
+
+(defun eshell/arp ()
+  (shell-command "asdf reshim python"))
