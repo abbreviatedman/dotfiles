@@ -1,3 +1,5 @@
+;; TODO command to toggle scroll-on-output on or off
+
   (defun kill-terminals ()
 	 (interactive)
 	 (mapc (lambda (buffer)
