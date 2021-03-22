@@ -11,6 +11,7 @@
 
 (map! :map :n :leader (:prefix-map ("p" . "project")
                        :desc "Edit project dir-locals" "E" #'projectile-edit-dir-locals
+                       :desc "Open vterm in project root" "v" #'projectile-run-vterm
                        :desc "Open eshell in project root" "e" #'projectile-run-eshell))
 
 (map! :map :n :leader (:prefix-map ("v" . "view")
