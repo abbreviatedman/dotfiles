@@ -15,6 +15,12 @@ exec --no-startup-id picom
 # might move to nextcloud soon?
 exec --no-startup-id syncthing -no-browser
 
+# Startup Files
+exec "google-chrome-stable"
+exec "zoom"
+exec "slack"
+exec "emacs"
+
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
 set $alt Mod1
