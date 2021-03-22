@@ -183,3 +183,5 @@
        (default +bindings +smartparens))
 
 (require 'tramp)
+
+(setq evil-respect-visual-line-mode nil)
