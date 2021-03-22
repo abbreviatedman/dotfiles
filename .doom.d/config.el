@@ -46,9 +46,6 @@
 (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
 
-;; whitespace settings
-(setq! show-trailing-whitespace 1)
-
 ;; Commands for changing the general look of fonts.
 ;; These are mostly for presenting things to others.
 
