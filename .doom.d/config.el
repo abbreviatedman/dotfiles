@@ -235,6 +235,10 @@
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
 
+;; black integration
+(add-hook 'after-init-hook #'blacken-mode)
+(setq blacken-only-if-project-is-blackened t)
+
 ;; set where node is located
 (setenv "NODE_PATH" nil)
 (setenv "PATH" (concat (getenv "PATH") ":/home/abbreviatedman/.asdf/shims"))
