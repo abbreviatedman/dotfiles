@@ -255,18 +255,7 @@
 ;; Pick from kill ring... with completion!
 (global-set-key (kbd "M-p") #'counsel-yank-pop)
 
-;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
-;; Not working on startup, but CAN be run after startup when the `ivy-minibuffer-map`
-;; variable exists.
-;;
-;; Could map setting it up with a keypress when I discover the feature doesn't exist.
-;; But there's probably a workaround where we can have it activate later on startup.
-;;
-;; When a file is first opened? We probably want to access it earlier.
 
-
-
-;;
 ;; smooth scrolling config
 
 (require 'scroll-on-jump)
