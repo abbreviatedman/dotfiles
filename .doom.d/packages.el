@@ -108,8 +108,11 @@
 ;; automatic code reformatting
 ;;
 
-;; prettier (web development)
+;;; web development
 (package! prettier)
+
+;;; python
+(package! blacken)
 
 
 

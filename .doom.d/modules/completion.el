@@ -1,3 +1,4 @@
+;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
 (defun ivy-call-number (n)
   (interactive
    (list (let* ((type (event-basic-type last-command-event))
