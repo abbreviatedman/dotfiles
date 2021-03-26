@@ -9,6 +9,7 @@
 (load-library "terminals")
 (load-library "aliases")
 
+;; TODO mark checkboxes marked with "SPC m x"
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
