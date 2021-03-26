@@ -229,11 +229,13 @@
 
 (setq undo-fu-allow-undo-in-region t)
 
+;; TODO configure prettier and blacken to run only in certain (and different) modes
+
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
 
 ;; black integration
-(add-hook 'after-init-hook #'blacken-mode)
+;; (add-hook 'after-init-hook #'blacken-mode)
 (setq blacken-only-if-project-is-blackened t)
 
 ;; set where node is located
