@@ -10,6 +10,7 @@
 (load-library "aliases")
 
 ;; TODO mark checkboxes marked with "SPC m x"
+;; TODO make returning to transparency not additive
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
