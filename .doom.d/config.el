@@ -8,6 +8,8 @@
 (load-library "config-dired")
 (load-library "terminals")
 (load-library "aliases")
+;; currently not overwriting
+(load-library "ivy-hydra-fork")
 
 ;; TODO mark checkboxes marked with "SPC m x"
 ;; TODO make returning to transparency not additive
