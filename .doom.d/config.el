@@ -372,11 +372,24 @@
        :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
 
 ;; use web mode for ejs
-
-
 (add-to-list 'auto-mode-alist '("\\.ejs\\'" . gfm-mode))
 
 
-;; some available keybinding prefixes
+; Pomodoro settings
+
+;; Mode-line appearance
+(setq org-pomodoro-format "POM~%s")
+(setq org-pomodoro-time-format "%m")
+(setq org-pomodoro-long-break-format "LB~%s")
+(setq org-pomodoro-short-break-format "SB~%s")
+
+;; Allow manual breaks in Pomodoro.
+(setq org-pomodoro-manual-break t)
+
+;; A canceled Pomodoro is the same as a completed Pomodoro.
+(setq org-pomodoro-keep-killed-pomodoro-time t)
+
+
+; some available keybinding prefixes
 ;; SPC l
 ;; SPC y
