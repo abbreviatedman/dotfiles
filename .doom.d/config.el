@@ -11,6 +11,11 @@
 
 ;; TODO mark checkboxes marked with "SPC m x"
 ;; TODO make returning to transparency not additive
+;; TODO make LSP type info display opt-in
+;; TODO add markdown-promote-lsit and markdown-demote-list to insert map in markdown mode
+
+
+
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
