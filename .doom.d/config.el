@@ -45,6 +45,10 @@
             kill-buffer-query-functions))
 (setq confirm-kill-emacs nil)
 
+; Markdown
+
+;; Tell markdown mode to stop over-indenting lists.
+(setq markdown-list-indent-width 2)
 ;; Make markdown continue lists on enter.
 (setq markdown-indent-on-enter 'indent-and-new-item)
 ;; uppercase markdown checkboxes
