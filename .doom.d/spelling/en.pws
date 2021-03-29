@@ -1,4 +1,4 @@
-personal_ws-1.1 en 150
+personal_ws-1.1 en 153
 APIs
 Avec
 Brinn
@@ -18,6 +18,7 @@ Jargondome
 Keyboardio
 Manjaro
 Middleware
+Modeline
 Mongo
 Mongo's
 Moonlander
@@ -54,6 +55,7 @@ bugapalooza
 charset
 cli
 cmake
+cmds
 codebase
 config
 const
@@ -105,6 +107,7 @@ parens
 pavucontrol
 picom
 png
+pomodoro
 ponymix
 popsicles
 postgres
