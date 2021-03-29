@@ -320,7 +320,7 @@
                         ("SomaFM - DEF CON" . "https://somafm.com/defcon.pls")
                         ("SomaFM - Space Station Soma" . "https://somafm.com/spacestation.pls")
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
-                        ("SomaFM - Groove Sala." . "https://somafm.com/groovesalad.pls")))
+                        ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")))
 
 ;; Config for when it's on:
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)
