@@ -1,8 +1,9 @@
-personal_ws-1.1 en 148
+personal_ws-1.1 en 158
 APIs
 Avec
 Brinn
 Buzzfeed
+Cliqhop
 Ctrl
 Dagm
 Dinos
@@ -26,6 +27,7 @@ NoSQL
 PlugInstall
 Repos
 Roomba
+SomaFM
 Sunil
 Syyu
 TAs
@@ -36,6 +38,7 @@ Whoo
 WidgetShow
 Wireframe
 abbreviatedman
+advices
 allStarLineup
 amazonaws
 arg
@@ -45,6 +48,7 @@ autosuggest
 axios
 backend
 bcrypt
+beatblender
 bindkey
 bindsym
 bitwarden
@@ -62,6 +66,7 @@ destructuring
 dev
 devs
 dired
+duckduckgo
 ejs
 elisp
 fav
@@ -69,6 +74,8 @@ favoriting
 fira
 forEach
 frontend
+gitlab
+goto
 gpg
 gtk
 hlissner
@@ -84,9 +91,11 @@ localhost
 lol
 loooong
 lotr
+minibuffer
 mins
 mmm
 moar
+modeline
 moveTabToNewWindow
 moveWindowToNewTab
 nav
@@ -129,6 +138,7 @@ stylesheet
 sudo
 swappable
 syncthing
+todo
 toggleable
 trello
 ttf
