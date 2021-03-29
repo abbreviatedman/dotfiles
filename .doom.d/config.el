@@ -181,13 +181,23 @@
 ;; they are implemented.
 
 
-;; TODO
-;; mark todo done and mark next todo next
-;; SPC m N
-;; (org-todo 'done)
-;; org forward same level
-;; (org-todo 2)
-;;
+;; Search specific engines.
+
+(engine-mode t)
+
+(defengine duck-duck-go
+  "https://duckduckgo.com/?q=%s")
+(defengine google
+  "https://www.google.com/search?q=%s")
+(defengine google-images
+  "https://www.google.com/search?tbm=isch&q=%s")
+
+(map! :map :n :leader (:prefix-map ("s" . "search")
+                       :desc "Search DuckDuckGo" "h" #'engine/search-duck-duck-go
+                       (:prefix-map ("g" . "google")
+                        :desc "Search Google" "g" #'engine/search-google
+                        :desc "Search Google Images" "i" #'engine/search-google-images)))
+
 
 (map! :map org-mode-map :leader
       (:prefix-map ("m" . "mark")

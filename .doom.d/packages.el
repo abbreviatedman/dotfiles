@@ -53,6 +53,8 @@
 ;; adds browsing for links
 (package! browse-at-remote)
 
+(package! engine-mode)
+
 ;; internal ssh handling
 (package! ssh-agency)
 
