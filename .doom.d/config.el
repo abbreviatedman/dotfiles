@@ -8,9 +8,16 @@
 (load-library "config-dired")
 (load-library "terminals")
 (load-library "aliases")
+;; currently not overwriting
+(load-library "ivy-hydra-fork")
 
 ;; TODO mark checkboxes marked with "SPC m x"
 ;; TODO make returning to transparency not additive
+;; TODO make LSP type info display opt-in
+;; TODO add markdown-promote-list and markdown-demote-list to insert map in markdown mode
+
+
+
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
@@ -40,6 +47,10 @@
             kill-buffer-query-functions))
 (setq confirm-kill-emacs nil)
 
+; Markdown
+
+;; Tell markdown mode to stop over-indenting lists.
+(setq markdown-list-indent-width 2)
 ;; Make markdown continue lists on enter.
 (setq markdown-indent-on-enter 'indent-and-new-item)
 ;; uppercase markdown checkboxes
@@ -363,11 +374,24 @@
        :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
 
 ;; use web mode for ejs
-
-
 (add-to-list 'auto-mode-alist '("\\.ejs\\'" . gfm-mode))
 
 
-;; some available keybinding prefixes
+; Pomodoro settings
+
+;; Mode-line appearance
+(setq org-pomodoro-format "POM~%s")
+(setq org-pomodoro-time-format "%m")
+(setq org-pomodoro-long-break-format "LB~%s")
+(setq org-pomodoro-short-break-format "SB~%s")
+
+;; Allow manual breaks in Pomodoro.
+(setq org-pomodoro-manual-break t)
+
+;; A canceled Pomodoro is the same as a completed Pomodoro.
+(setq org-pomodoro-keep-killed-pomodoro-time t)
+
+
+; some available keybinding prefixes
 ;; SPC l
 ;; SPC y
