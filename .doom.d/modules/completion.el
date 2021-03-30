@@ -101,5 +101,3 @@ If all failed, try to complete the common part with `company-complete-common'"
   (with-ivy-window
    (insert x)))
 
-(ivy-set-action
- t '(("p" ivy-copy-to-buffer-action "copy to buffer")))
