@@ -16,7 +16,6 @@ exec --no-startup-id picom
 exec --no-startup-id syncthing -no-browser
 
 # Startup Files
-exec "google-chrome-stable"
 exec "zoom"
 exec "slack"
 exec "emacs"
