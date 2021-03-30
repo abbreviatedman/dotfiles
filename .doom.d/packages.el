@@ -122,3 +122,5 @@
 
 
 (package! peep-dired)
+
+(package! evil-replace-with-register)
