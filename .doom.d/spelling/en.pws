@@ -1,8 +1,10 @@
-personal_ws-1.1 en 153
+personal_ws-1.1 en 176
 APIs
 Avec
+Banff
 Brinn
 Buzzfeed
+Capilano
 Ctrl
 Dagm
 Dinos
@@ -24,9 +26,11 @@ Mongo's
 Moonlander
 Nakisha
 NoSQL
+OpenWeather
 PlugInstall
 Repos
 Roomba
+Sandpoint
 Sunil
 Syyu
 TAs
@@ -39,6 +43,8 @@ Wireframe
 abbreviatedman
 allStarLineup
 amazonaws
+appid
+arcgis
 arg
 asdf
 auth
@@ -61,6 +67,7 @@ config
 const
 curlies
 dangerroom
+darksky
 destructuring
 dev
 devs
@@ -71,14 +78,23 @@ fav
 favoriting
 fira
 forEach
+formatter
 frontend
+generalassemb
+geocoder
+geolocating
+geonames
+giphy
+gitignore
 gpg
 gtk
 hlissner
+homeworks
 href
 https
 init
 js
+json
 jsx
 keychain
 keyring
@@ -87,12 +103,15 @@ localhost
 lol
 loooong
 lotr
+ly
 mins
 mmm
 moar
 moveTabToNewWindow
 moveWindowToNewTab
+mult
 nav
+navbar
 ncurses
 nextcloud
 nodejs
@@ -114,7 +133,9 @@ postgres
 pre
 pulseaudio
 pwfeedback
+py
 readme
+readthedocs
 recency
 repo
 repo's
@@ -131,6 +152,7 @@ src
 standups
 storyId
 stylesheet
+subfields
 sudo
 swappable
 syncthing
@@ -144,6 +166,7 @@ viewport
 vimium
 visudo
 vterm
+webstore
 wireframes
 workspaces
 xclip

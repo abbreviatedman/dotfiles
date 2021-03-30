@@ -8,8 +8,6 @@
 (load-library "config-dired")
 (load-library "terminals")
 (load-library "aliases")
-;; currently not overwriting
-(load-library "ivy-hydra-fork")
 
 ;; TODO mark checkboxes marked with "SPC m x"
 ;; TODO make returning to transparency not additive
@@ -99,14 +97,19 @@
        :desc "toggle transparency" "t" #'toggle-transparency))
 
 
+
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 ;; TODO remove markdown meta-p mapping
 
-;; start with ligatures in programming modes
+;; Ligatures
 (add-hook 'prog-mode-hook 'fira-code-mode)
 (setq fira-code-mode-disabled-ligatures '("x" "[]"))
+(use-package python
+  :config
+  (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
+  (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
@@ -267,6 +270,8 @@
 (setq exec-path (append exec-path '("/home/abbreviatedman/.asdf/shims")))
 
 
+(setq projectile-track-known-projects-automatically nil)
+
 ;; Opens minibuffer to select a root folder from which to discover projects.
 (map! :map :n :leader (:prefix-map ("p" . "project") :desc "Discover projects in directory" "D" #'projectile-discover-projects-in-directory))
 
@@ -380,7 +385,7 @@
 ; Pomodoro settings
 
 ;; Mode-line appearance
-(setq org-pomodoro-format "POM~%s")
+(setq org-pomodoro-format "")
 (setq org-pomodoro-time-format "%m")
 (setq org-pomodoro-long-break-format "LB~%s")
 (setq org-pomodoro-short-break-format "SB~%s")
