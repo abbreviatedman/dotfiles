@@ -385,10 +385,10 @@
 ; Pomodoro settings
 
 ;; Mode-line appearance
-(setq org-pomodoro-format "")
+(setq org-pomodoro-format "P%s")
 (setq org-pomodoro-time-format "%m")
-(setq org-pomodoro-long-break-format "LB~%s")
-(setq org-pomodoro-short-break-format "SB~%s")
+(setq org-pomodoro-long-break-format "L~%s")
+(setq org-pomodoro-short-break-format "S~%s")
 
 ;; Allow manual breaks in Pomodoro.
 (setq org-pomodoro-manual-break t)
