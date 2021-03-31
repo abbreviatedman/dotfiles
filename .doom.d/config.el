@@ -3,7 +3,6 @@
 (load-library "secrets")
 (load-library "config-org-agenda")
 (load-library "completion")
-(load-library "snipe-and-transpose")
 (load-library "space-liner")
 (load-library "config-dired")
 (load-library "terminals")
@@ -400,3 +399,5 @@
 ; some available keybinding prefixes
 ;; SPC l
 ;; SPC y
+;; SPC r
+;; SPC and any capital letter
