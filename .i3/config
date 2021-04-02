@@ -1,8 +1,10 @@
 # Set initial resolution
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
-# battery warning
+# enable caffeine by default
+# exec --no-startup-id "caffeine -a"
 
+# battery warning
 # warns at 30% and half that (15)
 exec --no-startup-id i3-battery-popup -n -L 30
 
@@ -12,6 +14,11 @@ exec --no-startup-id picom
 # start syncing local files
 # might move to nextcloud soon?
 exec --no-startup-id syncthing -no-browser
+
+# Startup Files
+exec "zoom"
+exec "slack"
+exec "emacs"
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -33,6 +40,7 @@ assign [class="Google-chrome"] "9"
 assign [class="Google-chrome-unstable"] "9"
 assign [class="zoom"] "10"
 assign [class="Slack"] "11"
+assign [class="discord"] "11"
 assign [class="pulse-sms"] "11"
 assign [class="Signal"] "11"
 assign [class="vlc"] "12"
@@ -69,7 +77,10 @@ bindsym Caps_Lock mode "caps"
 floating_modifier $mod
 
 # start terminal 1
-bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+vterm/here 1)\\"'"
+# bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+vterm/here 1)\\"'"
+# use eshell instead?
+bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+eshell/here)\\"'"
+
 
 # start terminal 2
 bindsym $mod+$alt+t exec "kitty"
@@ -89,6 +100,9 @@ bindsym $mod+s exec "slack"
 # start video conference app
 bindsym $mod+z exec "zoom"
 
+# start IDE
+bindsym $mod+$alt+e exec "emacs"
+
 # start Alternate IDE
 bindsym $mod+c exec "code"
 
@@ -103,6 +117,43 @@ bindsym $mod+space exec --no-startup-id dmenu_recency -sf '#93a1a1' -sb '#002b36
 
 # launch categorized menu
 bindsym $mod+$alt+space exec --no-startup-id morc_menu
+
+# sleep management
+
+## turn sleep on
+bindsym  $mod+$alt+Ctrl+c exec "caffeine -a"
+
+## turn sleep off
+bindsym  $mod+$alt+Ctrl+Shift+c exec "caffeine kill"
+
+
+## Volume control.
+
+### All audio sources.
+
+#### raise volume a little
+bindsym Shift+XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +2000"
+bindsym Shift+XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -2000"
+
+#### raise volume a lot
+bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume @DEFAULT_SINK@ +10000"
+bindsym XF86AudioLowerVolume exec "pactl set-sink-volume @DEFAULT_SINK@ -10000"
+
+#### Mute volume
+bindsym XF86AudioMute exec "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+
+### Just emacs' radio (or any audio stream)
+
+#### Raise volume a little.
+bindsym $alt+Shift+XF86AudioRaiseVolume exec "ponymix --sink-input -d 'audio' increase 2"
+bindsym $alt+Shift+XF86AudioLowerVolume exec "ponymix --sink-input -d 'audio' decrease 2"
+
+#### Raise volume a lot.
+bindsym $alt+XF86AudioRaiseVolume exec "ponymix --sink-input -d 'audio' increase 10"
+bindsym $alt+XF86AudioLowerVolume exec "ponymix --sink-input -d 'audio' decrease 10"
+
+#### Mute volume
+bindsym $alt+XF86AudioMute exec "ponymix --sink-input -d 'audio' toggle"
 
 ################################################################################################
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
@@ -132,7 +183,7 @@ bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
+bindsym $mod+Shift+Print --release exec --no-startup-id spectacle -rb
 # bindsym $mod+$alt+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
@@ -296,7 +347,7 @@ for_window [class="Oblogout"] fullscreen enable
 for_window [class="octopi"] floating enable
 for_window [title="About Pale Moon"] floating enable
 for_window [class="Pamac-manager"] floating enable
-for_window [class="Pavucontrol"] floating enable
+# for_window [class="Pavucontrol"] floating enable
 for_window [class="qt5ct"] floating enable sticky enable border normal
 for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
 for_window [class="Simple-scan"] floating enable border normal
@@ -505,12 +556,16 @@ mode "$mode_gaps_outer" {
 
 #  keybindings for changing display setups
 
-# Just a laptop screen.
-bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+# Just a laptop screen - T480
+# bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+
 
 # One external monitor.
 bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP1-2 --off --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 
 # ThinkPad dock with 4K and FHD.
-bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"
+# bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"
+
+# galp3 - external monitors with laptop screen off
+bindsym $mod+e exec "xrandr --output eDP1 --off --output DP1 --primary --mode 1920x1080 --pos 3840x1526 --rotate normal --output HDMI1 --off --output HDMI2 --mode 3840x2160 --pos 0x0 --rotate normal --output VIRTUAL1 --off; sleep 2; nitrogen --restore"

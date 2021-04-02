@@ -1,3 +1,23 @@
+;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
+(defun ivy-call-number (n)
+  (interactive
+   (list (let* ((type (event-basic-type last-command-event))
+                (char (if (characterp type)
+                          ;; Number on the main row.
+                          type
+                        ;; Keypad number, if bound directly.
+                        (car (last (string-to-list (symbol-name type))))))
+                (n (- char ?0)))
+           (if (zerop n) 10 n))))
+  (ivy-set-index (1- n))
+  (ivy--exhibit)
+  (ivy-done))
+
+(use-package ivy
+  :config
+  (dotimes (i 10)
+    (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number)))
+
 (use-package company
   :diminish company-mode
   :hook ((prog-mode LaTeX-mode latex-mode ess-r-mode) . company-mode)
@@ -72,3 +92,12 @@ If all failed, try to complete the common part with `company-complete-common'"
   (tide-hl-identifier-mode +1))
 
 (add-hook 'js2-mode-hook #'setup-tide-mode)
+
+
+(map! :i [C-tab] nil)
+(map! :i [M-tab] #'+web/indent-or-yas-or-emmet-expand)
+
+(defun ivy-copy-to-buffer-action (x)
+  (with-ivy-window
+   (insert x)))
+

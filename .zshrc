@@ -100,7 +100,7 @@ export VISUAL=$EDITOR
 
 # doom emacs
 alias ds='doom sync'
-alias ddoc='doom doctor'
+alias dmd='doom doctor'
 
 # pacman and yay
 alias yay='yay --color=always'
@@ -134,14 +134,16 @@ alias inbox='vim ~/Sync/gtd/inbox.md'
 alias na='vim ~/Sync/gtd/next-actions.md'
 
 # common directories
-alias cdga='cd ~/Documents/work/ga'
+alias cdga='cd ~/Documents/ga'
 alias cdt1='cd ~/Documents/code-immersives/term-1'
-alias cdjp='cd ~/Documents/code-immersives/term-1/javascript-playground/'
+alias cdjp='cd ~/Documents/javascript-playground/'
 alias cdsc='cd ~/Documents/scratchpad'
-alias cdsn='cd ~/Documents/snippets'
 alias cdsp='cd ~/Documents/side-projects'
 alias cdtc='cd ~/Documents/side-projects/techniconsole'
 alias cdgtd='cd ~/Sync/gtd'
+
+# database management
+alias smg='sequelize model:generate'
 
 # open emacs
 # open file(s) in emacs
@@ -177,20 +179,6 @@ mkcd ()
       cd -P -- "$1"
 }
 
-# Make each directory list contents upon entering.
-# chpwd() ls -a
-
-
-# # Show all color codes.
-
-# ZSH_SPECTRUM_TEXT=${ZSH_SPECTRUM_TEXT:-Arma virumque cano Troiae qui primus ab oris}
-
-# function spectrum_ls() {
-#   for code in {000..255}; do
-#     print -P -- "$code: %{$FG[$code]%}$ZSH_SPECTRUM_TEXT%{$reset_color%}"
-#   done
-# }
-
 # apt/pkcon
 alias sai='sudo apt install -y'
 alias saa='sudo apt autoremove -y'
@@ -198,15 +186,27 @@ alias sar='sudo apt remove -y'
 alias sauu='sudo apt update && sudo apt upgrade'
 alias update='sudo pkcon refresh && sudo pkcon update'
 
+# React
+alias cra='create-react-app'
+
 # npm aliases
 alias ni='npm install'
+alias niy='npm init -y'
 alias nid='npm install --save-dev'
 alias ng='npm install --global'
+alias ar='asdf reshim nodejs'
 alias nt='npm test'
 alias nr='npm run'
 alias ns='npm start'
 alias nf='npm cache clean && rm -rf node_modules && npm install'
 alias nlg='npm list --global --depth=0'
+
+# nodemon
+alias nm='nodemon'
+
+# hub
+alias hcl='hub clone'
+alias hcr='hub create'
 
 # git aliases I do/should use
 alias g='git'
@@ -304,7 +304,7 @@ alias gpristine='git reset --hard && git clean -dfx'
 alias gpu='git push upstream'
 alias gpv='git push -v'
 alias gr='git remote'
-alias gra='git remote add'
+alias gra='git remote add origin'
 alias grb='git rebase'
 alias grba='git rebase --abort'
 alias grbc='git rebase --continue'
@@ -373,11 +373,5 @@ export PATH=/usr/local/anaconda/bin:/usr/local/bin:/home/abbreviatedman/.local/b
 
 
 
-# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
 # use asdf
 . $HOME/.asdf/asdf.sh
-
-# export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-# # source /usr/share/nvm/init-nvm.sh

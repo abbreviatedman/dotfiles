@@ -3,14 +3,18 @@
 (load-library "secrets")
 (load-library "config-org-agenda")
 (load-library "completion")
-(load-library "snipe-and-transpose")
 (load-library "space-liner")
+(load-library "config-dired")
+(load-library "terminals")
+(load-library "aliases")
 
-;; start every emacs frame as a terminal by default
-(add-hook 'emacs-startup-hook 'vterm)
-(setq vterm-shell "/usr/sbin/zsh")
+;; TODO mark checkboxes marked with "SPC m x"
+;; TODO make returning to transparency not additive
+;; TODO make LSP type info display opt-in
+;; TODO add markdown-promote-list and markdown-demote-list to insert map in markdown mode
 
-;; TODO command to close all vterm buffers
+
+
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
@@ -19,9 +23,6 @@
 ;; Except composed from things like "8)" (ascii emojis).
 ;; And I don't want GitHub's alternate set clogging things up, either.
 (setq emojify-emoji-styles '(unicode))
-
-;; don't show mode-line
-(global-hide-mode-line-mode 1)
 
 (setq ivy-re-builders-alist
       '((t . ivy--regex-fuzzy)))
@@ -43,6 +44,10 @@
             kill-buffer-query-functions))
 (setq confirm-kill-emacs nil)
 
+; Markdown
+
+;; Tell markdown mode to stop over-indenting lists.
+(setq markdown-list-indent-width 2)
 ;; Make markdown continue lists on enter.
 (setq markdown-indent-on-enter 'indent-and-new-item)
 ;; uppercase markdown checkboxes
@@ -50,9 +55,6 @@
 ;; always be gfm-ing
 (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
-
-;; whitespace settings
-(setq! show-trailing-whitespace 1)
 
 ;; Commands for changing the general look of fonts.
 ;; These are mostly for presenting things to others.
@@ -73,26 +75,40 @@
               100)
          '(85 . 50) '(100 . 100)))))
 
+(defun add-fira-code-mode-hook ()
+  (interactive)
+  (add-hook 'prog-mode-hook 'fira-code-mode))
+(defun remove-fira-code-mode-hook ()
+  (interactive)
+  (remove-hook 'prog-mode-hook 'fira-code-mode))
+
 (map! :map evil-normal-state-map :leader
-      (:prefix-map ("z" . "font presentation")
+      (:prefix-map ("z" . "presentation")
        :desc "zoom in" "i" #'doom/increase-font-size
        :desc "zoom out" "o" #'doom/decrease-font-size
        :desc "zoom in buffer" "I" #'text-scale-increase
        :desc "zoom out buffer" "O" #'text-scale-decrease
        :desc "zoom hydra" "z" #'+hydra/text-zoom/body
+       :desc "turn ligatures on globally" "+" #'add-fira-code-mode-hook
+       :desc "turn ligatures off globally" "-" #'remove-fira-code-mode-hook
        :desc "toggle ligatures for this file" "l" #'fira-code-mode
+       :desc "toggle prettier globally" "p" #'global-prettier-mode
        :desc "toggle transparency" "t" #'toggle-transparency))
+
 
 
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 ;; TODO remove markdown meta-p mapping
-;; TODO add mapping for org-list-repair
 
-;; start with ligatures in programming modes
+;; Ligatures
 (add-hook 'prog-mode-hook 'fira-code-mode)
 (setq fira-code-mode-disabled-ligatures '("x" "[]"))
+(use-package python
+  :config
+  (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
+  (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
@@ -169,56 +185,59 @@
 ;; they are implemented.
 
 
+;; Search specific engines.
+
+(engine-mode t)
+
+(defengine duck-duck-go
+  "https://duckduckgo.com/?q=%s")
+(defengine google
+  "https://www.google.com/search?q=%s")
+(defengine google-images
+  "https://www.google.com/search?tbm=isch&q=%s")
+
+(map! :map :n :leader (:prefix-map ("s" . "search")
+                       :desc "Search DuckDuckGo" "h" #'engine/search-duck-duck-go
+                       (:prefix-map ("g" . "google")
+                        :desc "Search Google" "g" #'engine/search-google
+                        :desc "Search Google Images" "i" #'engine/search-google-images)))
+
+
+(map! :map org-mode-map :leader
+      (:prefix-map ("m" . "mark")
+       :desc "Next todo GTD-style" "m" '(lambda ()
+                                          (interactive)
+                                          (org-todo 'done)
+                                          (org-forward-heading-same-level 1)
+                                          (org-todo 2))))
+
 
 
 ;; markdown (and some org) key-bindings
-;; first, switch gj and gk back to regular evil standards
-(map! :map evil-markdown-mode "g j" nil)
-(map! :map evil-markdown-mode "g k" nil)
-(map! :map gfm-mode "g j" nil)
-(map! :map gfm-mode "g k" nil)
-(map! :map org-mode "g j" nil)
-(map! :map org-mode "g k" nil)
-
 ;; now good mappings
-(map! :map gfm-mode :leader
+
+(map! :map (evil-markdown-mode gfm-mode) :leader
       (:prefix-map ("e" . "editing")
        :desc "Add markdown item" "i" #'markdown-insert-list-item
        :desc "Go to next section" "j" #'markdown-forward-same-level
        :desc "Go to previous section" "k" #'markdown-backward-same-level
-       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
-       ))
-
-(map! :map evil-markdown-mode :leader
-      (:prefix-map ("e" . "editing")
-       :desc "Add markdown item" "i" #'markdown-insert-list-item
-       :desc "Go to next section" "j" #'markdown-forward-same-level
-       :desc "Go to previous section" "k" #'markdown-backward-same-level
-       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox
-       )
-      )
-
-(defun open-terminal-other-frame ()
-  (interactive)
-  (make-frame-command)
-  (let ((buf (current-buffer)))
-    (switch-to-buffer buf)
-    (switch-to-buffer-other-frame buf))
-  (+vterm/here nil))
-
+       :desc "Repair list" "r" #'org-list-repair
+       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox))
 
 ;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
-;; open a terminal in a new frame
-(map! :leader
-      :desc "open terminal other frame" "o T" #'open-terminal-other-frame)
 
-;; titlecase the selection
-(map! :map evil-visual-state-map "g t" #'upcase-initials-region)
+(evil-define-operator evil-titlecase (beg end type)
+  "Convert text to title case."
+  (if (eq type 'block)
+      (evil-apply-on-block #'evil-titlecase beg end nil)
+    (upcase-initials-region beg end)))
 
+(map! :nm "g o" #'evil-titlecase)
 
-
+;; use org to open links.
+(map! :n "g b" #'org-open-at-point)
 
 ;; Snipe settings
 ;; Look through whole buffer, not just line
@@ -229,12 +248,20 @@
 
 ;; set spelling dictionary
 (setq ispell-dictionary "en")
+;; spelling dictionary location
+(setq ispell-personal-dictionary "/home/abbreviatedman/.doom.d/spelling/en.pws")
 
 
 (setq undo-fu-allow-undo-in-region t)
 
+;; TODO configure prettier and blacken to run only in certain (and different) modes
+
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
+
+;; black integration
+;; (add-hook 'after-init-hook #'blacken-mode)
+(setq blacken-only-if-project-is-blackened t)
 
 ;; set where node is located
 (setenv "NODE_PATH" nil)
@@ -242,46 +269,19 @@
 (setq exec-path (append exec-path '("/home/abbreviatedman/.asdf/shims")))
 
 
+(setq projectile-track-known-projects-automatically nil)
+
+;; Opens minibuffer to select a root folder from which to discover projects.
+(map! :map :n :leader (:prefix-map ("p" . "project") :desc "Discover projects in directory" "D" #'projectile-discover-projects-in-directory))
+
 (beacon-mode 1)
 (setq beacon-size 10)
 (setq beacon-blink-duration 0.1)
 
-;; some available keybinding prefixes
-;; SPC d
-;; SPC l
-;; SPC v
-;; SPC y
-
-
 ;; Pick from kill ring... with completion!
 (global-set-key (kbd "M-p") #'counsel-yank-pop)
 
-;; Adds the ability to type Meta-n to go to the nth item in an Ivy buffer.
-;; Not working on startup, but CAN be run after startup when the `ivy-minibuffer-map`
-;; variable exists.
-;;
-;; Could map setting it up with a keypress when I discover the feature doesn't exist.
-;; But there's probably a workaround where we can have it activate later on startup.
-;;
-;; When a file is first opened? We probably want to access it earlier.
-;; (defun ivy-call-number (n)
-;;   (interactive
-;;    (list (let* ((type (event-basic-type last-command-event))
-;;                 (char (if (characterp type)
-;;                           ;; Number on the main row.
-;;                           type
-;;                         ;; Keypad number, if bound directly.
-;;                         (car (last (string-to-list (symbol-name type))))))
-;;                 (n (- char ?0)))
-;;            (if (zerop n) 10 n))))
-;;   (ivy-set-index (1- n))
-;;   (ivy--exhibit)
-;;   (ivy-done))
 
-;; (dotimes (i 10)
-;;   (define-key ivy-minibuffer-map (read-kbd-macro (format "M-%d" i)) 'ivy-call-number))
-
-;;
 ;; smooth scrolling config
 
 (require 'scroll-on-jump)
@@ -326,9 +326,6 @@
 
 (setq scroll-on-jump-duration 1)
 
-;; Use org to open links.
-(map! :m "g b" #'org-open-at-point)
-
 (setq eradio-channels '(
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
@@ -338,14 +335,30 @@
                         ("SomaFM - DEF CON" . "https://somafm.com/defcon.pls")
                         ("SomaFM - Space Station Soma" . "https://somafm.com/spacestation.pls")
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
-                        ("SomaFM - Groove Sala." . "https://somafm.com/groovesalad.pls")))
+                        ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")))
+
+;; Config for when it's on:
+(remove-hook 'doom-modeline-mode-hook 'column-number-mode)
+(remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
+(setq doom-modeline-buffer-encoding nil)
+(setq doom-modeline-lsp nil)
+(setq doom-modeline-env-version nil)
+(line-number-mode 0)
+
+(map! :map :n :leader (:prefix-map ("b" . "buffer") :desc "Rename buffer" "R" #'rename-buffer))
+
+;; Turn the modeline on and off.
+(defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
+
+(defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
 
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("t" . "toggle")
        :desc "toggle radio" "m" #'eradio-toggle
+       :desc "toggle modeline for buffer" "d" #'toggle-mode-line-buffer
+       :desc "toggle modeline" "D" #'toggle-mode-line-global
+       :desc "toggle pomodoro clock" "c" #'org-pomodoro
        :desc "play radio channel" "M" #'eradio-play))
-
-(map! :i [C-tab] #'yas-expand)
 
 (setq org-re-reveal-title-slide nil)
 (setq org-re-reveal-theme "league")
@@ -355,3 +368,36 @@
 
 
 (setq indium-chrome-executable "google-chrome-stable")
+
+
+(map! :map evil-normal-state-map :leader
+      (:prefix-map ("v" . "view")
+       :desc "ibuffer filter by content" "u" #'ibuffer-update
+       :desc "ibuffer filter by content" "/" #'ibuffer-filter-by-content
+       :desc "ibuffer filter by mode" "m" #'ibuffer-filter-by-mode
+       :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
+
+;; use web mode for ejs
+(add-to-list 'auto-mode-alist '("\\.ejs\\'" . gfm-mode))
+
+
+; Pomodoro settings
+
+;; Mode-line appearance
+(setq org-pomodoro-format "P%s")
+(setq org-pomodoro-time-format "%m")
+(setq org-pomodoro-long-break-format "L~%s")
+(setq org-pomodoro-short-break-format "S~%s")
+
+;; Allow manual breaks in Pomodoro.
+(setq org-pomodoro-manual-break t)
+
+;; A canceled Pomodoro is the same as a completed Pomodoro.
+(setq org-pomodoro-keep-killed-pomodoro-time t)
+
+
+; some available keybinding prefixes
+;; SPC l
+;; SPC y
+;; SPC r
+;; SPC and any capital letter

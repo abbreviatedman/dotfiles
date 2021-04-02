@@ -1,11 +1,9 @@
 ;; org agenda setup
 (setq! org-agenda-files '("~/Sync/org"))
 (after! org
-  (org-edna-mode)
-
   (setq org-startup-folded 'content)
-
-  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(p)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)"))))
+  (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
+  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAIT(w)" "|" "DONE(d)" "CANCELED(c)"))))
 
 (map! :map evil-normal-state-map :leader
       (:prefix-map ("a" . "agenda")
@@ -23,8 +21,6 @@
         :desc "sync" "s" #'org-gcal-sync
         :desc "fetch" "f" #'org-gcal-fetch)))
 
-;; allow manual breaks in pomodoro
-(setq org-pomodoro-manual-break t)
 
 ;; sync which org file handles which gcal
 (setq org-gcal-fetch-file-alist '(("colin.jaffe@gmail.com" . "~/Sync/org/gcal/colin.jaffe.org")))

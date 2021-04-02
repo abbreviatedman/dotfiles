@@ -43,8 +43,6 @@ set ignorecase
 " unless we explicitly type an uppercased character
 set smartcase
 
-" Adds many visible whitespace characters.
-set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,precedes:«,extends:»
 
 " Sets vim not to highlight matching pair in a way that can be visually
 " confusing, making the user lose track of the cursor. There's certainly an

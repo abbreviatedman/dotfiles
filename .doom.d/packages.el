@@ -53,14 +53,13 @@
 ;; adds browsing for links
 (package! browse-at-remote)
 
+(package! engine-mode)
+
 ;; internal ssh handling
 (package! ssh-agency)
 
 ;; adds gcal integration
 (package! org-gcal)
-
-;; allows for automatic actions on todos
-(package! org-edna)
 
 ;; decent emoji support
 (package! emojify)
@@ -111,9 +110,17 @@
 ;; automatic code reformatting
 ;;
 
-;; prettier (web development)
+;;; web development
 (package! prettier)
+
+;;; python
+(package! blacken)
 
 
 
 (package! indium)
+
+
+(package! peep-dired)
+
+(package! evil-replace-with-register)
