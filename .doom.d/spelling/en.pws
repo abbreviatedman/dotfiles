@@ -1,4 +1,4 @@
-personal_ws-1.1 en 191
+personal_ws-1.1 en 193
 APIs
 Avec
 Banff
@@ -98,6 +98,7 @@ gitlab
 goto
 gpg
 gtk
+gvim
 hlissner
 homeworks
 href
@@ -126,6 +127,7 @@ nav
 navbar
 ncurses
 nextcloud
+ng
 nodejs
 nodemon
 npm
