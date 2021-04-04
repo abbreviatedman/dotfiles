@@ -1,4 +1,4 @@
-personal_ws-1.1 en 193
+personal_ws-1.1 en 197
 APIs
 Avec
 Banff
@@ -33,6 +33,7 @@ OpenWeather
 PlugInstall
 Repos
 Roomba
+SQLAlchemy
 Sandpoint
 SomaFM
 Streeeeeetch
@@ -99,11 +100,13 @@ goto
 gpg
 gtk
 gvim
+hashmap
 hlissner
 homeworks
 href
 https
 init
+isSubArray
 js
 json
 jsx
@@ -147,6 +150,7 @@ popsicles
 postgres
 pre
 pseudocode
+psql
 pulseaudio
 pwfeedback
 py
