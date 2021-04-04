@@ -34,6 +34,7 @@ PlugInstall
 PyMongo
 Repos
 Roomba
+SQLAlchemy
 Sandpoint
 SomaFM
 Streeeeeetch
@@ -104,11 +105,14 @@ gitlab
 goto
 gpg
 gtk
+gvim
+hashmap
 hlissner
 homeworks
 href
 https
 init
+isSubArray
 js
 json
 jsx
@@ -133,6 +137,7 @@ nav
 navbar
 ncurses
 nextcloud
+ng
 nodejs
 nodemon
 npm
@@ -152,6 +157,7 @@ popsicles
 postgres
 pre
 pseudocode
+psql
 pulseaudio
 pwfeedback
 py

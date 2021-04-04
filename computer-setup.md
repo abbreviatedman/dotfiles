@@ -42,6 +42,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 `yay -S`:
 
 - google-chrome
+- gvim (for clipboard-enabled vim)
 - pulse-sms
 - slack-desktop
 - emacs
