@@ -33,6 +33,9 @@
 (map! :map evil-normal-state-map "SPC DEL" #'evil-switch-to-windows-last-buffer)
 (map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
 
+;; operator that replaces a motion/text object with what's in a register (the " register by default).
+(map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
+
 ;; keep cursor on current character when leaving insert mode
 ;; (regular vim moves it back by one)
 (setq! evil-move-cursor-back nil)
@@ -395,9 +398,7 @@
 ;; A canceled Pomodoro is the same as a completed Pomodoro.
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 
-
 ; some available keybinding prefixes
 ;; SPC l
 ;; SPC y
-;; SPC r
 ;; SPC and any capital letter
