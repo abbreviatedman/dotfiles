@@ -19,6 +19,9 @@
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
 
+(map! :map markdown-mode-map "M-l" #'markdown-demote)
+(map! :map markdown-mode-map "M-h" #'markdown-promote)
+
 
 ;; Except composed from things like "8)" (ascii emojis).
 ;; And I don't want GitHub's alternate set clogging things up, either.
