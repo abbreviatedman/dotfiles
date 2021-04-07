@@ -280,7 +280,9 @@
 ;; Opens minibuffer to select a root folder from which to discover projects.
 (map! :map :n :leader (:prefix-map ("p" . "project") :desc "Discover projects in directory" "D" #'projectile-discover-projects-in-directory))
 
-(beacon-mode 1)
+;; Quick cursor highlight on major change.
+;; Testing turning it off.
+;; (beacon-mode 1)
 (setq beacon-size 10)
 (setq beacon-blink-duration 0.1)
 
