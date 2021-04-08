@@ -1,4 +1,4 @@
-personal_ws-1.1 en 220
+personal_ws-1.1 en 223
 APIs
 Avec
 Banff
@@ -13,6 +13,7 @@ Dagm
 Dinos
 Dotfiles
 Dygma
+Esc
 Eshell
 Gcal
 Gmail
@@ -24,6 +25,7 @@ Jaffe
 Jargondome
 Keyboardio
 Manjaro
+Mariia
 MewTwo
 Middleware
 Modeline
@@ -116,6 +118,7 @@ gpg
 gtk
 gvim
 hashmap
+hjkl
 hlissner
 homeworks
 href
