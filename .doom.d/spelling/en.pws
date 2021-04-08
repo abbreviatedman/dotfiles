@@ -1,4 +1,4 @@
-personal_ws-1.1 en 209
+personal_ws-1.1 en 223
 APIs
 Avec
 Banff
@@ -13,6 +13,7 @@ Dagm
 Dinos
 Dotfiles
 Dygma
+Esc
 Eshell
 Gcal
 Gmail
@@ -24,6 +25,8 @@ Jaffe
 Jargondome
 Keyboardio
 Manjaro
+Mariia
+MewTwo
 Middleware
 Modeline
 Mongo
@@ -31,6 +34,7 @@ Mongo's
 Moonlander
 Nakisha
 NoSQL
+Nothin
 OpenWeather
 Pikachu
 PlugInstall
@@ -39,6 +43,7 @@ Repos
 Roomba
 SQLAlchemy
 Sandpoint
+Scrabblemania
 SomaFM
 Streeeeeetch
 Sunil
@@ -52,6 +57,7 @@ WidgetShow
 Wireframe
 abbreviatedman
 advices
+algo
 allStarLineup
 amazonaws
 appid
@@ -78,6 +84,7 @@ cli
 cmake
 cmds
 codebase
+codewars
 config
 const
 csv
@@ -102,6 +109,7 @@ generalassemb
 geocoder
 geolocating
 geonames
+getArea
 giphy
 gitignore
 gitlab
@@ -110,6 +118,7 @@ gpg
 gtk
 gvim
 hashmap
+hjkl
 hlissner
 homeworks
 href
@@ -119,8 +128,10 @@ isSubArray
 js
 json
 jsx
+kata
 keychain
 keyring
+kyu
 lifecycle
 localhost
 lol
@@ -146,7 +157,9 @@ nodemon
 npm
 num
 numpad
+nums
 ohmyz
+ol
 pacman
 pandoc
 params
@@ -172,6 +185,7 @@ repo
 repo's
 req
 reshim
+revealOptions
 ripgrep
 sammich
 sbin
