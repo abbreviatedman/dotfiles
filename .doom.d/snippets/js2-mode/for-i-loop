@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # name: For Loop With I Snippet
-# key: fi
-# uuid: fi
+# key: f
+# uuid: f
 # --
 for(let i = 0; i < ${1:arr}.length; i++) {
   $0
