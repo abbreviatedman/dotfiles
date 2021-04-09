@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: For Loop With I Snippet
+# key: fl
+# uuid: fl
+# --
+${1:arr}.filter(($2) => $0)

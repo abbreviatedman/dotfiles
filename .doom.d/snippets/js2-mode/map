@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: For Loop With I Snippet
+# key: m
+# uuid: m
+# --
+${1:arr}.map(($2) => $0)

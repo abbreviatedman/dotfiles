@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: For Loop With I Snippet
+# key: fo
+# uuid: fo
+# --
+for(const ${1:element} of ${2:arr}) {
+  $0
+}

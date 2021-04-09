@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: For Loop With I Snippet
+# key: rd
+# uuid: rd
+# --
+${1:arr}.reduce(($2) => $0)
