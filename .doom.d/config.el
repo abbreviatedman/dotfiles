@@ -386,7 +386,14 @@
        :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
 
 ;; use web mode for ejs
-(add-to-list 'auto-mode-alist '("\\.ejs\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist
+             '("\\.ejs\\'" . gfm-mode))
+
+;; Use RJSX's version of js2-mode for .js files.
+;; This is one way to make sure that JSX files in .js
+;; files get handled properly.
+(add-to-list 'auto-mode-alist
+             '("\\.js\\'" . rjsx-mode))
 
 
 ; Pomodoro settings
