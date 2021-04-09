@@ -27,7 +27,7 @@
   (company-tooltip-align-annotations t)
   (company-require-match 'never)
   ;; Don't use company in the following modes
-  (company-global-modes '(not shell-mode eaf-mode markdown-mode))
+  (company-global-modes '(not shell-mode eaf-mode markdown-mode gfm-mode))
   ;; Trigger completion immediately.
   (company-idle-delay 0)
   ;; Number the candidates (use M-1, M-2 etc to select completions).
