@@ -152,7 +152,7 @@ bindsym $alt+XF86AudioMute exec "ponymix --sink-input -d 'audio' toggle"
 ##bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 exec --no-startup-id start-pulseaudio-x11
 exec --no-startup-id pa-applet
-bindsym $mod+Ctrl+m exec pavucontrol
+bindsym $mod+$alt+a exec pavucontrol
 
 ################################################################################################
 
