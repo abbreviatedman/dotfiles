@@ -28,7 +28,7 @@ set $alt Mod1
 # exec_always --no-startup-id ~/trackpad-and-trackpoint-speed.sh
 
 # writing terminal
-bindsym $mod+$alt+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
+bindsym $mod+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
 
 # Move specific apps to specific workspaces.
 assign [class="Firefox"] "1"
@@ -62,17 +62,6 @@ font xft:URWGothic-Book 16
 bindsym $mod+$alt+Shift+h exec killall highlight-pointer
 bindsym $mod+$alt+h exec highlight-pointer -r 30 --auto-hide-highlight
 
-# Caps Lock indicators
-mode caps {
-  bindsym Caps_Lock mode "default"
-  # sometimes my caps lock gets stuck halfway on somehow... this is to change back to regular mode without actually using caps lock
-  bindsym $mod+$alt+c mode "default"
-}
-
-bindsym Caps_Lock mode "caps"
-
-
-
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
@@ -83,34 +72,34 @@ bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+eshell/h
 
 
 # start terminal 2
-bindsym $mod+$alt+t exec "kitty"
+bindsym $mod+BackSpace exec "kitty"
 
 # start browser 1
 bindsym $mod+$alt+r exec "chromium"
 
 # start browser 2
-bindsym $mod+g exec "google-chrome-stable"
+bindsym $mod+$alt+g exec "google-chrome-stable"
 
 # start browser 3
 bindsym $mod+$alt+f exec "firefox"
 
 # start team communication app
-bindsym $mod+s exec "slack"
+bindsym $mod+$alt+s exec "slack"
 
 # start video conference app
-bindsym $mod+z exec "zoom"
+bindsym $mod+$alt+z exec "zoom"
 
 # start IDE
 bindsym $mod+$alt+e exec "emacs"
 
 # start Alternate IDE
-bindsym $mod+c exec "code"
+bindsym $mod+$alt+c exec "code"
 
 # start Files
-bindsym $mod+$alt+Ctrl+f exec "nemo"
+bindsym $mod+$alt+n exec "nemo"
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+semicolon kill
 
 # start program launcher
 bindsym $mod+space exec --no-startup-id dmenu_recency -sf '#93a1a1' -sb '#002b36' -nf '#839496' -nb '#073642'
@@ -181,11 +170,13 @@ bindsym $mod+F5 exec terminal -e 'mocp'
 # bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
-bindsym Print exec --no-startup-id i3-scrot
-bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
-bindsym $mod+Shift+Print --release exec --no-startup-id spectacle -rb
 # bindsym $mod+$alt+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+
+# Screenshots
+bindsym Print --release exec --no-startup-id spectacle -b
+bindsym Shift+Print --release exec --no-startup-id spectacle -rb
+bindsym $mod+Print --release exec --no-startup-id spectacle -ab
 
 # change focus
 bindsym $mod+h focus left
@@ -208,7 +199,6 @@ bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_
 # split orientation
 bindsym $mod+x split h; exec notify-send 'tile horizontally'
 bindsym $mod+v split v; exec notify-send 'tile vertically'
-bindsym $mod+apostrophe split toggle
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -218,10 +208,10 @@ bindsym $mod+t layout toggle tabbed split
 
 
 # toggle tiling / floating
-bindsym $mod+Shift+f floating toggle
+bindsym $mod+g floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+Shift+t focus mode_toggle
+bindsym $mod+z focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
