@@ -395,6 +395,7 @@
 (add-to-list 'auto-mode-alist
              '("\\.js\\'" . rjsx-mode))
 
+(add-hook! 'i3wm-config-mode-hook #'rainbow-mode)
 
 ; Pomodoro settings
 
