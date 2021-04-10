@@ -60,7 +60,7 @@ font xft:URWGothic-Book 16
 
 # Highlight the Pointer
 bindsym $mod+$alt+Shift+h exec killall highlight-pointer
-bindsym $mod+$alt+h exec highlight-pointer -r 30 --auto-hide-highlight
+bindsym $mod+$alt+h exec highlight-pointer -r 30 -c "#1f77b4" -p  "#0366d6" --auto-hide-highlight
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
