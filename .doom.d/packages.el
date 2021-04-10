@@ -124,3 +124,5 @@
 (package! peep-dired)
 
 (package! evil-replace-with-register)
+
+(package! i3wm-config-mode)
