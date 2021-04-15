@@ -14,6 +14,19 @@
                        :desc "Open vterm in project root" "v" #'projectile-run-vterm
                        :desc "Open eshell in project root" "e" #'projectile-run-eshell))
 
+;; SPC p as leader to:
+;;; v - projectile vterm
+;;; V - projectile new vterm
+;;; e - projectile eshell
+;;; E - projectile new eshell
+
+;; SPC p f as leader to:
+;;; f - find-file-other-frame
+;;; v - projectile vterm other frame
+;;; V - projectile new vterm other frame
+;;; e - projectile eshell other frame
+;;; E - projectile new eshell other frame
+
 (map! :map :n :leader (:prefix-map ("v" . "view")
                        :desc "View available eshell buffers." "e" #'+eshell/switch-to))
 
