@@ -65,14 +65,14 @@ bindsym $mod+$alt+h exec highlight-pointer -r 30 -c "#1f77b4" -p  "#0366d6" --au
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
-# start terminal 1
-# bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+vterm/here 1)\\"'"
-# use eshell instead?
+# start terminal 1 (eshell)
 bindsym $mod+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+eshell/here)\\"'"
-
 
 # start terminal 2
 bindsym $mod+BackSpace exec "kitty"
+
+# start terminal 3 (vterm)
+bindsym $mod+Shift+Return exec "i3-msg exec 'emacsclient --no-wait -c -e \\"(+vterm/here 1)\\"'"
 
 # start browser 1
 bindsym $mod+$alt+r exec "chromium"
