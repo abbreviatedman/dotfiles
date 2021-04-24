@@ -50,7 +50,7 @@
   (let ((buf (current-buffer)))
     (switch-to-buffer buf)
     (switch-to-buffer-other-frame buf))
-  (+eshell/here nil))
+  (+eshell/here))
 
 ;; set up did-you-mean suggestions
 (eshell-did-you-mean-setup)

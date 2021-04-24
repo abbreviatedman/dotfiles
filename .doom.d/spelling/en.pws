@@ -1,6 +1,8 @@
-personal_ws-1.1 en 244
+personal_ws-1.1 en 261
 APIs
+Asus
 Avec
+BTUs
 Banff
 Bonjour
 Brinn
@@ -9,6 +11,7 @@ Buzzfeed
 Capilano
 Charmander
 Cliqhop
+Cortelyou
 Ctrl
 Dagm
 Desmonda
@@ -26,6 +29,7 @@ Hola
 IAs
 IndexError
 Jaffe
+Jaffe's
 Jargondome
 Jukay
 Keyboardio
@@ -47,10 +51,12 @@ OAuth
 OpenWeather
 Pikachu
 PlugInstall
+Prot
 PyMongo
 RJSX's
 React's
 Repos
+Roadmaps
 Roomba
 SQLAlchemy
 Sandpoint
@@ -94,6 +100,7 @@ booleans
 bootcamp
 bugapalooza
 charset
+cheapos
 cj
 cli
 cloneDeep
@@ -113,6 +120,7 @@ devs
 dired
 duckduckgo
 ejs
+el
 elif
 elisp
 fav
@@ -152,6 +160,7 @@ keyring
 kyu
 lifecycle
 localhost
+lockdown
 lodash
 lol
 loooong
@@ -180,16 +189,19 @@ numpad
 nums
 ohmyz
 ol
+onboarding
 pacman
 pandoc
 params
 parens
+partytime
 pavucontrol
 picom
 png
 pomodoro
 ponymix
 popsicles
+positivity
 postgres
 pre
 pseudocode
@@ -198,6 +210,7 @@ pulseaudio
 pwfeedback
 py
 pythonic
+querySelector
 readme
 readthedocs
 recency
@@ -207,6 +220,7 @@ req
 reshim
 revealOptions
 ripgrep
+rq
 sammich
 sbin
 sequelize
@@ -230,11 +244,14 @@ uppercased
 userId
 userapp
 utf
+uuid
 viewport
 vimium
 visudo
 vterm
+weatherObject
 webstore
+whiteboarding
 wireframes
 workspaces
 xclip

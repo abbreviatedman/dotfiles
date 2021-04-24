@@ -11,17 +11,17 @@
 ;; TODO mark checkboxes marked with "SPC m x"
 ;; TODO make returning to transparency not additive
 ;; TODO make LSP type info display opt-in
-;; TODO add markdown-promote-list and markdown-demote-list to insert map in markdown mode
 
 
 
 
-;; always show emojis
-(add-hook 'after-init-hook #'global-emojify-mode)
 
 (map! :map markdown-mode-map "M-l" #'markdown-demote)
 (map! :map markdown-mode-map "M-h" #'markdown-promote)
 
+
+;; always show emojis
+(add-hook 'after-init-hook #'global-emojify-mode)
 
 ;; Except composed from things like "8)" (ascii emojis).
 ;; And I don't want GitHub's alternate set clogging things up, either.
@@ -138,10 +138,10 @@
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
 (setq doom-font (font-spec :family "Fira Code" :size 24))
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
+;; This was necessary to fix some line of code somewhere giving my
+;; Fixed Pitch fonts an absolute height. This meant they didn't scale
+;; to other font sizes. Someday, we'll find the culprit!
+(set-face-attribute 'fixed-pitch nil :family "Fira Code" :height 1.0)
 
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
