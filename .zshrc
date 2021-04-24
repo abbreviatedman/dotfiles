@@ -345,33 +345,15 @@ alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no -verify -m "--wip-- [skip ci]"'
 
 
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-export PATH=$PATH:/usr/bin
-
-export PATH=$PATH:/snap/bin
-
-export BROWSER=firefox
 
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
 export FZF_DEFAULT_OPTS="--ansi"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--ansi"
 
-export PATH=$PATH:~/.cargo/bin
-export PATH=$PATH:~/Applications
-export PATH=$PATH:~/.local/
-
 export HOMEBREW_NO_ENV_FILTERING=1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-export PATH=/usr/local/anaconda/bin:/usr/local/bin:/home/abbreviatedman/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/abbreviatedman/Android/Sdk/tools:/home/abbreviatedman/Android/Sdk/tools/bin:/home/abbreviatedman/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/home/abbreviatedman/.fzf/bin:/home/abbreviatedman/Android/Sdk/tools:/home/abbreviatedman/Android/Sdk/tools/bin:/home/abbreviatedman/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/home/abbreviatedman/.emacs.d/bin:/home/abbreviatedman/.local/kitty.app/bin
-
-
 
 # use asdf
 . $HOME/.asdf/asdf.sh
