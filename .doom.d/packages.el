@@ -126,3 +126,5 @@
 (package! evil-replace-with-register)
 
 (package! i3wm-config-mode)
+
+(package! exec-path-from-shell)

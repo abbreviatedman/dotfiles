@@ -415,3 +415,9 @@
 ;; SPC l
 ;; SPC y
 ;; SPC and any capital letter
+
+;; set up exec-path-from-shell
+
+(when (or (memq window-system '(mac ns x)) (daemonp))
+  (setq exec-path-from-shell-arguments nil)
+  (exec-path-from-shell-initialize))
