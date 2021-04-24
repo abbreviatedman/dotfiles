@@ -10,9 +10,11 @@
 (map! :map :n :leader (:prefix-map ("q" . "quit/session") :desc "Kill all terminals." "t" #'kill-terminals))
 
 (map! :map :n :leader (:prefix-map ("p" . "project")
-                       :desc "Edit project dir-locals" "E" #'projectile-edit-dir-locals
-                       :desc "Open vterm in project root" "v" #'projectile-run-vterm
-                       :desc "Open eshell in project root" "e" #'projectile-run-eshell))
+                       :desc "Open a project vterm" "v" #'projectile-run-vterm
+                       :desc "Open a new project vterm" "V" #'(lambda () (interactive) (projectile-run-vterm 1))
+                       :desc "Open a project eshell" "e" 'projectile-run-eshell
+                       :desc "Open a new project eshell" "E" #'(lambda () (interactive) (projectile-run-eshell 1))
+                       :desc "Edit project dir-locals" "l" #'projectile-edit-dir-locals))
 
 ;; SPC p as leader to:
 ;;; v - projectile vterm
