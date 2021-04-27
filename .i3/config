@@ -110,7 +110,7 @@ bindsym $mod+$alt+space exec --no-startup-id morc_menu
 # sleep management
 
 ## turn sleep on
-bindsym  $mod+$alt+Ctrl+c exec "caffeine -a"
+bindsym  $mod+$alt+Ctrl+c exec "caffeine start -a"
 
 ## turn sleep off
 bindsym  $mod+$alt+Ctrl+Shift+c exec "caffeine kill"
