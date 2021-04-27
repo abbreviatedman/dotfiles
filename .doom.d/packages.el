@@ -128,3 +128,4 @@
 (package! i3wm-config-mode)
 
 (package! exec-path-from-shell)
+
