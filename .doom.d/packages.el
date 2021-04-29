@@ -116,16 +116,9 @@
 ;;; python
 (package! blacken)
 
-
-
 (package! indium)
-
-
 (package! peep-dired)
-
 (package! evil-replace-with-register)
-
 (package! i3wm-config-mode)
-
 (package! exec-path-from-shell)
-
+(package! ace-link)

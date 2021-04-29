@@ -422,3 +422,5 @@
 (when (or (memq window-system '(mac ns x)) (daemonp))
   (setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
+
+(ace-link-setup-default)
