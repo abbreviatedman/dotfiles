@@ -73,7 +73,7 @@ If all failed, try to complete the common part with `company-complete-common'"
 (use-package! yasnippet
   :config
   (yas-global-mode 1)
-  (setq yas-snippet-dirs '("/home/abbreviatedman/.doom.d/snippets")))
+  (setq yas-snippet-dirs '("~/.doom.d/snippets")))
 
 (yas-reload-all)
 
