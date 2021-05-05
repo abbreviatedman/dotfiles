@@ -9,9 +9,9 @@
 (load-library "aliases")
 (load-library "mail")
 
-;; TODO mark checkboxes marked with "SPC m x"
 ;; TODO make returning to transparency not additive
 ;; TODO make LSP type info display opt-in
+;; TODO reverse window split follow-not-follow shortcuts
 
 
 
