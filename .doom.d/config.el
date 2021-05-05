@@ -272,8 +272,12 @@
 
 ;; set where node is located
 (setenv "NODE_PATH" nil)
-(setenv "PATH" (concat (getenv "PATH") ":/home/abbreviatedman/.asdf/shims"))
-(setq exec-path (append exec-path '("/home/abbreviatedman/.asdf/shims")))
+;; asdf linux version
+;; (setenv "PATH" (concat (getenv "PATH") ":~/.asdf/shims"))
+;; (setq exec-path (append exec-path '("~/.asdf/shims")))
+;; standard mac version
+(setenv "PATH" (concat (getenv "PATH") ":/usr/bin/local/node"))
+(setq exec-path (append exec-path '("/usr/local/bin")))
 
 
 (setq projectile-track-known-projects-automatically nil)
