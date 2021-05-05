@@ -416,15 +416,16 @@
 ;; A canceled Pomodoro is the same as a completed Pomodoro.
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 
-; some available keybinding prefixes
-;; SPC l
-;; SPC y
-;; SPC and any capital letter
 
 ;; set up exec-path-from-shell
-
 (when (or (memq window-system '(mac ns x)) (daemonp))
   (setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
 
 (ace-link-setup-default)
+
+; some available keybinding prefixes
+;; SPC l
+;; SPC y
+;; SPC and any capital letter
+
