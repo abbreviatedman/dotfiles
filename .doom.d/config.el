@@ -14,7 +14,7 @@
 ;; TODO reverse window split follow-not-follow shortcuts
 
 
-
+(setq auth-sources (quote (macos-keychain-internet macos-keychain-generic)))
 
 
 (map! :map markdown-mode-map "M-l" #'markdown-demote)
