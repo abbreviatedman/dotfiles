@@ -1,5 +1,6 @@
 # SSH
-eval `keychain -q --eval id_ed25519`
+# linux keychain
+# eval `keychain -q --eval id_ed25519`
 
 
 # If you come from bash you might have to change your $PATH.
@@ -353,7 +354,6 @@ export FZF_DEFAULT_OPTS="--ansi"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--ansi"
 
-export HOMEBREW_NO_ENV_FILTERING=1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
