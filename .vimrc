@@ -104,6 +104,8 @@ endif
 
 call plug#begin()
 " Drawing!
+  " exchange text objects
+  Plug 'tommcdo/vim-exchange'
   Plug 'vim-scripts/DrawIt'
 " org mode
   Plug 'jceb/vim-orgmode'
