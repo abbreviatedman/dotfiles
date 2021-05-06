@@ -3,7 +3,7 @@ set updatetime=1000
 
 " Keep undo history across sessions by storing it in a file
 " The following creates the directory if it doesn't exist.
-" And ony for versions of vim that support persistent undo.
+" And only for versions of vim that support persistent undo.
 let vimDir = '$HOME/.vim'
 let &runtimepath.=','.vimDir
 
