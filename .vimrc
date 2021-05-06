@@ -103,11 +103,11 @@ endif
 "The above block will have installed vim-plug, and the below block will tell vim-plug which plugins to install.
 
 call plug#begin()
-" Drawing!
   " exchange text objects
   Plug 'tommcdo/vim-exchange'
+  " Drawing!
   Plug 'vim-scripts/DrawIt'
-" org mode
+  " org mode
   Plug 'jceb/vim-orgmode'
   " Undo tree visualization
   Plug 'simnalamburt/vim-mundo'
@@ -177,12 +177,13 @@ call plug#begin()
   " completion engine through language servers
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-  " Text objects!
-  "
-  " This one's needed to define the rest:
+
+  "" " Text objects!
+  " "
+  " " This one's needed to define the rest:
   Plug 'kana/vim-textobj-user'
 
-  " the rest:
+  " " the rest:
   "
   " comment
   " mapping: ic
@@ -213,17 +214,6 @@ call plug#end()
 
 
 " Plugin Configs
-
-
-" sneak mapping
-omap z <Plug>Sneak_s
-omap Z <Plug>Sneak_S
-nmap s <Plug>Sneak_s
-nmap S <Plug>Sneak_S
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
 
 " mundo's undo visualization toggle
 nnoremap <leader>u :MundoToggle<CR>
@@ -297,10 +287,97 @@ vmap gx <Plug>(openbrowser-smart-search)
 
 
 """"""""
+
+" mappings!
+
+" save
+nnoremap <Leader>s :w<CR>
+
+
+" just... never use U, it's bad and annoying and bad
+nnoremap U u
+
+" add spaces above and below
+" can take counts!
+nnoremap <Leader>k O<Esc>1j
+nnoremap <Leader>j o<Esc>1k
+
+" Remove highlighting until next search.
+nnoremap <Leader>/ :nohlsearch<CR>
+
+" code to normally make k and j scroll down by VISUAL line (NOT logical line),
+" while using a count makes it use LOGICAL lines
+" this works very well with relativenumber
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Open new terminal window set to current directory.
+" nnoremap <Leader>t :silent !kitty --detach<CR><CR>
+
+" Open new terminal with fuzzy finder going.
+" nnoremap <Leader>f :silent !kitty --detach vim $(fzf)<CR><CR>
+"
+" Open directory in VS Code.
+nnoremap <Leader>c :silent !code $PWD<CR><CR>
+
+" strip whitespace
+nnoremap <Leader>dtw :%s/\s\+$//e<CR>
+
+" accept first spelling suggestion
+nmap <Leader>z 1z=
+
+" copy and paste
+
+" yankstack mappings
+let g:yankstack_map_keys = 0
+nmap <leader>p <Plug>yankstack_substitute_older_paste
+nmap <leader>P <Plug>yankstack_substitute_newer_paste
+call yankstack#setup()
+" make Y behave more like the other capital variants and act on text until the
+" end of the line
+nmap Y y$
+
+" macros
+
+" Change function declaration to function expression.
+let @f='0wxiwdhIconst " = ýa'
+" Change function expression to arrow function.
+" TODO
+" Console log a label.
+" TODO
+" Console log out the value under the cursor, with label.
+" TODO
+" Console log out the value under the cursor, with label and colors
+" (requires npm package 'colors').
+" TODO
+
+" strip whitespace
+nnoremap <Leader>dtw :%s/\s\+$//e<CR>
+
+let &t_8f = "\e[38;2;%lu;%lu;%lum"
+let &t_8b = "\e[48;2;%lu;%lu;%lum"
+
+" accept first spelling suggestion
+nmap <Leader>z 1z=
+
+" append file to quick note
+nnoremap <Leader>w ggvG$:w!>>~/Sync/org/notes.md<CR>ggdG
+
+" sneak mapping
+omap z <Plug>Sneak_s
+omap Z <Plug>Sneak_S
+nmap s <Plug>Sneak_s
+nmap S <Plug>Sneak_S
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+
+""""""""
 " many many MANY COC settings
 
 " path to node
-let g:coc_node_path = '/home/abbreviatedman/.asdf/shims/node'
+let g:coc_node_path = '/usr/local/bin/node'
 
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -456,84 +533,3 @@ function! s:check_back_space() abort
 endfunction
 
 let g:coc_snippet_next = '<tab>'
-
-
-" mappings!
-
-" save
-nnoremap <Leader>s :w<CR>
-
-" make Y behave more like the other capital variants and act on text until the
-" end of the line
-nnoremap Y y$
-
-" just... never use U, it's bad and annoying and bad
-nnoremap U u
-
-" Swap the semi-colon and colon.
-" I use the go-to-next command plenty.
-" But not as often as I use Command Mode.
-"
-" Commenting this out because I might switch to emacs?
-" nnoremap : ;
-" nnoremap ; :
-
-" add spaces above and below
-" can take counts!
-nnoremap <Leader>k O<Esc>1j
-nnoremap <Leader>j o<Esc>1k
-
-" Remove highlighting until next search.
-nnoremap <Leader>/ :nohlsearch<CR>
-
-" code to normally make k and j scroll down by VISUAL line (NOT logical line),
-" while using a count makes it use LOGICAL lines
-" this works very well with relativenumber
-nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
-nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
-" Open new terminal window set to current directory.
-nnoremap <Leader>t :silent !kitty --detach<CR><CR>
-
-" Open new terminal with fuzzy finder going.
-nnoremap <Leader>f :silent !kitty --detach vim $(fzf)<CR><CR>
-"
-" Open directory in VS Code.
-nnoremap <Leader>c :silent !code $PWD<CR><CR>
-
-" strip whitespace
-nnoremap <Leader>dtw :%s/\s\+$//e<CR>
-
-" accept first spelling suggestion
-nmap <Leader>z 1z=
-
-" yankstack mappings
-let g:yankstack_map_keys = 0
-nmap <leader>p <Plug>yankstack_substitute_older_paste
-nmap <leader>P <Plug>yankstack_substitute_newer_paste
-
-" macros
-
-" Change function declaration to function expression.
-let @f='0wxiwdhIconst " = ýa'
-" Change function expression to arrow function.
-" TODO
-" Console log a label.
-" TODO
-" Console log out the value under the cursor, with label.
-" TODO
-" Console log out the value under the cursor, with label and colors
-" (requires npm package 'colors').
-" TODO
-
-" strip whitespace
-nnoremap <Leader>dtw :%s/\s\+$//e<CR>
-
-let &t_8f = "\e[38;2;%lu;%lu;%lum"
-let &t_8b = "\e[48;2;%lu;%lu;%lum"
-
-" accept first spelling suggestion
-nmap <Leader>z 1z=
-
-" append file to quick note
-nnoremap <Leader>w ggvG$:w!>>~/Sync/org/notes.org<CR>ggdG
