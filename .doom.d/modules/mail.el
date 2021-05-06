@@ -18,10 +18,10 @@
         ("/abbreviatedman/Drafts"     . ?d)
         ("/abbreviatedman/Trash"      . ?t)))
 
-;; don't save message to Sent Messages, IMAP takes care of this
+(setq mu4e-attachment-dir "~/Downloads")
 (setq mu4e-sent-messages-behavior 'sent)
 
-(setq mu4e-attachment-dir "~/Downloads")
+;; command to mark all read
 (evil-define-key 'normal mu4e-headers-mode-map "M" 'mu4e-headers-mark-all-unread-read)
 
 
