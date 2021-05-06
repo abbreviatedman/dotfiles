@@ -69,9 +69,14 @@ let &t_EI = "\e[2 q"
 " no 'bells' (aka beeps) of any kind:
 set noeb vb t_vb=
 
-" save to the + (system-wide clipboard) register instead of the unnamed, if that's available
-if has('unnamedplus')
-  set clipboard=unnamedplus
+" system clipboard integration
+if has('clipboard')
+  " using clipboard-capable vim
+  set clipboard=unnamed
+  if has('unnamedplus')
+    " on X11 (linux)
+    set clipboard+=unnamedplus
+  endif
 endif
 
 " set leader key
