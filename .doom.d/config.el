@@ -425,8 +425,6 @@
 
 ;; open links through ace-link
 (define-key help-mode-map (kbd "M-o") #'ace-link-help)
-(define-key Info-mode-map (kbd "M-o") #'ace-link-info)
-(define-key eww-mode-map (kbd "M-o") #'ace-link-eww)
 (define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
 (map! :map org-mode-map :n (kbd "M-o") #'ace-link-org)
 (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-org)
