@@ -53,6 +53,7 @@ let g:loaded_matchparen = 1
 " better colors
 set background=dark
 set cursorline
+set termguicolors
 
 " make tabs into spaces
 set expandtab
@@ -233,8 +234,7 @@ map T <Plug>Sneak_T
 nnoremap <leader>u :MundoToggle<CR>
 
 " color scheme
-set termguicolors
-colorscheme solarized8_high
+colorscheme elflord
 
 " turns off coloration for the Sign Column
 highlight clear SignColumn
