@@ -30,5 +30,22 @@
   (setq smtpmail-smtp-server "posteo.de")
   (org-ctrl-c-ctrl-c))
 
+(setq org-msg-default-alternatives '(html))
 (map! :map 'org-msg-edit-mode-map :ni "C-c C-c" #'send-mail)
 
+
+
+(add-hook 'mu4e-compose-pre-hook
+  (defun my-set-from-address ()
+    "Set the From address based on the To address of the original."
+    (let ((msg mu4e-compose-parent-message)) ;; msg is shorter...
+      (when msg
+	(setq user-mail-address
+	  (cond
+	    ((mu4e-message-contact-field-matches msg :to "colin.jaffe@gmail.com")
+	      "colin.jaffe@gmail.com")
+	    ((mu4e-message-contact-field-matches msg :to "balloonasaurus@gmail.com")
+	      "balloonasaurus@gmail.com")
+	    ((mu4e-message-contact-field-matches msg :to "colin@pursuit.org")
+	      "colin@pursuit.org")
+	    (t "abbreviatedman@posteo.net")))))))
