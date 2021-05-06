@@ -24,5 +24,11 @@
 ;; command to mark all read
 (evil-define-key 'normal mu4e-headers-mode-map "M" 'mu4e-headers-mark-all-unread-read)
 
+(require 'org-msg)
+(defun send-mail ()
+  (interactive)
+  (setq smtpmail-smtp-server "posteo.de")
+  (org-ctrl-c-ctrl-c))
 
+(map! :map 'org-msg-edit-mode-map :ni "C-c C-c" #'send-mail)
 
