@@ -1,7 +1,7 @@
 (add-to-list 'load-path "~/.doom.d/modules/")
 (load-library "version-control")
 (load-library "secrets")
-(load-library "config-org-agenda")
+(load-library "org-stuff")
 (load-library "completion")
 (load-library "space-liner")
 (load-library "config-dired")
@@ -9,9 +9,10 @@
 (load-library "aliases")
 (load-library "mail")
 
+;; TODO reverse window split follow-not-follow shortcuts
+;; TODO add alt-num-selection keybinding to minibuffer map
 ;; TODO make returning to transparency not additive
 ;; TODO make LSP type info display opt-in
-;; TODO reverse window split follow-not-follow shortcuts
 
 
 (setq auth-sources (quote (macos-keychain-internet macos-keychain-generic)))
