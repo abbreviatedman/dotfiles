@@ -109,19 +109,11 @@ call plug#begin()
   Plug 'vim-scripts/DrawIt'
 " org mode
   Plug 'jceb/vim-orgmode'
-  " autosave
-  Plug '907th/vim-auto-save'
   " Undo tree visualization
   Plug 'simnalamburt/vim-mundo'
   " fzf
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-  " easymotion
-  Plug 'easymotion/vim-easymotion'
-  " snippet engine
-  Plug 'sirver/UltiSnips'
-  " snippets
-  Plug 'honza/vim-snippets'
   " add indent guides
   Plug 'nathanaelkane/vim-indent-guides'
   " open link in browser
@@ -149,8 +141,6 @@ call plug#begin()
   Plug 'maxmellon/vim-jsx-pretty'
   " case coercion
   Plug 'tpope/vim-abolish'
-  " splits delete from cut
-  " Plug 'svermeulen/vim-cutlass'
   " Uses an emacs-like kill ring
   Plug 'maxbrunsfeld/vim-yankstack'
   " Two-character seek
