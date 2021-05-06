@@ -214,8 +214,6 @@ call plug#end()
 
 " Plugin Configs
 
-" enable autosave on startup
-let g:auto_save = 1
 
 " sneak mapping
 omap z <Plug>Sneak_s
