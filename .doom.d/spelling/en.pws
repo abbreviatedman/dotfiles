@@ -1,4 +1,4 @@
-personal_ws-1.1 en 270
+personal_ws-1.1 en 277
 APIs
 Asus
 Avec
@@ -63,6 +63,7 @@ Roomba
 SQLAlchemy
 Sandpoint
 Scrabblemania
+Soma
 SomaFM
 Streeeeeetch
 Sunil
@@ -120,6 +121,8 @@ csv
 curlies
 dangerroom
 darksky
+deepspaceone
+defcon
 destructuring
 dev
 devs
@@ -145,6 +148,7 @@ gitignore
 gitlab
 goto
 gpg
+groovesalad
 gtk
 gvim
 hashmap
@@ -153,6 +157,7 @@ hlissner
 homeworks
 href
 https
+ibuffer
 init
 isSubArray
 journaling
@@ -204,6 +209,7 @@ parens
 partytime
 pavucontrol
 picom
+pls
 png
 pomodoro
 ponymix
@@ -235,6 +241,7 @@ sequelize
 signup
 slidedeck
 sms
+spacestation
 speedbumps
 src
 standups
