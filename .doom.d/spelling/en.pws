@@ -1,9 +1,10 @@
-personal_ws-1.1 en 277
+personal_ws-1.1 en 290
 APIs
 Asus
 Avec
 BTUs
 Banff
+Bazi
 Bonjour
 Brinn
 Bulma
@@ -11,9 +12,12 @@ Buzzfeed
 Capilano
 Charmander
 Cliqhop
+Codepen
+Colorizer
 Cortelyou
 Ctrl
 Dagm
+Denniston
 Desmonda
 Dinos
 Dotfiles
@@ -27,7 +31,9 @@ GraphQL
 Heeeeey
 Hola
 IAs
+Imgur
 IndexError
+Itzkovitz
 Jaffe
 Jaffe's
 Jargondome
@@ -35,6 +41,7 @@ Jukay
 Kanban
 Karolin
 Keyboardio
+Kiyomi
 Kurakani
 Manjaro
 Mariia
@@ -51,10 +58,12 @@ NoSQL
 Nothin
 OAuth
 OpenWeather
+Oume
 Pikachu
 PlugInstall
 Prot
 PyMongo
+Quokka
 RJSX's
 React's
 Repos
@@ -63,6 +72,8 @@ Roomba
 SQLAlchemy
 Sandpoint
 Scrabblemania
+Sihame
+SimpleNote
 Soma
 SomaFM
 Streeeeeetch
@@ -130,6 +141,7 @@ dired
 duckduckgo
 ejs
 el
+eldoc
 elif
 elisp
 fav
@@ -239,6 +251,7 @@ sammich
 sbin
 sequelize
 signup
+skillset
 slidedeck
 sms
 spacestation
