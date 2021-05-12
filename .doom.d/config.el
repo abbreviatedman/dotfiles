@@ -30,7 +30,7 @@
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
 
-;; Except composed from things like "8)" (ascii emojis).
+;; Don't show composed from things like "8)" (ascii emojis).
 ;; And I don't want GitHub's alternate set clogging things up, either.
 (setq emojify-emoji-styles '(unicode))
 
@@ -41,7 +41,6 @@
 (targets-setup t)
 
 (map! :map evil-normal-state-map "SPC DEL" #'evil-switch-to-windows-last-buffer)
-(map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
 
 ;; operator that replaces a motion/text object with what's in a register (the " register by default).
 (map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
