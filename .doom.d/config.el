@@ -95,18 +95,18 @@
   (interactive)
   (remove-hook 'prog-mode-hook 'fira-code-mode))
 
-(map! :map evil-normal-state-map :leader
-      (:prefix-map ("z" . "presentation")
-       :desc "zoom in" "i" #'doom/increase-font-size
-       :desc "zoom out" "o" #'doom/decrease-font-size
-       :desc "zoom in buffer" "I" #'text-scale-increase
-       :desc "zoom out buffer" "O" #'text-scale-decrease
-       :desc "zoom hydra" "z" #'+hydra/text-zoom/body
-       :desc "turn ligatures on globally" "+" #'add-fira-code-mode-hook
-       :desc "turn ligatures off globally" "-" #'remove-fira-code-mode-hook
-       :desc "toggle ligatures for this file" "l" #'fira-code-mode
-       :desc "toggle prettier globally" "p" #'global-prettier-mode
-       :desc "toggle transparency" "t" #'toggle-transparency))
+(map! :leader
+      (:prefix "z"
+       :desc "zoom in" :n "i" #'doom/increase-font-size
+       :desc "zoom out" :n "o" #'doom/decrease-font-size
+       :desc "zoom in buffer" :n "I" #'text-scale-increase
+       :desc "zoom out buffer" :n "O" #'text-scale-decrease
+       :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
+       :desc "turn ligatures on globally" :n "+" #'add-fira-code-mode-hook
+       :desc "turn ligatures off globally" :n "-" #'remove-fira-code-mode-hook
+       :desc "toggle ligatures for this file" :n "l" #'fira-code-mode
+       :desc "toggle prettier globally" :n "p" #'global-prettier-mode
+       :desc "toggle transparency" :n "t" #'toggle-transparency))
 
 
 
@@ -208,17 +208,16 @@
   "https://www.google.com/search?q=%s")
 (defengine google-images
   "https://www.google.com/search?tbm=isch&q=%s")
-
-(map! :map :n :leader (:prefix-map ("s" . "search")
-                       :desc "Search DuckDuckGo" "h" #'engine/search-duck-duck-go
-                       (:prefix-map ("g" . "google")
-                        :desc "Search Google" "g" #'engine/search-google
-                        :desc "Search Google Images" "i" #'engine/search-google-images)))
+(map! :leader (:prefix "s"
+                       :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
+                       (:prefix "g"
+                        :desc "Search Google" :n "g" #'engine/search-google
+                        :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
 
 (map! :map org-mode-map :leader
-      (:prefix-map ("m" . "mark")
-       :desc "Next todo GTD-style" "m" '(lambda ()
+      (:prefix "m"
+       :desc "Next todo GTD-style" :n "m" '(lambda ()
                                           (interactive)
                                           (org-todo 'done)
                                           (org-forward-heading-same-level 1)
@@ -230,12 +229,12 @@
 ;; now good mappings
 
 (map! :map (evil-markdown-mode gfm-mode) :leader
-      (:prefix-map ("e" . "editing")
-       :desc "Add markdown item" "i" #'markdown-insert-list-item
-       :desc "Go to next section" "j" #'markdown-forward-same-level
-       :desc "Go to previous section" "k" #'markdown-backward-same-level
-       :desc "Repair list" "r" #'org-list-repair
-       :desc "Toggle checkbox" "m" #'markdown-toggle-gfm-checkbox))
+      (:prefix "e"
+       :desc "Add markdown item" :n "i" #'markdown-insert-list-item
+       :desc "Go to next section" :n "j" #'markdown-forward-same-level
+       :desc "Go to previous section" :n "k" #'markdown-backward-same-level
+       :desc "Repair list" :n "r" #'org-list-repair
+       :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
 
 ;; open the result of a search in a new frame
 (map! :leader
@@ -289,7 +288,7 @@
 (setq projectile-track-known-projects-automatically nil)
 
 ;; Opens minibuffer to select a root folder from which to discover projects.
-(map! :map :n :leader (:prefix-map ("p" . "project") :desc "Discover projects in directory" "D" #'projectile-discover-projects-in-directory))
+(map! :leader (:prefix "p" :desc "Discover projects in directory" :n "D" #'projectile-discover-projects-in-directory))
 
 ;; Quick cursor highlight on major change.
 ;; Testing turning it off.
@@ -364,20 +363,20 @@
 (setq doom-modeline-env-version nil)
 (line-number-mode 0)
 
-(map! :map :n :leader (:prefix-map ("b" . "buffer") :desc "Rename buffer" "R" #'rename-buffer))
+(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer))
 
 ;; Turn the modeline on and off.
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
 (defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
 
-(map! :map evil-normal-state-map :leader
-      (:prefix-map ("t" . "toggle")
-       :desc "toggle radio" "m" #'eradio-toggle
-       :desc "toggle modeline for buffer" "d" #'toggle-mode-line-buffer
-       :desc "toggle modeline" "D" #'toggle-mode-line-global
-       :desc "toggle pomodoro clock" "c" #'org-pomodoro
-       :desc "play radio channel" "M" #'eradio-play))
+(map! :leader
+      (:prefix "t"
+       :desc "toggle radio" :n "m" #'eradio-toggle
+       :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer
+       :desc "toggle modeline" :n "D" #'toggle-mode-line-global
+       :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
+       :desc "play radio channel" :n "M" #'eradio-play))
 
 (setq org-re-reveal-title-slide nil)
 (setq org-re-reveal-theme "league")
@@ -389,12 +388,12 @@
 (setq indium-chrome-executable "google-chrome-stable")
 
 
-(map! :map evil-normal-state-map :leader
-      (:prefix-map ("v" . "view")
-       :desc "ibuffer filter by content" "u" #'ibuffer-update
-       :desc "ibuffer filter by content" "/" #'ibuffer-filter-by-content
-       :desc "ibuffer filter by mode" "m" #'ibuffer-filter-by-mode
-       :desc "remove ibuffer filter" "?" #'ibuffer-filter-disable))
+(map! :leader
+      (:prefix "v"
+       :desc "ibuffer filter by content" :n "u" #'ibuffer-update
+       :desc "ibuffer filter by content" :n "/" #'ibuffer-filter-by-content
+       :desc "ibuffer filter by mode" :n "m" #'ibuffer-filter-by-mode
+       :desc "remove ibuffer filter" :n "?" #'ibuffer-filter-disable))
 
 ;; use web mode for ejs
 (add-to-list 'auto-mode-alist
