@@ -9,10 +9,15 @@
 (load-library "aliases")
 (load-library "mail")
 
-;; TODO reverse window split follow-not-follow shortcuts
-;; TODO add alt-num-selection keybinding to minibuffer map
 ;; TODO make returning to transparency not additive
-;; TODO make LSP type info display opt-in
+
+;; Reverse the shortcuts between window splitting with follow vs. without.
+;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
+(map! :leader (:prefix "w"
+                       :desc "split window vertically and follow" :n "v" #'+evil/window-vsplit-and-follow
+                       :desc "split vertically" :n "V" #'evil-window-vsplit
+                       :desc "split window and follow" :n "s" #'+evil/window-split-and-follow
+                       :desc "split window" :n "S" #'evil-window-split))
 
 
 (setq auth-sources (quote (macos-keychain-internet macos-keychain-generic)))
