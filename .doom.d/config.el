@@ -115,8 +115,9 @@
 ;; TODO remove markdown meta-p mapping
 
 ;; Ligatures
-(add-hook 'prog-mode-hook 'fira-code-mode)
-(setq fira-code-mode-disabled-ligatures '("x" "[]"))
+;; STart with ligatures enabled.
+;; (add-hook 'prog-mode-hook 'fira-code-mode)
+(setq fira-code-mode-disabled-ligatures '("x" "[]" "+" ":" ">="))
 (use-package python
   :config
   (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
@@ -151,13 +152,15 @@
 
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
-(setq modus-themes-slanted-constructs t)
-(setq modus-themes-syntax 'alt-syntax-yellow-comments)
-(setq modus-themes-paren-match 'intense-bold)
+(setq modus-themes-italic-constructs t)
+(setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
+(setq modus-themes-paren-match '(intense underline bold))
 (setq modus-themes-headings
       '((t . rainbow)))
 (setq modus-themes-scale-headings t)
 (setq modus-themes-completions 'opinionated)
+(setq modus-themes-hl-line '(intense accented))
+(setq modus-themes-subtle-line-numbers t)
 (setq doom-theme 'modus-vivendi)
 
 
@@ -235,6 +238,10 @@
        :desc "Repair list" :n "r" #'org-list-repair
        :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
 
+(evil-define-key '(normal visual) markdown-mode-map
+  "gj" #'evil-next-visual-line
+  "gk" #'evil-previous-visual-line)
+
 ;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
@@ -280,8 +287,12 @@
 ;; (setenv "PATH" (concat (getenv "PATH") ":~/.asdf/shims"))
 ;; (setq exec-path (append exec-path '("~/.asdf/shims")))
 ;; standard mac version
-(setenv "PATH" (concat (getenv "PATH") ":/usr/bin/local/node"))
-(setq exec-path (append exec-path '("/usr/local/bin")))
+(setenv "PATH" (concat (getenv "PATH") ":/usr/sbin/node"))
+(setq exec-path (append exec-path '("/usr/sbin/node")))
+(setenv "PATH" (concat (getenv "PATH") ":/usr/sbin"))
+(setq exec-path (append exec-path '("/usr/sbin")))
+
+(setq lsp-unzip-script "bash -c 'mkdir -p %2$s && unzip -qq -o %1$s -d %2$s'")
 
 
 (setq projectile-track-known-projects-automatically nil)
@@ -404,6 +415,19 @@
 (add-to-list 'auto-mode-alist
              '("\\.js\\'" . rjsx-mode))
 
+
+;; Show digraphs.
+(map! :map general-override-mode-map :n "SPC h C-k" #'evil-ex-show-digraphs)
+
+;; use indent of 2 for html
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  )
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(add-hook! 'rjsx-mode-hook #'jest-minor-mode)
+
 (add-hook! 'i3wm-config-mode-hook #'rainbow-mode)
 
 ; Pomodoro settings
@@ -431,6 +455,9 @@
 (define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
 (map! :map org-mode-map :n (kbd "M-o") #'ace-link-org)
 (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help)
+
+;; No fringe
+(fringe-mode 0)
 
 
 ; some available keybinding prefixes

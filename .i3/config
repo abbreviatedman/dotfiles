@@ -1,12 +1,14 @@
 # Set initial resolution
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
+exec --no-startup-id xcape
+
 # enable caffeine by default
 # exec --no-startup-id "caffeine -a"
 
 # battery warning
 # warns at 30% and half that (15)
-exec --no-startup-id i3-battery-popup -n -L 30
+exec --no-startup-id i3-battery-popup -L 98 -t 30s
 
 # video compositor
 exec --no-startup-id picom
@@ -17,7 +19,6 @@ exec --no-startup-id syncthing -no-browser
 
 # Startup Files
 exec "zoom"
-exec "slack"
 exec "emacs"
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
@@ -31,19 +32,19 @@ set $alt Mod1
 bindsym $mod+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
 
 # Move specific apps to specific workspaces.
-assign [class="Firefox"] "1"
-assign [class="Chromium"] "6"
-assign [class="Code"] "6"
-assign [class="code-oss"] "6"
-assign [class="Simplenote"] "8"
-assign [class="Google-chrome"] "9"
-assign [class="Google-chrome-unstable"] "9"
+assign [class="Firefox"] "6"
+# assign [class="Chromium"] "6"
+# assign [class="Code"] "6"
+# assign [class="code-oss"] "6"
+# assign [class="Simplenote"] "8"
+# assign [class="Google-chrome"] "9"
+# assign [class="Google-chrome-unstable"] "9"
 assign [class="zoom"] "10"
-assign [class="Slack"] "11"
-assign [class="discord"] "11"
-assign [class="pulse-sms"] "11"
-assign [class="Signal"] "11"
-assign [class="vlc"] "12"
+# assign [class="Slack"] "11"
+# assign [class="discord"] "11"
+# assign [class="pulse-sms"] "11"
+# assign [class="Signal"] "11"
+# assign [class="vlc"] "12"
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 5
@@ -110,7 +111,7 @@ bindsym $mod+$alt+space exec --no-startup-id morc_menu
 # sleep management
 
 ## turn sleep on
-bindsym  $mod+$alt+Ctrl+c exec "caffeine start -a"
+bindsym  $mod+$alt+Ctrl+c exec "caffeine -a"
 
 ## turn sleep off
 bindsym  $mod+$alt+Ctrl+Shift+c exec "caffeine kill"
@@ -394,6 +395,7 @@ mode "resize" {
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
 }
 
 # Lock screen

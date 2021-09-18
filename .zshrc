@@ -8,7 +8,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
-export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:usr/local/anaconda/bin:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local:~/.asdf
+export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:usr/local/anaconda/bin:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local
 
 export ALTERNATE_EDITOR=""
 
@@ -128,6 +128,7 @@ alias vimconfig="e /home/abbreviatedman/.vimrc"
 alias kittyconfig="e /home/abbreviatedman/.config/kitty/kitty.conf"
 alias qtileconfig="e /home/abbreviatedman/.config/qtile/config.py"
 
+
 # open scratchpad files
 alias scratchjs="vim ~/Documents/scratchpad/scratchpad.js"
 alias notesmd="vim ~/Sync/gtd/notes.md"
@@ -197,7 +198,6 @@ alias ni='npm install'
 alias niy='npm init -y'
 alias nid='npm install --save-dev'
 alias ng='npm install --global'
-alias ar='asdf reshim nodejs'
 alias nt='npm test'
 alias nr='npm run'
 alias ns='npm start'
@@ -356,6 +356,3 @@ export FZF_DEFAULT_OPTS="--ansi"
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# use asdf
-. $HOME/.asdf/asdf.sh

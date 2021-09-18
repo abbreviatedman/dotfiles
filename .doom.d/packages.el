@@ -122,3 +122,5 @@
 (package! i3wm-config-mode)
 (package! exec-path-from-shell)
 (package! ace-link)
+
+(package! jest)

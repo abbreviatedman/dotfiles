@@ -219,7 +219,7 @@ call plug#end()
 nnoremap <leader>u :MundoToggle<CR>
 
 " color scheme
-colorscheme elflord
+colorscheme solarized8
 
 " turns off coloration for the Sign Column
 highlight clear SignColumn
@@ -377,7 +377,7 @@ map T <Plug>Sneak_T
 " many many MANY COC settings
 
 " path to node
-let g:coc_node_path = '/usr/local/bin/node'
+let g:coc_node_path = '/usr/sbin/node'
 
 " TextEdit might fail if hidden is not set.
 set hidden
