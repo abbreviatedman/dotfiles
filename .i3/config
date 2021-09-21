@@ -2,9 +2,7 @@
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
 exec --no-startup-id xcape
-
-# enable caffeine by default
-# exec --no-startup-id "caffeine -a"
+exec --no-startup-id "xmodmap ~/.Xmodmap"
 
 # battery warning
 # warns at 30% and half that (15)
@@ -548,12 +546,8 @@ mode "$mode_gaps_outer" {
 # bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 
-# One external monitor.
-bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP1-2 --off --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+# The laptop screen plus one external monitor.
+bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --mode 1920x1080 --pos 3840x1080 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --mode 3840x2160 --pos 0x0 --rotate normal; sleep 3; nitrogen --restore"
 
-
-# ThinkPad dock with 4K and FHD.
-# bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"
-
-# galp3 - external monitors with laptop screen off
-bindsym $mod+e exec "xrandr --output eDP1 --off --output DP1 --primary --mode 1920x1080 --pos 3840x1526 --rotate normal --output HDMI1 --off --output HDMI2 --mode 3840x2160 --pos 0x0 --rotate normal --output VIRTUAL1 --off; sleep 2; nitrogen --restore"
+# Just the laptop screen.
+bindsym $mod+Shift+Ctrl+l exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
