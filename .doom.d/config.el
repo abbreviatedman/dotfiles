@@ -8,24 +8,31 @@
 (load-library "terminals")
 (load-library "aliases")
 (load-library "mail")
+(load-library "macos")
+;; (load-library "linux")
 
 ;; TODO make returning to transparency not additive
+;; TODO make markdown's enter work on opening a new line
+;; TODO port markdown's enter over to org
+;; TODO remove markdown meta-p mapping
+;; TODO make titlecase lowercase it first
+;; TODO add Spanish spelling dictionary
+;; TODO Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
+
+;; Quick cursor highlight on major change.
+(beacon-mode 1)
+(setq beacon-size 50)
+(setq beacon-blink-duration 0.1)
 
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
 (map! :leader (:prefix "w"
-                       :desc "split window vertically and follow" :n "v" #'+evil/window-vsplit-and-follow
-                       :desc "split vertically" :n "V" #'evil-window-vsplit
-                       :desc "split window and follow" :n "s" #'+evil/window-split-and-follow
-                       :desc "split window" :n "S" #'evil-window-split))
-
+               :desc "split window vertically and follow" :n "v" #'+evil/window-vsplit-and-follow
+               :desc "split vertically" :n "V" #'evil-window-vsplit
+               :desc "split window and follow" :n "s" #'+evil/window-split-and-follow
+               :desc "split window" :n "S" #'evil-window-split))
 
 (setq auth-sources (quote (macos-keychain-internet macos-keychain-generic)))
-
-
-(map! :map markdown-mode-map "M-l" #'markdown-demote)
-(map! :map markdown-mode-map "M-h" #'markdown-promote)
-
 
 ;; always show emojis
 (add-hook 'after-init-hook #'global-emojify-mode)
@@ -49,7 +56,6 @@
 ;; (regular vim moves it back by one)
 (setq! evil-move-cursor-back nil)
 
-
 ;; get rid of prompts
 (setq kill-buffer-query-functions
       (remq 'process-kill-buffer-query-function
@@ -58,16 +64,29 @@
 
 ; Markdown
 
+;; Promote/demote headlines.
+(map! :map markdown-mode-map "M-l" #'markdown-demote)
+(map! :map markdown-mode-map "M-h" #'markdown-promote)
 ;; Tell markdown mode to stop over-indenting lists.
 (setq markdown-list-indent-width 2)
 ;; Make markdown continue lists on enter.
 (setq markdown-indent-on-enter 'indent-and-new-item)
-;; uppercase markdown checkboxes
-(setq markdown-gfm-uppercase-checkbox 1)
 ;; always be gfm-ing
 (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
 
+(map! :map (evil-markdown-mode gfm-mode) :leader
+      (:prefix "e"
+       :desc "Add markdown item" :n "i" #'markdown-insert-list-item
+       :desc "Go to next section" :n "j" #'markdown-forward-same-level
+       :desc "Go to previous section" :n "k" #'markdown-backward-same-level
+       :desc "Repair list" :n "r" #'org-list-repair
+       :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
+
+;; Set gj/gk to vim's visual line navigation instead of markdown's headline-jumping.
+(evil-define-key '(normal visual) markdown-mode-map
+  "gj" #'evil-next-visual-line
+  "gk" #'evil-previous-visual-line)
 ;; Commands for changing the general look of fonts.
 ;; These are mostly for presenting things to others.
 
@@ -107,41 +126,39 @@
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
-
-
 ;; start every emacs frame with transparency
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
-;; TODO remove markdown meta-p mapping
-
 ;; Ligatures
-(add-hook 'prog-mode-hook 'fira-code-mode)
-(setq fira-code-mode-disabled-ligatures '("x" "[]"))
+;; turned off for now
+;; (add-hook 'prog-mode-hook 'fira-code-mode)
+;; (setq fira-code-mode-disabled-ligatures '("x" "[]" "+" ":" ">="))
+
 (use-package python
   :config
   (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
   (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
+
+; Indentation
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
 (setq! tab-width 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
 
+;; use indent of 2 for html
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  )
+
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
 ;; Stop clobbering my system clipboard, emacs you fiend.
 (setq save-interprogram-paste-before-kill t)
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+
+; Font Settings
 
 (setq doom-font (font-spec :family "Fira Code" :size 24))
 ;; This was necessary to fix some line of code somewhere giving my
@@ -149,19 +166,19 @@
 ;; to other font sizes. Someday, we'll find the culprit!
 (set-face-attribute 'fixed-pitch nil :family "Fira Code" :height 1.0)
 
+;; Modus Vivendi Theme Settings
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
-(setq modus-themes-slanted-constructs t)
-(setq modus-themes-syntax 'alt-syntax-yellow-comments)
-(setq modus-themes-paren-match 'intense-bold)
+(setq modus-themes-italic-constructs t)
+(setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
+(setq modus-themes-paren-match '(intense underline bold))
 (setq modus-themes-headings
       '((t . rainbow)))
 (setq modus-themes-scale-headings t)
 (setq modus-themes-completions 'opinionated)
+(setq modus-themes-hl-line '(intense accented))
+(setq modus-themes-subtle-line-numbers t)
 (setq doom-theme 'modus-vivendi)
-
-
-
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -170,8 +187,7 @@
 ;; soft wrap lines
 (global-visual-line-mode 1)
 
-
-;; ;; line number settings
+; line number settings
 
 ;; always display line numbers
 (global-display-line-numbers-mode t)
@@ -179,26 +195,7 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-
-
-;; Search specific engines.
-
+; Search specific engines.
 (engine-mode t)
 
 (defengine duck-duck-go
@@ -214,31 +211,11 @@
                         :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
 
-(map! :map org-mode-map :leader
-      (:prefix "m"
-       :desc "Next todo GTD-style" :n "m" '(lambda ()
-                                          (interactive)
-                                          (org-todo 'done)
-                                          (org-forward-heading-same-level 1)
-                                          (org-todo 2))))
-
-
-
-;; markdown (and some org) key-bindings
-;; now good mappings
-
-(map! :map (evil-markdown-mode gfm-mode) :leader
-      (:prefix "e"
-       :desc "Add markdown item" :n "i" #'markdown-insert-list-item
-       :desc "Go to next section" :n "j" #'markdown-forward-same-level
-       :desc "Go to previous section" :n "k" #'markdown-backward-same-level
-       :desc "Repair list" :n "r" #'org-list-repair
-       :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
-
 ;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
 
+;; Title Case
 (evil-define-operator evil-titlecase (beg end type)
   "Convert text to title case."
   (if (eq type 'block)
@@ -256,7 +233,6 @@
 (setq evil-snipe-scope 'whole-buffer)
 (setq evil-snipe-repeat-scope 'whole-buffer)
 
-
 ;; set spelling dictionary
 (setq ispell-dictionary "en")
 ;; spelling dictionary location
@@ -265,35 +241,22 @@
 
 (setq undo-fu-allow-undo-in-region t)
 
-;; TODO configure prettier and blacken to run only in certain (and different) modes
-
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
 
 ;; black integration
-;; (add-hook 'after-init-hook #'blacken-mode)
 (setq blacken-only-if-project-is-blackened t)
 
-;; set where node is located
-(setenv "NODE_PATH" nil)
-;; asdf linux version
-;; (setenv "PATH" (concat (getenv "PATH") ":~/.asdf/shims"))
-;; (setq exec-path (append exec-path '("~/.asdf/shims")))
-;; standard mac version
-(setenv "PATH" (concat (getenv "PATH") ":/usr/bin/local/node"))
-(setq exec-path (append exec-path '("/usr/local/bin")))
+; set where node is located
 
+(setenv "NODE_PATH" nil)
+
+(setq lsp-unzip-script "bash -c 'mkdir -p %2$s && unzip -qq -o %1$s -d %2$s'")
 
 (setq projectile-track-known-projects-automatically nil)
 
 ;; Opens minibuffer to select a root folder from which to discover projects.
 (map! :leader (:prefix "p" :desc "Discover projects in directory" :n "D" #'projectile-discover-projects-in-directory))
-
-;; Quick cursor highlight on major change.
-;; Testing turning it off.
-;; (beacon-mode 1)
-(setq beacon-size 10)
-(setq beacon-blink-duration 0.1)
 
 ;; Pick from kill ring... with completion!
 (global-set-key (kbd "M-p") #'counsel-yank-pop)
@@ -354,7 +317,10 @@
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
                         ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")))
 
-;; Config for when it's on:
+;; Rename buffers.
+(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer))
+
+;; Doom Modeline settings.
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)
 (remove-hook 'doom-modeline-mode-hook 'size-indication-mode)
 (setq doom-modeline-buffer-encoding nil)
@@ -362,31 +328,35 @@
 (setq doom-modeline-env-version nil)
 (line-number-mode 0)
 
-(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer))
-
 ;; Turn the modeline on and off.
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
 (defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
 
+; toggle for
+;; radio
+;; pomodoro
+;; modeline
+
 (map! :leader
       (:prefix "t"
        :desc "toggle radio" :n "m" #'eradio-toggle
-       :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer
-       :desc "toggle modeline" :n "D" #'toggle-mode-line-global
+       :desc "play radio channel" :n "M" #'eradio-play
        :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
-       :desc "play radio channel" :n "M" #'eradio-play))
+       :desc "toggle modeline" :n "D" #'toggle-mode-line-global
+       :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer))
 
+;; Org reveal settings.
 (setq org-re-reveal-title-slide nil)
 (setq org-re-reveal-theme "league")
 (require 'org-tempo)
 (require 'ox-reveal)
 (setq org-reveal-highlight-css "%r/lib/css/vs.css")
 
-
+;; Indium.
 (setq indium-chrome-executable "google-chrome-stable")
 
-
+;; Ibuffer commands.
 (map! :leader
       (:prefix "v"
        :desc "ibuffer filter by content" :n "u" #'ibuffer-update
@@ -404,15 +374,13 @@
 (add-to-list 'auto-mode-alist
              '("\\.js\\'" . rjsx-mode))
 
+;; i3wm mode.
 (add-hook! 'i3wm-config-mode-hook #'rainbow-mode)
 
-; Pomodoro settings
+;; Show digraphs.
+(map! :map general-override-mode-map :n "SPC h C-k" #'evil-ex-show-digraphs)
 
-;; Mode-line appearance
-(setq org-pomodoro-format "P%s")
-(setq org-pomodoro-time-format "%m")
-(setq org-pomodoro-long-break-format "L~%s")
-(setq org-pomodoro-short-break-format "S~%s")
+; Pomodoro settings
 
 ;; Allow manual breaks in Pomodoro.
 (setq org-pomodoro-manual-break t)
@@ -420,11 +388,19 @@
 ;; A canceled Pomodoro is the same as a completed Pomodoro.
 (setq org-pomodoro-keep-killed-pomodoro-time t)
 
+;; Mode-line appearance
+(setq org-pomodoro-format "P%s")
+(setq org-pomodoro-time-format "%m")
+(setq org-pomodoro-long-break-format "L~%s")
+(setq org-pomodoro-short-break-format "S~%s")
 
 ;; set up exec-path-from-shell
 (when (or (memq window-system '(mac ns x)) (daemonp))
   (setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
+
+;; Jest
+(add-hook! 'rjsx-mode-hook #'jest-minor-mode)
 
 ;; open links through ace-link
 (define-key help-mode-map (kbd "M-o") #'ace-link-help)
@@ -432,9 +408,13 @@
 (map! :map org-mode-map :n (kbd "M-o") #'ace-link-org)
 (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help)
 
+;; Switch frames. (Particularly useful on macOS.)
+(map! :leader (:prefix "w" :n "f" #'other-frame))
+
+;; No fringe
+(fringe-mode 0)
 
 ; some available keybinding prefixes
 ;; SPC l
 ;; SPC y
 ;; SPC and any capital letter
-
