@@ -2,6 +2,11 @@
 # linux keychain
 # eval `keychain -q --eval id_ed25519`
 
+# open vim
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -158,9 +163,6 @@ alias th='emacsclient --no-wait -c -a "" -e "(+vterm/here 1)"&'
 
 # open current directory in a stand-alone terminal
 alias kh='kitty --detach&'
-
-# open vim
-alias v='vim'
 
 # open vim fuzzy finder
 alias vf='vim $(fzf)'
