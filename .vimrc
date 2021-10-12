@@ -80,7 +80,8 @@ if has('clipboard')
 endif
 
 " set leader key
-let mapleader=","
+nnoremap <SPACE> <Nop>
+let mapleader=" "
 
 " set proper line wrapping
 set wrap linebreak nolist
