@@ -7,7 +7,7 @@
 (load-library "config-dired")
 (load-library "terminals")
 (load-library "aliases")
-(load-library "mail")
+; (Load-library "mail")
 
 ;; TODO make returning to transparency not additive
 
