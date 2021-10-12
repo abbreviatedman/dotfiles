@@ -26,8 +26,6 @@ set $alt Mod1
 # set trackpad and trackpoint movement speeds
 # exec_always --no-startup-id ~/trackpad-and-trackpoint-speed.sh
 
-# writing terminal
-bindsym $mod+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
 # writing terminals
 
 ## emacs-everywhere
