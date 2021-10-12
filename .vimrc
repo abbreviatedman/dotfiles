@@ -155,6 +155,8 @@ call plug#begin()
   " Color theme collections
   Plug 'rodnaph/vim-color-schemes'
   Plug 'rainglow/vim'
+  " Molokai theme
+  Plug 'lucasprag/simpleblack'
   " Solarized color theme
   Plug 'altercation/vim-colors-solarized'
   " Another alternate solarized color theme
@@ -220,7 +222,7 @@ call plug#end()
 nnoremap <leader>u :MundoToggle<CR>
 
 " color scheme
-colorscheme solarized8
+colorscheme simpleblack
 
 " turns off coloration for the Sign Column
 highlight clear SignColumn
