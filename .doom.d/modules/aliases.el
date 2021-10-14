@@ -52,7 +52,7 @@ Open dired in the current directory.
 
 (defun eshell/v (file)
   "Open a file in vim in an external terminal."
-  (shell-command (concat "kitty --detach vim " file)))
+  (shell-command (concat "kitty --detach nvim " file)))
 
 ;; hub
 
