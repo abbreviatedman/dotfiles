@@ -68,11 +68,3 @@ Open dired in the current directory.
 
 (defun eshell/sdm ()
   (shell-command "sequelize db:migrate"))
-
-;; asdf
-
-(defun eshell/arn ()
-  (shell-command "asdf reshim nodejs"))
-
-(defun eshell/arp ()
-  (shell-command "asdf reshim python"))
