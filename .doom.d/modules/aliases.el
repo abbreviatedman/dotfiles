@@ -64,7 +64,7 @@ Open dired in the current directory.
   "Clones one repo from GitHub."
   (shell-command (concat "hub clone " repo)))
 
-(defun eshell/hcr (repo)
+(defun eshell/hcr (&optional repo)
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
 
