@@ -460,7 +460,7 @@
 (fringe-mode 0)
 
 ;; Simpler binding for Emacs Everywhere
-(map! :map emacs-everywhere-mode-map :ni (kbd "C-c ") #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
+(map! :map emacs-everywhere-mode-map "C-c d" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
 
 ; some available keybinding prefixes
 ;; SPC l
