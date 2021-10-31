@@ -7,9 +7,13 @@
 (load-library "config-dired")
 (load-library "terminals")
 (load-library "aliases")
+<<<<<<< HEAD
 (load-library "mail")
 (load-library "macos")
 ;; (load-library "linux")
+=======
+; (Load-library "mail")
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 
 ;; TODO make returning to transparency not additive
 ;; TODO remove Ctrl-h and Ctrl-K from Org mode insert mode bindings
@@ -122,10 +126,16 @@
 (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 ;; Ligatures
+<<<<<<< HEAD
 ;; turned off for now
 ;; (add-hook 'prog-mode-hook 'fira-code-mode)
 ;; (setq fira-code-mode-disabled-ligatures '("x" "[]" "+" ":" ">="))
 
+=======
+;; STart with ligatures enabled.
+;; (add-hook 'prog-mode-hook 'fira-code-mode)
+(setq fira-code-mode-disabled-ligatures '("x" "[]" "+" ":" ">="))
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 (use-package python
   :config
   (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
@@ -202,6 +212,34 @@
                         :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
 
+<<<<<<< HEAD
+=======
+(map! :map org-mode-map :leader
+      (:prefix "m"
+       :desc "Next todo GTD-style" :n "m" '(lambda ()
+                                          (interactive)
+                                          (org-todo 'done)
+                                          (org-forward-heading-same-level 1)
+                                          (org-todo 2))))
+
+
+
+;; markdown (and some org) key-bindings
+;; now good mappings
+
+(map! :map (evil-markdown-mode gfm-mode) :leader
+      (:prefix "e"
+       :desc "Add markdown item" :n "i" #'markdown-insert-list-item
+       :desc "Go to next section" :n "j" #'markdown-forward-same-level
+       :desc "Go to previous section" :n "k" #'markdown-backward-same-level
+       :desc "Repair list" :n "r" #'org-list-repair
+       :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
+
+(evil-define-key '(normal visual) markdown-mode-map
+  "gj" #'evil-next-visual-line
+  "gk" #'evil-previous-visual-line)
+
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 ;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
@@ -239,7 +277,23 @@
 ;; black integration
 (setq blacken-only-if-project-is-blackened t)
 
+<<<<<<< HEAD
 (setq lsp-unzip-script "bash -c 'mkdir -p %2$s && unzip -qq -o %1$s -d %2$s'")
+=======
+;; set where node is located
+(setenv "NODE_PATH" nil)
+;; asdf linux version
+;; (setenv "PATH" (concat (getenv "PATH") ":~/.asdf/shims"))
+;; (setq exec-path (append exec-path '("~/.asdf/shims")))
+;; standard mac version
+(setenv "PATH" (concat (getenv "PATH") ":/usr/sbin/node"))
+(setq exec-path (append exec-path '("/usr/sbin/node")))
+(setenv "PATH" (concat (getenv "PATH") ":/usr/sbin"))
+(setq exec-path (append exec-path '("/usr/sbin")))
+
+(setq lsp-unzip-script "bash -c 'mkdir -p %2$s && unzip -qq -o %1$s -d %2$s'")
+
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 
 (setq projectile-track-known-projects-automatically nil)
 
@@ -362,7 +416,23 @@
 (add-to-list 'auto-mode-alist
              '("\\.js\\'" . rjsx-mode))
 
+<<<<<<< HEAD
 ;; i3wm mode.
+=======
+
+;; Show digraphs.
+(map! :map general-override-mode-map :n "SPC h C-k" #'evil-ex-show-digraphs)
+
+;; use indent of 2 for html
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  )
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(add-hook! 'rjsx-mode-hook #'jest-minor-mode)
+
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 (add-hook! 'i3wm-config-mode-hook #'rainbow-mode)
 
 ;; Show digraphs.
@@ -396,8 +466,16 @@
 (map! :map org-mode-map :n (kbd "M-o") #'ace-link-org)
 (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help)
 
+<<<<<<< HEAD
 ;; Switch frames. (Particularly useful on macOS.)
 (map! :leader (:prefix "w" :n "f" #'other-frame))
+=======
+;; No fringe
+(fringe-mode 0)
+
+;; Simpler binding for Emacs Everywhere
+(map! :map emacs-everywhere-mode-map "C-c d" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 
 ; some available keybinding prefixes
 ;; SPC l

@@ -2,13 +2,18 @@
 # linux keychain
 # eval `keychain -q --eval id_ed25519`
 
+# open vim
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
-export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:usr/local/anaconda/bin:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local:~/.asdf
+export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:usr/local/anaconda/bin:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local
 
 export ALTERNATE_EDITOR=""
 
@@ -129,6 +134,7 @@ alias vimconfig="e /home/abbreviatedman/.vimrc"
 alias kittyconfig="e /home/abbreviatedman/.config/kitty/kitty.conf"
 alias qtileconfig="e /home/abbreviatedman/.config/qtile/config.py"
 
+
 # open scratchpad files
 alias scratchjs="nvim ~/Documents/scratchpad/scratchpad.js"
 alias notesmd="nvim ~/Sync/gtd/notes.md"
@@ -160,11 +166,14 @@ alias th='emacsclient --no-wait -c -a "" -e "(+vterm/here 1)"&'
 # open current directory in a stand-alone terminal
 alias kh='kitty --detach&'
 
+<<<<<<< HEAD
 # open vim
 # alias vim='nvim'
 alias v='nvim'
 alias ovim='\vim'
 
+=======
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 # open vim fuzzy finder
 alias vf='nvim $(fzf)'
 
@@ -201,7 +210,6 @@ alias ni='npm install'
 alias niy='npm init -y'
 alias nid='npm install --save-dev'
 alias ng='npm install --global'
-alias ar='asdf reshim nodejs'
 alias nt='npm test'
 alias nr='npm run'
 alias ns='npm start'
@@ -360,6 +368,9 @@ export FZF_DEFAULT_OPTS="--ansi"
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+<<<<<<< HEAD
 
 # use asdf
 # . $HOME/.asdf/asdf.sh
+=======
+>>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1

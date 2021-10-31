@@ -1,12 +1,12 @@
 # Set initial resolution
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
-# enable caffeine by default
-# exec --no-startup-id "caffeine -a"
+exec --no-startup-id xcape
+exec --no-startup-id "xmodmap ~/.Xmodmap"
 
 # battery warning
 # warns at 30% and half that (15)
-exec --no-startup-id i3-battery-popup -n -L 30
+exec --no-startup-id i3-battery-popup -L 98 -t 30s
 
 # video compositor
 exec --no-startup-id picom
@@ -17,7 +17,6 @@ exec --no-startup-id syncthing -no-browser
 
 # Startup Files
 exec "zoom"
-exec "slack"
 exec "emacs"
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
@@ -27,23 +26,31 @@ set $alt Mod1
 # set trackpad and trackpoint movement speeds
 # exec_always --no-startup-id ~/trackpad-and-trackpoint-speed.sh
 
-# writing terminal
-bindsym $mod+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
+# writing terminals
+
+## emacs-everywhere
+bindsym $mod+w exec i3-msg exec 'emacsclient --eval "(emacs-everywhere)"'
+
+## Simple writing terminal.
+bindsym $mod+Shift+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
+
+# Add compose key manually. : (
+bindsym $mod+Shift+x exec "xmodmap ~/.Xmodmap"
 
 # Move specific apps to specific workspaces.
-assign [class="Firefox"] "1"
-assign [class="Chromium"] "6"
-assign [class="Code"] "6"
-assign [class="code-oss"] "6"
-assign [class="Simplenote"] "8"
-assign [class="Google-chrome"] "9"
-assign [class="Google-chrome-unstable"] "9"
+assign [class="Firefox"] "6"
+# assign [class="Chromium"] "6"
+# assign [class="Code"] "6"
+# assign [class="code-oss"] "6"
+# assign [class="Simplenote"] "8"
+# assign [class="Google-chrome"] "9"
+# assign [class="Google-chrome-unstable"] "9"
 assign [class="zoom"] "10"
-assign [class="Slack"] "11"
-assign [class="discord"] "11"
-assign [class="pulse-sms"] "11"
-assign [class="Signal"] "11"
-assign [class="vlc"] "12"
+# assign [class="Slack"] "11"
+# assign [class="discord"] "11"
+# assign [class="pulse-sms"] "11"
+# assign [class="Signal"] "11"
+# assign [class="vlc"] "12"
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
 default_border pixel 5
@@ -110,7 +117,7 @@ bindsym $mod+$alt+space exec --no-startup-id morc_menu
 # sleep management
 
 ## turn sleep on
-bindsym  $mod+$alt+Ctrl+c exec "caffeine start -a"
+bindsym  $mod+$alt+Ctrl+c exec "caffeine -a"
 
 ## turn sleep off
 bindsym  $mod+$alt+Ctrl+Shift+c exec "caffeine kill"
@@ -394,6 +401,7 @@ mode "resize" {
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
 }
 
 # Lock screen
@@ -546,12 +554,8 @@ mode "$mode_gaps_outer" {
 # bindsym $mod+d exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
 
 
-# One external monitor.
-bindsym $mod+Ctrl+f exec "xrandr --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 1920x0 --rotate normal --output DP1-2 --off --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore"
+# The laptop screen plus one external monitor.
+bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --mode 1920x1080 --pos 3840x1080 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --mode 3840x2160 --pos 0x0 --rotate normal; sleep 3; nitrogen --restore"
 
-
-# ThinkPad dock with 4K and FHD.
-# bindsym $mod+e exec "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x1397 --rotate normal --output DP1 --off --output DP1-1 --mode 1920x1080 --pos 6400x1713 --rotate normal --output DP1-2 --mode 3840x2160 --pos 2560x0 --rotate normal --output DP1-3 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off"
-
-# galp3 - external monitors with laptop screen off
-bindsym $mod+e exec "xrandr --output eDP1 --off --output DP1 --primary --mode 1920x1080 --pos 3840x1526 --rotate normal --output HDMI1 --off --output HDMI2 --mode 3840x2160 --pos 0x0 --rotate normal --output VIRTUAL1 --off; sleep 2; nitrogen --restore"
+# Just the laptop screen.
+bindsym $mod+Shift+Ctrl+l exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"

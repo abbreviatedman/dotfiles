@@ -44,15 +44,19 @@ Open dired in the current directory.
 
 (defun eshell/v (file)
   "Open a file in vim in an external terminal."
-  (shell-command (concat "kitty --detach vim " file)))
+  (shell-command (concat "kitty --detach nvim " file)))
 
-;; hub
+;; git(hub)
+
+(defun eshell/gn ()
+  "Creates a new git repository, removing any existing ones."
+  (shell-command "rm -rf .git && git init"))
 
 (defun eshell/hcl (repo)
   "Clones one repo from GitHub."
   (shell-command (concat "hub clone " repo)))
 
-(defun eshell/hcr (repo)
+(defun eshell/hcr (&optional repo)
   "Creates a repo on GitHub."
   (shell-command (concat "hub create " repo)))
 
