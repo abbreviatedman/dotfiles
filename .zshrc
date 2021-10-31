@@ -70,6 +70,7 @@ plugins=(
   zsh-syntax-highlighting
   zsh-autosuggestions
   zsh-vim-mode
+  z
 )
 source $ZSH/oh-my-zsh.sh
 
@@ -89,7 +90,7 @@ MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR=/usr/sbin/emacsclient
+export EDITOR=/usr/local/bin/nvim
 export VISUAL=$EDITOR
 
 # Compilation flags
@@ -129,12 +130,12 @@ alias kittyconfig="e /home/abbreviatedman/.config/kitty/kitty.conf"
 alias qtileconfig="e /home/abbreviatedman/.config/qtile/config.py"
 
 # open scratchpad files
-alias scratchjs="vim ~/Documents/scratchpad/scratchpad.js"
-alias notesmd="vim ~/Sync/gtd/notes.md"
-alias quickmd="vim ~/Sync/org/quick-note.org"
-alias tweetdeckmd="vim ~/Documents/scratchpad/tweetdeck.md"
-alias inbox='vim ~/Sync/gtd/inbox.md'
-alias na='vim ~/Sync/gtd/next-actions.md'
+alias scratchjs="nvim ~/Documents/scratchpad/scratchpad.js"
+alias notesmd="nvim ~/Sync/gtd/notes.md"
+alias quickmd="nvim ~/Sync/org/quick-note.org"
+alias tweetdeckmd="nvim ~/Documents/scratchpad/tweetdeck.md"
+alias inbox='nvim ~/Sync/gtd/inbox.md'
+alias na='nvim ~/Sync/gtd/next-actions.md'
 
 # common directories
 alias cdga='cd ~/Documents/ga'
@@ -150,7 +151,8 @@ alias smg='sequelize model:generate'
 
 # open emacs
 # open file(s) in emacs
-alias emacs='emacsclient --no-wait -c -a ""'
+# alias emacs='emacsclient --no-wait -c -a ""'
+
 alias e='emacsclient --no-wait -c -a ""'
 # open an emacs terminal in this location
 alias th='emacsclient --no-wait -c -a "" -e "(+vterm/here 1)"&'
@@ -159,10 +161,12 @@ alias th='emacsclient --no-wait -c -a "" -e "(+vterm/here 1)"&'
 alias kh='kitty --detach&'
 
 # open vim
-alias v='vim'
+# alias vim='nvim'
+alias v='nvim'
+alias ovim='\vim'
 
 # open vim fuzzy finder
-alias vf='vim $(fzf)'
+alias vf='nvim $(fzf)'
 
 # open current directory with file explorer
 alias fh='nautilus -w $PWD &'
@@ -358,4 +362,4 @@ export FZF_DEFAULT_OPTS="--ansi"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # use asdf
-. $HOME/.asdf/asdf.sh
+# . $HOME/.asdf/asdf.sh

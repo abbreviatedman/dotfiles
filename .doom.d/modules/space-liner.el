@@ -2,7 +2,6 @@
 ;; Functions for moving the current line or visual selection up or down.
 
 ;; Normal Mode Versions
-
 (defun space-liner-bring-line-up (&optional n)
 "Moves line up by COUNT lines, bringing point."
   (interactive "p")
@@ -21,10 +20,7 @@
     (yank)
     (forward-line -1)))
 
-
-
 ;; Visual Mode Versions
-
 (defun space-liner-bring-line-down-visual-mode (&optional n)
   "Moves visual selection down by count lines, bringing point.
 Currently is slightly off-kilter for non-Visual-Block visual modes."
@@ -46,10 +42,6 @@ Currently is slightly off-kilter for non-Visual-Block visual modes."
     (yank))
   (evil-visual-line)
   (forward-line -1))
-
-
-
-
 
 (map! :map evil-normal-state-map "SPC k" #'space-liner-bring-line-up)
 (map! :map evil-normal-state-map "SPC j" #'space-liner-bring-line-down)

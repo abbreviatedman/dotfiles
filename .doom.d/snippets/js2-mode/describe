@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Describe Block Snippet
-# key: d
-# uuid: d
-# --
-describe("$1", () => {
-  $0
-})

@@ -12,17 +12,13 @@
 ;; (load-library "linux")
 
 ;; TODO make returning to transparency not additive
+;; TODO remove Ctrl-h and Ctrl-K from Org mode insert mode bindings
 ;; TODO make markdown's enter work on opening a new line
 ;; TODO port markdown's enter over to org
 ;; TODO remove markdown meta-p mapping
 ;; TODO make titlecase lowercase it first
 ;; TODO add Spanish spelling dictionary
 ;; TODO Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
-
-;; Quick cursor highlight on major change.
-(beacon-mode 1)
-(setq beacon-size 50)
-(setq beacon-blink-duration 0.1)
 
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
@@ -47,14 +43,10 @@
 ;; initialize the targets package
 (targets-setup t)
 
-(map! :map evil-normal-state-map "SPC DEL" #'evil-switch-to-windows-last-buffer)
+(map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
 
 ;; operator that replaces a motion/text object with what's in a register (the " register by default).
 (map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
-
-;; keep cursor on current character when leaving insert mode
-;; (regular vim moves it back by one)
-(setq! evil-move-cursor-back nil)
 
 ;; get rid of prompts
 (setq kill-buffer-query-functions
@@ -149,8 +141,7 @@
 ;; use indent of 2 for html
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset 2)
-  )
+  (setq web-mode-markup-indent-offset 2))
 
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 
@@ -238,18 +229,15 @@
 ;; spelling dictionary location
 (setq ispell-personal-dictionary "~/.doom.d/spelling/en.pws")
 
-
 (setq undo-fu-allow-undo-in-region t)
+
+;; Automatic formatting
 
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
 
 ;; black integration
 (setq blacken-only-if-project-is-blackened t)
-
-; set where node is located
-
-(setenv "NODE_PATH" nil)
 
 (setq lsp-unzip-script "bash -c 'mkdir -p %2$s && unzip -qq -o %1$s -d %2$s'")
 
@@ -410,9 +398,6 @@
 
 ;; Switch frames. (Particularly useful on macOS.)
 (map! :leader (:prefix "w" :n "f" #'other-frame))
-
-;; No fringe
-(fringe-mode 0)
 
 ; some available keybinding prefixes
 ;; SPC l

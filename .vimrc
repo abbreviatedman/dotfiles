@@ -1,6 +1,32 @@
-" sets the updatetime for vim-signify
+" set leader key
+let mapleader=" "
+:set guifont=Fira_Code:h18
 set updatetime=1000
 
+
+function! ToggleHiddenAll()
+    if s:hidden_all  == 0
+        let s:hidden_all = 1
+        set noshowmode
+        set noruler
+        set laststatus=0
+        set noshowcmd
+    else
+        let s:hidden_all = 0
+        set showmode
+        set ruler
+        set laststatus=2
+        set showcmd
+    endif
+endfunction
+
+
+nnoremap <leader>m :call ToggleHiddenAll()<CR>
+let s:hidden_all = 1
+set noshowmode
+set noruler
+set laststatus=0
+set noshowcmd
 " Keep undo history across sessions by storing it in a file
 " The following creates the directory if it doesn't exist.
 " And only for versions of vim that support persistent undo.
@@ -79,8 +105,6 @@ if has('clipboard')
   endif
 endif
 
-" set leader key
-let mapleader=","
 
 " set proper line wrapping
 set wrap linebreak nolist
@@ -103,6 +127,8 @@ endif
 "The above block will have installed vim-plug, and the below block will tell vim-plug which plugins to install.
 
 call plug#begin()
+  " add exporting to firenvim plugin
+  " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
   " exchange text objects
   Plug 'tommcdo/vim-exchange'
   " Drawing!
@@ -170,8 +196,8 @@ call plug#begin()
   " mostly for GBrowse
   Plug 'tpope/vim-rhubarb'
   " better statusline
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
+  " Plug 'vim-airline/vim-airline'
+  " Plug 'vim-airline/vim-airline-themes'
   " Smooth scrolling
   Plug 'mg979/scroll.vim'
   " completion engine through language servers
@@ -268,13 +294,13 @@ let g:rainbow_conf = {
 " vim airline config
 
 " display all buffers when only one tab is open
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 " display tab numbers (makes {count}gt very easy for picking a particular tab)
-let g:airline#extensions#tabline#tab_nr_type = 1
+" let g:airline#extensions#tabline#tab_nr_type = 1
 " show only half the file path... I think? lost to the sands of time
-let g:airline_section_c = '%.50F'
+" let g:airline_section_c = '%.50F'
 " don't show amount current positon in file
-let g:airline_section_z = ''
+" let g:airline_section_z = ''
 
 " fugitive bindings
 nnoremap <Leader>gs :G<CR>
@@ -333,6 +359,7 @@ let g:yankstack_map_keys = 0
 nmap <leader>p <Plug>yankstack_substitute_older_paste
 nmap <leader>P <Plug>yankstack_substitute_newer_paste
 call yankstack#setup()
+
 " make Y behave more like the other capital variants and act on text until the
 " end of the line
 nmap Y y$
@@ -360,8 +387,8 @@ let &t_8b = "\e[48;2;%lu;%lu;%lum"
 " accept first spelling suggestion
 nmap <Leader>z 1z=
 
-" append file to quick note
-nnoremap <Leader>w ggvG$:w!>>~/Sync/org/notes.md<CR>ggdG
+" append file to notes
+nnoremap <Leader>q ggvG$:w!>>~/Sync/org/notes.md<CR>ggdG
 
 " sneak mapping
 omap z <Plug>Sneak_s
@@ -411,7 +438,7 @@ function! s:check_back_space() abort
 endfunction
 
 " Trigger completion on the hovered word.
-inoremap <silent><expr> <Leader>lr coc#refresh()
+" inoremap <silent><expr> <Leader>lr coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.

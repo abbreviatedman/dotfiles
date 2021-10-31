@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: It Block Snippet
-# key: it
-# uuid: it
-# --
-it("$1", () => {
-  $0
-})

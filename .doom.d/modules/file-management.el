@@ -14,5 +14,5 @@
 
 ;; automatically reload file (on focus) with changes on local filesystem
 ;; useful for when you change the file in another app
-;; or it's changed programmatically
+;; or it's changedprogrammatically
 (global-auto-revert-mode t)

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: For Loop With I Snippet
-# key: fe
-# uuid: fe
-# --
-${1:arr}.forEach(($2) => $0)

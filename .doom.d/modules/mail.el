@@ -5,7 +5,8 @@
 (setq user-mail-address "abbreviatedman@posteo.net"
       user-full-name  "Colin Jaffe"
       mu4e-get-mail-command "mbsync -a"
-      mu4e-update-interval  150
+      smtpmail-smtp-service 587
+      mu4e-update-interval  nil
       mu4e-main-buffer-hide-personal-addresses t
       mu4e-drafts-folder "/abbreviatedman/Drafts"
       mu4e-trash-folder "/abbreviatedman/Trash"

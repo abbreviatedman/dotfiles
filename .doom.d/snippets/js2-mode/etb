@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Expect To Be Snippet
-# key: eb
-# uuid: eb
-# --
-expect($1).toBe($0)

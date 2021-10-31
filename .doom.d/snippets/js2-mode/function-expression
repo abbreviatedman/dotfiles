@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: Function Statement Snippet
-# key: fu
-# uuid: fu
-# --
-function $1($2) {
-  $0
-}
