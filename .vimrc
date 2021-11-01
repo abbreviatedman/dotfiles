@@ -105,12 +105,9 @@ if has('clipboard')
   endif
 endif
 
-<<<<<<< HEAD
-=======
 " set leader key
 nnoremap <SPACE> <Nop>
 let mapleader=" "
->>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 
 " set proper line wrapping
 set wrap linebreak nolist
@@ -363,18 +360,11 @@ nmap <Leader>z 1z=
 " copy and paste
 
 " yankstack mappings
-<<<<<<< HEAD
-let g:yankstack_map_keys = 0
-nmap <leader>p <Plug>yankstack_substitute_older_paste
-nmap <leader>P <Plug>yankstack_substitute_newer_paste
-call yankstack#setup()
-
-=======
 " let g:yankstack_map_keys = 0
 " nmap <leader>p <Plug>yankstack_substitute_older_paste
 " nmap <leader>P <Plug>yankstack_substitute_newer_paste
 " call yankstack#setup()
->>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
+
 " make Y behave more like the other capital variants and act on text until the
 " end of the line
 nmap Y y$
@@ -439,24 +429,6 @@ map T <Plug>Sneak_T
 " set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate.
-<<<<<<< HEAD
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Trigger completion on the hovered word.
-" inoremap <silent><expr> <Leader>lr coc#refresh()
-
-=======
 " " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " " other plugin before putting this into your config.
 " inoremap <silent><expr> <TAB>
@@ -473,7 +445,6 @@ endfunction
 " " Trigger completion on the hovered word.
 " inoremap <silent><expr> <Leader>lr coc#refresh()
 "
->>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.

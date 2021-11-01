@@ -7,9 +7,9 @@
 (load-library "config-dired")
 (load-library "terminals")
 (load-library "aliases")
-(load-library "mail")
-(load-library "macos")
-;; (load-library "linux")
+;; (load-library "mail")
+;; (load-library "macos")
+(load-library "linux")
 
 ;; TODO make returning to transparency not additive
 ;; TODO remove Ctrl-h and Ctrl-K from Org mode insert mode bindings
