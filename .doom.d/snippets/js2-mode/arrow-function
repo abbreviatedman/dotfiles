@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Arrow Function Snippet
-# key: ar
-# uuid: ar
-# --
-($1) => $0

@@ -23,14 +23,6 @@ Open dired in the current directory.
       (dired-jump nil dir)
     (dired-jump)))
 
-(defun eshell/th ()
-"open a vterm terminal here"
-  (open-vterm-other-frame))
-
-(defun eshell/kh ()
-"Open a non-emacs terminal here"
-  (shell-command "kitty"))
-
 (defun eshell/up (match)
 "search parent directories by search string"
   (eshell-up match))

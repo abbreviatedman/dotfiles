@@ -35,25 +35,7 @@
   (company-idle-delay 0)
   ;; Number the candidates (use M-1, M-2 etc to select completions).
   (company-show-numbers t)
-  (company-backends nil)
-
-
-  (defun smarter-tab-to-complete ()
-    "Try to `org-cycle', `yas-expand', and `yas-next-field' at current cursor position.
-
-If all failed, try to complete the common part with `company-complete-common'"
-    (interactive)
-    (if yas-minor-mode
-        (let ((old-point (point))
-              (old-tick (buffer-chars-modified-tick))
-              (func-list '(org-cycle yas-expand yas-next-field)))
-          (catch 'func-suceed
-            (dolist (func func-list)
-              (ignore-errors (call-interactively func))
-              (unless (and (eq old-point (point))
-                           (eq old-tick (buffer-chars-modified-tick)))
-                (throw 'func-suceed t)))
-            (company-complete-common))))))
+  (company-backends nil))
 
 (setq tide-completion-show-source t)
 (setq tide-sort-completions-by-kind t)
@@ -118,3 +100,6 @@ If all failed, try to complete the common part with `company-complete-common'"
 (add-hook 'lsp-mode-hook #'cj/lsp-signature-hack)
 (map! :leader (:prefix "t"
                :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
+
+(map! :i (kbd "C-x s") #'company-yasnippet)
+(map! :map eshell-mode-map :i (kbd "<tab>") #'company-capf)

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Expect To Equal
-# key: ee
-# uuid: ee
-# --
-expect($1).toEqual($0)

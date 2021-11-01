@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Const Declaration Snippet
-# key: cv
-# uuid: cv
-# --
-const $1 = $0

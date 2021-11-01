@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Reveal.js Fragment Comment
-# key: f
-# uuid: f
-# --
-<!-- .element: class="fragment" -->
