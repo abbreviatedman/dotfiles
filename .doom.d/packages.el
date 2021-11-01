@@ -72,7 +72,6 @@
 (package! exec-path-from-shell)
 (package! ace-link)
 
-<<<<<<< HEAD
 (package! org-trello)
 (package! sentence-navigation :disable t)
 (package! jest)
@@ -84,6 +83,3 @@
 (package! gitignore-mode
 	:recipe (:host github :repo "magit/git-modes"
            :files ("gitignore-mode.el")))
-=======
-(package! jest)
->>>>>>> 680e579c5d1d3a704ab7b152a4fae43aad1a71a1
