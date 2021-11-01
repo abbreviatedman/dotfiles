@@ -29,7 +29,7 @@ set $alt Mod1
 # writing terminals
 
 ## emacs-everywhere
-bindsym $mod+w exec i3-msg exec 'emacsclient --eval "(emacs-everywhere)"'
+bindsym $mod+w exec i3-msg exec 'doom everywhere'
 
 ## Simple writing terminal.
 bindsym $mod+Shift+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"

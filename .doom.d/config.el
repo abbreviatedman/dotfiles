@@ -40,15 +40,16 @@
 ;; initialize the targets package
 (targets-setup t)
 
-(map! :map evil-normal-state-map "SPC DEL" #'evil-switch-to-windows-last-buffer)
+(map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
 
 ;; operator that replaces a motion/text object with what's in a register (the " register by default).
 (map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
 
-;; keep cursor on current character when leaving insert mode
-;; (regular vim moves it back by one)
-(setq! evil-move-cursor-back nil)
+;; Make substitutions global by default.
+(setq evil-ex-substitute-global 1)
 
+;; Enable evil in the mini-buffer.
+(setq evil-want-minibuffer t)
 
 ;; get rid of prompts
 (setq kill-buffer-query-functions
@@ -459,8 +460,15 @@
 ;; No fringe
 (fringe-mode 0)
 
+;; use subwords always
+;; makes 'w' work with the subwords of a camelCase word
+;; use 'W' for the whole thing
+;; or the text object 'o' for a symbol
+(global-subword-mode)
+
+
 ;; Simpler binding for Emacs Everywhere
-(map! :map emacs-everywhere-mode-map "C-c d" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
+(map! :map emacs-everywhere-mode-map "C-c DEL" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
 
 ; some available keybinding prefixes
 ;; SPC l

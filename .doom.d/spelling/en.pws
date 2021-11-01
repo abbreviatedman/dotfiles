@@ -1,4 +1,4 @@
-personal_ws-1.1 en 375
+personal_ws-1.1 en 400
 APIs
 Ang
 Asus
@@ -26,9 +26,11 @@ Desmonda
 Dinos
 Dotfiles
 Dygma
+Elea
 Emagi
 Emagi's
 Emmet
+Erian
 Esc
 Eshell
 Everdell
@@ -38,18 +40,21 @@ Gcal
 Gmail
 GraphQL
 HOFs
+HackerRank
 Haha
 Heeeeey
 HelperQueue
 Hola
 Hulkaroy
 IAs
+Ikechi
 Imgur
 IndexError
 Itzkovitz
 JSDoc
 Jaffe
 Jaffe's
+Jalamang
 Jargondome
 Jukay
 Kanban
@@ -59,6 +64,7 @@ Ki
 Kisha
 Kiyomi
 Kurakani
+LeetCode
 Looper
 Lowlights
 Manjaro
@@ -114,14 +120,17 @@ TAs
 Tashawnee
 Teamity
 Teladoc
+Theo
 Todon't
 Todont
+Todos
 Triane
 TypeError
 Uber
 Unbookables
 Uncomment
 VSCode
+VSCodeVim
 Vous
 Walesca
 Weingarten
@@ -131,8 +140,10 @@ Whoo
 WidgetShow
 Wireframe
 Woohoo
+Xiaoming
 Younes
 Zach
+Zelle
 abbreviatedman
 addEventListener
 advices
@@ -150,6 +161,7 @@ auth
 autoinc
 autosuggest
 axios
+backchannel
 backend
 balloonasaurus
 bcrypt
@@ -161,6 +173,8 @@ blogposts
 booleans
 bootcamp
 bugapalooza
+camelCase
+centric
 charset
 cheapos
 cj
@@ -185,6 +199,7 @@ destructuring
 dev
 devs
 dired
+divs
 dropdown
 duckduckgo
 ejs
@@ -196,6 +211,7 @@ else's
 explainer
 fav
 favoriting
+fetchWeather
 fira
 forEach
 formatter
@@ -205,9 +221,11 @@ geocoder
 geolocating
 geonames
 getArea
+getListsMenu
 giphy
 gitignore
 gitlab
+goshdarned
 goto
 gpg
 groovesalad
@@ -281,6 +299,7 @@ nodejs
 nodemon
 npm
 num
+numberizable
 numpad
 nums
 ohmyz
@@ -326,6 +345,8 @@ ripgrep
 rq
 sammich
 sbin
+scaffolded
+scoobies
 sequelize
 signup
 skillset
@@ -339,16 +360,19 @@ storyId
 strategize
 stylesheet
 subfields
+subwords
 sudo
 swappable
 syncthing
 textarea
 todo
+todo's
 toggleable
 trello
 ttf
 unbookable
 unmuting
+unrelatedly
 unshift
 uppercased
 userId
@@ -356,6 +380,7 @@ userapp
 usr
 utf
 uuid
+viewList
 viewport
 vimium
 visudo
