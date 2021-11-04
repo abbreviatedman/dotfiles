@@ -34,6 +34,9 @@ bindsym $mod+w exec i3-msg exec 'doom everywhere'
 ## Simple writing terminal.
 bindsym $mod+Shift+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
 
+## Todos
+bindsym $mod+Shift+t exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/tasks.org'"
+
 # Add compose key manually. : (
 bindsym $mod+Shift+x exec "xmodmap ~/.Xmodmap"
 
