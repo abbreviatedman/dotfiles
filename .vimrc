@@ -249,9 +249,6 @@ call plug#end()
 " mundo's undo visualization toggle
 nnoremap <leader>u :MundoToggle<CR>
 
-" color scheme
-colorscheme simpleblack
-
 " turns off coloration for the Sign Column
 highlight clear SignColumn
 

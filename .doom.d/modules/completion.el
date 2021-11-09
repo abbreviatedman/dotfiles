@@ -41,13 +41,13 @@
 (setq tide-sort-completions-by-kind t)
 (setq tide-completion-ignore-case t)
 
-;; make company prettier
-(company-posframe-mode 1)
-(require 'desktop)
-(push '(company-posframe-mode . nil)
-      desktop-minor-mode-table)
-(require 'company-box)
-(add-hook 'company-mode-hook 'company-box-mode)
+;; ;; make company prettier
+;; (company-posframe-mode 1)
+;; (require 'desktop)
+;; (push '(company-posframe-mode . nil)
+;;       desktop-minor-mode-table)
+;; (require 'company-box)
+;; (add-hook 'company-mode-hook 'company-box-mode)
 
 ;; remove . and .. from ivy completion buffers
 (setq ivy-extra-directories nil)
@@ -102,4 +102,13 @@
                :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
 (map! :i (kbd "C-x s") #'company-yasnippet)
-(map! :map eshell-mode-map :i (kbd "<tab>") #'company-capf)
+;; (map! :map eshell-mode-map :i (kbd "<tab>") #'company-capf)
+
+(after! company
+  (define-key! company-active-map
+    "RET" nil
+    (kbd "TAB") nil
+    (kbd "<return>") nil))
+
+ (let ((map company-active-map))
+    (define-key map (kbd "<tab>") 'company-complete-selection))

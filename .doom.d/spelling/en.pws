@@ -1,4 +1,4 @@
-personal_ws-1.1 en 615
+personal_ws-1.1 en 630
 APIs
 AddBookmark
 Algo
@@ -70,6 +70,7 @@ Fozzie
 FundMe
 GParted
 Galculator
+Gloomhaven's
 Guarriello
 Gcal
 Gmail
@@ -115,6 +116,7 @@ Learnings
 Lebsack
 LeetCode
 Lightdm
+LinkedIn
 Looper
 Loopers
 Lowlights
@@ -185,6 +187,7 @@ Rowlf
 SQLAlchemy
 Sandpoint
 Sareen
+Schenck
 Schulist
 Schumer
 Scrabblemania
@@ -281,6 +284,7 @@ centric
 charAt
 charset
 cheapos
+checkbox's
 checkboxes
 cj
 cking
@@ -320,6 +324,7 @@ elif
 elisp
 else's
 emacsclient
+emojify
 env
 eshell
 eshell's
@@ -337,6 +342,7 @@ fpakman
 frontend
 fs
 fullscreen
+gamers
 generalassemb
 geocoder
 geolocating
@@ -356,6 +362,7 @@ gradebook
 groovesalad
 gtk
 gvim
+handleInputChange
 hardcode
 hardcoded
 hardcoding
@@ -378,10 +385,12 @@ indic
 init
 inlineimages
 inplace
+inputValue
 isSubArray
 ish
 jaffe
 jdrichardstech
+jist
 josemejia
 journaling
 js
@@ -413,6 +422,7 @@ magit
 mainStreet
 mbsync
 meds
+meeples
 memoirist
 miasmic
 minibuffer
@@ -461,7 +471,9 @@ octopi
 ohmyz
 ol
 omg
+onChange
 onClick
+onSubmit
 onboarding
 oss
 pacman
@@ -488,6 +500,7 @@ postamble
 posteo
 ppt
 pre
+preventDefault
 prog
 programmatically
 prototypal
@@ -563,6 +576,7 @@ toggleable
 trackpad
 trackpoint
 trello
+truthy
 ttf
 unbookable
 undergird
@@ -573,6 +587,7 @@ unring
 unsee
 unshift
 uppercased
+useEffect
 userId
 userapp
 userguide

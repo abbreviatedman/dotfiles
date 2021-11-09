@@ -52,7 +52,7 @@
 (setq evil-ex-substitute-global 1)
 
 ;; Enable evil in the mini-buffer.
-(setq evil-want-minibuffer t)
+;; (setq evil-want-minibuffer t)
 
 ;; get rid of prompts
 (setq kill-buffer-query-functions

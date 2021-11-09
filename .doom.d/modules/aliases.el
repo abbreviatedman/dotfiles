@@ -1,4 +1,5 @@
 ;; TODO
+;;; add yay --colors=always alias
 ;;; generalize from ni alias
 ;;; git remote -v
 ;;; hub fork

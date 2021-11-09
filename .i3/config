@@ -175,7 +175,7 @@ bindsym $mod+Shift+F3 exec pcmanfm_pkexec
 bindsym $mod+F5 exec terminal -e 'mocp'
 # bindsym $mod+t exec --no-startup-id pkill compton
 bindsym $mod+Ctrl+t exec --no-startup-id compton -b
-bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
+# bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 # bindsym $mod+$alt+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
@@ -325,6 +325,7 @@ bindsym $mod+Ctrl+l move workspace to output right
 
 
 # Open specific applications in floating mode
+for_window [title="Emacs Everywhere ::.*"] floating enable, resize set 800 800
 for_window [title="alsamixer"] floating enable
 for_window [class="calamares"] floating enable border normal
 for_window [class="Clipgrab"] floating enable
@@ -405,6 +406,31 @@ mode "resize" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
         bindsym $mod+r mode "default"
+}
+
+# Move floating window to the center and increase/decrease its size
+# Requires an i3-center script I've gotta get up somewhere.
+bindsym $mod+d exec "i3-center"
+bindsym $mod+Ctrl+d exec "i3-center inc"
+bindsym $mod+Shift+d exec "i3-center dec"
+
+# Keeping this around, might return to it if I want a mode for moving
+mode "move" {
+        bindsym h move left
+        bindsym j move down
+        bindsym k move up
+        bindsym l move right
+
+        # same bindings, but for the arrow keys
+        bindsym Left move left
+        bindsym Down move down
+        bindsym Up move up
+        bindsym Right move right
+
+        # exit move mode: Enter or Escape or mod+d again
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+d mode "default"
 }
 
 # Lock screen
