@@ -11,6 +11,7 @@
 ;; (load-library "macos")
 (load-library "linux")
 
+;; TODO GET SNIPPETS WORKING!
 ;; TODO make returning to transparency not additive
 ;; TODO remove Ctrl-h and Ctrl-K from Org mode insert mode bindings
 ;; TODO make markdown's enter work on opening a new line
