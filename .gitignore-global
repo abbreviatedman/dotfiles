@@ -3,3 +3,5 @@ node_modules
 \.dir-locals\.el
 \.projectile
 /.log/
+rest\.org
+REST\.org

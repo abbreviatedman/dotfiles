@@ -1,4 +1,16 @@
-;; file-management configuration
+;;; file-management.el -*- lexical-binding: t; -*-
+
+
+; File Extensions
+
+(add-to-list 'auto-mode-alist '("\\.m(arkdown|d)\\'" . gfm-mode)) ; .md/.markdown
+(add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[jt]sx*\\'" . rjsx-mode)) ; .js, .jsx, .ts, .tsx
+(add-to-list 'auto-mode-alist '("\\.trello" . org-mode))
+
+
+
+; General Settings
 
 ;; save to backup directory
 (setq! auto-save-default t)
@@ -14,5 +26,5 @@
 
 ;; automatically reload file (on focus) with changes on local filesystem
 ;; useful for when you change the file in another app
-;; or it's changedprogrammatically
+;; or it's changed programmatically
 (global-auto-revert-mode t)

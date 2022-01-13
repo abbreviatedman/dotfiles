@@ -21,12 +21,13 @@
         )
 )
 
-;; Non-DOOM Solarized themes.
-(package! solarized-theme)
-
 ;; cursor highlighting when scrolling or switching buffers
 (package! beacon)
 
+; Themes
+
+;; Non-DOOM Solarized themes.
+(package! solarized-theme)
 
 ;; MORE Solarized themes??
 (package! color-theme-solarized)
@@ -35,12 +36,16 @@
 ;; Modus themes
 (package! modus-themes)
 
+;; Zenburn theme
+(package! zenburn-theme)
+
 ;; pomodoro
 (package! org-pomodoro)
 
 ;; company improvements
-(package! company-posframe)
-(package! company-box)
+(package! company-posframe :disable t)
+(package! company-box :disable t)
+(package! company :disable t)
 
 ;; Smooth scrolling.
 (package! scroll-on-jump
@@ -73,16 +78,28 @@
 (package! ace-link)
 
 (package! org-trello)
-(package! sentence-navigation :disable t)
 (package! jest)
 
-;; fix for gitconfig-mode recipe issue
-(package! gitconfig-mode
-	  :recipe (:host github :repo "magit/git-modes"
-       :files ("gitconfig-mode.el")))
-(package! gitignore-mode
-	:recipe (:host github :repo "magit/git-modes"
-           :files ("gitignore-mode.el")))
+;; Weather
+;; TODO needs patching!
+(package! wttrin)
 
-;; Arch package management
-(package! arch-packer)
+(package! mmm-mode)
+
+;; case changing!
+(package! string-inflection)
+
+;; Better completion.
+(package! corfu)
+(package! cape)
+(package! consult-yasnippet)
+
+;; Don't use Doom's snippets:
+;; (package! doom-snippets :ignore t)
+(package! yasnippet)
+
+;; Open large files.
+(package! vlf)
+
+;; GraphQL
+(package! graphql-mode)

@@ -1,4 +1,6 @@
 (add-to-list 'load-path "~/.doom.d/modules/")
+(add-to-list 'load-path "~/.doom.d/modules/packages/")
+(load-library "crj-utilities")
 (load-library "version-control")
 (load-library "secrets")
 (load-library "org-stuff")
@@ -9,37 +11,45 @@
 (load-library "aliases")
 ;; (load-library "mail")
 ;; (load-library "macos")
+;; (load-library "better-react-mmm-mode")
 (load-library "linux")
+(load-library "crj-spell")
+(load-library "beespell")
+(load-library "window-hydra")
+(load-library "file-management")
 
-;; TODO GET SNIPPETS WORKING!
+;; TODO get mu4e working
+;; TODO get working on Next Cloud
+;; TODO Improve window-resize hydra.
+;; TODO add feature to gtd-style next function to check if next todo is one it should mark todo
+;; TODO fix beespell when dictionary buffer is closed
+;; TODO add regex to org-agenda-file-regexp to exclude files with name "archive"
+;; TODO add variable pitch font to comments?
+;; TODO remove Forge-Corfu autocomplete on !
+;; TODO Function to title-case each markdown and org heading
+;; TODO make config literate
+;; TODO add file templates
 ;; TODO make returning to transparency not additive
 ;; TODO remove Ctrl-h and Ctrl-K from Org mode insert mode bindings
 ;; TODO make markdown's enter work on opening a new line
 ;; TODO port markdown's enter over to org
 ;; TODO remove markdown meta-p mapping
-;; TODO make titlecase lowercase it first
-;; TODO add Spanish spelling dictionary
-;; TODO Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
+;; DONE Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
+;; DONE toggle line number type globally - and maybe switch to Modus Vivendi? And reverse toggle?
 
+; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
+;; Also, use the hydra as a better UI for window management.
+;; Lastly, make window movement wrap around.
 (map! :leader (:prefix "w"
                :desc "split window vertically and follow" :n "v" #'+evil/window-vsplit-and-follow
                :desc "split vertically" :n "V" #'evil-window-vsplit
                :desc "split window and follow" :n "s" #'+evil/window-split-and-follow
-               :desc "split window" :n "S" #'evil-window-split))
+               :desc "split window" :n "S" #'evil-window-split
+               :desc "Activate Window Hydra." :n "a" #'hydra/crj-window-nav/body))
+(setq windmove-wrap-around t)
 
-(setq auth-sources (quote (macos-keychain-internet macos-keychain-generic)))
-
-;; always show emojis
-(add-hook 'after-init-hook #'global-emojify-mode)
-
-;; Don't show composed from things like "8)" (ascii emojis).
-;; And I don't want GitHub's alternate set clogging things up, either.
-(setq emojify-emoji-styles '(unicode))
-
-(setq ivy-re-builders-alist
-      '((t . ivy--regex-fuzzy)))
 
 ;; initialize the targets package
 (targets-setup t)
@@ -52,8 +62,8 @@
 ;; Make substitutions global by default.
 (setq evil-ex-substitute-global 1)
 
-;; Enable evil in the mini-buffer.
-;; (setq evil-want-minibuffer t)
+;; Enable evil in the mini-buffer?
+(setq evil-want-minibuffer nil)
 
 ;; get rid of prompts
 (setq kill-buffer-query-functions
@@ -70,9 +80,6 @@
 (setq markdown-list-indent-width 2)
 ;; Make markdown continue lists on enter.
 (setq markdown-indent-on-enter 'indent-and-new-item)
-;; always be gfm-ing
-(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
 
 (map! :map (evil-markdown-mode gfm-mode) :leader
       (:prefix "e"
@@ -86,8 +93,6 @@
 (evil-define-key '(normal visual) markdown-mode-map
   "gj" #'evil-next-visual-line
   "gk" #'evil-previous-visual-line)
-;; Commands for changing the general look of fonts.
-;; These are mostly for presenting things to others.
 
 ;; turn on transparency to start with
 (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
@@ -105,12 +110,12 @@
               100)
          '(85 . 50) '(100 . 100)))))
 
-(defun add-fira-code-mode-hook ()
-  (interactive)
-  (add-hook 'prog-mode-hook 'fira-code-mode))
-(defun remove-fira-code-mode-hook ()
-  (interactive)
-  (remove-hook 'prog-mode-hook 'fira-code-mode))
+;; (defun add-fira-code-mode-hook ()
+;;   (interactive)
+;;   (add-hook 'prog-mode-hook 'fira-code-mode))
+;; (defun remove-fira-code-mode-hook ()
+;;   (interactive)
+;;   (remove-hook 'prog-mode-hook 'fira-code-mode))
 
 (map! :leader
       (:prefix "z"
@@ -119,9 +124,9 @@
        :desc "zoom in buffer" :n "I" #'text-scale-increase
        :desc "zoom out buffer" :n "O" #'text-scale-decrease
        :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
-       :desc "turn ligatures on globally" :n "+" #'add-fira-code-mode-hook
-       :desc "turn ligatures off globally" :n "-" #'remove-fira-code-mode-hook
-       :desc "toggle ligatures for this file" :n "l" #'fira-code-mode
+       ;; :desc "turn ligatures on globally" :n "+" #'add-fira-code-mode-hook
+       ;; :desc "turn ligatures off globally" :n "-" #'remove-fira-code-mode-hook
+       ;; :desc "toggle ligatures for this file" :n "l" #'fira-code-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
@@ -134,17 +139,21 @@
 ;; (add-hook 'prog-mode-hook 'fira-code-mode)
 ;; (setq fira-code-mode-disabled-ligatures '("x" "[]" "+" ":" ">="))
 
-(use-package python
-  :config
-  (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
-  (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
+;; (use-package python
+;;   :config
+;;   (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
+;;   (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
 
 ; Indentation
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq-default evil-shift-width 2)
 (setq! tab-width 2)
+(setq! evil-shift-width 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
+(dtrt-indent-mode)
 
 ;; use indent of 2 for html
 (defun my-web-mode-hook ()
@@ -159,13 +168,20 @@
 
 ; Font Settings
 
-(setq doom-font (font-spec :family "Fira Code" :size 24))
+(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 24))
 ;; This was necessary to fix some line of code somewhere giving my
 ;; Fixed Pitch fonts an absolute height. This meant they didn't scale
 ;; to other font sizes. Someday, we'll find the culprit!
-(set-face-attribute 'fixed-pitch nil :family "Fira Code" :height 1.0)
+(set-face-attribute 'fixed-pitch nil :family "FiraCode Nerd Font Mono" :height 1.0)
 
-;; Modus Vivendi Theme Settings
+
+; use better emojis (requires this font!)
+(if (>= emacs-major-version 27)
+    (set-fontset-font t '(#x1f000 . #x1faff)
+              (font-spec :family "Noto Color Emoji")))
+
+;; Theme Settings
+;;; Modus Vivendi
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
 (setq modus-themes-italic-constructs t)
@@ -177,14 +193,30 @@
 (setq modus-themes-completions 'opinionated)
 (setq modus-themes-hl-line '(intense accented))
 (setq modus-themes-subtle-line-numbers t)
-(setq doom-theme 'modus-vivendi)
+(setq modus-themes-deuteranopia t)
+
+;;; doom-zenburn
+(setq doom-zenburn-comment-bg t)
+(setq doom-zenburn-brighter-comments t)
+(setq doom-zenburn-brighter-modeline t)
+
+;;; zenburn
+(setq zenburn-scale-org-headlines t)
+(setq zenburn-scale-outline-headlines t)
+
+;;; set fave themes
+(setq crj/working-theme 'zenburn)
+(setq crj/presentation-theme 'modus-vivendi)
+
+;;; Modus Vivendi is good for presenting code.
+;;;; (setq doom-theme 'modus-vivendi)
+;;; But let's use Zenburn for solo work.
+(setq doom-theme crj/presentation-theme)
+(setq doom-theme crj/working-theme)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
-
-;; soft wrap lines
-(global-visual-line-mode 1)
 
 ; line number settings
 
@@ -193,6 +225,21 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
+;; soft wrap lines
+(global-visual-line-mode 1)
+
+(defun crj/toggle-presentation-mode ()
+  (interactive)
+  (if (eq display-line-numbers-type t)
+      (progn
+        (setq display-line-numbers-type 'relative)
+        (disable-theme crj/presentation-theme)
+        (load-theme crj/working-theme t)
+        (global-display-line-numbers-mode 1))
+    (setq display-line-numbers-type t)
+    (disable-theme crj/working-theme)
+    (load-theme crj/presentation-theme t)
+    (global-display-line-numbers-mode 1)))
 
 ; Search specific engines.
 (engine-mode t)
@@ -212,7 +259,7 @@
 
 (map! :map org-mode-map :leader
       (:prefix "m"
-       :desc "Next todo GTD-style" :n "m" '(lambda ()
+       :desc "Next todo GTD-style" :n "m" #'(lambda ()
                                           (interactive)
                                           (org-todo 'done)
                                           (org-forward-heading-same-level 1)
@@ -257,10 +304,11 @@
 (setq evil-snipe-scope 'whole-buffer)
 (setq evil-snipe-repeat-scope 'whole-buffer)
 
-;; set spelling dictionary
-(setq ispell-dictionary "en")
-;; spelling dictionary location
-(setq ispell-personal-dictionary "~/.doom.d/spelling/en.pws")
+(setq message-log-max 100000)
+;; ;; set spelling dictionary
+;; (setq ispell-dictionary "en")
+;; ;; spelling dictionary location
+;; (setq ispell-personal-dictionary "~/.doom.d/spelling/en.pws")
 
 (setq undo-fu-allow-undo-in-region t)
 
@@ -358,6 +406,7 @@
 ;; radio
 ;; pomodoro
 ;; modeline
+;; presenting code (theme and line number settings)
 
 (map! :leader
       (:prefix "t"
@@ -365,14 +414,8 @@
        :desc "play radio channel" :n "M" #'eradio-play
        :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
        :desc "toggle modeline" :n "D" #'toggle-mode-line-global
+       :desc "toggle code presentation" :n "P" #'crj/toggle-presentation-mode
        :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer))
-
-;; Org reveal settings.
-(setq org-re-reveal-title-slide nil)
-(setq org-re-reveal-theme "league")
-(require 'org-tempo)
-(require 'ox-reveal)
-(setq org-reveal-highlight-css "%r/lib/css/vs.css")
 
 ;; Indium.
 (setq indium-chrome-executable "google-chrome-stable")
@@ -385,21 +428,24 @@
        :desc "ibuffer filter by mode" :n "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" :n "?" #'ibuffer-filter-disable))
 
-;; use web mode for ejs
-(add-to-list 'auto-mode-alist
-             '("\\.ejs\\'" . gfm-mode))
+;; Uses Vim's original meaning of `G`, which puts you at the last NON-EMPTY line.
+(defun crj/end-of-buffer ()
+  "Go to beginning of last line in buffer.
+If last line is empty, go to beginning of penultimate one
+instead."
+  (interactive)
+  (goto-char (point-max))
+  (beginning-of-line (and (looking-at-p "^$") 0)))
 
-;; Use RJSX's version of js2-mode for .js files.
-;; This is one way to make sure that JSX files in .js
-;; files get handled properly.
-(add-to-list 'auto-mode-alist
-             '("\\.js\\'" . rjsx-mode))
+(define-key evil-normal-state-map "G" #'crj/end-of-buffer)
+
+(add-hook! 'rjsx-mode-hook #'jest-minor-mode #'emmet-mode)
 
 ;; i3wm mode.
 (add-hook! 'i3wm-config-mode-hook #'rainbow-mode)
 
 ;; Show digraphs.
-(map! :map general-override-mode-map :n "SPC h C-k" #'evil-ex-show-digraphs)
+(map! :n "SPC h D" #'evil-ex-show-digraphs)
 
 ; Pomodoro settings
 
@@ -420,12 +466,9 @@
   (setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
 
-;; Jest
-(add-hook! 'rjsx-mode-hook #'jest-minor-mode)
-
 ;; open links through ace-link
 (define-key help-mode-map (kbd "M-o") #'ace-link-help)
-(define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
+;; (define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
 (map! :map org-mode-map :n (kbd "M-o") #'ace-link-org)
 (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help)
 
@@ -437,12 +480,36 @@
 ;; use 'W' for the whole thing
 ;; or the text object 'o' for a symbol
 (global-subword-mode)
-
+;; weather config
+(setq wttrin-default-cities '("Manhattan" ))
+(setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
+(map! :leader (:prefix "o" :n "w" #'wttrin))
 
 ;; Simpler binding for Emacs Everywhere
 (map! :map emacs-everywhere-mode-map "C-c DEL" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
 
+;; Lisp structural editing commands without a lispy-like mode.
+(map! :leader
+  (:prefix ("y" . "lisp")
+   :desc "slurp" "s" #'sp-forward-slurp-sexp
+   :desc "barf" "b" #'sp-forward-barf-sexp
+   :desc "raise" "r" #'sp-raise-sexp))
+
+(fset 'convert-react-class-to-functional-component
+   (kmacro-lambda-form [?g ?g ?/ ?c ?l ?a ?s ?s return ?c ?i ?w ?c ?o ?n ?s ?t escape ?2 ?W ?c ?2 ?w ?= ?  ?\( ?\) ?  ?= ?> escape ?/ ?r ?e ?n ?d ?e ?r return ?$ ?% ?d ?d ?N ?d ?d] 0 "%d"))
+
+;; Auto save the Messages buffer too.
+(defun save-messages-buffer ()
+  (with-current-buffer (get-buffer "*Messages*")
+    (append-to-file nil nil "~/.messages-history.txt")))
+
+
+(add-hook! 'auto-save-hook #'save-messages-buffer)
+
+
+;; Opening very large files.
+(require 'vlf-setup)
+(setq vlf-application 'dont-ask)
 ; some available keybinding prefixes
 ;; SPC l
-;; SPC y
 ;; SPC and any capital letter

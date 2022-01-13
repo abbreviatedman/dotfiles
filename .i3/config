@@ -15,7 +15,7 @@ exec --no-startup-id picom
 # might move to nextcloud soon?
 exec --no-startup-id syncthing -no-browser
 
-# Startup Files
+# Startup Programs
 exec "zoom"
 exec "emacs"
 
@@ -35,7 +35,9 @@ bindsym $mod+w exec i3-msg exec 'doom everywhere'
 bindsym $mod+Shift+w exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/quick-note.md'"
 
 ## Todos
-bindsym $mod+Shift+t exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/tasks.org'"
+bindsym $mod+Shift+t exec "i3-msg exec 'emacsclient --no-wait -c -a \\"\\" ~/Sync/org/current-tasks.org'"
+
+bindsym $mod+Shift+c exec "org-capture"
 
 # Add compose key manually. : (
 bindsym $mod+Shift+x exec "xmodmap ~/.Xmodmap"
@@ -120,7 +122,7 @@ bindsym $mod+$alt+space exec --no-startup-id morc_menu
 # sleep management
 
 ## turn sleep on
-bindsym  $mod+$alt+Ctrl+c exec "caffeine -a"
+bindsym  $mod+$alt+Ctrl+c exec "caffeine start"
 
 ## turn sleep off
 bindsym  $mod+$alt+Ctrl+Shift+c exec "caffeine kill"
@@ -276,46 +278,46 @@ bindsym $mod+Ctrl+8 workspace $ws18
 bindsym $mod+Ctrl+9 workspace $ws19
 
 # Move focused container to workspace
-bindsym $mod+$alt+Shift+1 move container to workspace $ws1
-bindsym $mod+$alt+Shift+2 move container to workspace $ws2
-bindsym $mod+$alt+Shift+3 move container to workspace $ws3
-bindsym $mod+$alt+Shift+4 move container to workspace $ws4
-bindsym $mod+$alt+Shift+5 move container to workspace $ws5
-bindsym $mod+$alt+Shift+6 move container to workspace $ws6
-bindsym $mod+$alt+Shift+7 move container to workspace $ws7
-bindsym $mod+$alt+Shift+8 move container to workspace $ws8
-bindsym $mod+$alt+Shift+9 move container to workspace $ws9
-bindsym $mod+$alt+Shift+0 move container to workspace $ws10
-bindsym $mod+$alt+Shift+Ctrl+1 move container to workspace $ws11
-bindsym $mod+$alt+Shift+Ctrl+2 move container to workspace $ws12
-bindsym $mod+$alt+Shift+Ctrl+3 move container to workspace $ws13
-bindsym $mod+$alt+Shift+Ctrl+4 move container to workspace $ws14
-bindsym $mod+$alt+Shift+Ctrl+5 move container to workspace $ws15
-bindsym $mod+$alt+Shift+Ctrl+6 move container to workspace $ws16
-bindsym $mod+$alt+Shift+Ctrl+7 move container to workspace $ws17
-bindsym $mod+$alt+Shift+Ctrl+8 move container to workspace $ws18
-bindsym $mod+$alt+Shift+Ctrl+9 move container to workspace $ws19
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $mod+Shift+Ctrl+1 move container to workspace $ws11
+bindsym $mod+Shift+Ctrl+2 move container to workspace $ws12
+bindsym $mod+Shift+Ctrl+3 move container to workspace $ws13
+bindsym $mod+Shift+Ctrl+4 move container to workspace $ws14
+bindsym $mod+Shift+Ctrl+5 move container to workspace $ws15
+bindsym $mod+Shift+Ctrl+6 move container to workspace $ws16
+bindsym $mod+Shift+Ctrl+7 move container to workspace $ws17
+bindsym $mod+Shift+Ctrl+8 move container to workspace $ws18
+bindsym $mod+Shift+Ctrl+9 move container to workspace $ws19
 
 # Move to workspace with focused container, move to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2; workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3; workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4; workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
-bindsym $mod+Shift+Ctrl+1 move container to workspace $ws11; workspace $ws11
-bindsym $mod+Shift+Ctrl+2 move container to workspace $ws12; workspace $ws12
-bindsym $mod+Shift+Ctrl+3 move container to workspace $ws13; workspace $ws13
-bindsym $mod+Shift+Ctrl+4 move container to workspace $ws14; workspace $ws14
-bindsym $mod+Shift+Ctrl+5 move container to workspace $ws15; workspace $ws15
-bindsym $mod+Shift+Ctrl+6 move container to workspace $ws16; workspace $ws16
-bindsym $mod+Shift+Ctrl+7 move container to workspace $ws17; workspace $ws17
-bindsym $mod+Shift+Ctrl+8 move container to workspace $ws18; workspace $ws18
-bindsym $mod+Shift+Ctrl+9 move container to workspace $ws19; workspace $ws19
+bindsym $mod+$alt+Shift+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+$alt+Shift+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+$alt+Shift+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+$alt+Shift+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+$alt+Shift+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+$alt+Shift+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+$alt+Shift+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+$alt+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+$alt+Shift+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+$alt+Shift+0 move container to workspace $ws10; workspace $ws10
+bindsym $mod+$alt+Shift+Ctrl+1 move container to workspace $ws11; workspace $ws11
+bindsym $mod+$alt+Shift+Ctrl+2 move container to workspace $ws12; workspace $ws12
+bindsym $mod+$alt+Shift+Ctrl+3 move container to workspace $ws13; workspace $ws13
+bindsym $mod+$alt+Shift+Ctrl+4 move container to workspace $ws14; workspace $ws14
+bindsym $mod+$alt+Shift+Ctrl+5 move container to workspace $ws15; workspace $ws15
+bindsym $mod+$alt+Shift+Ctrl+6 move container to workspace $ws16; workspace $ws16
+bindsym $mod+$alt+Shift+Ctrl+7 move container to workspace $ws17; workspace $ws17
+bindsym $mod+$alt+Shift+Ctrl+8 move container to workspace $ws18; workspace $ws18
+bindsym $mod+$alt+Shift+Ctrl+9 move container to workspace $ws19; workspace $ws19
 
 # Monitor management
 bindsym $mod+Ctrl+h move workspace to output left
@@ -324,10 +326,10 @@ bindsym $mod+Ctrl+k move workspace to output up
 bindsym $mod+Ctrl+l move workspace to output right
 
 # kill zoom popup windows
-# for_window [title="zoom" class="zoom"] kill
+for_window [title="zoom" class="zoom"] kill
 
 # Open specific applications in floating mode
-for_window [title="Emacs Everywhere ::.*"] floating enable
+# for_window [title="Emacs Everywhere ::.*"] floating enable
 for_window [title="alsamixer"] floating enable
 for_window [class="calamares"] floating enable border normal
 for_window [class="Clipgrab"] floating enable
@@ -360,7 +362,7 @@ for_window [class="Xfburn"] floating enable
 for_window [urgent=latest] focus
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+$alt+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
@@ -586,7 +588,7 @@ mode "$mode_gaps_outer" {
 
 
 # The laptop screen plus one external monitor.
-bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --mode 1920x1080 --pos 3840x1080 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --mode 3840x2160 --pos 0x0 --rotate normal; sleep 3; nitrogen --restore"
+bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --primary --mode 1920x1080 --pos 3840x1080 --rotate normal --output DP-1 --mode 3840x2160 --pos 0x0 --rotate normal --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
 
 # Just the laptop screen.
-bindsym $mod+Shift+Ctrl+l exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
+bindsym $mod+Shift+Ctrl+d exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
