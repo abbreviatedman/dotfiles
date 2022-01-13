@@ -16,6 +16,7 @@
 (load-library "crj-spell")
 (load-library "beespell")
 (load-library "window-hydra")
+(load-library "crj-zoom-hydra")
 (load-library "file-management")
 
 
@@ -122,14 +123,17 @@
 
 (map! :leader
       (:prefix "z"
-       :desc "zoom in" :n "i" #'doom/increase-font-size
-       :desc "zoom out" :n "o" #'doom/decrease-font-size
-       :desc "zoom in buffer" :n "I" #'text-scale-increase
-       :desc "zoom out buffer" :n "O" #'text-scale-decrease
-       :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
+       :desc "zoom in" :n "j" #'crj/zoom-in
+       :desc "zoom out" :n "k" #'crj/zoom-out
+       :desc "reset zoom" :n "b" #'crj/zoom-reset
+       :desc "zoom in buffer" :n "J" #'crj/zoom-in-all-buffers
+       :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
+       :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
+       :desc "zoom hydra" :n "z" #'crj/hydra/text-zoom/body
        ;; :desc "turn ligatures on globally" :n "+" #'add-fira-code-mode-hook
        ;; :desc "turn ligatures off globally" :n "-" #'remove-fira-code-mode-hook
        ;; :desc "toggle ligatures for this file" :n "l" #'fira-code-mode
+       :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
@@ -409,7 +413,7 @@
 ;; radio
 ;; pomodoro
 ;; modeline
-;; presenting code (theme and line number settings)
+;; presenting code
 
 (map! :leader
       (:prefix "t"
@@ -417,7 +421,8 @@
        :desc "play radio channel" :n "M" #'eradio-play
        :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
        :desc "toggle modeline" :n "D" #'toggle-mode-line-global
-       :desc "toggle code presentation" :n "P" #'crj/toggle-presentation-mode
+       :desc "toggle code presentation" :n "p" #'crj/toggle-presentation-mode
+       :desc "toggle code presentation" :n "P" #'org-tree-slide-mode
        :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer))
 
 ;; Indium.
