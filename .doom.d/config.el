@@ -227,25 +227,53 @@
 
 ; line number settings
 
+;; Some constants.
+(setq crj/working-line-number-type 'relative)
+(setq crj/presentation-line-number-type t)
+
 ;; always display line numbers
 (global-display-line-numbers-mode t)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type crj/working-line-number-type)
 ;; soft wrap lines
 (global-visual-line-mode 1)
 
+;; Constants for crj/toggle-presentation-mode
+(setq crj/presentation-mode-zoom-in-amount 4)
+(setq crj/working-mode-line-height 180)
+(setq crj/presentation-mode-line-height 360)
+(setq crj/presentation-mode nil)
+
 (defun crj/toggle-presentation-mode ()
+  "Toggles between presenting code and working with code.
+
+It toggles:
+
+- theme,
+- line numbers,
+- and text size, both in regular buffer and the mode line."
+
   (interactive)
-  (if (eq display-line-numbers-type t)
+  (if crj/presentation-mode
       (progn
-        (setq display-line-numbers-type 'relative)
+        (setq
+         crj/presentation-mode nil
+         display-line-numbers-type crj/working-line-number-type)
+        (crj/zoom-reset-all-buffers 0)
         (disable-theme crj/presentation-theme)
         (load-theme crj/working-theme t)
-        (global-display-line-numbers-mode 1))
-    (setq display-line-numbers-type t)
+        (global-display-line-numbers-mode 1)
+        (set-face-attribute 'mode-line nil
+                            :height crj/working-mode-line-height))
+    (setq
+     crj/presentation-mode t
+     display-line-numbers-type crj/presentation-line-number-type)
+    (crj/zoom-in-all-buffers crj/presentation-mode-zoom-in-amount)
     (disable-theme crj/working-theme)
     (load-theme crj/presentation-theme t)
+    (set-face-attribute 'mode-line nil
+                        :height crj/presentation-mode-line-height)
     (global-display-line-numbers-mode 1)))
 
 ; Search specific engines.
