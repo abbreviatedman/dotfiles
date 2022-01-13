@@ -408,7 +408,11 @@
 ;; Turn the modeline on and off.
 (defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
 
-(defun toggle-mode-line-global () (interactive) (if global-hide-mode-line-mode (global-hide-mode-line-mode 0) (global-hide-mode-line-mode)) (redraw-display))
+(defun toggle-mode-line-global () (interactive)
+       (if global-hide-mode-line-mode
+           (global-hide-mode-line-mode 0)
+         (global-hide-mode-line-mode))
+       (redraw-display))
 
 ; toggle for
 ;; radio
