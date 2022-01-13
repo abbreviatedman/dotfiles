@@ -18,6 +18,9 @@
 (load-library "window-hydra")
 (load-library "file-management")
 
+
+;; TODO BUG some JS files not starting with RJSX Mode
+;; TODO check Ctrl-O with other send-cursor-back setting
 ;; TODO get mu4e working
 ;; TODO get working on Next Cloud
 ;; TODO Improve window-resize hydra.
