@@ -8,6 +8,7 @@
 
 (use-package yasnippet
   :config
+  (yas-global-mode)
   (setq yas-snippet-dirs '("~/.doom.d/snippets"))
   ;; I like having a specific (non-tab) and easy key for expanding snippets
   (map! :i [M-tab] #'yas-expand)

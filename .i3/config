@@ -1,8 +1,8 @@
 # Set initial resolution
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
-exec --no-startup-id xcape
-exec --no-startup-id "xmodmap ~/.Xmodmap"
+exec_always --no-startup-id xcape
+exec_always --no-startup-id "xmodmap ~/.Xmodmap"
 
 # battery warning
 # warns at 30% and half that (15)
@@ -25,6 +25,10 @@ set $alt Mod1
 
 # set trackpad and trackpoint movement speeds
 # exec_always --no-startup-id ~/trackpad-and-trackpoint-speed.sh
+
+# Time zone setting.
+bindsym $mod+Ctrl+t exec --no-startup-id "i3-msg 'timedatectl set-timezone US/Eastern'"
+bindsym $mod+Ctrl+Shift+t exec --no-startup-id "i3-msg 'timedatectl set-timezone US/Pacific'"
 
 # writing terminals
 
@@ -176,7 +180,7 @@ bindsym $mod+F3 exec pcmanfm
 bindsym $mod+Shift+F3 exec pcmanfm_pkexec
 bindsym $mod+F5 exec terminal -e 'mocp'
 # bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
+# bindsym $mod+Ctrl+t exec --no-startup-id compton -b
 # bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
 # bindsym $mod+$alt+Shift+h exec xdg-open /usr/share/doc/manjaro/i3_help.pdf
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill

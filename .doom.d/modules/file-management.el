@@ -5,7 +5,10 @@
 
 (add-to-list 'auto-mode-alist '("\\.m(arkdown|d)\\'" . gfm-mode)) ; .md/.markdown
 (add-to-list 'auto-mode-alist '("\\.ejs\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[jt]sx*\\'" . rjsx-mode)) ; .js, .jsx, .ts, .tsx
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.trello" . org-mode))
 
 

@@ -20,10 +20,13 @@
 (load-library "file-management")
 
 
-;; TODO BUG some JS files not starting with RJSX Mode
+;; TODO double toggle presentation mode
+;; TODO find better ways to implement presentation mode
+;; TODO add sunlight toggle to i3
 ;; TODO check Ctrl-O with other send-cursor-back setting
 ;; TODO get mu4e working
 ;; TODO get working on Next Cloud
+;; TODO improve Corfu UX in eshell buffers
 ;; TODO Improve window-resize hydra.
 ;; TODO add feature to gtd-style next function to check if next todo is one it should mark todo
 ;; TODO fix beespell when dictionary buffer is closed
@@ -40,6 +43,7 @@
 ;; TODO remove markdown meta-p mapping
 ;; DONE Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
 ;; DONE toggle line number type globally - and maybe switch to Modus Vivendi? And reverse toggle?
+;; DONE BUG some JS files not starting with RJSX Mode
 
 ; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
@@ -175,12 +179,15 @@
 
 ; Font Settings
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 24))
-;; This was necessary to fix some line of code somewhere giving my
-;; Fixed Pitch fonts an absolute height. This meant they didn't scale
-;; to other font sizes. Someday, we'll find the culprit!
-(set-face-attribute 'fixed-pitch nil :family "FiraCode Nerd Font Mono" :height 1.0)
+(set-face-attribute 'default nil :family "Hack" :height 180)
+(set-face-attribute 'fixed-pitch nil :family "Hack")
+(set-face-attribute 'variable-pitch nil :family "Droid Sans")
 
+;; Fix LSP's annoying styling on unused variables
+(set-face-attribute 'lsp-lsp-flycheck-info-unnecessary-face nil :foreground 'unspecified :underline "gray")
+
+;; For doom-big-font-mode
+(setq doom-big-font-increment 8)
 
 ; use better emojis (requires this font!)
 (if (>= emacs-major-version 27)
@@ -188,7 +195,7 @@
               (font-spec :family "Noto Color Emoji")))
 
 ;; Theme Settings
-;;; Modus Vivendi
+;;; Modus
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
 (setq modus-themes-italic-constructs t)
@@ -198,9 +205,11 @@
       '((t . rainbow)))
 (setq modus-themes-scale-headings t)
 (setq modus-themes-completions 'opinionated)
-(setq modus-themes-hl-line '(intense accented))
 (setq modus-themes-subtle-line-numbers t)
 (setq modus-themes-deuteranopia t)
+(setq modus-themes-mixed-fonts t)
+(setq modus-themes-intense-markup t)
+(setq modus-themes-region '(no-extend accented))
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
@@ -212,15 +221,75 @@
 (setq zenburn-scale-outline-headlines t)
 
 ;;; set fave themes
-(setq crj/working-theme 'zenburn)
-(setq crj/presentation-theme 'modus-vivendi)
+(setq crj/working-theme-daytime 'modus-operandi)
+(setq crj/presentation-theme-daytime 'modus-operandi)
+(setq crj/working-theme-nighttime 'modus-vivendi)
+(setq crj/presentation-theme-nighttime 'modus-vivendi)
+
+;; start before the sun rises, alone
+(setq crj/daytime-p nil)
+(setq crj/presentation-mode nil)
 
 ;;; Modus Vivendi is good for presenting code.
-;;;; (setq doom-theme 'modus-vivendi)
 ;;; But let's use Zenburn for solo work.
-(setq doom-theme crj/presentation-theme)
-(setq doom-theme crj/working-theme)
+(defun crj/get-current-theme ()
+  "Get current theme, depending on time of day and presentation mode."
+  (cond ((and crj/daytime-p crj/presentation-mode)
+         crj/presentation-theme-daytime)
+        ((and crj/daytime-p (not crj/presentation-mode))
+         crj/working-theme-daytime)
+        ((and (not crj/daytime-p) crj/presentation-mode)
+         crj/presentation-theme-nighttime)
+        ((and (not crj/daytime-p) (not crj/presentation-mode))
+         crj/working-theme-nighttime)))
 
+;; Constants for crj/toggle-presentation-mode
+(setq crj/presentation-mode-zoom-in-amount 4)
+(setq crj/working-mode-line-height 180)
+(setq crj/presentation-mode-line-height 360)
+
+(defun crj/toggle-presentation-mode ()
+  "Toggles between presenting code and working with code.
+
+It toggles:
+
+- theme,
+- line numbers,
+- and text size, both in regular buffer and the mode line."
+
+  (interactive)
+  (if crj/presentation-mode
+      (progn
+        (setq
+         crj/presentation-mode nil
+         display-line-numbers-type crj/working-line-number-type)
+        (global-display-line-numbers-mode 1)
+        (doom-big-font-mode)
+        (set-face-attribute 'line-number nil
+                            :inherit 'fixed-pitch)
+        (set-face-attribute 'mode-line nil
+                            :height crj/working-mode-line-height))
+    (setq
+     crj/presentation-mode t
+     display-line-numbers-type crj/presentation-line-number-type)
+    (global-display-line-numbers-mode 1)
+    (doom-big-font-mode)
+    (set-face-attribute 'line-number nil
+                        :inherit 'fixed-pitch)
+    (set-face-attribute 'mode-line nil
+                        :height crj/presentation-mode-line-height))
+  (disable-theme crj/active-theme)
+  (load-theme (crj/get-current-theme) t)
+  (setq crj/active-theme (crj/get-current-theme)))
+
+(setq doom-theme (crj/get-current-theme))
+(setq crj/active-theme (crj/get-current-theme))
+
+(global-hl-line-mode -1)
+
+(use-package mixed-pitch
+  :hook
+  (text-mode . mixed-pitch-mode))
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
@@ -239,42 +308,11 @@
 ;; soft wrap lines
 (global-visual-line-mode 1)
 
-;; Constants for crj/toggle-presentation-mode
-(setq crj/presentation-mode-zoom-in-amount 4)
-(setq crj/working-mode-line-height 180)
-(setq crj/presentation-mode-line-height 360)
-(setq crj/presentation-mode nil)
-
-(defun crj/toggle-presentation-mode ()
-  "Toggles between presenting code and working with code.
-
-It toggles:
-
-- theme,
-- line numbers,
-- and text size, both in regular buffer and the mode line."
-
+(defun crj/toggle-theme-for-time-of-day ()
   (interactive)
-  (if crj/presentation-mode
-      (progn
-        (setq
-         crj/presentation-mode nil
-         display-line-numbers-type crj/working-line-number-type)
-        (crj/zoom-reset-all-buffers 0)
-        (disable-theme crj/presentation-theme)
-        (load-theme crj/working-theme t)
-        (global-display-line-numbers-mode 1)
-        (set-face-attribute 'mode-line nil
-                            :height crj/working-mode-line-height))
-    (setq
-     crj/presentation-mode t
-     display-line-numbers-type crj/presentation-line-number-type)
-    (crj/zoom-in-all-buffers crj/presentation-mode-zoom-in-amount)
-    (disable-theme crj/working-theme)
-    (load-theme crj/presentation-theme t)
-    (set-face-attribute 'mode-line nil
-                        :height crj/presentation-mode-line-height)
-    (global-display-line-numbers-mode 1)))
+  (setq crj/daytime-p (not crj/daytime-p))
+  (disable-theme crj/active-theme)
+  (load-theme (crj/get-current-theme) t))
 
 ; Search specific engines.
 (engine-mode t)
@@ -454,8 +492,9 @@ It toggles:
        :desc "play radio channel" :n "M" #'eradio-play
        :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
        :desc "toggle modeline" :n "D" #'toggle-mode-line-global
+       :desc "toggle day/night themes" :n "n" #'crj/toggle-theme-for-time-of-day
        :desc "toggle code presentation" :n "p" #'crj/toggle-presentation-mode
-       :desc "toggle code presentation" :n "P" #'org-tree-slide-mode
+       :desc "org tree slide mode" :n "P" #'org-tree-slide-mode
        :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer))
 
 ;; Indium.

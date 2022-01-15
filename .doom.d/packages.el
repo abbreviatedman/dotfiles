@@ -103,3 +103,6 @@
 
 ;; GraphQL
 (package! graphql-mode)
+
+;; different font styles, same file
+(package! mixed-pitch)

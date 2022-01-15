@@ -1,6 +1,7 @@
 (defun crj/zoom-in (arg)
   (interactive "p")
-  (text-scale-increase arg))
+  (text-scale-increase arg)
+  (global-display-line-numbers-mode 1))
 
 (defun crj/zoom-out (arg)
   (interactive "p")
