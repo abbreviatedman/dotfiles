@@ -9,9 +9,12 @@
 (use-package yasnippet
   :config
   (yas-global-mode)
-  (setq yas-snippet-dirs '("~/.doom.d/snippets"))
   ;; I like having a specific (non-tab) and easy key for expanding snippets
   (map! :i [M-tab] #'yas-expand)
+  )
+
+(after! yasnippet
+  (setq yas-snippet-dirs '("~/.doom.d/snippets"))
   (yas-reload-all))
 
 ;; don't add newlines to end of snippet files
@@ -36,6 +39,10 @@
   (if eldoc-mode
       (eldoc-mode -1)
     (eldoc-mode 1)))
+
+(setq lsp-diagnostics-attributes
+  `((unnecessary :foreground "unspecified" :underline "gray")
+    (deprecated  :strike-through t)))
 
 (defun crj/setup-lsp ()
   (interactive)
@@ -99,7 +106,6 @@
 (use-package! lsp-mode
   :custom
   (lsp-completion-provider :none) ;; we use Corfu!
-
   :init
   (setq lsp-auto-guess-root t)
   (defun my/orderless-dispatch-flex-first (_pattern index _total)

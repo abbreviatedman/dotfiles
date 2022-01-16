@@ -183,9 +183,6 @@
 (set-face-attribute 'fixed-pitch nil :family "Hack")
 (set-face-attribute 'variable-pitch nil :family "Droid Sans")
 
-;; Fix LSP's annoying styling on unused variables
-(set-face-attribute 'lsp-lsp-flycheck-info-unnecessary-face nil :foreground 'unspecified :underline "gray")
-
 ;; For doom-big-font-mode
 (setq doom-big-font-increment 8)
 
@@ -285,7 +282,7 @@ It toggles:
 (setq doom-theme (crj/get-current-theme))
 (setq crj/active-theme (crj/get-current-theme))
 
-(global-hl-line-mode -1)
+(remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
 
 (use-package mixed-pitch
   :hook

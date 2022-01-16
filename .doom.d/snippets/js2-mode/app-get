@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: app.get Snippet
+# key: ag
+# uuid: ag
+# --
+app.get("/$1", (${2:_}, ${3:response}) => {
+  $0
+})

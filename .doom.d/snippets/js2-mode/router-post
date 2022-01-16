@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: router.post Snippet
+# key: rpo
+# uuid: rpo
+# --
+post("/$1", (${2:request}, ${3:response}) => {
+  $0
+})

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: app.delete Snippet
+# key: ad
+# uuid: ad
+# --
+app.delete("/$1", (${2:request}, ${3:response}) => {
+  $0
+})
