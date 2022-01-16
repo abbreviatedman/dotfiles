@@ -26,10 +26,6 @@ set $alt Mod1
 # set trackpad and trackpoint movement speeds
 # exec_always --no-startup-id ~/trackpad-and-trackpoint-speed.sh
 
-# Time zone setting.
-bindsym $mod+Ctrl+t exec --no-startup-id "i3-msg 'timedatectl set-timezone US/Eastern'"
-bindsym $mod+Ctrl+Shift+t exec --no-startup-id "i3-msg 'timedatectl set-timezone US/Pacific'"
-
 # writing terminals
 
 ## emacs-everywhere
