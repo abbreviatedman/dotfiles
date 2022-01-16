@@ -1,3 +1,6 @@
+;; when native compiling, try this if it gets stuck:
+;;; ps aux | grep async
+;;; run any emacs command in the terminal
 (add-to-list 'load-path "~/.doom.d/modules/")
 (add-to-list 'load-path "~/.doom.d/modules/packages/")
 (load-library "crj-utilities")
@@ -20,6 +23,7 @@
 (load-library "file-management")
 
 
+;; TODO add speedtest to i3status
 ;; TODO double toggle presentation mode
 ;; TODO find better ways to implement presentation mode
 ;; TODO add sunlight toggle to i3
