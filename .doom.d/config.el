@@ -692,11 +692,11 @@ instead."
   (symex-initialize))
 
 (map!
- :i "C-<escape>" '(lambda ()
+ :i "M-<escape>" '(lambda ()
                     (interactive)
                     (evil-normal-state)
                     (symex-mode-interface))
- :n "C-<escape>" #'symex-mode-interface)
+ :n "M-<escape>" #'symex-mode-interface)
 
 ; some available keybinding prefixes
 ;; SPC l
