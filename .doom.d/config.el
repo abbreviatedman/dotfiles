@@ -680,6 +680,14 @@ instead."
 
 ;; Lisp Layer
 (use-package symex
+  :init
+  (setq symex--user-evil-keyspec
+      '(("j" . symex-go-up)
+        ("k" . symex-go-down)
+        ("C-j" . symex-climb-branch)
+        ("C-k" . symex-descend-branch)
+        ("M-j" . symex-goto-highest)
+        ("M-k" . symex-goto-lowest)))
   :config
   (symex-initialize))
 
