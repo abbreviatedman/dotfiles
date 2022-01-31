@@ -687,7 +687,10 @@ instead."
         ("C-j" . symex-climb-branch)
         ("C-k" . symex-descend-branch)
         ("M-j" . symex-goto-highest)
-        ("M-k" . symex-goto-lowest)))
+        ("M-k" . symex-goto-lowest)
+        ("^" . symex-goto-first)
+        ("K" . +lookup/documentation)
+        ("gK" . paredit-raise-sexp)))
   :config
   (symex-initialize))
 
