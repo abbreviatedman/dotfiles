@@ -1,55 +1,65 @@
-;; when native compiling, try this if it gets stuck:
-;;; ps aux | grep async
-;;; run any emacs command in the terminal
-(add-to-list 'load-path "~/.doom.d/modules/")
-(add-to-list 'load-path "~/.doom.d/modules/packages/")
-(load-library "crj-utilities")
-(load-library "version-control")
-(load-library "secrets")
-(load-library "org-stuff")
-(load-library "completion")
-(load-library "space-liner")
-(load-library "config-dired")
-(load-library "terminals")
-(load-library "aliases")
-;; (load-library "mail")
-;; (load-library "macos")
-;; (load-library "better-react-mmm-mode")
-(load-library "linux")
-(load-library "crj-spell")
-(load-library "beespell")
-(load-library "window-hydra")
-(load-library "crj-zoom-hydra")
-(load-library "file-management")
+(mapc 'load (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
 
-
-;; TODO add speedtest to i3status
-;; TODO double toggle presentation mode
-;; TODO find better ways to implement presentation mode
-;; TODO add sunlight toggle to i3
-;; TODO check Ctrl-O with other send-cursor-back setting
+;; TODO add evil-lisp-state
+;;   TODO remove `/` binding
+;;   TODO set `/` with `evil-lisp-state-leader` function
+;; TODO add evil-lisp-state package
 ;; TODO get mu4e working
-;; TODO get working on Next Cloud
-;; TODO improve Corfu UX in eshell buffers
+;; TODO improve everywhere hooks
+;;   TODO start in Normal Mode
+;;   TODO delete extra interparagraph whitespace
+;; TODO Use variable pitch font again (mixing in text mode?)
+;; TODO Add variable for whether we're using variable pitch as code or not
+;; TODO Remove Ctrl-J and Ctrl-K from vertico mapping
+;; TODO BUG upgrading Doom loses our `eradio` history
+;; TODO make adjustments to faces only if we're in a certain theme
+;; TODO turn off repeat for keys
+;; TODO change config filenames to avoid collisions
+;; TODO add custom i3blocks to yadm
+;; TODO fork and set upstream for i3blocks-contrib
+;; TODO add different audio sources to i3blocks
+;; TODO Add color/icon to custom battery i3block according to:
+;;; - charging status
+;;; - battery level
+;; TODO check Ctrl-O with other send-cursor-back setting
+;; TODO improve/understand Corfu UX in eshell buffers
 ;; TODO Improve window-resize hydra.
 ;; TODO add feature to gtd-style next function to check if next todo is one it should mark todo
 ;; TODO fix beespell when dictionary buffer is closed
 ;; TODO add regex to org-agenda-file-regexp to exclude files with name "archive"
-;; TODO add variable pitch font to comments?
+;; TODO FIXED??? BUG some JS files not starting with RJSX Mode
 ;; TODO remove Forge-Corfu autocomplete on !
 ;; TODO Function to title-case each markdown and org heading
 ;; TODO make config literate
 ;; TODO add file templates
-;; TODO make returning to transparency not additive
 ;; TODO remove Ctrl-h and Ctrl-K from Org mode insert mode bindings
 ;; TODO make markdown's enter work on opening a new line
 ;; TODO port markdown's enter over to org
+;; TODO make hl-line-subtle deal with other themes
 ;; TODO remove markdown meta-p mapping
-;; DONE Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
+;; TODO Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
+;; DONE Fix code in text modes not scaling with regular text
+;; DONE add key command ispell-buffer
 ;; DONE toggle line number type globally - and maybe switch to Modus Vivendi? And reverse toggle?
-;; DONE BUG some JS files not starting with RJSX Mode
+;; DONE add variable pitch font to comments?
+;; DONE write theme-switcher function
+;; DONE function to rename buffer with the project name as a prefix
 
-; Better window management.
+(defun rename-buffer-with-project-name-prefix ()
+"Prompts the user to rename the buffer, supplying the project prefix."
+  (interactive)
+  (let* ((project-prefix (concat (projectile-default-project-name (projectile-project-name)) "-"))
+         (prompt (concat "New Buffer Name: " project-prefix))
+         (name (concat project-prefix (read-string prompt))))
+    (rename-buffer name)))
+
+; Projects
+;; TODO sexp/target text objects
+;; TODO space liner (look to evil-surround)
+;; TODO nocturn.el - runs hooks on daylight change
+;; TODO Quokka Thing
+
+                                        ; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
 ;; Also, use the hydra as a better UI for window management.
@@ -83,7 +93,7 @@
             kill-buffer-query-functions))
 (setq confirm-kill-emacs nil)
 
-; Markdown
+                                        ; Markdown
 
 ;; Promote/demote headlines.
 (map! :map markdown-mode-map "M-l" #'markdown-demote)
@@ -92,6 +102,8 @@
 (setq markdown-list-indent-width 2)
 ;; Make markdown continue lists on enter.
 (setq markdown-indent-on-enter 'indent-and-new-item)
+;; (slow) syntax coloration in markdown blocks
+(setq markdown-fontify-code-blocks-natively t)
 
 (map! :map (evil-markdown-mode gfm-mode) :leader
       (:prefix "e"
@@ -102,13 +114,18 @@
        :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
 
 ;; Set gj/gk to vim's visual line navigation instead of markdown's headline-jumping.
-(evil-define-key '(normal visual) markdown-mode-map
-  "gj" #'evil-next-visual-line
-  "gk" #'evil-previous-visual-line)
+(map!
+ :map (markdown-mode-map gfm-mode-map org-mode-map)
+  :n "gj" nil
+  :n "gk" nil)
+(map!
+ :map (markdown-mode-map gfm-mode-map org-mode-map)
+  :n "gj" #'evil-next-visual-line
+  :n "gk" #'evil-previous-visual-line)
 
 ;; turn on transparency to start with
-(set-frame-parameter (selected-frame) 'alpha '(85 . 75))
-(add-to-list 'default-frame-alist '(alpha . (85 . 75)))
+;; (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
+;; (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
 
 (defun toggle-transparency ()
   (interactive)
@@ -122,13 +139,6 @@
               100)
          '(85 . 50) '(100 . 100)))))
 
-;; (defun add-fira-code-mode-hook ()
-;;   (interactive)
-;;   (add-hook 'prog-mode-hook 'fira-code-mode))
-;; (defun remove-fira-code-mode-hook ()
-;;   (interactive)
-;;   (remove-hook 'prog-mode-hook 'fira-code-mode))
-
 (map! :leader
       (:prefix "z"
        :desc "zoom in" :n "j" #'crj/zoom-in
@@ -138,17 +148,15 @@
        :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
        :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
        :desc "zoom hydra" :n "z" #'crj/hydra/text-zoom/body
-       ;; :desc "turn ligatures on globally" :n "+" #'add-fira-code-mode-hook
-       ;; :desc "turn ligatures off globally" :n "-" #'remove-fira-code-mode-hook
-       ;; :desc "toggle ligatures for this file" :n "l" #'fira-code-mode
+       :desc "toggle ligatures globally" :n "l" #'auto-composition-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
 ;; start every emacs frame with transparency
-(add-hook 'emacs-startup-hook 'toggle-transparency)
+;; (add-hook 'emacs-startup-hook 'toggle-transparency)
 
-; Ligatures
+                                        ; Ligatures
 ;; Start with ligatures enabled.
 ;; turned off for now
 ;; (add-hook 'prog-mode-hook 'fira-code-mode)
@@ -159,7 +167,7 @@
 ;;   (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
 ;;   (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
 
-; Indentation
+                                        ; Indentation
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
@@ -183,34 +191,101 @@
 
 ; Font Settings
 
-(set-face-attribute 'default nil :family "Hack" :height 180)
-(set-face-attribute 'fixed-pitch nil :family "Hack")
-(set-face-attribute 'variable-pitch nil :family "Droid Sans")
+(defun crj/make-custom-face-adjustments ()
+  "Customizations to faces whenever the theme is changed.
+
+Fixes many things according to how the author likes them.
+
+Also fixes a pernicious issue where line numbers become variable pitch fonts along with everything else. There's gotta be a better way to fix that than this, but... this works."
+
+  (interactive)
+  (message "yep")
+  (custom-set-faces
+   '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
+   '(highlight ((t :background "#b5d0ff")))
+   '(line-number ((t :family "Hack")))
+   '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
+   '(success ((t :foreground "#0031a9")))
+   '(line-number-current-line ((t :family "Hack")))))
+
+(add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
+
+(defun crj/swap-chars ()
+  (interactive)
+  (when (evil-normal-state-p)
+    (transpose-chars 1)
+    (backward-char)))
+
+;; TODO make this its own function rather than advice.
+(advice-add 'emojify-insert-emoji :after 'crj/swap-chars)
+
+(defun crj/evil-tranpose-chars ()
+  "Transpose characters as one evil action.
+
+        Wraps the function `transpose-chars' so that it's more in the style of Evil Mode/Vim. (See info node `(evil)Overview')
+
+        - Acts on the current character and the one to the right, which is more in line with Vim's Normal Mode style.
+        - Adds the entire process as one action, adding undo/repeat ability.
+
+        This differs greatly from the more Emacs-like `transpose-chars', which allows you to drag a character forward as far as you want, using a count,, but this author found that he preferred the atomicity of Normal Mode.
+
+See `transpose-chars' for more info on the original function."
+  (interactive)
+  (evil-with-undo
+    (forward-char)
+    (transpose-chars 1)
+    (backward-char 2)))
+
+(map! :leader :desc "Evil transpose characters" :n "T"  #'crj/evil-tranpose-chars)
+
+;; (map! :leader (:prefix "s"
+;;                        :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
+;;                        (:prefix "g"
+;;                         :desc "Search Google" :n "g" #'engine/search-google
+;;                         :desc "Search Google Images" :n "i" #'engine/search-google-images)))
+
+;; (advice-add 'transpose-chars :before #'backward-char)
+;; (advice-remove 'transpose-chars #'backward-char)
 
 ;; For doom-big-font-mode
 (setq doom-big-font-increment 8)
 
-; use better emojis (requires this font!)
+;; Use smart parens version of showing matching pairs instead of the built-in show-paren method. Includes strings, and you can customize it to include more.
+(show-paren-mode -1)
+(show-smartparens-global-mode)
+(setq sp-show-pair-from-inside nil)
+
+                                        ; use better emojis (requires this font!)
 (if (>= emacs-major-version 27)
     (set-fontset-font t '(#x1f000 . #x1faff)
-              (font-spec :family "Noto Color Emoji")))
-
+                      (font-spec :family "Noto Color Emoji")))
 ;; Theme Settings
 ;;; Modus
 (require 'modus-themes)
 (setq modus-themes-bold-constructs t)
 (setq modus-themes-italic-constructs t)
 (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
-(setq modus-themes-paren-match '(intense underline bold))
+(setq modus-themes-paren-match '(intense underline))
 (setq modus-themes-headings
       '((t . rainbow)))
 (setq modus-themes-scale-headings t)
 (setq modus-themes-completions 'opinionated)
-(setq modus-themes-subtle-line-numbers t)
+(setq modus-themes-subtle-line-numbers nil)
 (setq modus-themes-deuteranopia t)
-(setq modus-themes-mixed-fonts t)
 (setq modus-themes-intense-markup t)
-(setq modus-themes-region '(no-extend accented))
+(setq modus-themes-region '(no-extend bg-only accented))
+(setq modus-themes-hl-line '(intense underline))
+(setq modus-themes-headings
+      (quote ((1 . (rainbow 2.0))
+              (2 . (rainbow 1.8))
+              (3 . (rainbow 1.6))
+              (4 . (rainbow 1.4))
+              (5 . (rainbow 1.2))
+              (6 . (rainbow 1.0)))))
+
+(set-face-attribute 'modus-themes-hl-line nil
+                    :extend nil
+                    :background 'unspecified)
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
@@ -225,81 +300,92 @@
 (setq crj/working-theme-daytime 'modus-operandi)
 (setq crj/presentation-theme-daytime 'modus-operandi)
 (setq crj/working-theme-nighttime 'modus-vivendi)
-(setq crj/presentation-theme-nighttime 'modus-vivendi)
+(setq crj/presentation-theme-nighttime 'modus-operandi)
 
 ;; start before the sun rises, alone
 (setq crj/daytime-p nil)
-(setq crj/presentation-mode nil)
+(setq crj/presentation-mode-p nil)
 
-;;; Modus Vivendi is good for presenting code.
-;;; But let's use Zenburn for solo work.
 (defun crj/get-current-theme ()
   "Get current theme, depending on time of day and presentation mode."
-  (cond ((and crj/daytime-p crj/presentation-mode)
+  (cond ((and crj/daytime-p crj/presentation-mode-p)
          crj/presentation-theme-daytime)
-        ((and crj/daytime-p (not crj/presentation-mode))
+        ((and crj/daytime-p (not crj/presentation-mode-p))
          crj/working-theme-daytime)
-        ((and (not crj/daytime-p) crj/presentation-mode)
+        ((and (not crj/daytime-p) crj/presentation-mode-p)
          crj/presentation-theme-nighttime)
-        ((and (not crj/daytime-p) (not crj/presentation-mode))
+        ((and (not crj/daytime-p) (not crj/presentation-mode-p))
          crj/working-theme-nighttime)))
 
+(setq markdown-header-scaling t)
+(setq markdown-header-scaling-values '(2.5 2.0 2.0 1.5 1.0 1.0))
+
+;; TODO get font weights according to time
+;; (defun crj/get-font-weights-according-to-time ()
+;;   )
+
+(defun crj/switch-to-appropriate-theme ()
+  "Switch to the theme appropriate to the time of day and presentation mode."
+  (mapc #'disable-theme custom-enabled-themes)
+  (let ((new-theme (crj/get-current-theme)))
+    (load-theme new-theme t))
+  (custom-set-faces))
+
+(crj/switch-to-appropriate-theme)
+(crj/make-custom-face-adjustments)
+
+(set-face-attribute 'highlight nil :background "#b5d0ff")
+
 ;; Constants for crj/toggle-presentation-mode
-(setq crj/presentation-mode-zoom-in-amount 4)
-(setq crj/working-mode-line-height 180)
-(setq crj/presentation-mode-line-height 360)
+(setq crj/working-mode-line-height 160)
+(setq crj/presentation-mode-line-height 320)
+(setq crj/working-line-number-type 'relative)
+(setq crj/presentation-line-number-type t)
 
 (defun crj/toggle-presentation-mode ()
   "Toggles between presenting code and working with code.
 
 It toggles:
 
-- theme,
-- line numbers,
+- theme (ensuring we use a light theme),
+- line number type,
+- ligatures,
 - and text size, both in regular buffer and the mode line."
 
   (interactive)
-  (if crj/presentation-mode
+  (if crj/presentation-mode-p
       (progn
         (setq
-         crj/presentation-mode nil
+         crj/presentation-mode-p nil
          display-line-numbers-type crj/working-line-number-type)
+        (auto-composition-mode 1)
         (global-display-line-numbers-mode 1)
-        (doom-big-font-mode)
-        (set-face-attribute 'line-number nil
-                            :inherit 'fixed-pitch)
+        (global-hl-line-mode -1)
         (set-face-attribute 'mode-line nil
                             :height crj/working-mode-line-height))
     (setq
-     crj/presentation-mode t
+     crj/presentation-mode-p t
      display-line-numbers-type crj/presentation-line-number-type)
+    (auto-composition-mode 0)
     (global-display-line-numbers-mode 1)
-    (doom-big-font-mode)
-    (set-face-attribute 'line-number nil
-                        :inherit 'fixed-pitch)
+    (global-hl-line-mode)
     (set-face-attribute 'mode-line nil
                         :height crj/presentation-mode-line-height))
-  (disable-theme crj/active-theme)
-  (load-theme (crj/get-current-theme) t)
-  (setq crj/active-theme (crj/get-current-theme)))
+  (message "presentation-mode-p: %s" crj/presentation-mode-p)
+  (message "daytime-p: %s" crj/daytime-p)
+  (crj/switch-to-appropriate-theme)
+  (doom-big-font-mode))
 
-(setq doom-theme (crj/get-current-theme))
-(setq crj/active-theme (crj/get-current-theme))
+;; Great if you go back to fixed-pitch programming fonts!
+;; (use-package mixed-pitch
+;;   :hook
+;;   (text-mode . mixed-pitch-mode))
+;; ;; If you use `org' and don't want your org files in the default location below,
 
-(remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
-
-(use-package mixed-pitch
-  :hook
-  (text-mode . mixed-pitch-mode))
-;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
-
-; line number settings
-
-;; Some constants.
-(setq crj/working-line-number-type 'relative)
-(setq crj/presentation-line-number-type t)
+(setq debug-ignored-errors '("^Exit the snippet first!$" "^End of line$" "^Beginning of line$" beginning-of-line beginning-of-buffer end-of-line end-of-buffer end-of-file buffer-read-only file-supersession mark-inactive))
+                                        ; line number settings
 
 ;; always display line numbers
 (global-display-line-numbers-mode t)
@@ -312,10 +398,13 @@ It toggles:
 (defun crj/toggle-theme-for-time-of-day ()
   (interactive)
   (setq crj/daytime-p (not crj/daytime-p))
-  (disable-theme crj/active-theme)
-  (load-theme (crj/get-current-theme) t))
+  (crj/switch-to-appropriate-theme)
+  (crj/make-custom-face-adjustments))
 
-; Search specific engines.
+;; Best way to remove global-hl-line-mode in Doom.
+(remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
+
+                                        ; Search specific engines.
 (engine-mode t)
 
 (defengine duck-duck-go
@@ -325,33 +414,24 @@ It toggles:
 (defengine google-images
   "https://www.google.com/search?tbm=isch&q=%s")
 (map! :leader (:prefix "s"
-                       :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
-                       (:prefix "g"
-                        :desc "Search Google" :n "g" #'engine/search-google
-                        :desc "Search Google Images" :n "i" #'engine/search-google-images)))
+               :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
+               (:prefix "g"
+                :desc "Search Google" :n "g" #'engine/search-google
+                :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
 
 (map! :map org-mode-map :leader
       (:prefix "m"
        :desc "Next todo GTD-style" :n "m" #'(lambda ()
-                                          (interactive)
-                                          (org-todo 'done)
-                                          (org-forward-heading-same-level 1)
-                                          (org-todo 2))))
+                                              (interactive)
+                                              (org-todo 'done)
+                                              (org-forward-heading-same-level 1)
+                                              (org-todo 2))))
 
 
 
 ;; markdown (and some org) key-bindings
 ;; now good mappings
-
-(map! :map (evil-markdown-mode gfm-mode) :leader
-      (:prefix "e"
-       :desc "Add markdown item" :n "i" #'markdown-insert-list-item
-       :desc "Go to next section" :n "j" #'markdown-forward-same-level
-       :desc "Go to previous section" :n "k" #'markdown-backward-same-level
-       :desc "Repair list" :n "r" #'org-list-repair
-       :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
-
 (evil-define-key '(normal visual) markdown-mode-map
   "gj" #'evil-next-visual-line
   "gk" #'evil-previous-visual-line)
@@ -461,7 +541,7 @@ It toggles:
                         ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")))
 
 ;; Rename buffers.
-(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer))
+(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer-with-project-name-prefix))
 
 ;; Doom Modeline settings.
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)
@@ -481,7 +561,7 @@ It toggles:
          (global-hide-mode-line-mode))
        (redraw-display))
 
-; toggle for
+                                        ; toggle for
 ;; radio
 ;; pomodoro
 ;; modeline
@@ -528,7 +608,7 @@ instead."
 ;; Show digraphs.
 (map! :n "SPC h D" #'evil-ex-show-digraphs)
 
-; Pomodoro settings
+                                        ; Pomodoro settings
 
 ;; Allow manual breaks in Pomodoro.
 (setq org-pomodoro-manual-break t)
@@ -546,7 +626,6 @@ instead."
 (when (or (memq window-system '(mac ns x)) (daemonp))
   (setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
-
 ;; open links through ace-link
 (define-key help-mode-map (kbd "M-o") #'ace-link-help)
 ;; (define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
@@ -571,13 +650,13 @@ instead."
 
 ;; Lisp structural editing commands without a lispy-like mode.
 (map! :leader
-  (:prefix ("y" . "lisp")
-   :desc "slurp" "s" #'sp-forward-slurp-sexp
-   :desc "barf" "b" #'sp-forward-barf-sexp
-   :desc "raise" "r" #'sp-raise-sexp))
+      (:prefix ("y" . "lisp")
+       :desc "slurp" "s" #'sp-forward-slurp-sexp
+       :desc "barf" "b" #'sp-forward-barf-sexp
+       :desc "raise" "r" #'sp-raise-sexp))
 
 (fset 'convert-react-class-to-functional-component
-   (kmacro-lambda-form [?g ?g ?/ ?c ?l ?a ?s ?s return ?c ?i ?w ?c ?o ?n ?s ?t escape ?2 ?W ?c ?2 ?w ?= ?  ?\( ?\) ?  ?= ?> escape ?/ ?r ?e ?n ?d ?e ?r return ?$ ?% ?d ?d ?N ?d ?d] 0 "%d"))
+      (kmacro-lambda-form [?g ?g ?/ ?c ?l ?a ?s ?s return ?c ?i ?w ?c ?o ?n ?s ?t escape ?2 ?W ?c ?2 ?w ?= ?  ?\( ?\) ?  ?= ?> escape ?/ ?r ?e ?n ?d ?e ?r return ?$ ?% ?d ?d ?N ?d ?d] 0 "%d"))
 
 ;; Auto save the Messages buffer too.
 (defun save-messages-buffer ()
@@ -587,10 +666,30 @@ instead."
 
 (add-hook! 'auto-save-hook #'save-messages-buffer)
 
+;; Fixes a bug in RJSX Mode where it doesn't handle the figment syntax.
+(defun crj/rjsx-electric-gt-fragment-a (n)
+  (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
+    (insert ?> ?<)
+    (backward-char)))
+
+(advice-add #'rjsx-electric-gt :before-while #'crj/rjsx-electric-gt-fragment-a)
 
 ;; Opening very large files.
 (require 'vlf-setup)
-(setq vlf-application 'dont-ask)
+((((setq))) vlf-application 'dont-ask)
+
+;; Lisp Layer
+(use-package symex
+  :config
+  (symex-initialize))
+
+(map!
+ :i "C-<escape>" '(lambda ()
+                    (interactive)
+                    (evil-normal-state)
+                    (symex-mode-interface))
+ :n "C-<escape>" #'symex-mode-interface)
+
 ; some available keybinding prefixes
 ;; SPC l
 ;; SPC and any capital letter

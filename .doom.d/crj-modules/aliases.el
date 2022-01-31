@@ -41,7 +41,7 @@ Open dired in the current directory.
 
 (defun eshell/kh ()
 "Open a non-emacs terminal here"
-  (shell-command "kitty"))
+  (shell-command "kitty --detach"))
 
 (defun eshell/v (file)
   "Open a file in vim in an external terminal."

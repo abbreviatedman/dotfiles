@@ -46,6 +46,7 @@ This takes a while, but can be done in one line that ALSO includes all the items
 - pulse-sms
 - slack-desktop
 - emacs
+- emacs-libvterm-git
 - pavucontrol
 - zoom
 - signal-desktop

@@ -1,5 +1,7 @@
 ;; TODO command to toggle scroll-on-output on or off
 
+(setq vterm-always-compile-module t)
+
   (defun kill-terminals ()
 	 (interactive)
 	 (mapc (lambda (buffer)

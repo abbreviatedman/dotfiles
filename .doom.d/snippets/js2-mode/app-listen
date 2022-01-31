@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: app.listen Snippet
-# key: al
-# uuid: al
-# --
-app.listen(${1:PORT}, () => {
-  ${2:console.log(\`Listening on port: \$\{PORT\}\`)}$0
-})

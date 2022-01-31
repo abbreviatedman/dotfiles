@@ -24,3 +24,13 @@
          :desc "Switch to snake_case" :n "s" #'string-inflection-underscore
          :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
 
+;; spellcheck settings
+(map! :leader
+      (:prefix "e"
+       :desc "Spellcheck buffer" :n "s" #'ispell-buffer))
+
+(setq flyspell-highlight-flag nil
+      ispell-silently-savep t
+      flyspell-mark-duplications-exceptions
+      '((nil "that" "had" "really" "very")
+        ("\\`francais" "nous" "vous")))

@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: router.patch Snippet
-# key: rpa
-# uuid: rpa
-# --
-patch("/$1", (${2:request}, ${3:response}) => {
-  $0
-})

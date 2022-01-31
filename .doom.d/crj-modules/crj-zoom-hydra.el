@@ -1,33 +1,38 @@
 (defun crj/zoom-in (arg)
   (interactive "p")
   (text-scale-increase arg)
-  (global-display-line-numbers-mode 1))
+  (crj/fix-font-wonkiness))
 
 (defun crj/zoom-out (arg)
   (interactive "p")
-  (text-scale-increase (* arg -1)))
+  (text-scale-increase (* arg -1))
+  (crj/fix-font-wonkiness))
 
 (defun crj/zoom-reset (arg)
   (interactive "p")
-  (text-scale-increase 0))
+  (text-scale-increase 0)
+  (crj/fix-font-wonkiness))
 
 (defun crj/zoom-in-all-buffers (arg)
   (interactive "p")
   (dolist (buffer (buffer-list))
     (with-current-buffer buffer
-      (crj/zoom-in arg))))
+      (crj/zoom-in arg)))
+  (crj/fix-font-wonkiness))
 
 (defun crj/zoom-out-all-buffers (arg)
   (interactive "p")
   (dolist (buffer (buffer-list))
     (with-current-buffer buffer
-      (crj/zoom-out arg))))
+      (crj/zoom-out arg)))
+  (crj/fix-font-wonkiness))
 
 (defun crj/zoom-reset-all-buffers (arg)
   (interactive "p")
   (dolist (buffer (buffer-list))
     (with-current-buffer buffer
-      (crj/zoom-reset arg))))
+      (crj/zoom-reset arg)))
+  (crj/fix-font-wonkiness))
 
 (defhydra crj/hydra/text-zoom (:hint nil :color red)
   "

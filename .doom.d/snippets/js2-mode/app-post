@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: app.post Snippet
-# key: apo
-# uuid: apo
-# --
-app.post("/$1", (${2:request}, ${3:response}) => {
-  $0
-})

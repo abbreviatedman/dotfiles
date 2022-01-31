@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: router.get Snippet
-# key: rg
-# uuid: rg
-# --
-get("/$1", (${2:_}, ${3:response}) => {
-  $0
-})

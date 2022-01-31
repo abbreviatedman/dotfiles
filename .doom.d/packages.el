@@ -106,3 +106,5 @@
 
 ;; different font styles, same file
 (package! mixed-pitch)
+
+(package! symex)

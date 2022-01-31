@@ -13,9 +13,7 @@ alias vim='nvim'
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
-export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local
-
-export ALTERNATE_EDITOR=""
+export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local:$HOME/go/bin
 
 VIM_MODE_VICMD_KEY='^Q'
 
@@ -95,8 +93,9 @@ MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR=/usr/local/bin/nvim
+export EDITOR='emacsclient -c -a "emacs"'
 export VISUAL=$EDITOR
+export ALTERNATE_EDITOR=""
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
