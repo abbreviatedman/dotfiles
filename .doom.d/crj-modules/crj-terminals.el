@@ -35,7 +35,7 @@
                        :desc "View available eshell buffers." "e" #'+eshell/switch-to))
 
 ;; start every emacs frame as a terminal by default
-(add-hook 'emacs-startup-hook '+eshell/here)
+;; (add-hook 'emacs-startup-hook '+eshell/here)
 
 ;; zsh baby
 (setq vterm-shell "/usr/sbin/zsh")
@@ -77,12 +77,15 @@
 ;; remember moar better
 (setq eshell-history-size 100000)
 
-
 ;; read in history
 (map! :map evil-normal-state :leader
       (:prefix ("z" . "presentation")
        :desc "read eshell history in" "r" #'eshell/r))
 
+;; Some
+(map! :map 'vterm-mode-map
+      "C-c <escape>" #'vterm-send-escape
+      "C-c :" #'vterm--self-insert)
 
 
 ;; turn off their history saving so we can do it more often

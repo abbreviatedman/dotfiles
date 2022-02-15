@@ -29,8 +29,7 @@
       (:prefix "e"
        :desc "Spellcheck buffer" :n "s" #'ispell-buffer))
 
-(setq flyspell-highlight-flag nil
+(setq flyspell-highlight-flag t
       ispell-silently-savep t
-      flyspell-mark-duplications-exceptions
-      '((nil "that" "had" "really" "very")
-        ("\\`francais" "nous" "vous")))
+      ispell-quietly t
+      flyspell-mark-duplications-flag nil)

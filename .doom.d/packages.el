@@ -107,4 +107,13 @@
 ;; different font styles, same file
 (package! mixed-pitch)
 
+;; Elisp tree navigation system.
 (package! symex)
+
+(package! pcmpl-args)
+
+(package! svg-lib)
+
+;; SQL
+(package! ob-sql-mode)
+(package! sqlup-mode)

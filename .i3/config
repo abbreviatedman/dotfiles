@@ -1,8 +1,9 @@
 # Set initial resolution
 exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
 
+# Keyboard configs.
 exec_always --no-startup-id xcape
-exec_always --no-startup-id "xmodmap ~/.Xmodmap"
+exec --no-startup-id setxkbmap -option compose:paus
 
 # battery warning
 # warns at 30% and half that (15)
@@ -17,7 +18,7 @@ exec --no-startup-id syncthing -no-browser
 
 # Startup Programs
 exec "zoom"
-exec "emacs --fg-daemon"
+# exec emacsclient -cn -a "" -e "(+eshell/here)"
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -71,20 +72,20 @@ popup_during_fullscreen smart
 font xft:URWGothic-Book 16
 
 # Highlight the Pointer
-bindsym $mod+$alt+Ctrl+Shift+h exec killall highlight-pointer
-bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#008000" --auto-hide-highlight --show-cursor
+# bindsym $mod+$alt+Ctrl+Shift+h exec killall highlight-pointer
+# bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#008000" --auto-hide-highlight --show-cursor
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
 # start terminal 1 (eshell)
-bindsym $mod+Return exec "i3-msg exec 'emacsclient -ce \\"(+eshell/here)\\"'"
+bindsym $mod+Return exec emacsclient -cn -a "" -e "(+eshell/here)"
 
 # start terminal 2
 bindsym $mod+BackSpace exec "kitty"
 
 # start terminal 3 (vterm)
-bindsym $mod+Shift+Return exec "i3-msg exec 'emacsclient -ce \\"(+vterm/here 1)\\"'"
+bindsym $mod+Shift+Return exec emacsclient -cn -a "" -e "(+vterm/here 1)"
 
 # start browser 1
 bindsym $mod+$alt+r exec "chromium"
@@ -102,7 +103,7 @@ bindsym $mod+$alt+s exec "slack"
 # bindsym $mod+$alt+z exec "zoom"
 
 # start IDE
-bindsym $mod+$alt+e exec "emacs"
+# bindsym $mod+$alt+e exec "emacs"
 
 # start Alternate IDE
 # bindsym $mod+$alt+c exec "code"

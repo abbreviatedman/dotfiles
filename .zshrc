@@ -93,9 +93,9 @@ MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR='emacsclient -c -a "emacs"'
+export EDITOR='emacsclient'
 export VISUAL=$EDITOR
-export ALTERNATE_EDITOR=""
+export ALTERNATE_EDITOR=$EDITOR
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"

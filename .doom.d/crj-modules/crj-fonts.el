@@ -40,10 +40,9 @@
                                  `([,ligature-re 0 font-shape-gstring])))
          char/ligature-re))
 
-(add-hook! (lisp-interaction-mode emacs-lisp-mode) #'prettify-symbols-mode)
-(global-prettify-symbols-mode)
+;; (add-hook 'emacs-lisp-mode-hook #'crj/set-up-elisp-prettify-mode)
+(setq prettify-symbols-alist nil)
 
-(defun crj/set-prettify-symbols-js ()
-  (setq prettify-symbols-alist nil))
-
-(add-hook 'js-mode-hook #'crj/set-prettify-symbols-js)
+;; (defun crj/set-up-elisp-prettify-mode ()
+;;   (prettify-symbols-mode)
+;;   (setq-local prettify-symbols-alist '((lambda . 955))))

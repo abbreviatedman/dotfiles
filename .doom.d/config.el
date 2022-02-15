@@ -1,13 +1,13 @@
 (mapc 'load (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
 
-;; TODO add evil-lisp-state
-;;   TODO remove `/` binding
-;;   TODO set `/` with `evil-lisp-state-leader` function
-;; TODO add evil-lisp-state package
 ;; TODO get mu4e working
 ;; TODO improve everywhere hooks
 ;;   TODO start in Normal Mode
-;;   TODO delete extra interparagraph whitespace
+;;   TODO delete extra inter-paragraph whitespace
+;;   TODO put focus back on input box? (maybe vimium is interfering with this?)
+;; TODO swap =`= and ='=
+;; TODO get dark mode system-wide, plug in as much as possible (browser, Discord, Emacs)
+;; TODO debug ob-restclient
 ;; TODO Use variable pitch font again (mixing in text mode?)
 ;; TODO Add variable for whether we're using variable pitch as code or not
 ;; TODO Remove Ctrl-J and Ctrl-K from vertico mapping
@@ -21,7 +21,6 @@
 ;; TODO Add color/icon to custom battery i3block according to:
 ;;; - charging status
 ;;; - battery level
-;; TODO check Ctrl-O with other send-cursor-back setting
 ;; TODO improve/understand Corfu UX in eshell buffers
 ;; TODO Improve window-resize hydra.
 ;; TODO add feature to gtd-style next function to check if next todo is one it should mark todo
@@ -39,6 +38,8 @@
 ;; TODO remove markdown meta-p mapping
 ;; TODO Figure out keybinding prefixes. (Check out "leader m" in org-stuff.)
 ;; DONE Fix code in text modes not scaling with regular text
+;; DONE check Ctrl-O with other send-cursor-back setting
+;; DONE Set up SQL LSP
 ;; DONE add key command ispell-buffer
 ;; DONE toggle line number type globally - and maybe switch to Modus Vivendi? And reverse toggle?
 ;; DONE add variable pitch font to comments?
@@ -70,6 +71,7 @@
                :desc "split window and follow" :n "s" #'+evil/window-split-and-follow
                :desc "split window" :n "S" #'evil-window-split
                :desc "Activate Window Hydra." :n "a" #'hydra/crj-window-nav/body))
+
 (setq windmove-wrap-around t)
 
 
@@ -81,11 +83,9 @@
 ;; operator that replaces a motion/text object with what's in a register (the " register by default).
 (map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
 
-;; Make substitutions global by default.
 (setq evil-ex-substitute-global 1)
-
-;; Enable evil in the mini-buffer?
 (setq evil-want-minibuffer nil)
+(setq +evil-want-o/O-to-continue-comments nil)
 
 ;; get rid of prompts
 (setq kill-buffer-query-functions
@@ -93,7 +93,7 @@
             kill-buffer-query-functions))
 (setq confirm-kill-emacs nil)
 
-                                        ; Markdown
+; Markdown
 
 ;; Promote/demote headlines.
 (map! :map markdown-mode-map "M-l" #'markdown-demote)
@@ -148,26 +148,16 @@
        :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
        :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
        :desc "zoom hydra" :n "z" #'crj/hydra/text-zoom/body
-       :desc "toggle ligatures globally" :n "l" #'auto-composition-mode
-       :desc "toggle prettier globally" :n "p" #'global-prettier-mode
+       :desc "toggle ligatures globally" :n "l" #'global-auto-composition-mode
+       :desc "toggle ligatures in buffer" :n "L" #'auto-composition-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
 ;; start every emacs frame with transparency
 ;; (add-hook 'emacs-startup-hook 'toggle-transparency)
 
-                                        ; Ligatures
-;; Start with ligatures enabled.
-;; turned off for now
-;; (add-hook 'prog-mode-hook 'fira-code-mode)
-;; (setq fira-code-mode-disabled-ligatures '("x" "[]" "+" ":" ">="))
 
-;; (use-package python
-;;   :config
-;;   (setq python-prettify-symbols-alist (delete '("and" . 8743) python-prettify-symbols-alist))
-;;   (setq python-prettify-symbols-alist (delete '("or" . 8744) python-prettify-symbols-alist)))
-
-                                        ; Indentation
+; Indentation
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
@@ -199,14 +189,14 @@ Fixes many things according to how the author likes them.
 Also fixes a pernicious issue where line numbers become variable pitch fonts along with everything else. There's gotta be a better way to fix that than this, but... this works."
 
   (interactive)
-  (message "yep")
-  (custom-set-faces
-   '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
-   '(highlight ((t :background "#b5d0ff")))
-   '(line-number ((t :family "Hack")))
-   '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
-   '(success ((t :foreground "#0031a9")))
-   '(line-number-current-line ((t :family "Hack")))))
+  ;; (custom-set-faces
+  ;;  '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
+  ;;  '(highlight ((t :background "#b5d0ff")))
+  ;;  '(line-number ((t :family "Hack")))
+  ;;  '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
+  ;;  '(success ((t :foreground "#0031a9")))
+  ;;  '(line-number-current-line ((t :family "Hack"))))
+  )
 
 (add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
 
@@ -238,15 +228,6 @@ See `transpose-chars' for more info on the original function."
 
 (map! :leader :desc "Evil transpose characters" :n "T"  #'crj/evil-tranpose-chars)
 
-;; (map! :leader (:prefix "s"
-;;                        :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
-;;                        (:prefix "g"
-;;                         :desc "Search Google" :n "g" #'engine/search-google
-;;                         :desc "Search Google Images" :n "i" #'engine/search-google-images)))
-
-;; (advice-add 'transpose-chars :before #'backward-char)
-;; (advice-remove 'transpose-chars #'backward-char)
-
 ;; For doom-big-font-mode
 (setq doom-big-font-increment 8)
 
@@ -266,23 +247,17 @@ See `transpose-chars' for more info on the original function."
 (setq modus-themes-italic-constructs t)
 (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
 (setq modus-themes-paren-match '(intense underline))
-(setq modus-themes-headings
-      '((t . rainbow)))
-(setq modus-themes-scale-headings t)
 (setq modus-themes-completions 'opinionated)
 (setq modus-themes-subtle-line-numbers nil)
 (setq modus-themes-deuteranopia t)
-(setq modus-themes-intense-markup t)
+(setq modus-themes-markup '(background))
 (setq modus-themes-region '(no-extend bg-only accented))
 (setq modus-themes-hl-line '(intense underline))
 (setq modus-themes-headings
-      (quote ((1 . (rainbow 2.0))
-              (2 . (rainbow 1.8))
-              (3 . (rainbow 1.6))
-              (4 . (rainbow 1.4))
-              (5 . (rainbow 1.2))
-              (6 . (rainbow 1.0)))))
-
+      (quote ((1 . (rainbow 1.8))
+              (2 . (rainbow 1.6))
+              (3 . (rainbow 1.4))
+              (4 . (rainbow 1.2)))))
 (set-face-attribute 'modus-themes-hl-line nil
                     :extend nil
                     :background 'unspecified)
@@ -302,6 +277,12 @@ See `transpose-chars' for more info on the original function."
 (setq crj/working-theme-nighttime 'modus-vivendi)
 (setq crj/presentation-theme-nighttime 'modus-operandi)
 
+;; But turn them off in text and shell modes.
+(defun crj/turn-off-ligatures-in-buffer () (auto-composition-mode -1))
+(setq crj/no-ligatures-hooks '(text-mode-hook vterm-mode-hook eshell-mode-hook))
+(dolist (hook crj/no-ligatures-hooks)
+  (add-hook hook #'crj/turn-off-ligatures-in-buffer))
+
 ;; start before the sun rises, alone
 (setq crj/daytime-p nil)
 (setq crj/presentation-mode-p nil)
@@ -320,16 +301,11 @@ See `transpose-chars' for more info on the original function."
 (setq markdown-header-scaling t)
 (setq markdown-header-scaling-values '(2.5 2.0 2.0 1.5 1.0 1.0))
 
-;; TODO get font weights according to time
-;; (defun crj/get-font-weights-according-to-time ()
-;;   )
-
 (defun crj/switch-to-appropriate-theme ()
   "Switch to the theme appropriate to the time of day and presentation mode."
   (mapc #'disable-theme custom-enabled-themes)
   (let ((new-theme (crj/get-current-theme)))
-    (load-theme new-theme t))
-  (custom-set-faces))
+    (load-theme new-theme t)))
 
 (crj/switch-to-appropriate-theme)
 (crj/make-custom-face-adjustments)
@@ -358,17 +334,17 @@ It toggles:
         (setq
          crj/presentation-mode-p nil
          display-line-numbers-type crj/working-line-number-type)
-        (auto-composition-mode 1)
         (global-display-line-numbers-mode 1)
         (global-hl-line-mode -1)
+        (global-auto-composition-mode 1)
         (set-face-attribute 'mode-line nil
                             :height crj/working-mode-line-height))
     (setq
      crj/presentation-mode-p t
      display-line-numbers-type crj/presentation-line-number-type)
-    (auto-composition-mode 0)
     (global-display-line-numbers-mode 1)
     (global-hl-line-mode)
+    (global-auto-composition-mode -1)
     (set-face-attribute 'mode-line nil
                         :height crj/presentation-mode-line-height))
   (message "presentation-mode-p: %s" crj/presentation-mode-p)
@@ -645,9 +621,6 @@ instead."
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
 (map! :leader (:prefix "o" :n "w" #'wttrin))
 
-;; Simpler binding for Emacs Everywhere
-(map! :map emacs-everywhere-mode-map "C-c DEL" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
-
 ;; Lisp structural editing commands without a lispy-like mode.
 (map! :leader
       (:prefix ("y" . "lisp")
@@ -666,7 +639,7 @@ instead."
 
 (add-hook! 'auto-save-hook #'save-messages-buffer)
 
-;; Fixes a bug in RJSX Mode where it doesn't handle the figment syntax.
+;; Fixes a bug in RJSX Mode where it doesn't handle the fragment syntax.
 (defun crj/rjsx-electric-gt-fragment-a (n)
   (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
     (insert ?> ?<)
@@ -676,30 +649,64 @@ instead."
 
 ;; Opening very large files.
 (require 'vlf-setup)
-((((setq))) vlf-application 'dont-ask)
+(setq vlf-application 'dont-ask)
 
 ;; Lisp Layer
-(use-package symex
-  :init
-  (setq symex--user-evil-keyspec
-      '(("j" . symex-go-up)
-        ("k" . symex-go-down)
-        ("C-j" . symex-climb-branch)
-        ("C-k" . symex-descend-branch)
-        ("M-j" . symex-goto-highest)
-        ("M-k" . symex-goto-lowest)
-        ("^" . symex-goto-first)
-        ("K" . +lookup/documentation)
-        ("gK" . paredit-raise-sexp)))
-  :config
-  (symex-initialize))
+;; (use-package symex
+;;   :init
+;;   (setq symex--user-evil-keyspec
+;;         '(("j" . symex-go-up)
+;;           ("k" . symex-go-down)
+;;           ("C-j" . symex-climb-branch)
+;;           ("C-k" . symex-descend-branch)
+;;           ("M-j" . symex-goto-highest)
+;;           ("M-k" . symex-goto-lowest)
+;;           ("^" . symex-goto-first)
+;;           ("K" . +lookup/documentation)
+;;           ("gK" . paredit-raise-sexp)))
+;;   :config
+;;   (symex-initialize))
 
-(map!
- :i "M-<escape>" '(lambda ()
-                    (interactive)
-                    (evil-normal-state)
-                    (symex-mode-interface))
- :n "M-<escape>" #'symex-mode-interface)
+;; stay in Symex editing by default in lisp
+;; (map! :map emacs-lisp-mode-map :i "<escape>" nil)
+;; (map! :map emacs-lisp-mode-map :i "<escape>" #'(lambda ()
+;;                                                  (interactive)
+;;                                                  (evil-normal-state)
+;;                                                  (symex-mode-interface)))
+;; (map! :map emacs-lisp-mode-map
+;;  :n "M-<escape>" #'symex-mode-interface)
+
+(map! :map Info-mode-map :n "q" nil)
+
+(map! :leader (:prefix "b"
+               :desc "Save and close buffer." :n "e" #'doom/save-and-kill-buffer))
+
+(setq org-babel-header-args:sql-mode '((:product . :postgres) (:session . :any))
+      org-babel-default-header-args:sql-mode '((:product . "postgres"))
+      sql-connection-alist '(("animes" (sql-product 'postgres) (sql-user "abbreviatedman") (sql-database "animes_dev") (sql-server "")))
+      )
+;; PORT=3003
+;; PG_HOST=localhost
+;; PG_PORT=5432
+;; PG_DATABASE=animes_dev
+;; PG_USER=postgres
+(setq sql-server "localhost"
+      sql-port 5432
+      sql-product "postgres")
+
+(add-hook 'sql-interactive-mode-hook
+          (lambda ()
+            (toggle-truncate-lines t)))
+
+(add-hook! '(sql-mode-hook sql-interactive-mode-hook) #'sqlup-mode)
+(remove-hook 'org-mode-hook #'sqlup-mode)
+(map! "C-c U" 'sqlup-capitalize-keywords-in-region
+        "C-c u" 'sqlup-capitalize-keywords-in-buffer
+        :map sql-interactive-mode-map
+        "M-RET" #'sql-accumulate-and-indent)
+
+(after! sqlup-mode
+  (add-to-list 'sqlup-blacklist "name"))
 
 ; some available keybinding prefixes
 ;; SPC l
