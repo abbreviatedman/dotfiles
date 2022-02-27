@@ -6,7 +6,7 @@
 [core]
 	excludesFile = ~/.gitignore-global
 [interactive]
-        singleKey = true
+	singleKey = true
 [init]
 	defaultBranch = main
 [pull]
