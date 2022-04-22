@@ -5,7 +5,9 @@
 
 ; snippet settings
 
-(after! yasnippet
+(after! yasnippet (crj/set-up-snippets))
+
+(defun crj/set-up-snippets ()
   (yas-global-mode)
   (setq yas-snippet-dirs '("~/.doom.d/snippets"))
   (yas-reload-all)
@@ -15,6 +17,7 @@
         "<tab>" nil
         [M-tab] #'yas-next-field-or-maybe-expand))
 
+(add-hook 'before-make-frame-hook #'crj/set-up-orderless)
 
 ;; don't add newlines to end of snippet files
 (defun no-final-newline-in-buffer ()
@@ -45,7 +48,7 @@
 
 (defun crj/setup-lsp ()
   (interactive)
-  ;; (company-mode -1)
+  (company-mode -1)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-eldoc-enable-hover nil))
 
@@ -53,7 +56,9 @@
 (map! :leader (:prefix "t"
                :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
-(after! orderless
+(after! orderless #'crj/set-up-orderless)
+
+(defun crj/set-up-orderless ()
   (setq completion-category-defaults nil
         orderless-component-separator "\_"
         orderless-style-dispatchers '(+vertico-orderless-dispatch)
@@ -62,9 +67,10 @@
 (use-package vertico
   :after orderless
   :config
-  (setq completion-category-defaults nil
-        orderless-component-separator "\_")
+  (crj/set-up-orderless)
   (vertico-indexed-mode)
+  (map! :leader
+        (:desc "Select from previous completions." "\"" #'vertico-repeat-select))
   (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
   (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
 
@@ -125,9 +131,6 @@
 (map! :i "C-n" nil)
 (map! :i "C-p" nil)
 
-; make orderless separator easier to type
-(global-set-key (kbd "S-SPC") (lambda () (interactive) (insert "_")))
-
 ; Use "_" as the start of Consult's project-wide search (to play better with Orderless)
 (after! consult
   (plist-put (alist-get 'perl consult-async-split-styles-alist) :initial "_"))
@@ -160,12 +163,11 @@
   ;; Add `completion-at-point-functions', used by `completion-at-point'.
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-tex)
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-keyword)
   (add-to-list 'completion-at-point-functions #'cape-sgml)
   (add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-symbol)
-  (add-to-list 'completion-at-point-functions #'cape-line))
+  (add-to-list 'completion-at-point-functions #'cape-symbol))
 
 (after! projectile
   (add-to-list 'projectile-project-root-files ".git"))
@@ -226,9 +228,8 @@
         lsp-auto-guess-root t))
 
 ; Switch regular evil ex search for consult's search.
-(map! :map (evil-motion-state-map) "/" nil
-      "/" #'+default/search-buffer
-      :leader "/" #'evil-ex-search-forward)
+(map! :map (evil-motion-state-map) "/" #'evil-ex-search-forward
+      :leader "/" #'+default/search-buffer)
 
 (cl-defmacro teco/lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
@@ -266,3 +267,7 @@
 (defun org-babel-edit-prep:js (babel-info)
   (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
   (lsp))
+
+(map! :leader (:desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring))
+
+(map! :i "C-SPC" #'complete-symbol)

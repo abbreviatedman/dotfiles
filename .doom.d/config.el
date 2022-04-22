@@ -1,15 +1,29 @@
 (mapc 'load (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
 
+; TODO add space-W for deleting word and capitalizing next one
+; TODO space-something for lower-casing word and entering insert mode a word before it
+;   "Help me!" -> "| help me!"
+; TODO run projectile-cache-update (or whatever) every time we create a file
+;; ensure that updating the cache is handled gracefully if we're not in a project
+; TODO remove spelling tasing as you go
+;; TODO above all, what is the order code runs?
+;; TODO no completion in minibuffer without Ctrl-space
+;; TODO no completion in comments
+;; TODO Add variable for whether we're using variable pitch as code or not
+;;   TODO make it easy to do one or the other
+;; TODO turn off line completion
 ;; TODO get mu4e working
 ;; TODO improve everywhere hooks
 ;;   TODO start in Normal Mode
 ;;   TODO delete extra inter-paragraph whitespace
 ;;   TODO put focus back on input box? (maybe vimium is interfering with this?)
 ;; TODO swap =`= and ='=
+;; TODO see about flyspell-popup
+;; TODO add command for going to last misspelled word and popping up menu
 ;; TODO get dark mode system-wide, plug in as much as possible (browser, Discord, Emacs)
 ;; TODO debug ob-restclient
+;; TODO add binding for doom-kill-buffer-and-windows
 ;; TODO Use variable pitch font again (mixing in text mode?)
-;; TODO Add variable for whether we're using variable pitch as code or not
 ;; TODO Remove Ctrl-J and Ctrl-K from vertico mapping
 ;; TODO BUG upgrading Doom loses our `eradio` history
 ;; TODO make adjustments to faces only if we're in a certain theme
@@ -247,7 +261,6 @@ See `transpose-chars' for more info on the original function."
 (setq modus-themes-italic-constructs t)
 (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
 (setq modus-themes-paren-match '(intense underline))
-(setq modus-themes-completions 'opinionated)
 (setq modus-themes-subtle-line-numbers nil)
 (setq modus-themes-deuteranopia t)
 (setq modus-themes-markup '(background))
@@ -261,6 +274,10 @@ See `transpose-chars' for more info on the original function."
 (set-face-attribute 'modus-themes-hl-line nil
                     :extend nil
                     :background 'unspecified)
+(setq modus-themes-completions (quote ((matches . (intense background underline bold))
+                                       (selection . (accented intense bold))
+                                       (popup . (accented intense bold)))))
+
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
@@ -283,8 +300,7 @@ See `transpose-chars' for more info on the original function."
 (dolist (hook crj/no-ligatures-hooks)
   (add-hook hook #'crj/turn-off-ligatures-in-buffer))
 
-;; start before the sun rises, alone
-(setq crj/daytime-p nil)
+(setq crj/daytime-p t)
 (setq crj/presentation-mode-p nil)
 
 (defun crj/get-current-theme ()
@@ -506,6 +522,7 @@ It toggles:
 (setq scroll-on-jump-duration 1)
 
 (setq eradio-channels '(
+("Chill Lounge Florida" . "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://us5.internet-radio.com:8283/listen.pls&t=.pls")
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
                         ("SomaFM - Beat Blender" . "https://somafm.com/beatblender.pls")

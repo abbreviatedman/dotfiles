@@ -40,7 +40,7 @@
       "* %U %?\n %i\n %a" :heading "Changelog" :prepend t)))
     (setq org-export-with-section-numbers nil)
     (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
-    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "PROJ(p)" "WAIT(w)" "HOLD(h)" "|" "DONE(d)" "CANCELED(c)"))))
+    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
 
 (defun open-calendar ()
   (interactive)
@@ -109,6 +109,8 @@ ELEMENT should be a list like that returned by `org-element-context'."
 (defun tecosaur/org-return-dwim (&optional default)
   "A helpful replacement for `org-return-indent'.  With prefix, call `org-return-indent'.
 
+Adapted from Tecosaur's version.
+
 On headings, move point to position after entry content.  In
 lists, insert a new item or end the list, with checkbox if
 appropriate.  In tables, insert a new row or end the table."
@@ -122,9 +124,9 @@ appropriate.  In tables, insert a new row or end the table."
     ;; NOTE: I prefer RET to not follow links, but by uncommenting this block, links will be
     ;; followed.
 
-    ;; ((eq 'link (car (org-element-context)))
-    ;;  ;; Link: Open it.
-    ;;  (org-open-at-point-global))
+    ((eq 'link (car (org-element-context)))
+     ;; Link: Open it.
+     (org-open-at-point-global))
 
     ((org-at-heading-p)
     ;; Heading: Move to position after entry content.
@@ -137,17 +139,8 @@ appropriate.  In tables, insert a new row or end the table."
               (end-of-line)
               (insert "\n\n"))
             (t
-              ;; Entry ends after its heading; back up
-              (forward-line -1)
-              (end-of-line)
-              (when (org-at-heading-p)
-                ;; At the same heading
-                (forward-line)
-                (insert "\n")
-                (forward-line -1))
-              (while (not (looking-back "\\(?:[[:blank:]]?\n\\)\\{3\\}" nil))
-                (insert "\n"))
-              (forward-line -1)))))
+             (newline)
+             (forward-line -1)))))
 
     ((org-at-item-checkbox-p)
       ;; Checkbox: Insert new item with checkbox.
@@ -195,4 +188,12 @@ appropriate.  In tables, insert a new row or end the table."
 (map!
   :after evil-org
   :map evil-org-mode-map
-  :i [return] #'tecosaur/org-return-dwim)
+  :i [return] #'tecosaur/org-return-dwim
+  :i "C-k" nil)
+
+(setq org-blank-before-new-entry
+      '((heading . auto)
+        (plain-list-item . nil)))
+
+(map! :map emacs-everywhere-mode-map :n "ZZ" nil)
+(map! :map emacs-everywhere-mode-map :n "ZZ" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)

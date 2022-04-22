@@ -1,8 +1,8 @@
 # Set initial resolution
-exec --no-startup-id "xrandr --output eDP1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP1 --off --output DP2 --off --output HDMI1 --off --output HDMI2 --off --output VIRTUAL1 --off; sleep 5; nitrogen --restore;"
+exec --no-startup-id "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
 
 # Keyboard configs.
-exec_always --no-startup-id xcape
+exec --no-startup-id xcape
 exec --no-startup-id setxkbmap -option compose:paus
 
 # battery warning
@@ -58,11 +58,12 @@ assign [class="zoom"] "10"
 # assign [class="Signal"] "11"
 # assign [class="vlc"] "12"
 
-# Configure border style <normal|1pixel|pixel xx|none|pixel>
-default_border pixel 5
+# Configure border style <normal|pixel|pixel xx|none|pixel>
+default_border pixel 8
+default_floating_border pixel 8
 
 # Hide borders
-hide_edge_borders none
+hide_edge_borders both
 
 # Enable popup during fullscreen
 popup_during_fullscreen smart
@@ -72,8 +73,8 @@ popup_during_fullscreen smart
 font xft:URWGothic-Book 16
 
 # Highlight the Pointer
-# bindsym $mod+$alt+Ctrl+Shift+h exec killall highlight-pointer
-# bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#008000" --auto-hide-highlight --show-cursor
+bindsym $mod+$alt+Ctrl+Shift+h exec killall highlight-pointer
+bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#008000" --auto-hide-highlight --show-cursor
 
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
@@ -268,15 +269,16 @@ bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 bindsym $mod+0 workspace $ws10
-bindsym $mod+Ctrl+1 workspace $ws11
-bindsym $mod+Ctrl+2 workspace $ws12
-bindsym $mod+Ctrl+3 workspace $ws13
-bindsym $mod+Ctrl+4 workspace $ws14
-bindsym $mod+Ctrl+5 workspace $ws15
-bindsym $mod+Ctrl+6 workspace $ws16
-bindsym $mod+Ctrl+7 workspace $ws17
-bindsym $mod+Ctrl+8 workspace $ws18
-bindsym $mod+Ctrl+9 workspace $ws19
+# extra workspaces
+# bindsym $mod+Ctrl+1 workspace $ws11
+# bindsym $mod+Ctrl+2 workspace $ws12
+# bindsym $mod+Ctrl+3 workspace $ws13
+# bindsym $mod+Ctrl+4 workspace $ws14
+# bindsym $mod+Ctrl+5 workspace $ws15
+# bindsym $mod+Ctrl+6 workspace $ws16
+# bindsym $mod+Ctrl+7 workspace $ws17
+# bindsym $mod+Ctrl+8 workspace $ws18
+# bindsym $mod+Ctrl+9 workspace $ws19
 
 # Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
@@ -289,45 +291,51 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
-bindsym $mod+Shift+Ctrl+1 move container to workspace $ws11
-bindsym $mod+Shift+Ctrl+2 move container to workspace $ws12
-bindsym $mod+Shift+Ctrl+3 move container to workspace $ws13
-bindsym $mod+Shift+Ctrl+4 move container to workspace $ws14
-bindsym $mod+Shift+Ctrl+5 move container to workspace $ws15
-bindsym $mod+Shift+Ctrl+6 move container to workspace $ws16
-bindsym $mod+Shift+Ctrl+7 move container to workspace $ws17
-bindsym $mod+Shift+Ctrl+8 move container to workspace $ws18
-bindsym $mod+Shift+Ctrl+9 move container to workspace $ws19
+# extra workspaces
+# bindsym $mod+Shift+Ctrl+1 move container to workspace $ws11
+# bindsym $mod+Shift+Ctrl+2 move container to workspace $ws12
+# bindsym $mod+Shift+Ctrl+3 move container to workspace $ws13
+# bindsym $mod+Shift+Ctrl+4 move container to workspace $ws14
+# bindsym $mod+Shift+Ctrl+5 move container to workspace $ws15
+# bindsym $mod+Shift+Ctrl+6 move container to workspace $ws16
+# bindsym $mod+Shift+Ctrl+7 move container to workspace $ws17
+# bindsym $mod+Shift+Ctrl+8 move container to workspace $ws18
+# bindsym $mod+Shift+Ctrl+9 move container to workspace $ws19
 
 # Move to workspace with focused container, move to workspace
-bindsym $mod+$alt+Shift+1 move container to workspace $ws1; workspace $ws1
-bindsym $mod+$alt+Shift+2 move container to workspace $ws2; workspace $ws2
-bindsym $mod+$alt+Shift+3 move container to workspace $ws3; workspace $ws3
-bindsym $mod+$alt+Shift+4 move container to workspace $ws4; workspace $ws4
-bindsym $mod+$alt+Shift+5 move container to workspace $ws5; workspace $ws5
-bindsym $mod+$alt+Shift+6 move container to workspace $ws6; workspace $ws6
-bindsym $mod+$alt+Shift+7 move container to workspace $ws7; workspace $ws7
-bindsym $mod+$alt+Shift+8 move container to workspace $ws8; workspace $ws8
-bindsym $mod+$alt+Shift+9 move container to workspace $ws9; workspace $ws9
-bindsym $mod+$alt+Shift+0 move container to workspace $ws10; workspace $ws10
-bindsym $mod+$alt+Shift+Ctrl+1 move container to workspace $ws11; workspace $ws11
-bindsym $mod+$alt+Shift+Ctrl+2 move container to workspace $ws12; workspace $ws12
-bindsym $mod+$alt+Shift+Ctrl+3 move container to workspace $ws13; workspace $ws13
-bindsym $mod+$alt+Shift+Ctrl+4 move container to workspace $ws14; workspace $ws14
-bindsym $mod+$alt+Shift+Ctrl+5 move container to workspace $ws15; workspace $ws15
-bindsym $mod+$alt+Shift+Ctrl+6 move container to workspace $ws16; workspace $ws16
-bindsym $mod+$alt+Shift+Ctrl+7 move container to workspace $ws17; workspace $ws17
-bindsym $mod+$alt+Shift+Ctrl+8 move container to workspace $ws18; workspace $ws18
-bindsym $mod+$alt+Shift+Ctrl+9 move container to workspace $ws19; workspace $ws19
+bindsym $mod+Ctrl+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+Ctrl+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+Ctrl+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+Ctrl+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+Ctrl+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Ctrl+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Ctrl+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+Ctrl+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Ctrl+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+Ctrl+0 move container to workspace $ws10; workspace $ws10
+# extra workspaces
+# bindsym $mod+$alt+Shift+Ctrl+1 move container to workspace $ws11; workspace $ws11
+# bindsym $mod+$alt+Shift+Ctrl+2 move container to workspace $ws12; workspace $ws12
+# bindsym $mod+$alt+Shift+Ctrl+3 move container to workspace $ws13; workspace $ws13
+# bindsym $mod+$alt+Shift+Ctrl+4 move container to workspace $ws14; workspace $ws14
+# bindsym $mod+$alt+Shift+Ctrl+5 move container to workspace $ws15; workspace $ws15
+# bindsym $mod+$alt+Shift+Ctrl+6 move container to workspace $ws16; workspace $ws16
+# bindsym $mod+$alt+Shift+Ctrl+7 move container to workspace $ws17; workspace $ws17
+# bindsym $mod+$alt+Shift+Ctrl+8 move container to workspace $ws18; workspace $ws18
+# bindsym $mod+$alt+Shift+Ctrl+9 move container to workspace $ws19; workspace $ws19
 
 # Monitor management
-bindsym $mod+Ctrl+h move workspace to output left
-bindsym $mod+Ctrl+j move workspace to output down
-bindsym $mod+Ctrl+k move workspace to output up
-bindsym $mod+Ctrl+l move workspace to output right
+bindsym $mod+Ctrl+Tab move workspace to output left
+# fine-grained monitor management
+# bindsym $mod+Ctrl+j move workspace to output down
+# bindsym $mod+Ctrl+k move workspace to output up
+# bindsym $mod+Ctrl+l move workspace to output right
 
 # kill zoom popup windows
 for_window [title="zoom" class="zoom"] kill
+
+# but also make breakout rooms popup
+for_window [title="Breakout Rooms"] floating enable; exec "i3-center"
 
 # Open specific applications in floating mode
 for_window [title="alsamixer"] floating enable
@@ -586,7 +594,7 @@ mode "$mode_gaps_outer" {
 
 
 # The laptop screen plus one external monitor.
-bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --primary --mode 1920x1080 --pos 3840x1080 --rotate normal --output DP-1 --mode 3840x2160 --pos 0x0 --rotate normal --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
+bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output DP-1 --mode 3840x2160 --pos 1920x0 --rotate normal --output HDMI-1 --off --output HDMI-2 --off"
 
 # Just the laptop screen.
 bindsym $mod+Shift+Ctrl+d exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
