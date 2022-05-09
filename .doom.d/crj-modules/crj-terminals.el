@@ -1,4 +1,15 @@
-;; TODO command to toggle scroll-on-output on or off
+(defun crj/toggle-eshell-scrollback ()
+  (interactive)
+  (if (eq eshell-scroll-show-maximum-output 'all)
+      (setq eshell-scroll-to-bottom-on-input nil)
+    (setq eshell-scroll-to-bottom-on-input 'all)))
+
+;; command to toggle scroll-on-output on or off
+(map! :map evil-normal-state :leader
+      (:prefix ("z" . "more toggling")
+        :desc "toggle scrollback in current eshell window" "s" #'crj/toggle-eshell-scrollback
+       :desc "read eshell history in" "r" #'eshell/r))
+
 
 (setq vterm-always-compile-module t)
 
@@ -76,11 +87,6 @@
 
 ;; remember moar better
 (setq eshell-history-size 100000)
-
-;; read in history
-(map! :map evil-normal-state :leader
-      (:prefix ("z" . "presentation")
-       :desc "read eshell history in" "r" #'eshell/r))
 
 ;; Some
 (map! :map 'vterm-mode-map

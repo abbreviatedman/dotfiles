@@ -1,5 +1,7 @@
 (mapc 'load (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
 
+; TODO add function to swap ctrl and caps and back
+; TODO experiment with de-bounce in Planck settings
 ; TODO add space-W for deleting word and capitalizing next one
 ; TODO space-something for lower-casing word and entering insert mode a word before it
 ;   "Help me!" -> "| help me!"
@@ -696,7 +698,7 @@ instead."
 (map! :map Info-mode-map :n "q" nil)
 
 (map! :leader (:prefix "b"
-               :desc "Save and close buffer." :n "e" #'doom/save-and-kill-buffer))
+               :desc "Save and close buffer." :n "q" #'doom/save-and-kill-buffer))
 
 (setq org-babel-header-args:sql-mode '((:product . :postgres) (:session . :any))
       org-babel-default-header-args:sql-mode '((:product . "postgres"))

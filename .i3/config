@@ -3,6 +3,7 @@ exec --no-startup-id "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate 
 
 # Keyboard configs.
 exec --no-startup-id xcape
+exec --no-startup-id xset r rate 1000
 exec --no-startup-id setxkbmap -option compose:paus
 
 # battery warning
@@ -79,20 +80,20 @@ bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#0
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
-# start terminal 1 (eshell)
+# start Emacs terminal 1 (eshell)
 bindsym $mod+Return exec emacsclient -cn -a "" -e "(+eshell/here)"
 
-# start terminal 2
-bindsym $mod+BackSpace exec "kitty"
+# start Emacs terminal 2 (vterm)
+bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+vterm/here 1)"
 
-# start terminal 3 (vterm)
-bindsym $mod+Shift+Return exec emacsclient -cn -a "" -e "(+vterm/here 1)"
+# start non-emacs terminal
+bindsym $mod+Shift+BackSpace exec "kitty"
 
 # start browser 1
-bindsym $mod+$alt+r exec "chromium"
+bindsym $mod+Shift+Return exec "google-chrome-stable"
 
 # start browser 2
-bindsym $mod+$alt+g exec "google-chrome-stable"
+bindsym $mod+$alt+g exec "chromium"
 
 # start browser 3
 bindsym $mod+$alt+f exec "firefox"
@@ -594,7 +595,7 @@ mode "$mode_gaps_outer" {
 
 
 # The laptop screen plus one external monitor.
-bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output DP-1 --mode 3840x2160 --pos 1920x0 --rotate normal --output HDMI-1 --off --output HDMI-2 --off"
+bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output DP-1 --mode 3840x2160 --pos 1920x0 --rotate normal --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
 
 # Just the laptop screen.
 bindsym $mod+Shift+Ctrl+d exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
