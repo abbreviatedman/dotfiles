@@ -1,13 +1,13 @@
 (defun crj/toggle-eshell-scrollback ()
   (interactive)
-  (if (eq eshell-scroll-show-maximum-output 'all)
-      (setq eshell-scroll-to-bottom-on-input nil)
-    (setq eshell-scroll-to-bottom-on-input 'all)))
+  (if (equal eshell-scroll-to-bottom-on-output 'all)
+      (setq eshell-scroll-to-bottom-on-output nil)
+    (setq eshell-scroll-to-bottom-on-output 'all)))
 
 ;; command to toggle scroll-on-output on or off
 (map! :map evil-normal-state :leader
       (:prefix ("z" . "more toggling")
-        :desc "toggle scrollback in current eshell window" "s" #'crj/toggle-eshell-scrollback
+        :desc "toggle terminal auto-scroll" "s" #'crj/toggle-eshell-scrollback
        :desc "read eshell history in" "r" #'eshell/r))
 
 

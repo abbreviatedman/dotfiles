@@ -29,3 +29,6 @@
 ;; useful for when you change the file in another app
 ;; or it's changed programmatically
 (global-auto-revert-mode t)
+
+;; TODO add projectile cache update advice to new file creation
+;; TODO remove completion from minibuffer

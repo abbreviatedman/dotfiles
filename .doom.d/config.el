@@ -1,6 +1,7 @@
 (mapc 'load (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
 
 ; TODO add function to swap ctrl and caps and back
+; TODO OS should open files with emacsclient
 ; TODO experiment with de-bounce in Planck settings
 ; TODO add space-W for deleting word and capitalizing next one
 ; TODO space-something for lower-casing word and entering insert mode a word before it
@@ -82,11 +83,16 @@
 ;; Also, use the hydra as a better UI for window management.
 ;; Lastly, make window movement wrap around.
 (map! :leader (:prefix "w"
-               :desc "split window vertically and follow" :n "v" #'+evil/window-vsplit-and-follow
-               :desc "split vertically" :n "V" #'evil-window-vsplit
-               :desc "split window and follow" :n "s" #'+evil/window-split-and-follow
-               :desc "split window" :n "S" #'evil-window-split
-               :desc "Activate Window Hydra." :n "a" #'hydra/crj-window-nav/body))
+               :desc "split window vertically and follow"
+                 :n "v" #'+evil/window-vsplit-and-follow
+               :desc "split vertically"
+                 :n "V" #'evil-window-vsplit
+               :desc "split window and follow"
+                 :n "s" #'+evil/window-split-and-follow
+               :desc "split window"
+                 :n "S" #'evil-window-split
+               :desc "Activate Window Hydra."
+                 :n "a" #'hydra/crj-window-nav/body))
 
 (setq windmove-wrap-around t)
 
@@ -365,8 +371,6 @@ It toggles:
     (global-auto-composition-mode -1)
     (set-face-attribute 'mode-line nil
                         :height crj/presentation-mode-line-height))
-  (message "presentation-mode-p: %s" crj/presentation-mode-p)
-  (message "daytime-p: %s" crj/daytime-p)
   (crj/switch-to-appropriate-theme)
   (doom-big-font-mode))
 
@@ -726,6 +730,10 @@ instead."
 
 (after! sqlup-mode
   (add-to-list 'sqlup-blacklist "name"))
+
+
+;; Browse with EWW. (& to switch to open in default browser after.)
+(setq browse-url-browser-function 'eww)
 
 ; some available keybinding prefixes
 ;; SPC l

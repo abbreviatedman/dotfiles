@@ -282,16 +282,16 @@ bindsym $mod+0 workspace $ws10
 # bindsym $mod+Ctrl+9 workspace $ws19
 
 # Move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $mod+Ctrl+1 move container to workspace $ws1
+bindsym $mod+Ctrl+2 move container to workspace $ws2
+bindsym $mod+Ctrl+3 move container to workspace $ws3
+bindsym $mod+Ctrl+4 move container to workspace $ws4
+bindsym $mod+Ctrl+5 move container to workspace $ws5
+bindsym $mod+Ctrl+6 move container to workspace $ws6
+bindsym $mod+Ctrl+7 move container to workspace $ws7
+bindsym $mod+Ctrl+8 move container to workspace $ws8
+bindsym $mod+Ctrl+9 move container to workspace $ws9
+bindsym $mod+Ctrl+0 move container to workspace $ws10
 # extra workspaces
 # bindsym $mod+Shift+Ctrl+1 move container to workspace $ws11
 # bindsym $mod+Shift+Ctrl+2 move container to workspace $ws12
@@ -304,16 +304,16 @@ bindsym $mod+Shift+0 move container to workspace $ws10
 # bindsym $mod+Shift+Ctrl+9 move container to workspace $ws19
 
 # Move to workspace with focused container, move to workspace
-bindsym $mod+Ctrl+1 move container to workspace $ws1; workspace $ws1
-bindsym $mod+Ctrl+2 move container to workspace $ws2; workspace $ws2
-bindsym $mod+Ctrl+3 move container to workspace $ws3; workspace $ws3
-bindsym $mod+Ctrl+4 move container to workspace $ws4; workspace $ws4
-bindsym $mod+Ctrl+5 move container to workspace $ws5; workspace $ws5
-bindsym $mod+Ctrl+6 move container to workspace $ws6; workspace $ws6
-bindsym $mod+Ctrl+7 move container to workspace $ws7; workspace $ws7
-bindsym $mod+Ctrl+8 move container to workspace $ws8; workspace $ws8
-bindsym $mod+Ctrl+9 move container to workspace $ws9; workspace $ws9
-bindsym $mod+Ctrl+0 move container to workspace $ws10; workspace $ws10
+bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
 # extra workspaces
 # bindsym $mod+$alt+Shift+Ctrl+1 move container to workspace $ws11; workspace $ws11
 # bindsym $mod+$alt+Shift+Ctrl+2 move container to workspace $ws12; workspace $ws12
@@ -333,7 +333,7 @@ bindsym $mod+Ctrl+Tab move workspace to output left
 # bindsym $mod+Ctrl+l move workspace to output right
 
 # kill zoom popup windows
-for_window [title="zoom" class="zoom"] kill
+for_window [title="zoom" class="zoom"] floating enable
 
 # but also make breakout rooms popup
 for_window [title="Breakout Rooms"] floating enable; exec "i3-center"

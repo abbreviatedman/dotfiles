@@ -5,6 +5,8 @@
 	tool = vimdiff
 [core]
 	excludesFile = ~/.gitignore-global
+	editor = /usr/sbin/code -w
+	ignorecase = false
 [interactive]
 	singleKey = true
 [init]
