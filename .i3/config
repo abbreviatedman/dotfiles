@@ -31,15 +31,15 @@ set $alt Mod1
 # writing terminals
 
 ## emacs-everywhere
-bindsym $mod+w exec i3-msg exec 'doom everywhere'
+bindsym $mod+w exec emacsclient --eval "(emacs-everywhere)"
 
 ## Simple writing terminal.
-bindsym $mod+Shift+w exec "i3-msg exec 'emacsclient -cn ~/Sync/org/quick-note.md'"
+bindsym $mod+Shift+w exec emacsclient -cn ~/Sync/org/quick-note.md
 
 ## Todos
-bindsym $mod+Shift+t exec "i3-msg exec 'emacsclient -cn ~/Sync/org/current-tasks.org'"
+bindsym $mod+Shift+t exec emacsclient -cn ~/Sync/org/current-tasks.org
 
-bindsym $mod+Shift+c exec "org-capture"
+bindsym $mod+Shift+c exec org-capture
 
 # Add compose key manually. : (
 bindsym $mod+Shift+x exec "xmodmap ~/.Xmodmap"
