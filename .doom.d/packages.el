@@ -17,9 +17,13 @@
 (package! targets
   :recipe (
            :host github
-           :repo "noctuid/targets.el"
-        )
-)
+           :repo "noctuid/targets.el"))
+
+;; Sync a buffer with a Chrome text box.
+(package! atomic-chrome
+  :recipe (
+           :host github
+           :repo "alpha22jp/atomic-chrome"))
 
 ;; cursor highlighting when scrolling or switching buffers
 (package! beacon)

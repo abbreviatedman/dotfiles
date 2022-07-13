@@ -735,6 +735,12 @@ instead."
 ;; Browse with EWW. (& to switch to open in default browser after.)
 (setq browse-url-browser-function 'eww)
 
+;; Atomic Chrome
+(atomic-chrome-start-server)
+(setq atomic-chrome-default-major-mode 'markdown-mode)
+(setq atomic-chrome-buffer-open-style 'frame)
+(map! :map atomic-chrome-edit-mode-map :leader (:prefix "c" :desc "Exit Ghost Text buffer." :n "z" #'atomic-chrome-close-current-buffer))
+
 ; some available keybinding prefixes
 ;; SPC l
 ;; SPC and any capital letter
