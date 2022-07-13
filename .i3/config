@@ -80,11 +80,11 @@ bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#0
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
-# start Emacs terminal 1 (eshell)
-bindsym $mod+Return exec emacsclient -cn -a "" -e "(+eshell/here)"
+# start Emacs terminal 1 (vterm)
+bindsym $mod+Return exec emacsclient -cn -a "" -e "(+vterm/here 1)"
 
-# start Emacs terminal 2 (vterm)
-bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+vterm/here 1)"
+# start Emacs terminal 2 (eshell)
+bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+eshell/here)"
 
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
