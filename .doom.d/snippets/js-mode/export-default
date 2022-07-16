@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Export Default Snippet
+# key: ed
+# uuid: ed
+# --
+export default $0

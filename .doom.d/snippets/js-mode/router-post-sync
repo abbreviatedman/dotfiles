@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: router.post sync Snippet
+# key: rpos
+# uuid: rpos
+# --
+post("/$1", (${2:request}, ${3:response}) => {
+  $0
+})

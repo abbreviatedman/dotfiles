@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Require Snippet
+# key: rq
+# uuid: rq
+# --
+const $1 = require('$2')$0

@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: SQL source block snippet
+# key: pgh
+# uuid: pgh
+# --
+
+:PROPERTIES:
+:header-args:
+:results value
+:exports both
+:engine postgres
+:dbhost localhost
+:dbport 5432
+:dbuser abbreviatedman
+:database $1
+:END:
+
+$0

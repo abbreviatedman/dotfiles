@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: router.get sync Snippet
+# key: rgs
+# uuid: rgs
+# --
+get("/$1", (${2:_}, ${3:response}) => {
+  $0
+})

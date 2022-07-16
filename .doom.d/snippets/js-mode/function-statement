@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Function Statement
+# key: cf
+# uuid: cf
+# --
+const $1 = function ($2) {
+  $0
+}

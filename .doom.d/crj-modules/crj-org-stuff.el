@@ -197,3 +197,7 @@ appropriate.  In tables, insert a new row or end the table."
 
 (map! :map emacs-everywhere-mode-map :n "ZZ" nil)
 (map! :map emacs-everywhere-mode-map :n "ZZ" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
+(setq org-html-postamble nil
+      org-export-with-toc nil
+      org-treat-S-cursor-todo-selection-as-state-change)
+(setq org-export-with-entities)

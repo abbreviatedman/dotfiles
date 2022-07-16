@@ -25,6 +25,9 @@
            :host github
            :repo "alpha22jp/atomic-chrome"))
 
+;; convert html to markdown (atomic chrome gives you html unfortunately)
+(package! html-to-markdown)
+
 ;; cursor highlighting when scrolling or switching buffers
 (package! beacon)
 

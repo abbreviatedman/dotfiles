@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Import Snippet
+# key: im
+# uuid: im
+# --
+import $2 from '$1'$0

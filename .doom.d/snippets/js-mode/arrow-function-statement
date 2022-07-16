@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Arrow Function Statement
+# key: ca
+# uuid: ca
+# --
+const $1 = ($2) => $0

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: SQL source block snippet
+# key: sbsql
+# uuid: sbsql
+# --
+
+#+begin_src sql-mode
+$0
+#+end_src

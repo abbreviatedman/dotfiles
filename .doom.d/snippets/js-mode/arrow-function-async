@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Arrow Function - Async
+# key: afa
+# uuid: afa
+# --
+async ($1) => $0

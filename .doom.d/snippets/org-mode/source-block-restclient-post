@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: restclient GET source block snippet
+# key: sbrpo
+# uuid: sbrpo
+# --
+
+#+begin_src restclient
+POST ${1:http://localhost:3003/}$2
+Content-Type: application/json
+
+{
+  $0
+}
+#+end_src
