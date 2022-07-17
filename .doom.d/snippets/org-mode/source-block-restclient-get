@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: restclient GET source block snippet
+# key: sbrg
+# uuid: sbrg
+# --
+
+#+begin_src restclient
+GET ${1:http://localhost:3003/}$0
+#+end_src

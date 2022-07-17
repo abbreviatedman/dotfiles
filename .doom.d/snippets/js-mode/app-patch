@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: app.patch Snippet
+# key: apa
+# uuid: apa
+# --
+app.patch("/$1", async (${2:request}, ${3:response}) => {
+  $0
+})

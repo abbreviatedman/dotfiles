@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: router.put sync Snippet
+# key: rpus
+# uuid: rpus
+# --
+put("/$1", (${2:request}, ${3:response}) => {
+  $0
+})

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Describe Test Snippet
+# key: ds
+# uuid: ds
+# --
+describe("$1", () => {
+  $0
+})

@@ -200,3 +200,7 @@ appropriate.  In tables, insert a new row or end the table."
 
 ;; easier source block insertion keyboard shortcuts
 (require 'org-tempo)
+
+;; org export settings
+(setq org-html-postamble nil
+      org-export-with-toc nil)

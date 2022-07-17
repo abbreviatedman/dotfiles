@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: router.patch sync Snippet
+# key: rpas
+# uuid: rpas
+# --
+patch("/$1", (${2:request}, ${3:response}) => {
+  $0
+})

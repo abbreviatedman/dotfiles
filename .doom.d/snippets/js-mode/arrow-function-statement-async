@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Arrow Function Statement - Async
+# key: caa
+# uuid: caa
+# --
+const $1 = async ($2) => $0

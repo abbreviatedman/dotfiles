@@ -173,46 +173,46 @@
   (add-to-list 'projectile-project-root-files ".git"))
 
 ;; I don't need the "symbol class" info in my documentation.
-(after! marginalia
-  (setf (alist-get 'variable marginalia-annotator-registry)
-        '(crj/custom-marginalia-annotate-variable builtin none))
-  (setf (alist-get 'symbol marginalia-annotator-registry)
-        '(crj/custom-marginalia-annotate-symbol builtin none))
-  (setf (alist-get 'function marginalia-annotator-registry)
-        '(crj/custom-marginalia-annotate-function none)))
+;; (after! marginalia
+;;   (setf (alist-get 'variable marginalia-annotator-registry)
+;;         '(crj/custom-marginalia-annotate-variable builtin none))
+;;   (setf (alist-get 'symbol marginalia-annotator-registry)
+;;         '(crj/custom-marginalia-annotate-symbol builtin none))
+;;   (setf (alist-get 'function marginalia-annotator-registry)
+;;         '(crj/custom-marginalia-annotate-function none)))
 
-(defun crj/custom-marginalia-annotate-symbol (cand)
-  "Annotate symbol CAND with its documentation string."
-  (when-let (sym (intern-soft cand))
-    (concat
-     (marginalia-annotate-binding cand)
-     (marginalia--fields
-      ((cond
-        ((fboundp sym) (marginalia--function-doc sym))
-        ((facep sym) (documentation-property sym 'face-documentation))
-        (t (documentation-property sym 'variable-documentation)))
-       :truncate marginalia-truncate-width :face 'marginalia-documentation)))))
+;; (defun crj/custom-marginalia-annotate-symbol (cand)
+;;   "Annotate symbol CAND with its documentation string."
+;;   (when-let (sym (intern-soft cand))
+;;     (concat
+;;      (marginalia-annotate-binding cand)
+;;      (marginalia--fields
+;;       ((cond
+;;         ((fboundp sym) (marginalia--function-doc sym))
+;;         ((facep sym) (documentation-property sym 'face-documentation))
+;;         (t (documentation-property sym 'variable-documentation)))
+;;        :truncate marginalia-truncate-width :face 'marginalia-documentation)))))
 
-(defun crj/custom-marginalia-annotate-variable (cand)
-  "Annotate variable CAND with its documentation string."
-  (when-let (sym (intern-soft cand))
-    (marginalia--fields
-     ((marginalia--variable-value sym) :truncate (/ marginalia-truncate-width 2))
-     ((documentation-property sym 'variable-documentation)
-      :truncate marginalia-truncate-width :face 'marginalia-documentation))))
+;; (defun crj/custom-marginalia-annotate-variable (cand)
+;;   "Annotate variable CAND with its documentation string."
+;;   (when-let (sym (intern-soft cand))
+;;     (marginalia--fields
+;;      ((marginalia--variable-value sym) :truncate (/ marginalia-truncate-width 2))
+;;      ((documentation-property sym 'variable-documentation)
+;;       :truncate marginalia-truncate-width :face 'marginalia-documentation))))
 
-(defun crj/custom-marginalia-annotate-function (cand)
-  "Annotate function CAND with its documentation string."
-  (when-let (sym (intern-soft cand))
-    (when (functionp sym)
-      (concat
-       (marginalia-annotate-binding cand)
-       (marginalia--fields
-        ((marginalia--symbol-class sym) :face 'marginalia-type)
-        ((marginalia--function-args sym) :face 'marginalia-value
-         :truncate (/ marginalia-truncate-width 2))
-        ((marginalia--function-doc sym) :truncate marginalia-truncate-width
-         :face 'marginalia-documentation))))))
+;; (defun crj/custom-marginalia-annotate-function (cand)
+;;   "Annotate function CAND with its documentation string."
+;;   (when-let (sym (intern-soft cand))
+;;     (when (functionp sym)
+;;       (concat
+;;        (marginalia-annotate-binding cand)
+;;        (marginalia--fields
+;;         ((marginalia--symbol-class sym) :face 'marginalia-type)
+;;         ((marginalia--function-args sym) :face 'marginalia-value
+;;          :truncate (/ marginalia-truncate-width 2))
+;;         ((marginalia--function-doc sym) :truncate marginalia-truncate-width
+;;          :face 'marginalia-documentation))))))
 
 (defun corfu-enable-always-in-minibuffer ()
   "Enable Corfu in the minibuffer if Vertico/Mct are not active."

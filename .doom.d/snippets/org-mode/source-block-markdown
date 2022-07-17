@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Markdown source block snippet
+# key: sbmd
+# uuid: sbmd
+# --
+
+#+begin_src md
+$0
+#+end_src

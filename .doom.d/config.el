@@ -737,6 +737,43 @@ instead."
 ;; Browse with EWW. (& to switch to open in default browser after.)
 (setq browse-url-browser-function 'eww)
 
+;; Atomic Chrome
+(atomic-chrome-start-server)
+(setq atomic-chrome-default-major-mode 'markdown-mode)
+(setq atomic-chrome-buffer-open-style 'frame)
+(map! :map atomic-chrome-edit-mode-map :leader (:prefix "c"
+        :desc "Exit Ghost Text buffer." :n "z" #'atomic-chrome-close-current-buffer
+        :desc "Fix up Ghost Text buffer." :n "p" #'crj/remove-html-from-markdown-and-clean-up))
+
+;;; atomic chrome converts some text boxes to html, and we want to convert to markdown
+;;; this function, or its individual pieces, can help
+(defun crj/remove-html-from-markdown-and-clean-up ()
+  (interactive)
+  (html-to-markdown-this-buffer)
+  (sc/strip-html)
+  (prettier-prettify))
+
+;; taken from https://emacs.stackexchange.com/questions/18504/gnus-how-to-strip-all-html-tags-from-incoming-mails, which says it's from Sacha Chua (but the link doesn't work, so who knows)
+(defun sc/strip-html ()
+  "Remove HTML tags from the current buffer,
+   (this will affect the whole buffer regardless of the restrictions in effect)."
+  (interactive "*")
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (while (re-search-forward "<[^<]*>" (point-max) t)
+    (replace-match "\\1"))
+      (goto-char (point-min))
+      (replace-string "&copy;" "(c)")
+      (goto-char (point-min))
+      (replace-string "&amp;" "&")
+      (goto-char (point-min))
+      (replace-string "&lt;" "<")
+      (goto-char (point-min))
+      (replace-string "&gt;" ">")
+      (goto-char (point-min)))))
+
 ; some available keybinding prefixes
 ;; SPC l
 ;; SPC and any capital letter

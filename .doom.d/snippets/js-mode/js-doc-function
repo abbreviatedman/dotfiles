@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: JSDoc Function
+# key: jdf
+# uuid: jdf
+# --
+/**
+ * @param $1
+ * @return $0
+ */

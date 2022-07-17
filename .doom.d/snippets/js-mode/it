@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: It Test Snippet
+# key: it
+# uuid: it
+# --
+it("$1", () => {
+  $0
+})

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: router.delete Snippet
+# key: rd
+# uuid: rd
+# --
+delete("/$1", async (${2:request}, ${3:response}) => {
+  $0
+})

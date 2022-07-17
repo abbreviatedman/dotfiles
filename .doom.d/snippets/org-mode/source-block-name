@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Source Block Name Attribute
+# key: sbn
+# uuid: sbn
+# --
+
+#+name: $0

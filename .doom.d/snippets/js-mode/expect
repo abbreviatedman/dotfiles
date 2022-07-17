@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Expect Test Snippet
+# key: ep
+# uuid: ep
+# --
+expect(${1:result}).toBe(${2:expected})$0

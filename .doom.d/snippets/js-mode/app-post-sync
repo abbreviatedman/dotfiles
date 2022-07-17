@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: app.post Snippet
+# key: apos
+# uuid: apos
+# --
+app.post("/$1", (${2:request}, ${3:response}) => {
+  $0
+})

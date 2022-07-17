@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: JS-Doc Type
+# key: jdt
+# uuid: jdt
+# --
+/** @type {$1} */
