@@ -197,3 +197,6 @@ appropriate.  In tables, insert a new row or end the table."
 
 (map! :map emacs-everywhere-mode-map :n "ZZ" nil)
 (map! :map emacs-everywhere-mode-map :n "ZZ" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
+
+;; easier source block insertion keyboard shortcuts
+(require 'org-tempo)

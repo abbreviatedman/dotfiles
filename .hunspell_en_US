@@ -1184,3 +1184,9 @@ Kertis
 Lili
 Mukayila
 tecosaur
+xdotool
+getactivewindow
+gui
+'primary
+'utf8
+args

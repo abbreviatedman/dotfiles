@@ -588,6 +588,10 @@ mode "$mode_gaps_outer" {
 }
 
 
+# if I want to go back to working on my own way to quickly edit text in Emacs a la emacs-everywhere, this function was helpful
+# add window id to notification
+# bindsym $mod+Shift+Ctrl+w exec emacsclient --eval "(crj/emacs-everywhere-for-i3wm)"
+
 #  keybindings for changing display setups
 
 # Just a laptop screen - T480

@@ -469,6 +469,8 @@ It toggles:
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
 
+(setenv "NODE_PATH" "/usr/local/lib/node_modules")
+
 ;; black integration
 (setq blacken-only-if-project-is-blackened t)
 
