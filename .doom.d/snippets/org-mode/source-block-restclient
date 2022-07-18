@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # name: restclient source block snippet
-# key: sbr
-# uuid: sbr
+# key: sbrc
+# uuid: sbrc
 # --
 
 #+begin_src restclient

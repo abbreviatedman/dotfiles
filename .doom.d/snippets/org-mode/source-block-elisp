@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # name: Source Block Snippet - Elisp
-# key: sbel
-# uuid: sbel
+# key: sbelisp
+# uuid: sbelisp
 # --
 
 #+begin_src elisp
