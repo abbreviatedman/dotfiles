@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Source Block Snippet - Elisp
+# key: sborg
+# uuid: sborg
+# --
+
+#+begin_src org
+$0
+#+end_src
