@@ -71,8 +71,8 @@
 (setq org-gcal-fetch-file-alist '(("colin@pursuit.org" . "~/Sync/org/cal.org")))
 
 ;; timestamp manipulation
-(map! :map :n :leader :desc "Discover projects in directory" "J" #'org-timestamp-down)
-(map! :map :n :leader :desc "Discover projects in directory" "K" #'org-timestamp-up)
+(map! :map :leader :desc "Discover projects in directory" :n "J" #'org-timestamp-down)
+(map! :map :leader :desc "Discover projects in directory" :n "K" #'org-timestamp-up)
 
 (map! :map org-mode-map (:prefix "[" :n "H" #'outline-up-heading))
 
@@ -83,9 +83,6 @@
       (org-trello-mode))))
 
 (add-hook 'org-mode-hook 'crj/add-org-trello-mode-maybe)
-
-(eval-after-load 'ox-html
-  '(setq org-html-special-string-regexps nil))
 
 ;; Mark current todo DONE and next todo NEXT
 (map! :map org-mode-map :leader
@@ -201,6 +198,5 @@ appropriate.  In tables, insert a new row or end the table."
 ;; easier source block insertion keyboard shortcuts
 (require 'org-tempo)
 
-;; org export settings
-(setq org-html-postamble nil
-      org-export-with-toc nil)
+;; Show full link text by default.
+(setq org-link-descriptive nil)
