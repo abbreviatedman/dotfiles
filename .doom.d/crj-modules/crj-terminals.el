@@ -20,14 +20,14 @@
              (kill-buffer buffer)))
          (buffer-list)))
 
-(map! :map :n :leader (:prefix ("q" . "quit/session") :desc "Kill all terminals." "t" #'kill-terminals))
+(map! :leader (:prefix ("q" . "quit/session") :desc "Kill all terminals." :n "t" #'kill-terminals))
 
-(map! :map :n :leader (:prefix ("p" . "project")
-                       :desc "Open a project vterm" "v" #'projectile-run-vterm
-                       :desc "Open a new project vterm" "V" #'(lambda () (interactive) (projectile-run-vterm 1))
-                       :desc "Open a project eshell" "e" 'projectile-run-eshell
-                       :desc "Open a new project eshell" "E" #'(lambda () (interactive) (projectile-run-eshell 1))
-                       :desc "Edit project dir-locals" "l" #'projectile-edit-dir-locals))
+(map! :leader (:prefix ("p" . "project")
+                       :desc "Open a project vterm" :n "v" #'projectile-run-vterm
+                       :desc "Open a new project vterm" :n "V" #'(lambda () (interactive) (projectile-run-vterm 1))
+                       :desc "Open a project eshell" :n "e" 'projectile-run-eshell
+                       :desc "Open a new project eshell" :n "E" #'(lambda () (interactive) (projectile-run-eshell 1))
+                       :desc "Edit project dir-locals" :n "l" #'projectile-edit-dir-locals))
 
 ;; SPC p as leader to:
 ;;; v - projectile vterm
@@ -42,8 +42,8 @@
 ;;; e - projectile eshell other frame
 ;;; E - projectile new eshell other frame
 
-(map! :map :n :leader (:prefix ("v" . "view")
-                       :desc "View available eshell buffers." "e" #'+eshell/switch-to))
+(map! :leader (:prefix ("v" . "view")
+                       :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
 
 ;; start every emacs frame as a terminal by default
 ;; (add-hook 'emacs-startup-hook '+eshell/here)
@@ -71,11 +71,11 @@
 ; (eshell-did-you-mean-setup)
 
 ;; open terminals
-(map! :map :n :leader (:prefix ("o" . "open")
-                       :desc "Open vterm buffer" "v" #'+vterm/here
-                       :desc "Open vterm in other frame" "V" #'open-vterm-other-frame
-                       :desc "Open eshell buffer" "e" #'+eshell/here
-                       :desc "Open eshell in other frame" "E" #'open-eshell-other-frame))
+(map! :leader (:prefix ("o" . "open")
+                       :desc "Open vterm buffer" :n "v" #'+vterm/here
+                       :desc "Open vterm in other frame" :n "V" #'open-vterm-other-frame
+                       :desc "Open eshell buffer" :n "e" #'+eshell/here
+                       :desc "Open eshell in other frame" :n "E" #'open-eshell-other-frame))
 
 ;; Toggleable vterm/eshell popups
 (map! :map evil-normal-state :leader

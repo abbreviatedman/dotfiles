@@ -71,8 +71,8 @@
 (setq org-gcal-fetch-file-alist '(("colin@pursuit.org" . "~/Sync/org/cal.org")))
 
 ;; timestamp manipulation
-(map! :map :leader :desc "Discover projects in directory" :n "J" #'org-timestamp-down)
-(map! :map :leader :desc "Discover projects in directory" :n "K" #'org-timestamp-up)
+(map! :leader :desc "Discover projects in directory" :n "J" #'org-timestamp-down)
+(map! :leader :desc "Discover projects in directory" :n "K" #'org-timestamp-up)
 
 (map! :map org-mode-map (:prefix "[" :n "H" #'outline-up-heading))
 
