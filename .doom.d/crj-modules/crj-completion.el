@@ -172,6 +172,8 @@
 (after! projectile
   (add-to-list 'projectile-project-root-files ".git"))
 
+;; These used to work and now don't.
+;; TODO fix them!
 ;; I don't need the "symbol class" info in my documentation.
 ;; (after! marginalia
 ;;   (setf (alist-get 'variable marginalia-annotator-registry)
