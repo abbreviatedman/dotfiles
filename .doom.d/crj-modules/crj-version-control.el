@@ -21,3 +21,5 @@
 ;; keep line numbers in magit
 (setq magit-disable-line-numbers nil)
 (setq magit-section-disable-line-numbers nil)
+
+(setq password-cache-expiry nil)
