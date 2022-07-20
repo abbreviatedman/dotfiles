@@ -175,55 +175,62 @@
 ;; These used to work and now don't.
 ;; TODO fix them!
 ;; I don't need the "symbol class" info in my documentation.
-;; (after! marginalia
-;;   (setf (alist-get 'variable marginalia-annotator-registry)
-;;         '(crj/custom-marginalia-annotate-variable builtin none))
-;;   (setf (alist-get 'symbol marginalia-annotator-registry)
-;;         '(crj/custom-marginalia-annotate-symbol builtin none))
-;;   (setf (alist-get 'function marginalia-annotator-registry)
-;;         '(crj/custom-marginalia-annotate-function none)))
+(after! marginalia
+  (setf (alist-get 'variable marginalia-annotator-registry)
+        '(crj/custom-marginalia-annotate-variable builtin none))
+  (setf (alist-get 'symbol marginalia-annotator-registry)
+        '(crj/custom-marginalia-annotate-symbol builtin none))
+  (setf (alist-get 'function marginalia-annotator-registry)
+        '(crj/custom-marginalia-annotate-function none)))
 
-;; (defun crj/custom-marginalia-annotate-symbol (cand)
-;;   "Annotate symbol CAND with its documentation string."
-;;   (when-let (sym (intern-soft cand))
-;;     (concat
-;;      (marginalia-annotate-binding cand)
-;;      (marginalia--fields
-;;       ((cond
-;;         ((fboundp sym) (marginalia--function-doc sym))
-;;         ((facep sym) (documentation-property sym 'face-documentation))
-;;         (t (documentation-property sym 'variable-documentation)))
-;;        :truncate marginalia-truncate-width :face 'marginalia-documentation)))))
+;; TODO remove permissions from annotation of file
+;; things to keep in mind:
+;; - which fields show up are in helper function
+;; - there's a project file version as well
+;; (defun crj/custom-marginalia-annotate-file (cand))
 
-;; (defun crj/custom-marginalia-annotate-variable (cand)
-;;   "Annotate variable CAND with its documentation string."
-;;   (when-let (sym (intern-soft cand))
-;;     (marginalia--fields
-;;      ((marginalia--variable-value sym) :truncate (/ marginalia-truncate-width 2))
-;;      ((documentation-property sym 'variable-documentation)
-;;       :truncate marginalia-truncate-width :face 'marginalia-documentation))))
+(defun crj/custom-marginalia-annotate-symbol (cand)
+  "Annotate symbol CAND with its documentation string."
+  (when-let (sym (intern-soft cand))
+    (concat
+     (marginalia-annotate-binding cand)
+     (marginalia--fields
+      ((cond
+        ((fboundp sym) (marginalia--function-doc sym))
+        ((facep sym) (documentation-property sym 'face-documentation))
+        (t (documentation-property sym 'variable-documentation)))
+       :truncate 1.0 :face 'marginalia-documentation)))))
 
-;; (defun crj/custom-marginalia-annotate-function (cand)
-;;   "Annotate function CAND with its documentation string."
-;;   (when-let (sym (intern-soft cand))
-;;     (when (functionp sym)
-;;       (concat
-;;        (marginalia-annotate-binding cand)
-;;        (marginalia--fields
-;;         ((marginalia--symbol-class sym) :face 'marginalia-type)
-;;         ((marginalia--function-args sym) :face 'marginalia-value
-;;          :truncate (/ marginalia-truncate-width 2))
-;;         ((marginalia--function-doc sym) :truncate marginalia-truncate-width
-;;          :face 'marginalia-documentation))))))
+(defun crj/custom-marginalia-annotate-variable (cand)
+  "Annotate variable CAND with its documentation string."
+  (when-let (sym (intern-soft cand))
+    (marginalia--fields
+     ((marginalia--variable-value sym) :truncate 0.5)
+     ((documentation-property sym 'variable-documentation)
+      :truncate 1.0 :face 'marginalia-documentation))))
 
-(defun corfu-enable-always-in-minibuffer ()
-  "Enable Corfu in the minibuffer if Vertico/Mct are not active."
-  (unless (or (bound-and-true-p mct--active)
-              (bound-and-true-p vertico--input))
-    (setq-local corfu-auto t)
-    (corfu-mode 1)))
+(defun crj/custom-marginalia-annotate-function (cand)
+  "Annotate function CAND with its documentation string."
+  (when-let (sym (intern-soft cand))
+    (when (fboundp sym)
+      (concat
+       (marginalia-annotate-binding cand)
+       (marginalia--fields
+        ((marginalia--function-args sym) :face 'marginalia-value
+         :truncate 0.5)
+        ((marginalia--function-doc sym) :truncate 1.0
+         :face 'marginalia-documentation))))))
 
-(add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
+
+;; uncomment the following function and its hook to get corfu minibuffer completion.
+;; (defun corfu-enable-always-in-minibuffer ()
+;;   "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+;;   (unless (or (bound-and-true-p mct--active)
+;;               (bound-and-true-p vertico--input))
+;;     (setq-local corfu-auto t)
+;;     (corfu-mode 1)))
+
+;; (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
 
 (after! lsp
   (setq lsp-completion-provider :none
@@ -273,3 +280,17 @@
 (map! :leader (:desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring))
 
 (map! :i "C-SPC" #'complete-symbol)
+
+(setq truncate-lines t)
+(setq resize-mini-windows t)
+(setq vertico-resize t)
+
+(defun crj/marginalia-toggle ()
+  (interactive)
+  (mapc
+   (lambda (x)
+     (setcdr x (append (reverse (remq 'none
+                                      (remq 'builtin (cdr x))))
+                       '(builtin none))))
+   marginalia-annotator-registry))
+
