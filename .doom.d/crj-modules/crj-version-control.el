@@ -23,3 +23,4 @@
 (setq magit-section-disable-line-numbers nil)
 
 (setq password-cache-expiry nil)
+(setq ssh-agency-askpass t)
