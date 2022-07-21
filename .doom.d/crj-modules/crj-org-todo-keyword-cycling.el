@@ -49,8 +49,9 @@ Ideally I'd learn how to use symbols properly."
    (cl-position todo-keyword crj/todo-cycling-keywords :test 'equal)
    (- (length crj/todo-cycling-keywords) 1)))
 
-(map! :map evil-org-mode-map
-      :n "<return>" #'crj/cycle-todo-keyword-maybe
-      :n "RET" #'crj/cycle-todo-keyword-maybe
-      :n "S-<return>" #'crj/cycle-todo-keyword-backwards
-      :n "S-RET" #'crj/cycle-todo-keyword-backwards)
+(after! evil-org
+  (map! :map evil-org-mode-map
+        :n "<return>" #'crj/cycle-todo-keyword-maybe
+        :n "RET" #'crj/cycle-todo-keyword-maybe
+        :n "S-<return>" #'crj/cycle-todo-keyword-backwards
+        :n "S-RET" #'crj/cycle-todo-keyword-backwards))
