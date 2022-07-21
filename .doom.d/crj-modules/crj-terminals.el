@@ -109,3 +109,5 @@
 (add-hook 'eshell-pre-command-hook 'crj/eshell-update-history)
 ;; When creating a new terminal, get the history of all previous terminals.
 (add-hook 'eshell-hist-load-hook 'eshell-read-history)
+
+(map! :leader :n "&" #'async-shell-command)
