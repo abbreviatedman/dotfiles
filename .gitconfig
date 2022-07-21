@@ -5,8 +5,8 @@
 	tool = vimdiff
 [core]
 	excludesFile = ~/.gitignore-global
-	editor = /usr/sbin/code -w
 	ignorecase = false
+	editor = emacsclient -t -a=\\\"\\\"
 [interactive]
 	singleKey = true
 [init]
