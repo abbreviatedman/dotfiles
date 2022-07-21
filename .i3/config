@@ -37,7 +37,7 @@ bindsym $mod+w exec emacsclient --eval "(emacs-everywhere)"
 bindsym $mod+Shift+w exec emacsclient -cn ~/Sync/org/quick-note.md
 
 ## Todos
-bindsym $mod+Shift+t exec emacsclient -cn ~/Sync/org/current-tasks.org
+bindsym $mod+Shift+t exec emacsclient -cn ~/org-stuff/readme.org
 
 bindsym $mod+Shift+c exec org-capture
 
