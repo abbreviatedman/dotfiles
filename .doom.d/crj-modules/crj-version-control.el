@@ -24,3 +24,5 @@
 
 (setq password-cache-expiry nil)
 (setq ssh-agency-askpass t)
+
+(after! keychain (keychain-refresh-environment))

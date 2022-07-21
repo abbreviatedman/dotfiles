@@ -99,10 +99,6 @@ export ALTERNATE_EDITOR=$EDITOR
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-
 # Aliases!
 
 # doom emacs
@@ -355,6 +351,8 @@ alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no -verify -m "--wip-- [skip ci]"'
 
 
+# ssh
+eval `keychain --eval --agents ssh id_ed25519`
 
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
 export FZF_DEFAULT_OPTS="--ansi"

@@ -124,3 +124,6 @@
 ;; SQL
 (package! ob-sql-mode)
 (package! sqlup-mode)
+
+;; SSH
+(package! keychain-environment)
