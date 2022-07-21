@@ -1,11 +1,9 @@
-(setq tide-completion-show-source t)
-(setq tide-sort-completions-by-kind t)
+;; (setq tide-completion-show-source t)
+;; (setq tide-sort-completions-by-kind t)
 
 (setq completion-ignore-case t)
 
 ; snippet settings
-
-(after! yasnippet (crj/set-up-snippets))
 
 (defun crj/set-up-snippets ()
   (yas-global-mode)
@@ -16,6 +14,9 @@
         :map yas-keymap "TAB" nil
         "<tab>" nil
         [M-tab] #'yas-next-field-or-maybe-expand))
+
+(require 'yasnippet)
+(after! yasnippet (crj/set-up-snippets))
 
 (add-hook 'before-make-frame-hook #'crj/set-up-orderless)
 
@@ -56,7 +57,7 @@
 (map! :leader (:prefix "t"
                :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
-(after! orderless #'crj/set-up-orderless)
+(after! orderless (crj/set-up-orderless))
 
 (defun crj/set-up-orderless ()
   (setq completion-category-defaults nil
@@ -172,8 +173,6 @@
 (after! projectile
   (add-to-list 'projectile-project-root-files ".git"))
 
-;; These used to work and now don't.
-;; TODO fix them!
 ;; I don't need the "symbol class" info in my documentation.
 (after! marginalia
   (setf (alist-get 'variable marginalia-annotator-registry)
@@ -242,8 +241,7 @@
 
 (cl-defmacro teco/lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
-  (setq centaur-lsp 'lsp-mode)
-  (cl-check-type lang stringp)
+  (cl-check-type lang string)
   (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
          (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
     `(progn
@@ -264,6 +262,7 @@
            (put ',edit-pre 'function-documentation
                 (format "Prepare local buffer environment for org source block (%s)."
                         (upcase ,lang))))))))
+
 (defvar org-babel-lang-list
   '("go" "python" "ipython" "bash" "sh" "js" "javascript" "sql" "sql-mode"))
 (dolist (lang org-babel-lang-list)
@@ -281,7 +280,6 @@
 
 (map! :i "C-SPC" #'complete-symbol)
 
-(setq truncate-lines t)
 (setq resize-mini-windows t)
 (setq vertico-resize t)
 
