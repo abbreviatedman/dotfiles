@@ -110,4 +110,51 @@
 ;; When creating a new terminal, get the history of all previous terminals.
 (add-hook 'eshell-hist-load-hook 'eshell-read-history)
 
+(setq async-shell-command-buffer 'new-buffer)
+
+(defun crj/async-shell-command-no-window ()
+  "A version of `async-shell-command' that won't create a window to display its output buffer."
+  (interactive)
+  (crj/call-and-bury-window-from-interactive-command
+   #'async-shell-command
+   shell-command-buffer-name-async))
+
+(defun crj/shell-command-no-window ()
+  "A version of `shell-command' that won't create a window to display its output buffer."
+  (interactive)
+  (crj/call-and-bury-window-from-interactive-command
+   #'shell-command
+   shell-command-buffer-name))
+
+(defun crj/projectile-run-shell-command-in-root-no-window ()
+  "A version of `projectile-run-shell-command-in-root' that won't create a window to display its output buffer."
+  (interactive)
+  (crj/call-and-bury-window-from-interactive-command
+   #'projectile-run-shell-command-in-root
+   shell-command-buffer-name))
+
+(defun crj/projectile-run-async-shell-command-in-root-no-window ()
+  "A version of `projectile-run-async-shell-command-in-root' that won't create a window to display its output buffer."
+  (interactive)
+  (crj/call-and-bury-window-from-interactive-command
+   #'projectile-run-async-shell-command-in-root
+   shell-command-buffer-name-async))
+
+(map! :leader :n "7" #'crj/async-shell-command-no-window)
 (map! :leader :n "&" #'async-shell-command)
+(map! :leader :n "1" #'crj/shell-command-no-window)
+(map! :leader :n "!" #'shell-command)
+(map! :leader (:prefix "p"
+               :desc "Run project async shell command without a window opening."
+               :n "7" #'crj/projectile-run-async-shell-command-in-root-no-window
+               :desc "Run project shell command without a window opening."
+               :n "1" #'crj/projectile-run-shell-command-in-root-no-window))
+
+(defun crj/call-and-bury-window-from-interactive-command (command window-name)
+  "A helper function that calls COMMAND interactively while preventing any buffer with the name WINDOW-NAME from creating a window.
+
+This is useful for times when you want a command to create an output buffer without distracting the user."
+  (let
+      ((display-buffer-alist
+        '(window-name '(#'display-buffer-no-window))))
+    (call-interactively command)))

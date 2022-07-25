@@ -25,4 +25,17 @@
 (setq password-cache-expiry nil)
 (setq ssh-agency-askpass t)
 
-(after! keychain (keychain-refresh-environment))
+(require 'keychain-environment)
+(after! keychain-environment (keychain-refresh-environment))
+
+;; Adapted from this SO answer: https://emacs.stackexchange.com/questions/21597/using-magit-for-the-most-basic-add-commit-push/64991#64991.
+;; Only changes were:
+;; 1. Removing the command to save all open buffers. we /could/ save the visited buffer only, though even that should likely be a discrete operation
+;; 2. Removing user input from the commit message altogether. It now creates a commit message using the current projectile project name.
+;; 3. Removing the pop-up git status window using a helper function.
+(defun crj/push-all ()
+  (interactive)
+  (magit-stage-modified)
+  (crj/async-shell-command-no-window (format "git commit -m \"Updates %s.\"&"
+                     (projectile-default-project-name (projectile-project-name))))
+  (magit-run-git-async "push"))

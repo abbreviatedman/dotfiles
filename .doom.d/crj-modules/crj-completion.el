@@ -157,7 +157,7 @@
 (map! :i "C-x C-s" #'consult-yasnippet)
 
 ;; completion source extensions
-(use-package cape
+(use-package! cape
   ;; Bind dedicated completion commands
   :bind (("C-c p" . completion-at-point))
   :init
@@ -235,12 +235,11 @@
   (setq lsp-completion-provider :none
         lsp-auto-guess-root t))
 
-; Switch regular evil ex search for consult's search.
-(map! :map (evil-motion-state-map) "/" #'evil-ex-search-forward
-      :leader "/" #'+default/search-buffer)
+(map! :leader "/" #'+default/search-buffer)
 
 (cl-defmacro teco/lsp-org-babel-enable (lang)
   "Support LANG in org source code block."
+  (setq centaur-lsp 'lsp-mode)
   (cl-check-type lang string)
   (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
          (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
@@ -280,8 +279,6 @@
 
 (map! :i "C-SPC" #'complete-symbol)
 
-(setq resize-mini-windows t)
-(setq vertico-resize t)
 
 (defun crj/marginalia-toggle ()
   (interactive)
@@ -291,4 +288,3 @@
                                       (remq 'builtin (cdr x))))
                        '(builtin none))))
    marginalia-annotator-registry))
-

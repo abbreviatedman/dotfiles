@@ -661,8 +661,10 @@ instead."
   (with-current-buffer (get-buffer "*Messages*")
     (append-to-file nil nil "~/.messages-history.txt")))
 
-
 (add-hook! 'auto-save-hook #'save-messages-buffer)
+
+;; Switch to the messages buffer.
+
 
 ;; Fixes a bug in RJSX Mode where it doesn't handle the fragment syntax.
 (defun crj/rjsx-electric-gt-fragment-a (n)
@@ -702,9 +704,6 @@ instead."
 ;;  :n "M-<escape>" #'symex-mode-interface)
 
 (map! :map Info-mode-map :n "q" nil)
-
-(map! :leader (:prefix "b"
-               :desc "Save and close buffer." :n "q" #'doom/save-and-kill-buffer))
 
 (setq org-babel-header-args:sql-mode '((:product . :postgres) (:session . :any))
       org-babel-default-header-args:sql-mode '((:product . "postgres"))
