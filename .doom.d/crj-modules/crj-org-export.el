@@ -2,7 +2,7 @@
   '(setq org-html-special-string-regexps nil))
 
 ;; org export settings
-(after! ox
+(after! org
   (setq org-html-postamble nil
         org-export-with-toc nil)
   (setq org-babel-default-header-args `((:results . "verbatim pp replace output")

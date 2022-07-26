@@ -664,7 +664,13 @@ instead."
 (add-hook! 'auto-save-hook #'save-messages-buffer)
 
 ;; Switch to the messages buffer.
+(defun crj/switch-to-messages-buffer ()
+  (interactive)
+  (switch-to-buffer (get-buffer "*Messages*")))
 
+(map! :leader (:prefix "o"
+               :desc "Switch to messages buffer."
+               :n "M" #'crj/switch-to-messages-buffer))
 
 ;; Fixes a bug in RJSX Mode where it doesn't handle the fragment syntax.
 (defun crj/rjsx-electric-gt-fragment-a (n)

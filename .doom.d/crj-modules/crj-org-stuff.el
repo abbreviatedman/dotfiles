@@ -40,7 +40,23 @@
       "* %U %?\n %i\n %a" :heading "Changelog" :prepend t)))
     (setq org-export-with-section-numbers nil)
     (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
-    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
+    (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
+
+(defun crj/sort-org-entries-by-todo-state ()
+  "Sorts children of current heading by order of todo keywords.
+
+See `org-todo-keywords' for what order `org-sort-entries' uses."
+  (interactive)
+  (org-sort-entries nil ?o))
+
+(map! :map org-mode-map :leader
+      :desc "Move subtree up."
+      :n "j" #'org-metadown
+      :desc "Move subtree down."
+      :n "k" #'org-metaup
+      (:prefix "m"
+        :desc "Sort by todo keyword."
+        :n "O" #'crj/sort-org-entries-by-todo-state))
 
 (defun open-calendar ()
   (interactive)
@@ -200,3 +216,17 @@ appropriate.  In tables, insert a new row or end the table."
 
 ;; Show full link text by default.
 (setq org-link-descriptive nil)
+
+(defun JK-org-move-to-extreme (up)
+  "Move current org subtree to the end of its parent.
+With prefix arg move subtree to the start of its parent."
+  (interactive "P")
+  (condition-case err
+      (while t
+        (funcall (if up
+                     'org-move-subtree-up
+                   'org-move-subtree-down)))
+    (user-error
+     (let ((err-msg (cadr err)))
+       (unless (string-match "Cannot move past superior level or buffer limit" err-msg)
+         (signal 'user-error (list err-msg)))))))
