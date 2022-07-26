@@ -208,6 +208,10 @@ appropriate.  In tables, insert a new row or end the table."
       '((heading . auto)
         (plain-list-item . nil)))
 
+(map! :leader (:prefix "i"
+               :desc "Insert timestamp."
+               :n "d" #'org-time-stamp))
+
 (map! :map emacs-everywhere-mode-map :n "ZZ" nil)
 (map! :map emacs-everywhere-mode-map :n "ZZ" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
 

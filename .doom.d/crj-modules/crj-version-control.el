@@ -36,6 +36,12 @@
 (defun crj/push-all ()
   (interactive)
   (magit-stage-modified)
-  (crj/async-shell-command-no-window (format "git commit -m \"Updates %s.\"&"
-                     (projectile-default-project-name (projectile-project-name))))
-  (magit-run-git-async "push"))
+  (let
+      ((display-buffer-alist
+        '(shell-command-buffer-name '(#'display-buffer-no-window)))
+       (inhibit-message t))
+    (shell-command
+     (format "git commit -m \"Updates %s.\""
+             (projectile-default-project-name
+              (projectile-project-name))))
+    (shell-command "git push")))
