@@ -288,3 +288,7 @@
                                       (remq 'builtin (cdr x))))
                        '(builtin none))))
    marginalia-annotator-registry))
+
+;; use completion version—for now, it works better for me
+;; it also works better on smaller screens!
+(setq embark-prompter 'embark-completing-read-prompter)
