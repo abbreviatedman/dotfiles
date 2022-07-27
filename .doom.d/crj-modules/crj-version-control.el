@@ -30,9 +30,9 @@
 
 ;; Adapted from this SO answer: https://emacs.stackexchange.com/questions/21597/using-magit-for-the-most-basic-add-commit-push/64991#64991.
 ;; Only changes were:
-;; 1. Removing the command to save all open buffers. we /could/ save the visited buffer only, though even that should likely be a discrete operation
-;; 2. Removing user input from the commit message altogether. It now creates a commit message using the current projectile project name.
-;; 3. Removing the pop-up git status window using a helper function.
+;; 1. Removing the command to save all open buffers. We /could/ save the visited buffer only, though even that should likely be a discrete operation.
+;; 2. Removing user input from the commit message altogether. It now composes a commit message using the current projectile project name.
+;; 3. Disabling the pop-up git status window. (It still shows in the minibuffer, as well as the buffer `shell-command-buffer-name'.)
 (defun crj/git-cloud-save ()
   (interactive)
   (magit-stage-modified)
