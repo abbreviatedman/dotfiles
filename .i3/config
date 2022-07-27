@@ -446,8 +446,10 @@ mode "move" {
         bindsym $mod+d mode "default"
 }
 
-# Lock screen
+# Lock screen toggle
 # bindsym $mod+9 exec --no-startup-id blurlock
+bindsym $mod+$alt+Ctrl+l exec xautolock -enable
+bindsym $mod+$alt+Ctrl+Shift+l exec xautolock -disable
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1

@@ -33,15 +33,18 @@
 ;; 1. Removing the command to save all open buffers. we /could/ save the visited buffer only, though even that should likely be a discrete operation
 ;; 2. Removing user input from the commit message altogether. It now creates a commit message using the current projectile project name.
 ;; 3. Removing the pop-up git status window using a helper function.
-(defun crj/push-all ()
+(defun crj/git-cloud-save ()
   (interactive)
   (magit-stage-modified)
   (let
       ((display-buffer-alist
-        '(shell-command-buffer-name '(#'display-buffer-no-window)))
-       (inhibit-message t))
+        '(shell-command-buffer-name '(#'display-buffer-no-window))))
     (shell-command
      (format "git commit -m \"Updates %s.\""
              (projectile-default-project-name
               (projectile-project-name))))
     (shell-command "git push")))
+
+(map! :leader (:prefix "g"
+               :desc "Add, commit, and push all to remote."
+               :n "p" #'crj/git-cloud-save))
