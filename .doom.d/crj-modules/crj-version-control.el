@@ -46,5 +46,5 @@
     (shell-command "git push")))
 
 (map! :leader (:prefix "g"
-               :desc "Add, commit, and push all to remote."
+               :desc "Add/commit/push to remote."
                :n "p" #'crj/git-cloud-save))
