@@ -234,3 +234,14 @@ With prefix arg move subtree to the start of its parent."
      (let ((err-msg (cadr err)))
        (unless (string-match "Cannot move past superior level or buffer limit" err-msg)
          (signal 'user-error (list err-msg)))))))
+
+;; Trying to figure out how to change org keyword order temporarily!
+;; Just to play around with it.
+;; However, org is very confusingly written!
+(defun crj/sort-org-entries-by-custom-todo-state ()
+  "Sort entries by a custom keyword order."
+  (interactive)
+  (let ((org-todo-keywords '((sequence "TODO(n)" "DONE(t)" "NEXT(d)")
+ (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
+    (org-reload)
+    (org-sort-entries nil ?o)))
