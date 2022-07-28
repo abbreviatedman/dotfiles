@@ -42,12 +42,24 @@
     (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
     (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
 
-(defun crj/sort-org-entries-by-todo-state ()
+(defun crj/sort-entries-by-todo-state-at-current-level ()
+  "Sorts headings at current level by order of todo-keywords.
+
+See `org-todo-keywords' for what order `org-sort-entries' uses."
+  (interactive)
+  (let ((prev-point (point)))
+    (outline-up-heading 1)
+    (crj/sort-entries-by-todo-state-for-children)
+    (goto-char prev-point)))
+
+(defun crj/sort-entries-by-todo-state-for-children ()
   "Sorts children of current heading by order of todo keywords.
 
 See `org-todo-keywords' for what order `org-sort-entries' uses."
   (interactive)
-  (org-sort-entries nil ?o))
+  (let ((prev-point (point)))
+    (org-sort-entries nil ?o)
+    (goto-char prev-point)))
 
 (map! :map org-mode-map :leader
       :desc "Move subtree up."
@@ -56,7 +68,10 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
       :n "k" #'org-metaup
       (:prefix "m"
         :desc "Sort by todo keyword."
-        :n "O" #'crj/sort-org-entries-by-todo-state))
+        :n "O" #'crj/sort-entries-by-todo-state-at-current-level
+        (:prefix "u"
+         :desc "Sort children by todo keyword."
+         :n "O" #'crj/sort-entries-by-todo-state-for-children)))
 
 (defun open-calendar ()
   (interactive)
