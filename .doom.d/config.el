@@ -417,17 +417,6 @@ It toggles:
                 :desc "Search Google" :n "g" #'engine/search-google
                 :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
-
-(map! :map org-mode-map :leader
-      (:prefix "m"
-       :desc "Next todo GTD-style" :n "m" #'(lambda ()
-                                              (interactive)
-                                              (org-todo 'done)
-                                              (org-forward-heading-same-level 1)
-                                              (org-todo 2))))
-
-
-
 ;; markdown (and some org) key-bindings
 ;; now good mappings
 (evil-define-key '(normal visual) markdown-mode-map
