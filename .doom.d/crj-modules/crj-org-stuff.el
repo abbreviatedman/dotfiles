@@ -122,7 +122,7 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
                                               (interactive)
                                               (org-todo 'done)
                                               (org-forward-heading-same-level 1)
-                                              (org-todo 2))))
+                                              (org-todo 1))))
 
 ;; Emacs user Tecosaur's dwim for hitting return in org mode.
 (defun tecosaur/org-element-descendant-of (type element)
