@@ -102,8 +102,8 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
 (setq org-gcal-fetch-file-alist '(("colin@pursuit.org" . "~/Sync/org/cal.org")))
 
 ;; timestamp manipulation
-(map! :leader :desc "Discover projects in directory" :n "J" #'org-timestamp-down)
-(map! :leader :desc "Discover projects in directory" :n "K" #'org-timestamp-up)
+(map! :leader (:prefix "m" (:prefix "c":desc "Adjust timestamp down." :n "j" #'org-timestamp-down)))
+(map! :leader (:prefix "m" (:prefix "c":desc "Adjust timestamp up." :n "k" #'org-timestamp-up)))
 
 (map! :map org-mode-map (:prefix "[" :n "H" #'outline-up-heading))
 
@@ -238,7 +238,10 @@ appropriate.  In tables, insert a new row or end the table."
 
 (defun JK-org-move-to-extreme (up)
   "Move current org subtree to the end of its parent.
-With prefix arg move subtree to the start of its parent."
+
+With prefix arg move subtree to the start of its parent.
+
+Source: https://emacs.stackexchange.com/a/43662."
   (interactive "P")
   (condition-case err
       (while t
@@ -249,6 +252,20 @@ With prefix arg move subtree to the start of its parent."
      (let ((err-msg (cadr err)))
        (unless (string-match "Cannot move past superior level or buffer limit" err-msg)
          (signal 'user-error (list err-msg)))))))
+
+(defun crj/org-move-item-to-end-of-list ()
+  "Move current item to bottom of list."
+  (interactive)
+  (JK-org-move-to-extreme nil))
+
+(defun crj/org-move-item-to-start-of-list ()
+  "Move current item to top of list."
+  (interactive)
+  (JK-org-move-to-extreme t))
+
+(map! :map org-mode-map :leader
+      :n "J" #'crj/org-move-item-to-end-of-list
+      :n "K" #'crj/org-move-item-to-start-of-list)
 
 ;; Trying to figure out how to change org keyword order temporarily!
 ;; Just to play around with it.
