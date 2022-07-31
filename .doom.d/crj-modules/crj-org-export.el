@@ -9,7 +9,8 @@
                                         (:exports . "both")
                                         (:noweb . "strip-export")
                                         (:session . "none")
-                                        (:eval . "no-export"))))
+                                        (:eval . "no-export")
+                                        (:padline . "no"))))
 
 (defun crj/prettify-js-org-src-block ()
   "Run prettier on source block at point."
