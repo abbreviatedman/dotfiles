@@ -455,8 +455,9 @@ It toggles:
 
 ;; Automatic formatting
 
-;; configure prettier integration
-(add-hook 'after-init-hook #'global-prettier-mode)
+;; Decided to remove format-on-save.
+;; Uncomment the below to bring it back.
+;; (add-hook 'after-init-hook #'global-prettier-mode)
 
 (map! :leader (:prefix "b"
                :desc "Prettify current buffer."
