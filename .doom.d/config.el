@@ -458,6 +458,10 @@ It toggles:
 ;; configure prettier integration
 (add-hook 'after-init-hook #'global-prettier-mode)
 
+(map! :leader (:prefix "b"
+               :desc "Prettify current buffer."
+               :n "P" #'prettier-prettify))
+
 (setenv "NODE_PATH" "/usr/local/lib/node_modules")
 
 ;; black integration
