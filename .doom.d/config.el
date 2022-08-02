@@ -459,6 +459,7 @@ It toggles:
 ;; Uncomment the below to bring it back.
 ;; (add-hook 'after-init-hook #'global-prettier-mode)
 
+;; Manually format JS/HTML/MD instead!
 (map! :leader (:prefix "b"
                :desc "Prettify current buffer."
                :n "P" #'prettier-prettify))
