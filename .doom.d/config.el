@@ -4,6 +4,7 @@
 ;; - SPC TAB a - add buffer to perspective
 ;; - SPC TAB k - remove buffer to perspective
 ;; - SPC TAB t - add buffer to perspective /temporarily/
+; TODO add doom modeline zoom-out
 ; TODO add function to swap ctrl and caps and back
 ; TODO OS should open files with emacsclient
 ; TODO experiment with de-bounce in Planck settings
