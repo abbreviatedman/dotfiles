@@ -8,6 +8,8 @@
 (set-face-attribute 'fixed-pitch nil :family crj/variable-font :height 1.0)
 (set-face-attribute 'default nil :family crj/variable-font :height 120)
 
+(setq all-the-icons-scale-factor 1.0)
+
 (defun crj/change-modeline-height (multiplier &optional reset)
   (interactive)
   (let* ((height (internal-get-lisp-face-attribute 'mode-line :height))
@@ -22,6 +24,9 @@
 ;; testing code
 (internal-get-lisp-face-attribute 'default :height)
 (crj/change-modeline-height 1 t)
+
+;; modeline appearance
+(setq doom-modeline-buffer-file-name-style 'relative-to-project)
 
 ; Ligatures
 (dolist (char/ligature-re
