@@ -545,7 +545,7 @@ It toggles:
 (setq doom-modeline-buffer-encoding nil)
 (setq doom-modeline-lsp nil)
 (setq doom-modeline-env-version nil)
-(setq doom-modeline-indent-info t)
+(setq mode-line-percent-position nil)
 (line-number-mode 0)
 
 ;; Turn the modeline on and off.

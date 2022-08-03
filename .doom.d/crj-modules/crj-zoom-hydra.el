@@ -1,5 +1,6 @@
 (defun crj/zoom-in (arg)
   (interactive "p")
+  (crj/change-modeline-height (* arg text-scale-mode-step))
   (text-scale-increase arg))
 
 (defun crj/zoom-out (arg)
@@ -8,6 +9,7 @@
 
 (defun crj/zoom-reset (arg)
   (interactive "p")
+  (crj/change-modeline-height 1 t)
   (text-scale-increase 0))
 
 (defun crj/zoom-in-all-buffers (arg)
