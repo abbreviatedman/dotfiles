@@ -1,5 +1,5 @@
 ;; org agenda setup
-(setq! org-agenda-files '("~/Sync/org"))
+(setq! org-agenda-files '("~/org-stuff/"))
 (setq! org-agenda-file-regexp "\\`[^.].*\\.org\\'")
 ;; Stop indenting my code blocks. Seriously!
 (setq org-edit-src-content-indentation 0)
@@ -83,7 +83,7 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
 (map! :leader
   (:prefix ("a" . "agenda")
     :desc "view agenda" :n "a" #'org-agenda
-    :desc "view todo-list" :n "t" #'(lambda () (interactive)  (org-todo-list 2))
+    :desc "view todo-list" :n "t" #'(lambda () (interactive)  (org-todo-list 1))
     :desc "capture" :n "x" #'(lambda () (interactive) (find-file "~/Sync/org/capture.org"))
     :desc "view mobile file" :n "m" #'(lambda () (interactive) (find-file "~/Sync/org/phone.org"))
     :desc "task org file" :n "o" #'(lambda () (interactive) (find-file "~/Sync/org/tasks.org"))
