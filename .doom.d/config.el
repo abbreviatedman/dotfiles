@@ -1,9 +1,14 @@
 (mapc 'load (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
 
+; TODO fix display-buffer-alist in crj/git-cloud-save
+; TODO set :leader and number to persp switches
+;; changing custom no-window shell command keybindings
 ; TODO add persp buffer functions to SPC TAB map:
 ;; - SPC TAB a - add buffer to perspective
-;; - SPC TAB k - remove buffer to perspective
+;; - SPC TAB k - remove buffer from perspective
 ;; - SPC TAB t - add buffer to perspective /temporarily/
+;; - SPC TAB S - save workspaces to file
+;; - SPC TAB L - load workspaces from file
 ; TODO add doom modeline zoom-out
 ; TODO add function to swap ctrl and caps and back
 ; TODO OS should open files with emacsclient
