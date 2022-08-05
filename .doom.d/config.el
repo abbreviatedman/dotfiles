@@ -73,14 +73,6 @@
 ;; DONE write theme-switcher function
 ;; DONE function to rename buffer with the project name as a prefix
 
-(defun rename-buffer-with-project-name-prefix ()
-"Prompts the user to rename the buffer, supplying the project prefix."
-  (interactive)
-  (let* ((project-prefix (concat (projectile-default-project-name (projectile-project-name)) "-"))
-         (prompt (concat "New Buffer Name: " project-prefix))
-         (name (concat project-prefix (read-string prompt))))
-    (rename-buffer name)))
-
 ; Projects
 ;; TODO sexp/target text objects
 ;; TODO space liner (look to evil-surround)
@@ -481,10 +473,6 @@ It toggles:
 
 (setq lsp-unzip-script "bash -c 'mkdir -p %2$s && unzip -qq -o %1$s -d %2$s'")
 
-(setq projectile-track-known-projects-automatically nil)
-
-;; Opens minibuffer to select a root folder from which to discover projects.
-(map! :leader (:prefix "p" :desc "Discover projects in directory" :n "D" #'projectile-discover-projects-in-directory))
 
 ;; Pick from kill ring... with completion!
 (global-set-key (kbd "M-p") #'counsel-yank-pop)
@@ -546,8 +534,6 @@ It toggles:
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
                         ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")))
 
-;; Rename buffers.
-(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer-with-project-name-prefix))
 
 ;; Doom Modeline settings.
 (remove-hook 'doom-modeline-mode-hook 'column-number-mode)

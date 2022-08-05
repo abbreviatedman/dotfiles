@@ -22,25 +22,6 @@
 
 (map! :leader (:prefix ("q" . "quit/session") :desc "Kill all terminals." :n "t" #'kill-terminals))
 
-(map! :leader (:prefix ("p" . "project")
-                       :desc "Open a project vterm" :n "v" #'projectile-run-vterm
-                       :desc "Open a new project vterm" :n "V" #'(lambda () (interactive) (projectile-run-vterm 1))
-                       :desc "Open a project eshell" :n "e" 'projectile-run-eshell
-                       :desc "Open a new project eshell" :n "E" #'(lambda () (interactive) (projectile-run-eshell 1))
-                       :desc "Edit project dir-locals" :n "l" #'projectile-edit-dir-locals))
-
-;; SPC p as leader to:
-;;; v - projectile vterm
-;;; V - projectile new vterm
-;;; e - projectile eshell
-;;; E - projectile new eshell
-
-;; SPC p f as leader to:
-;;; f - find-file-other-frame
-;;; v - projectile vterm other frame
-;;; V - projectile new vterm other frame
-;;; e - projectile eshell other frame
-;;; E - projectile new eshell other frame
 
 (map! :leader (:prefix ("v" . "view")
                        :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
