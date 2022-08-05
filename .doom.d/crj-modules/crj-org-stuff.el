@@ -267,6 +267,12 @@ Source: https://emacs.stackexchange.com/a/43662."
       :n "J" #'crj/org-move-item-to-end-of-list
       :n "K" #'crj/org-move-item-to-start-of-list)
 
+(map! :map org-mode-map
+      (:prefix "["
+       :n "[" #'org-backward-heading-same-level)
+      (:prefix "]"
+       :n "]" #'org-forward-heading-same-level))
+
 ;; Trying to figure out how to change org keyword order temporarily!
 ;; Just to play around with it.
 ;; However, org is very confusingly written!
