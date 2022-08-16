@@ -1,6 +1,8 @@
 ;; adds browsing for links
 (package! browse-at-remote)
 
+(package! json-process-client)
+
 ;; send search to browser
 (package! engine-mode)
 
