@@ -28,6 +28,9 @@
 ;; convert html to markdown (atomic chrome gives you html unfortunately)
 (package! html-to-markdown)
 
+;; Rotating thing at point.
+(package! parrot)
+
 ;; cursor highlighting when scrolling or switching buffers
 (package! beacon)
 
