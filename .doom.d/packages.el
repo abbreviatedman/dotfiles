@@ -3,6 +3,8 @@
 
 (package! json-process-client)
 
+(package! enwc)
+
 ;; send search to browser
 (package! engine-mode)
 

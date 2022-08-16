@@ -98,6 +98,8 @@
 
 (setq windmove-wrap-around t)
 
+(setq enwc-default-backend 'nm)
+
 
 ;; initialize the targets package
 (targets-setup t)
