@@ -100,6 +100,9 @@
 
 (setq enwc-default-backend 'nm)
 
+(require 'parrot)
+(define-key evil-normal-state-map (kbd "[r") 'parrot-rotate-prev-word-at-point)
+(define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
 
 ;; initialize the targets package
 (targets-setup t)
