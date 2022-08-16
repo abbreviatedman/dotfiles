@@ -98,11 +98,14 @@
 
 (setq windmove-wrap-around t)
 
-(setq enwc-default-backend 'nm)
+;; network interface (it's... okay)
+(require 'nm)
 
-(require 'parrot)
-(define-key evil-normal-state-map (kbd "[r") 'parrot-rotate-prev-word-at-point)
-(define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
+(use-package! parrot
+  :config
+  (define-key evil-normal-state-map (kbd "[r") 'parrot-rotate-prev-word-at-point)
+  (define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
+  (setq parrot-rotate-dict (append parrot-rotate-dict '((:rot ("const" "let"))))))
 
 ;; initialize the targets package
 (targets-setup t)

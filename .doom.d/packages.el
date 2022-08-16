@@ -14,6 +14,10 @@
 ;; adds gcal integration
 (package! org-gcal)
 
+(package! emacs-nm
+  :recipe
+  (:host github :repo "Kodkollektivet/emacs-nm"))
+
 ;; decent emoji support
 (package! emojify)
 
