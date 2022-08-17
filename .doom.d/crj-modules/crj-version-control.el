@@ -48,3 +48,14 @@ Only changes were:
 (map! :leader (:prefix "g"
                :desc "Add/commit/push to remote."
                :n "p" #'crj/git-cloud-save))
+
+(after! magit
+  (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
+
+(add-hook 'code-review-mode-hook
+          (lambda ()
+            ;; include *Code-Review* buffer into current workspace
+            (persp-add-buffer (current-buffer))))
+
+(setq code-review-auth-login-marker 'forge)
+(setq auth-sources '("~/.authinfo"))
