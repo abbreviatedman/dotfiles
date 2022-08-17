@@ -139,3 +139,6 @@
 
 ;; SSH
 (package! keychain-environment)
+
+;; Github Cloning
+(package! github-clone)
