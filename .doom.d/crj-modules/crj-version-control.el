@@ -29,7 +29,10 @@
 (after! keychain-environment (keychain-refresh-environment))
 
 (defun crj/git-cloud-save ()
-  "Adapted from this SO answer: https://emacs.stackexchange.com/questions/21597/using-magit-for-the-most-basic-add-commit-push/64991#64991.
+  "Adds, commits, and pushes without any further input from the user.
+
+Adapted from this SO answer: https://emacs.stackexchange.com/questions/21597/using-magit-for-the-most-basic-add-commit-push/64991#64991.
+
 Only changes were:
 1. Removing the command to save all open buffers. We /could/ save the visited buffer only, though even that should likely be a discrete operation.
 2. Removing user input from the commit message altogether. It now composes a commit message using the current projectile project name.
