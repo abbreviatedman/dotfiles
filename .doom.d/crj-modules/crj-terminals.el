@@ -139,3 +139,70 @@ This is useful for times when you want a command to create an output buffer with
       ((display-buffer-alist
         '(window-name '(#'display-buffer-no-window))))
     (call-interactively command)))
+
+(defun crj/set-up-vterm ()
+  (turn-off-evil-mode))
+
+(add-hook 'vterm-mode-hook #'crj/set-up-vterm)
+
+(defun crj/toggle-evil-in-vterm ()
+  "Toggles evil mode in Vterm so as to leave ESC to the shell's keybindings.
+
+To use:
+
+(add-hook 'vterm-mode-hook #'turn-off-evil-mode) ; start with evil turned off
+(add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm) ; runs on entering /or/ leaving Vterm Copy Mode).
+
+The problem we're trying to solve here is that if you want to use both Emacs' Evil Mode and your shell's Vim keybindings, then when you press ESC to switch to Normal Mode, do you want Evil Mode's Normal Mode or the shell's Normal Mode? Without a solution, Evil Mode will greedily gobble the ESC up and you'll be unable to enter your shell's Vim emulation. So we need to be able to disambiguate which Normal Mode we want to enter.
+
+This function provides a solution that leverages Vterm Copy Mode to give Emacs an alternative way to exit to Evil's Normal Mode, leaving ESC to the shell.
+
+An alternative solution is to keep ESC for Evil's Normal Mode and use a different keybinding for the shell's Normal Mode.
+
+Here are a couple ways to do that:
+
+1. Set a non-ESC keybinding for entering normal mode in your shell's config file.
+
+- You can do this in your bash configuration file:
+
+bind '\"jk\":vi-movement-mode'
+
+Source: URL'https://unix.stackexchange.com/a/303401'
+
+- For zsh, you can use the following in your config file:
+
+bindkey -M viins jk vi-cmd-mode
+
+Source: URL'https://unix.stackexchange.com/a/697026'
+
+- For zsh, you could also use the excellent zsh plugin Zsh Vim Mode (URL'https://github.com/softmoth/zsh-vim-mode'), which has many benefits including additional ways you can customize entering Normal Mode.
+
+2. An alternative method for keeping ESC reserved for Evil Mode is to leverage Vterm Mode's ability to send a key directly to the shell. You can do this, for example:
+
+(define-key vterm-mode-map (kbd \"C-c <escape>\") #'vterm-send-escape)
+
+This will mean that using ~C-c <escape>~ will send the escape key to your shell. ~ESC~ goes to Evil, while ~C-c ESC~ sends ESC to your shell. This means you can use ESC in other places in your shell besides the direct command line, which can be useful for interactive shell programs as well. (Thus, this is recommended even with this function's solution.)
+
+In short, this function's solution allows you to have the same exact experience in a Vterm as you do in a non-Emacs terminal emulator.
+
+The advantage of the other solutions is that you keep the same Emacs Evil keybinding of ESC even in Vterm Mode.
+
+Which solution works for you likely depends on which workflow you prioritize and which context you want to context-switch in."
+
+  (interactive)
+  (if (bound-and-true-p vterm-copy-mode)
+      (progn
+        (turn-on-evil-mode)
+        (evil-normal-state))
+    (evil-insert-state)
+    (turn-off-evil-mode)))
+
+(map! :map vterm-mode-map
+      "C-c q" #'vterm-copy-mode
+      "C-c t" #'vterm-copy-mode)
+
+(map! :map vterm-copy-mode-map
+      "C-c t" #'vterm-copy-mode
+      "C-c i" #'vterm-copy-mode)
+
+(add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)

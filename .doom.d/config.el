@@ -350,7 +350,9 @@ See `transpose-chars' for more info on the original function."
 (setq crj/presentation-theme-nighttime 'modus-operandi)
 
 ;; But turn them off in text and shell modes.
-(defun crj/turn-off-ligatures-in-buffer () (auto-composition-mode -1))
+(defun crj/turn-off-ligatures-in-buffer ()
+  (auto-composition-mode -1))
+
 (setq crj/no-ligatures-hooks '(text-mode-hook vterm-mode-hook eshell-mode-hook))
 (dolist (hook crj/no-ligatures-hooks)
   (add-hook hook #'crj/turn-off-ligatures-in-buffer))
