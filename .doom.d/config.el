@@ -98,8 +98,13 @@
 
 (setq windmove-wrap-around t)
 
-;; network interface (it's... okay)
+;; network interface
 (require 'nm)
+(map! :leader (:prefix "o"
+               :desc "Connect to network."
+               :n "c" 'nm/connect-with-profile
+               :desc "Connect to new network."
+               :n "C" 'nm/connect-basic))
 
 (use-package! parrot
   :config

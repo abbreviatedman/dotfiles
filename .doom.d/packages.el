@@ -16,7 +16,9 @@
 
 (package! emacs-nm
   :recipe
-  (:host github :repo "abbreviatedman/emacs-nm"))
+  (:host github
+   :repo "abbreviatedman/emacs-nm"
+   :branch "main"))
 
 ;; decent emoji support
 (package! emojify)
