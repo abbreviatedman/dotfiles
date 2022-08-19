@@ -120,6 +120,7 @@
 ;; operator that replaces a motion/text object with what's in a register (the " register by default).
 (map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
 
+;; Evil settings.
 (setq evil-ex-substitute-global 1)
 (setq evil-want-minibuffer nil)
 (setq +evil-want-o/O-to-continue-comments nil)
