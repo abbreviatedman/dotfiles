@@ -1227,3 +1227,10 @@ SSID
 NetworkManager
 nmcli
 vpn
+vterm
+cmd
+bindkey
+crj
+turn
+kbd
+vterm
