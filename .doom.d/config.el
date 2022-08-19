@@ -106,11 +106,42 @@
                :desc "Connect to new network."
                :n "C" 'nm/connect-basic))
 
+;; Rotate the symbol at point.
 (use-package! parrot
   :config
   (define-key evil-normal-state-map (kbd "[r") 'parrot-rotate-prev-word-at-point)
   (define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
   (setq parrot-rotate-dict (append parrot-rotate-dict '((:rot ("const" "let"))))))
+
+(plist-get (car parrot-rotate-dict) :rot)
+
+(defun crj/flatten-list (list)
+  "A function to flatten the given LIST.
+Taken from https://stackoverflow.com/a/13173391.
+
+With a minor bug fix of adding `cl-loop' in place of `loop'"
+  (cl-loop for e in list
+           nconc
+           (if (consp e)
+               (copy-list e)
+             (list e))))
+
+(defun crj/parrot-extra--get-symbols-from-rotation-list (list)
+  "Returns just the symbols from the rotation list LIST."
+  (plist-get list :rot))
+
+(defun crj/parrot-extra--get-parrot-symbols ()
+  "This function returns every symbol in the `parrot-rotate-dict'"
+  (crj/flatten-list
+   (mapcar #'crj/parrot-extra--get-symbols-from-rotation-list parrot-rotate-dict)))
+
+(defun crj/parrot-extra--parrot-symbol-p (symbol)
+  "Returns `t' if SYMBOL is in `parrot-rotate-dict'."
+  (member symbol (crj/parrot-extra--get-parrot-symbols)))
+
+;; tests for the above
+(crj/parrot-extra--parrot-symbol-p "colin")
+(crj/parrot-extra--parrot-symbol-p "const")
 
 ;; initialize the targets package
 (targets-setup t)
