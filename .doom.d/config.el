@@ -743,9 +743,14 @@ instead."
 (after! sqlup-mode
   (add-to-list 'sqlup-blacklist "name"))
 
+;; Browse with EWW. (& to open in default browser after.)
+(defun crj/browse-with-eww-in-same-window (url &rest _args)
+  "Function to browse eww in the same window.
 
-;; Browse with EWW. (& to switch to open in default browser after.)
-(setq browse-url-browser-function 'eww)
+Probably something like this already exists!"
+  (eww-browse-url url t))
+
+(setq browse-url-browser-function 'crj/browse-with-eww-in-same-window)
 
 ;; Atomic Chrome
 (atomic-chrome-start-server)
