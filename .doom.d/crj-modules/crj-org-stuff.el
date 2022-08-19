@@ -283,3 +283,11 @@ Source: https://emacs.stackexchange.com/a/43662."
  (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
     (org-reload)
     (org-sort-entries nil ?o)))
+
+(defun crj/open-tasks-file ()
+  (interactive)
+  (find-file "/home/abbreviatedman/org-stuff/readme.org"))
+
+(map! :leader (:prefix "o"
+               :desc "Open tasks repo."
+               :n "o" #'crj/open-tasks-file))
