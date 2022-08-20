@@ -165,36 +165,6 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
             kill-buffer-query-functions))
 (setq confirm-kill-emacs nil)
 
-; Markdown
-
-;; Promote/demote headlines.
-(map! :map markdown-mode-map "M-l" #'markdown-demote)
-(map! :map markdown-mode-map "M-h" #'markdown-promote)
-;; Tell markdown mode to stop over-indenting lists.
-(setq markdown-list-indent-width 2)
-;; Make markdown continue lists on enter.
-(setq markdown-indent-on-enter 'indent-and-new-item)
-;; (slow) syntax coloration in markdown blocks
-(setq markdown-fontify-code-blocks-natively t)
-
-(map! :map (evil-markdown-mode gfm-mode) :leader
-      (:prefix "e"
-       :desc "Add markdown item" :n "i" #'markdown-insert-list-item
-       :desc "Go to next section" :n "j" #'markdown-forward-same-level
-       :desc "Go to previous section" :n "k" #'markdown-backward-same-level
-       :desc "Repair list" :n "r" #'org-list-repair
-       :desc "Toggle checkbox" :n "m" #'markdown-toggle-gfm-checkbox))
-
-;; Set gj/gk to vim's visual line navigation instead of markdown's headline-jumping.
-(map!
- :map (markdown-mode-map gfm-mode-map org-mode-map)
-  :n "gj" nil
-  :n "gk" nil)
-(map!
- :map (markdown-mode-map gfm-mode-map org-mode-map)
-  :n "gj" #'evil-next-visual-line
-  :n "gk" #'evil-previous-visual-line)
-
 ;; turn on transparency to start with
 ;; (set-frame-parameter (selected-frame) 'alpha '(85 . 75))
 ;; (add-to-list 'default-frame-alist '(alpha . (85 . 75)))
@@ -374,9 +344,6 @@ See `transpose-chars' for more info on the original function."
         ((and (not crj/daytime-p) (not crj/presentation-mode-p))
          crj/working-theme-nighttime)))
 
-(setq markdown-header-scaling t)
-(setq markdown-header-scaling-values '(2.5 2.0 2.0 1.5 1.0 1.0))
-
 (defun crj/switch-to-appropriate-theme ()
   "Switch to the theme appropriate to the time of day and presentation mode."
   (mapc #'disable-theme custom-enabled-themes)
@@ -454,7 +421,7 @@ It toggles:
 ;; Best way to remove global-hl-line-mode in Doom.
 (remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
 
-                                        ; Search specific engines.
+; Search specific engines.
 (engine-mode t)
 
 (defengine duck-duck-go
@@ -463,19 +430,15 @@ It toggles:
   "https://www.google.com/search?q=%s")
 (defengine google-images
   "https://www.google.com/search?tbm=isch&q=%s")
-(map! :leader (:prefix "s"
-               :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
-               (:prefix "g"
-                :desc "Search Google" :n "g" #'engine/search-google
-                :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
-;; markdown (and some org) key-bindings
-;; now good mappings
-(evil-define-key '(normal visual) markdown-mode-map
-  "gj" #'evil-next-visual-line
-  "gk" #'evil-previous-visual-line)
+(map!
+ :leader
+ (:prefix "s"
+  :desc "Search DuckDuckGo" :n "h" #'engine/search-duck-duck-go
+  (:prefix "g"
+   :desc "Search Google" :n "g" #'engine/search-google
+   :desc "Search Google Images" :n "i" #'engine/search-google-images)))
 
-;; open the result of a search in a new frame
 (map! :leader
       :desc "find file other frame" "o f" #'find-file-other-frame)
 
@@ -492,8 +455,8 @@ It toggles:
 (map! :n "g b" #'org-open-at-point)
 
 ;; Snipe settings
-;; Look through whole buffer, not just line
 
+;; Look through whole buffer, not just line
 (setq evil-snipe-scope 'whole-buffer)
 (setq evil-snipe-repeat-scope 'whole-buffer)
 
@@ -505,7 +468,7 @@ It toggles:
 
 (setq undo-fu-allow-undo-in-region t)
 
-;; Automatic formatting
+;; formatting
 
 ;; Decided to remove format-on-save.
 ;; Uncomment the below to bring it back.

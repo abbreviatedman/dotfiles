@@ -4,6 +4,18 @@
 ;; Stop indenting my code blocks. Seriously!
 (setq org-edit-src-content-indentation 0)
 
+(map!
+ :leader
+ (:prefix "m"
+  :desc "Repair list" :n "r" #'org-list-repair))
+
+(map!
+ :map org-mode-map
+ :n "gj" nil
+ :n "gk" nil
+ :n "gj" #'evil-next-visual-line
+ :n "gk" #'evil-previous-visual-line)
+
 (after! org
   (setq org-startup-folded 'showall)
   (setq +org-capture-notes-file "inbox.org")
