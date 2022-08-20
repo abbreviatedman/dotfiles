@@ -16,7 +16,10 @@
                :n "l" #'crj/open-elisp-reference-manual
                :n "L" #'crj/open-intro-to-elisp))
 
-;; Evaluate things in Info Mode.
+;; An overabundance of keybindings for evaluating expressions in Info Mode.
 (map! :map Info-mode-map
+      :n "C-v" #'eros-eval-last-sexp
       :n "C-c C-e" #'eros-eval-last-sexp
-      :n "C-c e" #'eros-eval-last-sexp)
+      :n "C-c e" #'eros-eval-last-sexp
+      :leader (:prefix "m"
+               :n "e" #'eros-eval-last-sexp))
