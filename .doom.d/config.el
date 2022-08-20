@@ -98,6 +98,9 @@
 
 (setq windmove-wrap-around t)
 
+;; Start with lisp!
+(setq initial-major-mode 'emacs-lisp-mode)
+
 ;; network interface
 (require 'nm)
 (map! :leader (:prefix "o"
