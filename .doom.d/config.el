@@ -477,7 +477,7 @@ It toggles:
 ;; Manually format JS/HTML/MD instead!
 (map! :leader (:prefix "b"
                :desc "Prettify current buffer."
-               :n "P" #'prettier-prettify))
+               :n "p" #'prettier-prettify))
 
 (setenv "NODE_PATH" "/usr/local/lib/node_modules")
 
