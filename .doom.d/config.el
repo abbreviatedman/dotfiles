@@ -488,8 +488,7 @@ It toggles:
 
 
 ;; Pick from kill ring... with completion!
-(global-set-key (kbd "M-p") #'counsel-yank-pop)
-
+(map! "M-p" #'consult-yank-from-kill-ring)
 
 ;; smooth scrolling config
 
