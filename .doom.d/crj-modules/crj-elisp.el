@@ -16,10 +16,13 @@
                :n "l" #'crj/open-elisp-reference-manual
                :n "L" #'crj/open-intro-to-elisp))
 
-;; An overabundance of keybindings for evaluating expressions in Info Mode.
-(map! :map Info-mode-map
-      :n "C-v" #'eros-eval-last-sexp
-      :n "C-c C-e" #'eros-eval-last-sexp
-      :n "C-c e" #'eros-eval-last-sexp
-      :leader (:prefix "m"
-               :n "e" #'eros-eval-last-sexp))
+;; Quicker evaluation keybindings.
+(map! :leader (:prefix "c"
+               :desc "Evaluate buffer/region."
+                :n "b" #'+eval/buffer-or-region
+               :desc "Evaluate last expression."
+                :n "e" #'eros-eval-last-sexp
+               :desc "Evaluate and replace region."
+                :n "E" #'+eval:replace-region
+               :desc "Evaluate top-level form."
+               :n "f" #'eros-eval-defun))
