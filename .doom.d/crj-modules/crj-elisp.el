@@ -3,11 +3,18 @@
 (defun crj/open-intro-to-elisp ()
   "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info node '(eintr)'), re-using the current window."
   (interactive)
-  (info (Info-find-file "eintr"))
+  (info "eintr")
+  (delete-other-windows))
+
+(defun crj/open-elisp-reference-manual ()
+  "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node '(elisp)'), re-using the current window."
+  (interactive)
+  (info "elisp")
   (delete-other-windows))
 
 (map! :leader (:prefix "o"
-               :n "l" #'crj/open-intro-to-elisp))
+               :n "l" #'crj/open-elisp-reference-manual
+               :n "L" #'crj/open-intro-to-elisp))
 
 ;; Evaluate things in Info Mode.
 (map! :map Info-mode-map
