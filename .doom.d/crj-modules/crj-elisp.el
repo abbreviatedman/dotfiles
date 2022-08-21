@@ -1,4 +1,6 @@
-; Learning elisp.
+; Elisp
+
+;; Learning elisp.
 
 (defun crj/open-intro-to-elisp ()
   "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info node '(eintr)'), re-using the current window."
@@ -15,6 +17,8 @@
 (map! :leader (:prefix "o"
                :n "l" #'crj/open-elisp-reference-manual
                :n "L" #'crj/open-intro-to-elisp))
+
+;; Evaluating Elisp
 
 (map! :leader :n "e" #'+eval:region)
 (map! :leader :n "E" #'+eval:replace-region)
