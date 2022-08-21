@@ -22,3 +22,12 @@
 
 (map! :leader :n "e" #'+eval:region)
 (map! :leader :n "E" #'+eval:replace-region)
+
+;; Manipulating Expressions
+;; Lisp structural editing commands without a lispy-like mode.
+(map! :leader
+      (:prefix ("y" . "lisp")
+       :desc "slurp" "s" #'sp-forward-slurp-sexp
+       :desc "barf" "b" #'sp-forward-barf-sexp
+       :desc "raise" "r" #'sp-raise-sexp))
+
