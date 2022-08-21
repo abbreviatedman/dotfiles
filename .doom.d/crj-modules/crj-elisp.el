@@ -1,6 +1,6 @@
 ; Elisp
 
-;; Learning elisp.
+;; Learning Elisp.
 
 (defun crj/open-intro-to-elisp ()
   "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info node '(eintr)'), re-using the current window."
