@@ -5,9 +5,11 @@ Passes on arguments to `doom/open-scratch-buffer'. See that function's doc strin
 
 Setting `doom-scratch-initial-major-mode' to `t' was supposed to handle the \"use the same mode\" part, but it does not appear to be working. So: hack."
   (interactive)
-  (let ((new-mode major-mode))
+  (let ((previous-mode major-mode)
+        (read-only-p buffer-read-only))
     (doom/open-scratch-buffer new-buffer-p project-p same-window-p)
-    (funcall new-mode)))
+    (unless read-only-p
+      (funcall previous-mode))))
 
 (defun crj/open-scratch-buffer-in-new-window ()
   "Open the scratch buffer in the same window with the current buffer's mode applied."
