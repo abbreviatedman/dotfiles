@@ -232,4 +232,4 @@ prioritize and which context you want to context-switch in."
       "C-c t" #'vterm-copy-mode
       "C-c i" #'vterm-copy-mode)
 
-(add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
+;; (add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
