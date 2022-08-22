@@ -188,19 +188,33 @@ bindkey -M viins jk vi-cmd-mode
 
 Source: URL'https://unix.stackexchange.com/a/697026'
 
-- For zsh, you could also use the excellent zsh plugin Zsh Vim Mode (URL'https://github.com/softmoth/zsh-vim-mode'), which has many benefits including additional ways you can customize entering Normal Mode.
+- For zsh, you could also use the excellent zsh plugin Zsh Vim
+  Mode (URL'https://github.com/softmoth/zsh-vim-mode'), which has
+  many benefits including additional ways you can customize
+  entering Normal Mode.
 
-2. An alternative method for keeping ESC reserved for Evil Mode is to leverage Vterm Mode's ability to send a key directly to the shell. You can do this, for example:
+2. An alternative method for keeping ESC reserved for Evil Mode
+is to leverage Vterm Mode's ability to send a key directly to the
+shell. You can do this, for example:
 
 (define-key vterm-mode-map (kbd \"C-c <escape>\") #'vterm-send-escape)
 
-This will mean that using ~C-c <escape>~ will send the escape key to your shell. ~ESC~ goes to Evil, while ~C-c ESC~ sends ESC to your shell. This means you can use ESC in other places in your shell besides the direct command line, which can be useful for interactive shell programs as well. (Thus, this is recommended even with this function's solution.)
+This will mean that using ~C-c <escape>~ will send the escape key
+to your shell. ~ESC~ goes to Evil, while ~C-c ESC~ sends ESC to
+your shell. This means you can use ESC in other places in your
+shell besides the direct command line, which can be useful for
+interactive shell programs as well. (Thus, this is recommended
+even with this function's solution.)
 
-In short, this function's solution allows you to have the same exact experience in a Vterm as you do in a non-Emacs terminal emulator.
+In short, this function's solution allows you to have the same
+exact experience in a Vterm as you do in a non-Emacs terminal
+emulator.
 
-The advantage of the other solutions is that you keep the same Emacs Evil keybinding of ESC even in Vterm Mode.
+The advantage of the other solutions is that you keep the same
+Emacs Evil keybinding of ESC even in Vterm Mode.
 
-Which solution works for you likely depends on which workflow you prioritize and which context you want to context-switch in."
+Which solution works for you likely depends on which workflow you
+prioritize and which context you want to context-switch in."
 
   (interactive)
   (if (bound-and-true-p vterm-copy-mode)
