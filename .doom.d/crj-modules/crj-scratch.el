@@ -41,3 +41,5 @@ Setting `doom-scratch-initial-major-mode' to `t' was supposed to handle the \"us
       (:prefix "o"
        :n "x" #'crj/open-scratch-buffer
        :n "X" #'crj/open-scratch-buffer-in-new-window))
+
+(setq doom-scratch-dir "~/Documents/work/playground/")
