@@ -43,7 +43,10 @@ Currently is slightly off-kilter for non-Visual-Block visual modes."
   (evil-visual-line)
   (forward-line -1))
 
-(map! :leader :n "k" #'space-liner-bring-line-up)
-(map! :leader :n "j" #'space-liner-bring-line-down)
-(map! :leader :v "k" #'space-liner-bring-line-up-visual-mode)
-(map! :leader :v "j" #'space-liner-bring-line-down-visual-mode)
+(evil-define-key 'normal 'global
+  (kbd "SPC j") #'space-liner-bring-line-down
+  (kbd "SPC k") #'space-liner-bring-line-up)
+
+(evil-define-key 'visual 'global
+  (kbd "SPC k") #'space-liner-bring-line-up-visual-mode
+  (kbd "SPC j") #'space-liner-bring-line-down-visual-mode)
