@@ -225,8 +225,8 @@ prioritize and which context you want to context-switch in."
     (turn-off-evil-mode)))
 
 (map! :map vterm-mode-map
-      "C-c q" #'vterm-copy-mode
-      "C-c t" #'vterm-copy-mode)
+      "C-c t" #'vterm-copy-mode
+      "C-c n" #'vterm-copy-mode)
 
 (map! :map vterm-copy-mode-map
       "C-c t" #'vterm-copy-mode
