@@ -150,18 +150,31 @@ This is useful for times when you want a command to create an output buffer with
 
 To use:
 
-(add-hook 'vterm-mode-hook #'turn-off-evil-mode) ; start with evil turned off
-(add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm) ; runs on entering /or/ leaving Vterm Copy Mode).
+;; Start with evil turned off.
+(add-hook 'vterm-mode-hook #'turn-off-evil-mode)
+;; Add to the copy-mode hook.
+;; Which runs on entering /or/ leaving Vterm Copy Mode.
+(add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
 
-The problem we're trying to solve here is that if you want to use both Emacs' Evil Mode and your shell's Vim keybindings, then when you press ESC to switch to Normal Mode, do you want Evil Mode's Normal Mode or the shell's Normal Mode? Without a solution, Evil Mode will greedily gobble the ESC up and you'll be unable to enter your shell's Vim emulation. So we need to be able to disambiguate which Normal Mode we want to enter.
+The problem we're trying to solve here is that if you want to use
+both Emacs' Evil Mode and your shell's Vim keybindings, then when
+you press ESC to switch to Normal Mode, do you want Evil Mode's
+Normal Mode or the shell's Normal Mode? Without a solution, Evil
+Mode will greedily gobble the ESC up and you'll be unable to
+enter your shell's Vim emulation. So we need to be able to
+disambiguate which Normal Mode we want to enter.
 
-This function provides a solution that leverages Vterm Copy Mode to give Emacs an alternative way to exit to Evil's Normal Mode, leaving ESC to the shell.
+This function provides a solution that leverages Vterm Copy Mode
+to give Emacs an alternative way to exit to Evil's Normal Mode,
+leaving ESC to the shell.
 
-An alternative solution is to keep ESC for Evil's Normal Mode and use a different keybinding for the shell's Normal Mode.
+An alternative solution is to keep ESC for Evil's Normal Mode and
+use a different keybinding for the shell's Normal Mode.
 
 Here are a couple ways to do that:
 
-1. Set a non-ESC keybinding for entering normal mode in your shell's config file.
+1. Set a non-ESC keybinding for entering normal mode in your
+shell's config file.
 
 - You can do this in your bash configuration file:
 
