@@ -140,10 +140,13 @@ This is useful for times when you want a command to create an output buffer with
         '(window-name '(#'display-buffer-no-window))))
     (call-interactively command)))
 
+;; Good for playing nice with vi mode shell keybindings. See `crj/toggle-evil-in-vterm' for more info.
 (defun crj/set-up-vterm ()
   (turn-off-evil-mode))
 
-(add-hook 'vterm-mode-hook #'crj/set-up-vterm)
+;; Hook for running above function for each new vterm buffer.
+;; Turned off for now.
+;; (add-hook 'vterm-mode-hook #'crj/set-up-vterm)
 
 (defun crj/toggle-evil-in-vterm ()
   "Toggles evil mode in Vterm so as to leave ESC to the shell's keybindings.
