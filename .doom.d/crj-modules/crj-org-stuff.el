@@ -4,6 +4,17 @@
 ;; Stop indenting my code blocks. Seriously!
 (setq org-edit-src-content-indentation 0)
 
+(map!
+ :leader
+ (:prefix "m"
+  :desc "Repair list" :n "r" #'org-list-repair))
+
+(map!
+ :map evil-org-mode-map
+ :n "gj" #'evil-next-visual-line
+ :n "gk" #'evil-previous-visual-line
+ :n "zR" #'org-fold-show-all)
+
 (after! org
   (setq org-startup-folded 'showall)
   (setq +org-capture-notes-file "inbox.org")
@@ -61,17 +72,20 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
     (org-sort-entries nil ?o)
     (goto-char prev-point)))
 
-(map! :map org-mode-map :leader
-      :desc "Move subtree up."
-      :n "j" #'org-metadown
-      :desc "Move subtree down."
-      :n "k" #'org-metaup
-      (:prefix "m"
-        :desc "Sort by todo keyword."
-        :n "O" #'crj/sort-entries-by-todo-state-at-current-level
-        (:prefix "u"
-         :desc "Sort children by todo keyword."
-         :n "O" #'crj/sort-entries-by-todo-state-for-children)))
+
+(evil-define-key 'normal org-mode-map
+  (kbd "SPC j") #'org-metadown
+  (kbd "SPC k") #'org-metaup)
+
+(map!
+ :map org-mode-map
+ :leader
+ (:prefix "m"
+  :desc "Sort by todo keyword."
+  :n "O" #'crj/sort-entries-by-todo-state-at-current-level
+  (:prefix "u"
+   :desc "Sort children by todo keyword."
+   :n "O" #'crj/sort-entries-by-todo-state-for-children)))
 
 (defun open-calendar ()
   (interactive)

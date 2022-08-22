@@ -1,4 +1,6 @@
-; Learning elisp.
+; Elisp
+
+;; Learning Elisp.
 
 (defun crj/open-intro-to-elisp ()
   "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info node '(eintr)'), re-using the current window."
@@ -16,10 +18,16 @@
                :n "l" #'crj/open-elisp-reference-manual
                :n "L" #'crj/open-intro-to-elisp))
 
-;; An overabundance of keybindings for evaluating expressions in Info Mode.
-(map! :map Info-mode-map
-      :n "C-v" #'eros-eval-last-sexp
-      :n "C-c C-e" #'eros-eval-last-sexp
-      :n "C-c e" #'eros-eval-last-sexp
-      :leader (:prefix "m"
-               :n "e" #'eros-eval-last-sexp))
+;; Evaluating Elisp
+
+(map! :leader :n "e" #'+eval:region)
+(map! :leader :n "E" #'+eval:replace-region)
+
+;; Manipulating Expressions
+;; Lisp structural editing commands without a lispy-like mode.
+(map! :leader
+      (:prefix ("y" . "lisp")
+       :desc "slurp" "s" #'sp-forward-slurp-sexp
+       :desc "barf" "b" #'sp-forward-barf-sexp
+       :desc "raise" "r" #'sp-raise-sexp))
+

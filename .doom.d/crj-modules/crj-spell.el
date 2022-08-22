@@ -25,9 +25,10 @@
          :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
 
 ;; spellcheck settings
-(map! :leader
-      (:prefix "e"
-       :desc "Spellcheck buffer" :n "s" #'ispell-buffer))
+(map!
+ :leader
+ (:prefix "m"
+  :desc "Spellcheck buffer" :n "s" #'ispell-buffer))
 
 (setq flyspell-highlight-flag t
       ispell-silently-savep t
