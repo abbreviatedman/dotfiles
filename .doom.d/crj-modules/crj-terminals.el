@@ -1,3 +1,5 @@
+(require 'dwim-shell-commands)
+
 (defun crj/toggle-eshell-scrollback ()
   (interactive)
   (if (equal eshell-scroll-to-bottom-on-output 'all)
