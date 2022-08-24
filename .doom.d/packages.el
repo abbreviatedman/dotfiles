@@ -147,3 +147,6 @@
 
 ;; Github Cloning
 (package! github-clone)
+
+;; Mail
+(package! org-mime)
