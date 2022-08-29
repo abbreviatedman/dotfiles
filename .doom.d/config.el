@@ -748,7 +748,7 @@ instead."
 Probably something like this already exists!"
   (eww-browse-url url t))
 
-(setq browse-url-browser-function 'crj/browse-with-eww-in-same-window)
+(setq browse-url-browser-function 'browse-url-default-browser)
 
 ;; Atomic Chrome
 (atomic-chrome-start-server)
