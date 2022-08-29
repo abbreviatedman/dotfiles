@@ -38,6 +38,9 @@
 ;; convert html to markdown (atomic chrome gives you html unfortunately)
 (package! html-to-markdown)
 
+;; Wrapper for shell commands.
+(package! dwim-shell-command)
+
 ;; Rotating thing at point.
 (package! parrot)
 
@@ -150,3 +153,6 @@
 
 ;; Github Cloning
 (package! github-clone)
+
+;; Mail
+(package! org-mime)
