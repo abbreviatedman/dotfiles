@@ -80,7 +80,13 @@
 ;; streaming radio
 (package! eradio)
 
+;; Org exporters.
 (package! ox-reveal)
+(package! ox-slack
+  :recipe
+  (:host github
+   :repo "masukomi/ox-slack"
+   :branch "community"))
 
 ; automatic code reformatting
 
