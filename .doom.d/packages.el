@@ -124,6 +124,13 @@
 (package! cape)
 (package! consult-yasnippet)
 
+;; Slack
+(package! request)
+(package! oauth2)
+(package! circe)
+(package! emacs-slack
+  :recipe (:host github :repo "stonekyx/emacs-slack"))
+
 ;; Don't use Doom's snippets:
 ;; (package! doom-snippets :ignore t)
 (package! yasnippet)

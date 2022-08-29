@@ -748,6 +748,8 @@ instead."
 Probably something like this already exists!"
   (eww-browse-url url t))
 
+;; password management
+(setq auth-sources '(password-store))
 (setq browse-url-browser-function 'browse-url-default-browser)
 
 ;; Atomic Chrome
