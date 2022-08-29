@@ -121,13 +121,67 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
 
 (map! :map org-mode-map (:prefix "[" :n "H" #'outline-up-heading))
 
+;; Hack to keep flycheck mode off in org-trello buffers
+(put 'org-trello-mode 'mode-class 'special)
+
 ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+;; Additionally, turn off some modes and settings that conflict with org-trello.
 (defun crj/add-org-trello-mode-maybe ()
-  (let ((filename (buffer-file-name (current-buffer))))
-    (when (and filename (string= "trello" (file-name-extension filename)))
-      (org-trello-mode))))
+  (let ((old-warning-suppress-types warning-suppress-types))
+    (setq-local warning-suppress-types (append warning-suppress-types '((org-element-cache))))
+    (let ((filename (buffer-file-name (current-buffer))))
+      (if (and filename (string= "trello" (file-name-extension filename)))
+          (progn
+            (org-trello-mode)
+            (flyspell-mode -1))
+        (setq-local warning-suppress-types old-warning-suppress-types)))))
 
 (add-hook 'org-mode-hook 'crj/add-org-trello-mode-maybe)
+
+(map! :map org-trello-mode-map
+      :leader
+      (:prefix ("m" . "Markup")
+       (:prefix ("t" . "Trello")
+        :desc "Assign a user to card."
+        :n "a" #'org-trello-toggle-assign-user
+        :desc "Assign yourself to card."
+        :n "A" #'org-trello-toggle-assign-me
+        :desc "Browse trello board."
+        :n "b" #'org-trello-jump-to-trello-board
+        :desc "Browse trello card."
+        :n "B" #'org-trello-jump-to-trello-card
+        :desc "Remove current entity."
+        :n "k" #'org-trello-kill-entity
+        :desc "Sync buffer to Trello."
+        :n "g" #'org-trello-sync-buffer
+        :desc "Sync buffer from Trello."
+        :n "G" #'(lambda () (interactive) (org-trello-sync-buffer t))
+        :desc "Sync card to Trello."
+        :n "c" #'org-trello-sync-card
+        :desc "Sync card from Trello."
+        :n "C" #'(lambda () (interactive) (org-trello-sync-card t))
+        :desc "Add comment to card."
+        "r" #'org-trello-add-card-comment
+        :desc "Sync comment."
+        "R" #'org-trello-sync-comment)))
+
+;; "a" #'org-trello-toggle-assign-user
+;; "A" #'org-trello-toggle-assign-me
+;; "b" #'org-trello-jump-to-trello-board
+;; "B" #'org-trello-jump-to-trello-card
+;; "k" #'org-trello-kill-entity
+;; (:prefix "c"
+;; "s" #'org-trello-sync-card
+;; "c" #'org-trello-sync-card
+;; "S" #'(lambda () (interactive) (org-trello-sync-card t)))
+;; (:prefix "g"
+;; "g" #'org-trello-sync-buffer
+;; "s" #'org-trello-sync-buffer
+;; "S" #'(lambda () (interactive) (org-trello-sync-buffer t)))
+;; (:prefix "r"
+;; "n" #'org-trello-add-card-comment
+;; "r" #'org-trello-add-card-comment
+;; "s" #'org-trello-sync-comment)
 
 ;; Mark current todo DONE and next todo NEXT
 (map! :map org-mode-map :leader
