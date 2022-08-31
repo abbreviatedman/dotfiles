@@ -4,8 +4,9 @@
 ;; org export settings
 (after! org
   (setq org-html-postamble nil
-        org-export-with-toc nil)
-  (setq org-babel-default-header-args `((:results . "verbatim pp replace output")
+        org-export-with-toc nil
+        org-export-headline-levels 6
+        org-babel-default-header-args `((:results . "verbatim pp replace output")
                                         (:exports . "both")
                                         (:noweb . "strip-export")
                                         (:session . "none")
