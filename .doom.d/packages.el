@@ -83,12 +83,18 @@
 (package! eradio)
 
 ;; Org exporters.
-(package! ox-reveal)
+(package! org-pandoc-import
+  :recipe (:host github
+           :repo "tecosaur/org-pandoc-import"
+           :files ("*.el" "filters" "preprocessors")))
+
 (package! ox-slack
   :recipe
   (:host github
    :repo "masukomi/ox-slack"
    :branch "community"))
+
+(package! ox-reveal)
 
 ; automatic code reformatting
 

@@ -16,3 +16,6 @@
 ;; TODO add to it, maybe make it a global file or host on a CDN.
 (setq org-html-head-extra
       "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>")
+
+;; convert TO Org
+(use-package! org-pandoc-import :after org)
