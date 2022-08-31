@@ -15,12 +15,12 @@
 
 (setq vterm-always-compile-module t)
 
-  (defun kill-terminals ()
-	 (interactive)
-	 (mapc (lambda (buffer)
-           (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
-             (kill-buffer buffer)))
-         (buffer-list)))
+(defun kill-terminals ()
+  (interactive)
+  (mapc (lambda (buffer)
+          (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
+            (kill-buffer buffer)))
+        (buffer-list)))
 
 (map! :leader (:prefix ("q" . "quit/session") :desc "Kill all terminals." :n "t" #'kill-terminals))
 

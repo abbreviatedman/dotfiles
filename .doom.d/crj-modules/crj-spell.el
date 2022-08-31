@@ -14,9 +14,12 @@
 (map! :n "zw" nil)
 (map! :n "zw" #'crj/beespell-remove-word)
 
-; case management
+;; unhacking Doom's keymap
+
 (map! :n "zc" nil)
 (map! (:prefix "z"
+       :desc "Open all folds."
+       :n "R" #'org-fold-show-all
        (:prefix ("c" . "Manage case")
         (:desc "Cycle Case" :n "z" #'string-inflection-all-cycle
          :desc "Switch to camelCase" :n "c" #'string-inflection-lower-camelcase

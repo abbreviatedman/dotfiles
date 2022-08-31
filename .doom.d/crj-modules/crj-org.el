@@ -9,49 +9,50 @@
  (:prefix "m"
   :desc "Repair list" :n "r" #'org-list-repair))
 
-(map!
- :map evil-org-mode-map
- :n "gj" #'evil-next-visual-line
- :n "gk" #'evil-previous-visual-line
- :n "zR" #'org-fold-show-all)
 
 (after! org
-  (setq org-startup-folded 'showall)
+  (setq org-startup-folded 'showeverything)
   (setq +org-capture-notes-file "inbox.org")
   (setq +org-capture-todo-file "inbox.org")
   (setq org-capture-templates
-    '(("t" "Personal todo" entry
-      (file+headline +org-capture-todo-file "Todos")
-      "* TODO %?\n%i\n%a" :prepend t)
-    ("n" "Personal notes" entry
-      (file+headline +org-capture-notes-file "Notes")
-      "* %?\n%i\n%a" :prepend t)
-    ("j" "Journal" entry
-      (file+olp+datetree +org-capture-journal-file)
-      "* %U %?\n%i\n%a" :prepend t)
-    ("p" "Templates for projects")
-    ("pt" "Project-local todo" entry
-      (file+headline +org-capture-project-todo-file "Inbox")
-      "* TODO %?\n%i\n%a" :prepend t)
-    ("pn" "Project-local notes" entry
-      (file+headline +org-capture-project-notes-file "Inbox")
-      "* %U %?\n%i\n%a" :prepend t)
-    ("pc" "Project-local changelog" entry
-      (file+headline +org-capture-project-changelog-file "Unreleased")
-      "* %U %?\n%i\n%a" :prepend t)
-    ("o" "Centralized templates for projects")
-    ("ot" "Project todo" entry
-      #'+org-capture-central-project-todo-file
-      "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
-    ("on" "Project notes" entry
-      #'+org-capture-central-project-notes-file
-      "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
-    ("oc" "Project changelog" entry
-      #'+org-capture-central-project-changelog-file
-      "* %U %?\n %i\n %a" :heading "Changelog" :prepend t)))
-    (setq org-export-with-section-numbers nil)
-    (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
-    (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
+        '(("t" "Personal todo" entry
+           (file+headline +org-capture-todo-file "Todos")
+           "* TODO %?\n%i\n%a" :prepend t)
+          ("n" "Personal notes" entry
+           (file+headline +org-capture-notes-file "Notes")
+           "* %?\n%i\n%a" :prepend t)
+          ("j" "Journal" entry
+           (file+olp+datetree +org-capture-journal-file)
+           "* %U %?\n%i\n%a" :prepend t)
+          ("p" "Templates for projects")
+          ("pt" "Project-local todo" entry
+           (file+headline +org-capture-project-todo-file "Inbox")
+           "* TODO %?\n%i\n%a" :prepend t)
+          ("pn" "Project-local notes" entry
+           (file+headline +org-capture-project-notes-file "Inbox")
+           "* %U %?\n%i\n%a" :prepend t)
+          ("pc" "Project-local changelog" entry
+           (file+headline +org-capture-project-changelog-file "Unreleased")
+           "* %U %?\n%i\n%a" :prepend t)
+          ("o" "Centralized templates for projects")
+          ("ot" "Project todo" entry
+           #'+org-capture-central-project-todo-file
+           "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
+          ("on" "Project notes" entry
+           #'+org-capture-central-project-notes-file
+           "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
+          ("oc" "Project changelog" entry
+           #'+org-capture-central-project-changelog-file
+           "* %U %?\n %i\n %a" :heading "Changelog" :prepend t)))
+  (setq org-export-with-section-numbers nil)
+  (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
+  (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)")))
+  (map! :map evil-org-mode-map :n "zR" nil)
+  (map!
+   :map evil-org-mode-map
+   :n "gj" #'evil-next-visual-line
+   :n "gk" #'evil-previous-visual-line
+   :n "zR" #'org-fold-show-all))
 
 (defun crj/sort-entries-by-todo-state-at-current-level ()
   "Sorts headings at current level by order of todo-keywords.
