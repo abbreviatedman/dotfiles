@@ -60,17 +60,26 @@ Forget where I got this, but it's pretty sweet."
 
 (add-hook 'mu4e-compose-pre-hook #'crj/set-from-address)
 
-(after! 'mu4e
+(after! mu4e
   (add-to-list 'mu4e-headers-custom-markers
                '("All"
                  (lambda (msg param) t)
                  (lambda () nil))))
 
-(defun crj/mark-all-as-read ()
-  (interactive)
-  (mu4e-headers-mark-for-each-if
-   '(read . nil)
-   (lambda (msg _param) t))
-  (mu4e-mark-execute-all t))
+;; TODO Should probably return to the below to see if I can manage multiple addresses better
+;; (set-email-account!
+;;  "posteo.de"
+;;  '((mu4e-sent-folder . "/posteo/Sent")
+;;    (mu4e-drafts-folder . "/posteo/Drafts")
+;;    (mu4e-trash-folder . "/posteo/Trash")
+;;    (mu4e-refile-folder . "/posteo/INBOX")
+;;    (smtpmail-smtp-user . "abbreviatedman@posteo.net")
+;;    (+mu4e-personal-addresses . '("colin@pursuit.org"
+;;                                  "colin.jaffe@gmail.com"
+;;                                  "balloonasaurus@gmail.com"
+;;                                  "abbreviatedman@posteo.net"
+;;                                  "abbreviatedman@posteo.af")))
+;;  t)
 
-(map! :map mu4e-headers-mode-map :n "M" 'crj/mark-all-as-read)
+
+;; Mark all.
