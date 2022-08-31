@@ -76,9 +76,10 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
     (goto-char prev-point)))
 
 
-(evil-define-key 'normal org-mode-map
-  (kbd "SPC j") #'org-metadown
-  (kbd "SPC k") #'org-metaup)
+;; There were problems with regular space liner in org mode. I'm going to try it again, though, so this can go away for now.
+;; (evil-define-key 'normal org-mode-map
+;;   (kbd "SPC j") #'org-metadown
+;;   (kbd "SPC k") #'org-metaup)
 
 (map!
  :map org-mode-map
