@@ -47,6 +47,7 @@
            (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
            (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
 
+;; This works for removing Doom's bindings.
 (after! evil-org
   (map! :map evil-org-mode-map
         :n "gj" nil
