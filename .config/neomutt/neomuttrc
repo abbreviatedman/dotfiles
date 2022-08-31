@@ -1,0 +1,50 @@
+## Neomutt configuration file located at ~/.config/neomutt/neomuttrc
+set from='abbreviatedman@posteo.net'
+set realname='Colin Jaffe'
+set sendmail = "/usr/sbin/msmtp -a posteo"
+set sendmail_wait = 0
+unset record
+
+set header_cache='~/.cache/neomutt/headers'
+set message_cachedir='~/.cache/neomutt/bodies'
+set certificate_file='~/.cache/neomutt/certificates'
+
+# My mailboxes
+set folder ='~/.local/mail/posteo'
+set spoolfile='+INBOX'
+set postponed='+Drafts'
+set record='+Sent'
+set trash='+Trash'
+mailboxes =INBOX =Archive =Sent =Trash =Drafts
+
+# Personal preferences
+set date_format="%y/%m/%d %I:%M%p"
+set editor='nvim'
+set sort=threads
+set sort='reverse-date'
+set forward_format = "Fwd: %s"
+set include
+
+# Set key bindings
+bind compose p postpone-message
+bind index p recall-message
+macro index G "!mbsync -a -c ~/.mbsyncrc" "Update through mbsync"
+
+# Sidebar settings
+set sidebar_visible=yes
+set sidebar_width=20
+set sidebar_short_path = yes
+set sidebar_next_new_wrap = yes
+set mail_check_stats
+#set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
+bind index,pager \Ck sidebar-prev
+bind index,pager \Cj sidebar-next
+bind index,pager \Co sidebar-open
+bind index,pager \Cp sidebar-prev-new
+bind index,pager \Cn sidebar-next-new
+bind index,pager B sidebar-toggle-visible
+
+# HTML settings
+set mailcap_path = ~/.config/neomutt/mailcap
+alternative_order text/plain text/enriched text/html
+macro attach 'V' "<pipe-entry>iconv -c --to-code=UTF-8 > ~/.cache/neomutt/neomail.html<enter><shell-escape>$BROWSER ~/.cache/neomutt/neomail.html<enter>"
