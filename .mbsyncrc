@@ -1,0 +1,20 @@
+IMAPStore posteo-remote
+Host posteo.de
+Port 993
+User abbreviatedman@posteo.net
+PassCmd "pass mail"
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+MaildirStore posteo-local
+Path ~/.local/mail/posteo/
+Inbox ~/.local/mail/posteo/INBOX
+Subfolders Verbatim
+
+Channel posteo
+Far :posteo-remote:
+Near :posteo-local:
+Create Both
+Expunge Both
+Patterns *
+SyncState *
