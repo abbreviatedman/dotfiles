@@ -17,3 +17,5 @@
 	user = abbreviatedman
 [include]
 	path = ~/.private.gitconfig
+[github]
+	user = abbreviatedman
