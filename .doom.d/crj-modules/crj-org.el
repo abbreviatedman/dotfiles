@@ -47,6 +47,15 @@
            (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
            (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
 
+(after! evil-org
+  (map! :map evil-org-mode-map
+        :n "gj" nil
+        :n "gk" nil
+        :n "gj" #'evil-next-visual-line
+        :n "gk" #'evil-previous-visual-line
+        :n "zR" nil
+        :n "zR" #'org-fold-show-all))
+
 (defun crj/sort-entries-by-todo-state-at-current-level ()
   "Sorts headings at current level by order of todo-keywords.
 
