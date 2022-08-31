@@ -133,6 +133,9 @@
                :desc "Run project shell command without a window opening."
                :n "1" #'crj/projectile-run-shell-command-in-root-no-window))
 
+;; TODO maybe this code can help?
+;; (add-to-list 'display-buffer-alist
+;; 	     (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 (defun crj/call-and-bury-window-from-interactive-command (command window-name)
   "A helper function that calls COMMAND interactively while preventing any buffer with the name WINDOW-NAME from creating a window.
 
