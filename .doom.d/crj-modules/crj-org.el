@@ -56,6 +56,22 @@
         :n "zR" nil
         :n "zR" #'org-fold-show-all))
 
+
+(defun crj/prettify-js-org-src-block ()
+  "Run prettier on source block at point."
+  (interactive)
+  (org-edit-src-code)
+  (prettier-prettify)
+  (org-edit-src-exit))
+
+(map! :map org-mode-map
+      :leader
+      (:prefix "m"
+       (:prefix "p"
+        :desc "Prettify source block at point."
+        :n "j" #'crj/prettify-js-org-src-block)))
+
+
 (defun crj/sort-entries-by-todo-state-at-current-level ()
   "Sorts headings at current level by order of todo-keywords.
 
