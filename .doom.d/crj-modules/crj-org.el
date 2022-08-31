@@ -9,8 +9,8 @@
  (:prefix "m"
   :desc "Repair list" :n "r" #'org-list-repair))
 
-
-(after! org
+(use-package! org
+  :config
   (setq org-startup-folded 'showeverything)
   (setq +org-capture-notes-file "inbox.org")
   (setq +org-capture-todo-file "inbox.org")
@@ -44,15 +44,8 @@
           ("oc" "Project changelog" entry
            #'+org-capture-central-project-changelog-file
            "* %U %?\n %i\n %a" :heading "Changelog" :prepend t)))
-  (setq org-export-with-section-numbers nil)
-  (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
-  (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)")))
-  (map! :map evil-org-mode-map :n "zR" nil)
-  (map!
-   :map evil-org-mode-map
-   :n "gj" #'evil-next-visual-line
-   :n "gk" #'evil-previous-visual-line
-   :n "zR" #'org-fold-show-all))
+           (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
+           (setq org-todo-keywords '((sequence "NEXT(n)" "TODO(t)" "DONE(d)") (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
 
 (defun crj/sort-entries-by-todo-state-at-current-level ()
   "Sorts headings at current level by order of todo-keywords.
