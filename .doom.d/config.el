@@ -208,7 +208,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (setq! tab-width 2)
 (setq! evil-shift-width 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
-(dtrt-indent-mode)
+(dtrt-indent-global-mode)
 
 ;; use indent of 2 for html
 (defun my-web-mode-hook ()
