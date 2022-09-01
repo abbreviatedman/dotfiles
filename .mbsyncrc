@@ -7,8 +7,8 @@ SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 MaildirStore posteo-local
-Path ~/.local/mail/posteo/
-Inbox ~/.local/mail/posteo/INBOX
+Path ~/.local/mail/posteo/abbreviatedman/
+Inbox ~/.local/mail/posteo/abbreviatedman/INBOX
 Subfolders Verbatim
 
 Channel posteo
