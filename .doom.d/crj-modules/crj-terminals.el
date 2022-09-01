@@ -50,12 +50,15 @@
     (switch-to-buffer-other-frame buf))
   (+eshell/here))
 
+(defun crj/vterm-in-current-directory ()
+  (+vterm/here t))
+
 ;; set up did-you-mean suggestions
 ; (eshell-did-you-mean-setup)
 
 ;; open terminals
 (map! :leader (:prefix ("o" . "open")
-                       :desc "Open vterm buffer" :n "v" #'+vterm/here
+                       :desc "Open vterm buffer in current directory" :n "v" #'crj/vterm-in-current-directory
                        :desc "Open vterm in other frame" :n "V" #'open-vterm-other-frame
                        :desc "Open eshell buffer" :n "e" #'+eshell/here
                        :desc "Open eshell in other frame" :n "E" #'open-eshell-other-frame))
