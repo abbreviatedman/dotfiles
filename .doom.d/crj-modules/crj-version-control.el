@@ -55,4 +55,3 @@ Only changes were:
             (persp-add-buffer (current-buffer))))
 
 (setq code-review-auth-login-marker 'forge)
-(setq auth-sources '("~/.authinfo"))
