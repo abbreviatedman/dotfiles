@@ -51,6 +51,7 @@
   (+eshell/here))
 
 (defun crj/vterm-in-current-directory ()
+  (interactive)
   (+vterm/here t))
 
 ;; set up did-you-mean suggestions
