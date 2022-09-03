@@ -24,11 +24,9 @@
 (setq auto-save-file-name-transforms
   `((".*" "~/.emacs.d/backups/" t)))
 
-
 ;; automatically reload file (on focus) with changes on local filesystem
 ;; useful for when you change the file in another app
 ;; or it's changed programmatically
 (global-auto-revert-mode t)
 
 ;; TODO add projectile cache update advice to new file creation
-;; TODO remove completion from minibuffer
