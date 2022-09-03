@@ -5,18 +5,20 @@
 ;; (add-load-path! "/home/abbreviatedman/.emacs.d/.local/straight/repos/dirvish/extensions/")
 ;; (add-load-path! "/home/abbreviatedman/.emacs.d/.local/straight/repos/dirvish/")
 
-(use-package! dired
-  :hook (dired-mode . dired-omit-mode))
+;; (use-package! dired
+;; :hook dired-omit-mode
+;; :config (evil-define-key 'normal dired-mode-map "q" nil))
+
+(add-hook 'dired-mode-hook #'dired-omit-mode)
 
 (use-package! dirvish
   :after (dired)
   :init
   (dirvish-override-dired-mode)
-  ; (evil-define-key)
-  :hook (dired-mode . dired-omit-mode)
   :config
-  (setq dirvish-cache-dir (concat doom-cache-dir "dirvish/")
-        dirvish-hide-details t
+  (evil-define-key 'normal dired-mode-map "q" nil)
+  (setq dirvish-hide-details t
+        dirvish-cache-dir (concat doom-cache-dir "dirvish/")
         dired-listing-switches "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group"
         dirvish-attributes '(git-msg
                              vc-state
@@ -25,7 +27,7 @@
                              all-the-icons))
   :bind
   (("C-c f" . dirvish-fd)
-   :map dirvish-mode-map
+   :map dired-mode-map
    ("q" . dirvish-quit)
    ("b" . dirvish-goto-bookmark)
    ("z" . dirvish-show-history)
@@ -49,6 +51,30 @@
    ("M-s" . dirvish-setup-menu)
    ("M-e" . dirvish-emerge-menu)
    ("M-j" . dirvish-fd-jump)))
+;; (map! :map dired-mode-map
+;;         :n "q" #'dirvish-quit
+;;         :n "b" #'dirvish-goto-bookmark
+;;         :n "z" #'dirvish-show-history
+;;         :n "F" #'dirvish-toggle-fullscreen
+;;         :n "l" #'dired-find-file
+;;         :n "h" #'dired-up-directory
+;;         :n "C-c" #'dired-omit-mode
+;;         :n "e"   #'dired-create-empty-file
+;;         :n "f"   #'dirvish-file-info-menu
+;;         :n "N"   #'dirvish-narrow
+;;         :n "^"   #'dirvish-history-last
+;;         :n "h"   #'dirvish-history-jump
+;;         :n "s"   #'dirvish-quicksort
+;;         :n "v"   #'dirvish-vc-menu
+;;         :n "TAB" #'dirvish-subtree-toggle
+;;         :n "M-f" #'dirvish-history-go-forward
+;;         :n "M-b" #'dirvish-history-go-backward
+;;         :n "M-l" #'dirvish-ls-switches-menu
+;;         :n "M-m" #'dirvish-mark-menu
+;;         :n "M-t" #'dirvish-layout-toggle
+;;         :n "M-s" #'dirvish-setup-menu
+;;         :n "M-e" #'dirvish-emerge-menu
+;;         :n "M-j" #'dirvish-fd-jump)
 
 (use-package! dirvish-collapse
   :after (dirvish))
