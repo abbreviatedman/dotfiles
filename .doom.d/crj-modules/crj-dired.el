@@ -23,7 +23,6 @@
         dirvish-attributes '(vc-state
                              subtree-state
                              symlink-target
-                             hl-line
                              collapse
                              file-size))
   (map! :leader :n "d" #'dired-jump)
