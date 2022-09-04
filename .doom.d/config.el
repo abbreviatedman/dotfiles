@@ -264,12 +264,12 @@ Also fixes a pernicious issue where line numbers become variable pitch fonts alo
 (defun crj/evil-tranpose-chars ()
   "Transpose characters as one evil action.
 
-        Wraps the function `transpose-chars' so that it's more in the style of Evil Mode/Vim. (See info node `(evil)Overview')
+Wraps the function `transpose-chars' so that it's more in the style of Evil Mode/Vim. (See info node `(evil)Overview')
 
-        - Acts on the current character and the one to the right, which is more in line with Vim's Normal Mode style.
-        - Adds the entire process as one action, adding undo/repeat ability.
+- Acts on the current character and the one to the right, which is more in line with Vim's Normal Mode style.
+- Adds the entire process as one action, adding undo/repeat ability.
 
-        This differs greatly from the more Emacs-like `transpose-chars', which allows you to drag a character forward as far as you want, using a count,, but this author found that he preferred the atomicity of Normal Mode.
+This differs greatly from the more Emacs-like `transpose-chars', which allows you to drag a character forward as far as you want, using a count,, but this author found that he preferred the atomicity of Normal Mode.
 
 See `transpose-chars' for more info on the original function."
   (interactive)
