@@ -1,11 +1,13 @@
 ;; Load my (many) config files. But not the flycheck ones.
 ;; Not sure I /needed/ to avoid loading those.
 ;; But I /did/ want to practice my lisp-fu!
-(let* ((unsanitized-modules (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
+(defun crj--not-a-flycheck-filename-p (filename)
+  (not (string-search "flycheck" filename)))
+
+(let* ((unsanitized-modules
+        (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
        (modules
-        (seq-filter
-         (lambda (module) (not (string-search "flycheck" module)))
-         unsanitized-modules)))
+        (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
   (mapc 'load modules))
 
 ; TODO fix display-buffer-alist in crj/git-cloud-save
