@@ -59,7 +59,10 @@
 (package! color-theme-sanityinc-solarized)
 
 ;; Modus themes
-(package! modus-themes)
+(package! modus-themes
+  :recipe (:host nil
+           :type git
+           :repo "https://git.sr.ht/~protesilaos/modus-themes"))
 
 ;; Zenburn theme
 (package! zenburn-theme)
