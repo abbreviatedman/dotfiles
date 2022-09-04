@@ -41,3 +41,9 @@
   :desc "barf" :n "b" #'sp-forward-barf-sexp
   :desc "raise" :n "r" #'sp-raise-sexp))
 
+;;; Gotta catch 'em all.
+(map!
+ :leader
+ (:prefix ("t" . "Toggle")
+  :desc "Toggle debugging during elisp errors."
+  :n "B" #'toggle-debug-on-error))
