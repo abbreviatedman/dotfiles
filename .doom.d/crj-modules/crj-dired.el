@@ -2,12 +2,12 @@
 
 ;; For now, prioritize dirvish bookmarks over the debugger.
 (map! :leader
-        (:prefix ("o" . "+open")
-         :n "d" nil
-         :desc "Go to bookmarked directories."
-         :n "d" #'dirvish-quick-access
-         :desc "Open debugger."
-         :n "D" #'+debugger/start))
+      (:prefix ("o" . "+open")
+       :n "d" nil
+       :desc "Go to bookmarked directories."
+       :n "d" #'dirvish-quick-access
+       :desc "Open debugger."
+       :n "D" #'+debugger/start))
 
 ;; Dirvish improves dired while retaining all of its native amazing features.
 (use-package! dirvish
@@ -15,6 +15,7 @@
   :init
   (dirvish-override-dired-mode)
   :config
+  (dirvish-peek-mode)
   (evil-define-key 'normal dired-mode-map "q" nil)
   (setq dirvish-hide-details t
         dirvish-cache-dir (concat doom-cache-dir "dirvish/")
@@ -56,9 +57,6 @@
 (use-package! dirvish-history
   :after (dirvish))
 
-(use-package! dirvish-history
-  :after (dirvish))
-
 (use-package! dirvish-icons
   :after (dirvish))
 
@@ -72,10 +70,6 @@
 
 (use-package! dirvish-narrow
   :after (dirvish))
-
-(use-package! dirvish-peek
-  :after (dirvish)
-  :config (dirvish-peek-mode))
 
 (use-package! dirvish-quick-access
   :after (dirvish)
@@ -98,13 +92,14 @@
 
 (use-package! dirvish-yank
   :after (dirvish)
+  :custom
+  (dirvish-yank-keys '(("p" "Yank (paste) here" dirvish-yank)
+                       ("m" "Move here" dirvish-move)
+                       ("s" "Make symlinks here" dirvish-symlink)
+                       ("r" "Make relative symlinks here" dirvish-relative-symlink)
+                       ("h" "Make hardlinks here" dirvish-hardlink)))
   :config
-  (setq dirvish-yank-new-name-style 'append-to-filename
-        dirvish-yank-keys '(("p" "Yank (paste) here" dirvish-yank)
-                            ("m" "Move here" dirvish-move)
-                            ("s" "Make symlinks here" dirvish-symlink)
-                            ("r" "Make relative symlinks here" dirvish-relative-symlink)
-                            ("h" "Make hardlinks here" dirvish-hardlink)))
+  (setq dirvish-yank-new-name-style 'append-to-filename)
   (map!
    :map dirvish-mode-map
    :n "p" #'dirvish-yank-menu))
