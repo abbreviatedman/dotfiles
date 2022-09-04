@@ -177,3 +177,8 @@
 
 ;; Better file manager.
 (package! dirvish)
+
+;; Visual regexp.
+(package! visual-regexp)
+;;; Allows for regexes that aren't escaped for Emacs.
+(package! visual-regexp-steroids)
