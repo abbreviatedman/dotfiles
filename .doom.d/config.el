@@ -581,7 +581,7 @@ It toggles:
 ;; presenting code
 
 (map! :leader
-      (:prefix "t"
+      (:prefix ("t" . "toggle")
        :desc "toggle radio" :n "m" #'eradio-toggle
        :desc "play radio channel" :n "M" #'eradio-play
        :desc "toggle pomodoro clock" :n "c" #'org-pomodoro

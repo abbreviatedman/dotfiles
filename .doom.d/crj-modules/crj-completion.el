@@ -54,8 +54,11 @@
   (setq lsp-eldoc-enable-hover nil))
 
 (add-hook 'lsp-mode-hook #'crj/setup-lsp)
-(map! :leader (:prefix "t"
-               :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
+
+(map!
+ :leader
+ (:prefix ("t" . "toggle")
+  :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
 (after! orderless (crj/set-up-orderless))
 

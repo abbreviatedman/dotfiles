@@ -21,20 +21,23 @@
   (info "elisp")
   (delete-other-windows))
 
-(map! :leader (:prefix "o"
-               :n "l" #'crj/open-elisp-reference-manual
-               :n "L" #'crj/open-intro-to-elisp))
+(map!
+ :leader
+ (:prefix "o"
+  :n "l" #'crj/open-elisp-reference-manual
+  :n "L" #'crj/open-intro-to-elisp))
 
-;; Evaluating Elisp
+;;; Evaluating Elisp
 
 (map! :leader :n "e" #'+eval:region)
 (map! :leader :n "E" #'+eval:replace-region)
 
-;; Manipulating Expressions
-;; Lisp structural editing commands without a lispy-like mode.
-(map! :leader
-      (:prefix ("y" . "lisp")
-       :desc "slurp" "s" #'sp-forward-slurp-sexp
-       :desc "barf" "b" #'sp-forward-barf-sexp
-       :desc "raise" "r" #'sp-raise-sexp))
+;;; Manipulating Expressions
+;;; Lisp structural editing commands without a lispy-like mode.
+(map!
+ :leader
+ (:prefix ("y" . "lisp")
+  :desc "slurp" :n "s" #'sp-forward-slurp-sexp
+  :desc "barf" :n "b" #'sp-forward-barf-sexp
+  :desc "raise" :n "r" #'sp-raise-sexp))
 
