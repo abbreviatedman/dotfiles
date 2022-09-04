@@ -173,6 +173,4 @@
 (package! org-mime)
 
 ;; Better file manager.
-(package! dirvish
-  :recipe (:host github
-           :repo "alexluigit/dirvish"))
+(package! dirvish)
