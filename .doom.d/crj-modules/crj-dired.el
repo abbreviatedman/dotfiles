@@ -20,16 +20,18 @@
   (setq dirvish-hide-details t
         dirvish-cache-dir (concat doom-cache-dir "dirvish/")
         dired-listing-switches "-l --almost-all --human-readable --time-style=long-iso --group-directories-first --no-group"
-        dirvish-attributes '(git-msg
-                             vc-state
-                             expanded-state
-                             file-size
-                             all-the-icons))
+        dirvish-attributes '(vc-state
+                             subtree-state
+                             symlink-target
+                             hl-line
+                             collapse
+                             file-size))
+  (map! :leader :n "d" #'dired-jump)
   (map! :map dirvish-mode-map
         "C-c ." #'dired-omit-mode
         :n "q" #'dirvish-quit
-        :n "b" #'dirvish-goto-bookmark
         :n "F" #'dirvish-layout-toggle
+        :n "b" #'dirvish-quick-access
         :n "l" #'dired-find-file
         :n "h" #'dired-up-directory
         :n "e"   #'dired-create-empty-file
@@ -61,9 +63,7 @@
   :after (dirvish))
 
 (use-package! dirvish-layout
-  :after (dirvish)
-  :config
-  (map! :leader :n "d" #'dirvish-dwim))
+  :after (dirvish))
 
 (use-package! dirvish-ls
   :after (dirvish))
@@ -75,7 +75,9 @@
   :after (dirvish)
   :custom
   (dirvish-quick-access-entries '(("d" "~/Downloads/" "Downloads")
-                                  ("h" "~/"           "Home"))))
+                                  ("h" "~/"           "Home")
+                                  ("p" "~/Documents/side-projects/" "Side Projects")
+                                  ("w" "~/Documents/work/" "Work"))))
 
 (use-package! dirvish-side
   :after (dirvish)
