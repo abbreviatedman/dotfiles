@@ -1,6 +1,13 @@
-; Elisp
+;; Elisp
 
-;; Learning Elisp.
+;;; Prettifying.
+;;; I'm not a huge fan of ligatures in general.
+;;; But the lambda symbol is a nice shortening.
+(add-hook 'lisp-mode-hook
+          #'(lambda () (setq-local prettify-symbols-alist
+                              (append prettify-symbols-alist '(("lambda" . λ))))))
+
+;;; Learning Elisp.
 
 (defun crj/open-intro-to-elisp ()
   "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info node '(eintr)'), re-using the current window."

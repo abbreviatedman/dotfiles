@@ -368,6 +368,7 @@ See `transpose-chars' for more info on the original function."
 (setq crj/presentation-mode-line-height 320)
 (setq crj/working-line-number-type 'relative)
 (setq crj/presentation-line-number-type t)
+(global-prettify-symbols-mode 1)
 
 (defun crj/toggle-presentation-mode ()
   "Toggles between presenting code and working with code.
