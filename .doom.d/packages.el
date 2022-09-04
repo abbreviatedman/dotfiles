@@ -182,3 +182,11 @@
 (package! visual-regexp)
 ;;; Allows for regexes that aren't escaped for Emacs.
 (package! visual-regexp-steroids)
+
+;; Undo
+
+;;; Persist undo across restarts.
+(package! undo-fu-session)
+
+;;; Visualize undo.
+(package! vundo)
