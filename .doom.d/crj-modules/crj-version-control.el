@@ -44,7 +44,9 @@ Only changes were:
 
 (map! :leader (:prefix "g"
                :desc "Add/commit/push to remote."
-               :n "p" #'crj/git-cloud-save))
+               :n "p" #'crj/git-cloud-save
+               :desc "Magit pull."
+               :n "P" #'magit-pull))
 
 (after! magit
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
