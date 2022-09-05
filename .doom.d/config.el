@@ -252,14 +252,12 @@ Also fixes a pernicious issue where line numbers become variable pitch fonts alo
 
 (add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
 
+;; Not currently using this, could be useful again though.
 (defun crj/swap-chars ()
   (interactive)
   (when (evil-normal-state-p)
     (transpose-chars 1)
     (backward-char)))
-
-;; TODO make this its own function rather than advice.
-(advice-add 'emojify-insert-emoji :after 'crj/swap-chars)
 
 (defun crj/evil-tranpose-chars ()
   "Transpose characters as one evil action.
