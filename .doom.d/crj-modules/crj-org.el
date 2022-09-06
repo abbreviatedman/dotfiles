@@ -1,6 +1,6 @@
 ;; org agenda setup
 (setq! org-agenda-files '("~/org-stuff/"))
-(setq +org-capture-emails-file '("/home/abbreviatedman/org-stuff/readme.org"))
+(setq! +org-capture-emails-file "~/org-stuff/readme.org")
 (setq! org-agenda-file-regexp "\\`[^.].*\\.org\\'")
 ;; Stop indenting my code blocks. Seriously!
 (setq org-edit-src-content-indentation 0)
