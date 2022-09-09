@@ -22,11 +22,15 @@
             (kill-buffer buffer)))
         (buffer-list)))
 
-(map! :leader (:prefix ("q" . "quit/session") :desc "Kill all terminals." :n "t" #'kill-terminals))
+(map! :leader
+      (:prefix ("q" . "quit/session")
+       :desc "Kill all terminals."
+       :n "t" #'kill-terminals))
 
 
-(map! :leader (:prefix ("v" . "view")
-                       :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
+(map! :leader
+      (:prefix ("v" . "view")
+       :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
 
 ;; start every emacs frame as a terminal by default
 ;; (add-hook 'emacs-startup-hook '+eshell/here)
@@ -58,11 +62,16 @@
 ; (eshell-did-you-mean-setup)
 
 ;; open terminals
-(map! :leader (:prefix ("o" . "open")
-                       :desc "Open vterm buffer in current directory" :n "v" #'crj/vterm-in-current-directory
-                       :desc "Open vterm in other frame" :n "V" #'open-vterm-other-frame
-                       :desc "Open eshell buffer" :n "e" #'+eshell/here
-                       :desc "Open eshell in other frame" :n "E" #'open-eshell-other-frame))
+(map! :leader
+      (:prefix ("o" . "open")
+       :desc "Open vterm buffer in current directory"
+       :n "v" #'crj/vterm-in-current-directory
+       :desc "Open vterm in other frame"
+       :n "V" #'open-vterm-other-frame
+       :desc "Open eshell buffer"
+       :n "e" #'+eshell/here
+       :desc "Open eshell in other frame"
+       :n "E" #'open-eshell-other-frame))
 
 ;; Toggleable vterm/eshell popups
 (map! :map evil-normal-state :leader
@@ -131,11 +140,12 @@
 (map! :leader :n "&" #'async-shell-command)
 (map! :leader :n "1" #'crj/shell-command-no-window)
 (map! :leader :n "!" #'shell-command)
-(map! :leader (:prefix "p"
-               :desc "Run project async shell command without a window opening."
-               :n "7" #'crj/projectile-run-async-shell-command-in-root-no-window
-               :desc "Run project shell command without a window opening."
-               :n "1" #'crj/projectile-run-shell-command-in-root-no-window))
+(map! :leader
+      (:prefix "p"
+       :desc "Run project async shell command without a window opening."
+       :n "7" #'crj/projectile-run-async-shell-command-in-root-no-window
+       :desc "Run project shell command without a window opening."
+       :n "1" #'crj/projectile-run-shell-command-in-root-no-window))
 
 ;; TODO maybe this code can help?
 ;; (add-to-list 'display-buffer-alist

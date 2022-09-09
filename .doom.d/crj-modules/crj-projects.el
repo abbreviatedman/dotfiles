@@ -1,13 +1,20 @@
 (setq projectile-track-known-projects-automatically nil)
 
 ;; Opens minibuffer to select a root folder from which to discover projects.
-(map! :leader (:prefix ("p" . "project")
-               :desc "Discover projects in directory" :n "h" #'projectile-discover-projects-in-directory
-               :desc "Open a project vterm" :n "v" #'projectile-run-vterm
-               :desc "Open a new project vterm" :n "V" #'(lambda () (interactive) (projectile-run-vterm 1))
-               :desc "Open a project eshell" :n "e" 'projectile-run-eshell
-               :desc "Open a new project eshell" :n "E" #'(lambda () (interactive) (projectile-run-eshell 1))
-               :desc "Edit project dir-locals" :n "l" #'projectile-edit-dir-locals))
+(map! :leader
+      (:prefix ("p" . "project")
+       :desc "Discover projects in directory"
+       :n "h" #'projectile-discover-projects-in-directory
+       :desc "Open a project vterm"
+       :n "v" #'projectile-run-vterm
+       :desc "Open a new project vterm"
+       :n "V" #'(lambda () (interactive) (projectile-run-vterm 1))
+       :desc "Open a project eshell"
+       :n "e" 'projectile-run-eshell
+       :desc "Open a new project eshell"
+       :n "E" #'(lambda () (interactive) (projectile-run-eshell 1))
+       :desc "Edit project dir-locals"
+       :n "l" #'projectile-edit-dir-locals))
 
 (defun rename-buffer-with-project-name-prefix ()
 "Prompts the user to rename the buffer, supplying the project prefix."
@@ -18,11 +25,20 @@
     (rename-buffer name)))
 
 ;; Rename buffers.
-(map! :leader (:prefix "b" :desc "Rename buffer" :n "R" #'rename-buffer-with-project-name-prefix))
+(map! :leader
+      (:prefix "b"
+       :desc "Rename buffer"
+       :n "R" #'rename-buffer-with-project-name-prefix))
 
-;; (map! :leader (:prefix ("p" . "project")
-;;                        :desc "Open a project vterm" :n "v" #'projectile-run-vterm
-;;                        :desc "Open a new project vterm" :n "V" #'(lambda () (interactive) (projectile-run-vterm 1))
-;;                        :desc "Open a project eshell" :n "e" 'projectile-run-eshell
-;;                        :desc "Open a new project eshell" :n "E" #'(lambda () (interactive) (projectile-run-eshell 1))
-;;                        :desc "Edit project dir-locals" :n "l" #'projectile-edit-dir-locals))
+;; (map! :leader
+;;       (:prefix ("p" . "project")
+;;        :desc "Open a project vterm"
+;;        :n "v" #'projectile-run-vterm
+;;        :desc "Open a new project vterm"
+;;        :n "V" #'(lambda () (interactive) (projectile-run-vterm 1))
+;;        :desc "Open a project eshell"
+;;        :n "e" 'projectile-run-eshell
+;;        :desc "Open a new project eshell"
+;;        :n "E" #'(lambda () (interactive) (projectile-run-eshell 1))
+;;        :desc "Edit project dir-locals"
+;;        :n "l" #'projectile-edit-dir-locals))
