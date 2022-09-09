@@ -82,9 +82,10 @@
 (use-package! dirvish-side
   :after (dirvish)
   :config
-  (map! :leader (:prefix ("o" . "+open")
-                 :desc "Open file-manager sidebar."
-                 :n "p" #'dirvish-side)))
+  (map! :leader
+        (:prefix ("o" . "+open")
+         :desc "Open file-manager sidebar."
+         :n "p" #'dirvish-side)))
 
 (use-package! dirvish-subtree
   :after (dirvish))

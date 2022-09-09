@@ -1,7 +1,5 @@
 ;; org agenda setup
-(setq! org-agenda-files '("~/org-stuff/"))
-(setq! +org-capture-emails-file "~/org-stuff/readme.org")
-(setq! org-agenda-file-regexp "\\`[^.].*\\.org\\'")
+
 ;; Stop indenting my code blocks. Seriously!
 (setq org-edit-src-content-indentation 0)
 
@@ -12,11 +10,15 @@
 
 (use-package! org
   :config
+  (setq! org-agenda-files '("~/org-stuff/"))
+  (setq! +org-capture-emails-file "~/org-stuff/readme.org")
+  (setq! org-agenda-file-regexp "\\`[^.].*\\.org\\'")
   (setq org-startup-folded 'showeverything)
   (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
   (setq org-todo-keywords '((sequence
-                             "NEXT(n)"
                              "TODO(t)"
+                             "NEXT(n)"
+                             "IN PROGRESS(i)"
                              "DONE(d)")
                             (sequence
                              "|"
@@ -94,93 +96,95 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
 
 (map! :leader "a" nil)
 (map! :leader
-  (:prefix ("a" . "agenda")
-    :desc "view agenda" :n "a" #'org-agenda
-    :desc "view todo-list" :n "t" #'(lambda () (interactive)  (org-todo-list 1))
-    :desc "capture" :n "x" #'(lambda () (interactive) (find-file "~/Sync/org/capture.org"))
-    :desc "view mobile file" :n "m" #'(lambda () (interactive) (find-file "~/Sync/org/phone.org"))
-    :desc "task org file" :n "o" #'(lambda () (interactive) (find-file "~/Sync/org/tasks.org"))
-    :desc "view projects" :n "p" #'(lambda () (interactive) (find-file "~/Sync/org/projects.org"))
-    :desc "file" :n "f" #'org-refile
-      (:prefix ("c" . "calendar")
-      :desc "view" :n "v" #'open-calendar
-      :desc "view org file" :n "o" #'(lambda () (interactive) (find-file "~/Sync/org/cal.org"))
-      :desc "post" :n "p" #'org-gcal-post-at-point
-      :desc "delete" :n "d" #'org-gcal-delete-at-point
-      :desc "sync" :n "s" #'org-gcal-sync
-      :desc "fetch" :n "f" #'org-gcal-fetch)))
+      (:prefix ("a" . "agenda")
+       :desc "view agenda" :n "a" #'org-agenda
+       :desc "view todo-list" :n "t" #'(lambda () (interactive)  (org-todo-list 2))
+       :desc "capture" :n "x" #'(lambda () (interactive) (find-file "~/Sync/org/capture.org"))
+       :desc "view mobile file" :n "m" #'(lambda () (interactive) (find-file "~/Sync/org/phone.org"))
+       :desc "task org file" :n "o" #'(lambda () (interactive) (find-file "~/Sync/org/tasks.org"))
+       :desc "view projects" :n "p" #'(lambda () (interactive) (find-file "~/Sync/org/projects.org"))
+       :desc "file" :n "f" #'org-refile
+       (:prefix ("c" . "calendar")
+        :desc "view" :n "v" #'open-calendar
+        :desc "view org file" :n "o" #'(lambda () (interactive) (find-file "~/Sync/org/cal.org"))
+        :desc "post" :n "p" #'org-gcal-post-at-point
+        :desc "delete" :n "d" #'org-gcal-delete-at-point
+        :desc "sync" :n "s" #'org-gcal-sync
+        :desc "fetch" :n "f" #'org-gcal-fetch)))
 
 
 ;; sync which org file handles which gcal
 (setq org-gcal-fetch-file-alist '(("colin@pursuit.org" . "~/Sync/org/cal.org")))
 
 ;; timestamp manipulation
-(map! :leader (:prefix "m" (:prefix "c":desc "Adjust timestamp down." :n "j" #'org-timestamp-down)))
-(map! :leader (:prefix "m" (:prefix "c":desc "Adjust timestamp up." :n "k" #'org-timestamp-up)))
+(map! :leader
+      (:prefix "m"
+       (:prefix "c"
+        :desc "Adjust timestamp down."
+        :n "j" #'org-timestamp-down
+        :desc "Adjust timestamp up."
+        :n "k" #'org-timestamp-up)))
 
-(map! :map org-mode-map (:prefix "[" :n "H" #'outline-up-heading))
+(map! :map org-mode-map
+      :desc "Change todo state." :n "C-c t" #'org-todo
+      (:prefix "[" :n "H" #'outline-up-heading))
 
-;; Hack to keep flycheck mode off in org-trello buffers
-(put 'org-trello-mode 'mode-class 'special)
 
-;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
-;; Additionally, turn off some modes and settings that conflict with org-trello.
-(defun crj/add-org-trello-mode-maybe ()
-  (let ((old-warning-suppress-types warning-suppress-types))
-    (setq-local warning-suppress-types (append warning-suppress-types '((org-element-cache))))
-    (let ((filename (buffer-file-name (current-buffer))))
-      (if (and filename (string= "trello" (file-name-extension filename)))
-          (progn
-            (org-trello-mode)
-            (flyspell-mode -1))
-        (setq-local warning-suppress-types old-warning-suppress-types)))))
 
-(add-hook 'org-mode-hook 'crj/add-org-trello-mode-maybe)
+(use-package! org-trello
+  :after (dash s)
+  :config
+  ;; Hack to keep flycheck mode off in org-trello buffers
+  (put 'org-trello-mode 'mode-class 'special)
 
-(map! :map org-trello-mode-map
-      :leader
-      (:prefix ("m" . "Markup")
-       (:prefix ("t" . "Trello")
-        :desc "Assign a user to card."
-        :n "a" #'org-trello-toggle-assign-user
-        :desc "Assign yourself to card."
-        :n "A" #'org-trello-toggle-assign-me
-        :desc "Browse trello board."
-        :n "b" #'org-trello-jump-to-trello-board
-        :desc "Browse trello card."
-        :n "B" #'org-trello-jump-to-trello-card
-        :desc "Remove current entity."
-        :n "k" #'org-trello-kill-entity
-        :desc "Sync buffer to Trello."
-        :n "g" #'org-trello-sync-buffer
-        :desc "Sync buffer from Trello."
-        :n "G" #'(lambda () (interactive) (org-trello-sync-buffer t))
-        :desc "Sync card to Trello."
-        :n "c" #'org-trello-sync-card
-        :desc "Sync card from Trello."
-        :n "C" #'(lambda () (interactive) (org-trello-sync-card t))
-        :desc "Add comment to card."
-        "r" #'org-trello-add-card-comment
-        :desc "Sync comment."
-        "R" #'org-trello-sync-comment)))
+  ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+  ;; Additionally, turn off some modes and settings that conflict with org-trello.
+  (defun crj/add-org-trello-mode-maybe ()
+    (let ((old-warning-suppress-types warning-suppress-types))
+      (setq-local warning-suppress-types (append warning-suppress-types '((org-element-cache))))
+      (let ((filename (buffer-file-name (current-buffer))))
+        (if (and filename (string= "trello" (file-name-extension filename)))
+            (progn
+              (org-trello-mode)
+              (sleep-for 2)
+              (org-cycle-hide-drawers 'all)
+              (flyspell-mode -1))
+          (setq-local warning-suppress-types old-warning-suppress-types)))))
 
-;; "a" #'org-trello-toggle-assign-user
-;; "A" #'org-trello-toggle-assign-me
-;; "b" #'org-trello-jump-to-trello-board
-;; "B" #'org-trello-jump-to-trello-card
-;; "k" #'org-trello-kill-entity
-;; (:prefix "c"
-;; "s" #'org-trello-sync-card
-;; "c" #'org-trello-sync-card
-;; "S" #'(lambda () (interactive) (org-trello-sync-card t)))
-;; (:prefix "g"
-;; "g" #'org-trello-sync-buffer
-;; "s" #'org-trello-sync-buffer
-;; "S" #'(lambda () (interactive) (org-trello-sync-buffer t)))
-;; (:prefix "r"
-;; "n" #'org-trello-add-card-comment
-;; "r" #'org-trello-add-card-comment
-;; "s" #'org-trello-sync-comment)
+  (defun crj/save-and-clean-org-trello-buffer ()
+    (interactive)
+    (save-buffer)
+    (org-cycle-hide-drawers 'all))
+
+  (add-hook 'org-mode-hook 'crj/add-org-trello-mode-maybe)
+  (map! :map org-trello-mode-map
+        :leader
+        (:prefix ("m" . "Markup")
+         (:prefix ("t" . "Trello")
+          :desc "Assign a user to card."
+          :n "a" #'org-trello-toggle-assign-user
+          :desc "Assign yourself to card."
+          :n "A" #'org-trello-toggle-assign-me
+          :desc "Browse trello board."
+          :n "b" #'org-trello-jump-to-trello-board
+          :desc "Browse trello card."
+          :n "B" #'org-trello-jump-to-trello-card
+          :desc "Remove current entity."
+          :n "k" #'org-trello-kill-entity
+          :desc "Sync buffer to Trello."
+          :n "g" #'org-trello-sync-buffer
+          :desc "Sync buffer from Trello."
+          :n "G" #'(lambda () (interactive) (org-trello-sync-buffer t))
+          :desc "Sync card to Trello."
+          :n "c" #'org-trello-sync-card
+          :desc "Sync card from Trello."
+          :n "C" #'(lambda () (interactive) (org-trello-sync-card t))
+          :desc "Add comment to card."
+          :n "r" #'org-trello-add-card-comment
+          :desc "Sync comment."
+          :n "R" #'org-trello-sync-comment
+          :desc "Save and clean buffer."
+          :n "s" #'crj/save-and-clean-org-trello-buffer))))
 
 ;; Mark current todo DONE and next todo NEXT
 (map! :map org-mode-map :leader
@@ -212,41 +216,41 @@ appropriate.  In tables, insert a new row or end the table."
   ;; Inspired by John Kitchin: http://kitchingroup.cheme.cmu.edu/blog/2017/04/09/A-better-return-in-org-mode/
   (interactive "P")
   (if default
-    (org-return t)
+      (org-return t)
     (cond
-    ;; Act depending on context around point.
+     ;; Act depending on context around point.
 
-    ;; NOTE: I prefer RET to not follow links, but by uncommenting this block, links will be
-    ;; followed.
+     ;; NOTE: I prefer RET to not follow links, but by uncommenting this block, links will be
+     ;; followed.
 
-    ((eq 'link (car (org-element-context)))
-     ;; Link: Open it.
-     (org-open-at-point-global))
+     ((eq 'link (car (org-element-context)))
+      ;; Link: Open it.
+      (org-open-at-point-global))
 
-    ((org-at-heading-p)
-    ;; Heading: Move to position after entry content.
-    ;; NOTE: This is probably the most interesting feature of this function.
-    (let ((heading-start (org-entry-beginning-position)))
-      (goto-char (org-entry-end-position))
-      (cond ((and (org-at-heading-p)
-                  (= heading-start (org-entry-beginning-position)))
-              ;; Entry ends on its heading; add newline after
-              (end-of-line)
-              (insert "\n\n"))
-            (t
-             (newline)
-             (forward-line -1)))))
+     ((org-at-heading-p)
+      ;; Heading: Move to position after entry content.
+      ;; NOTE: This is probably the most interesting feature of this function.
+      (let ((heading-start (org-entry-beginning-position)))
+        (goto-char (org-entry-end-position))
+        (cond ((and (org-at-heading-p)
+                    (= heading-start (org-entry-beginning-position)))
+               ;; Entry ends on its heading; add newline after
+               (end-of-line)
+               (insert "\n\n"))
+              (t
+               (newline)
+               (forward-line -1)))))
 
-    ((org-at-item-checkbox-p)
+     ((org-at-item-checkbox-p)
       ;; Checkbox: Insert new item with checkbox.
       (org-insert-todo-heading nil))
 
-      ((org-in-item-p)
+     ((org-in-item-p)
       ;; Plain list.  Yes, this gets a little complicated...
       (let ((context (org-element-context)))
         (if (or (eq 'plain-list (car context))  ; First item in list
                 (and (eq 'item (car context))
-                      (not (eq (org-element-property :contents-begin context)
+                     (not (eq (org-element-property :contents-begin context)
                               (org-element-property :contents-end context))))
                 (tecosaur/org-element-descendant-of 'item context))  ; Element in list item, e.g. a link
             ;; Non-empty item: Add new item.
@@ -256,43 +260,44 @@ appropriate.  In tables, insert a new row or end the table."
           (delete-region (line-beginning-position) (line-end-position))
           (insert "\n"))))
 
-    ((when (fboundp 'org-inlinetask-in-task-p)
+     ((when (fboundp 'org-inlinetask-in-task-p)
         (org-inlinetask-in-task-p))
       ;; Inline task: Don't insert a new heading.
       (org-return t))
 
-      ((org-at-table-p)
+     ((org-at-table-p)
       (cond ((save-excursion
-                (beginning-of-line)
-                ;; See `org-table-next-field'.
-                (cl-loop with end = (line-end-position)
+               (beginning-of-line)
+               ;; See `org-table-next-field'.
+               (cl-loop with end = (line-end-position)
                         for cell = (org-element-table-cell-parser)
                         always (equal (org-element-property :contents-begin cell)
                                       (org-element-property :contents-end cell))
                         while (re-search-forward "|" end t)))
-              ;; Empty row: end the table.
-              (delete-region (line-beginning-position) (line-end-position))
-              (org-return t))
+             ;; Empty row: end the table.
+             (delete-region (line-beginning-position) (line-end-position))
+             (org-return t))
             (t
-              ;; Non-empty row: call `org-return-indent'.
-              (org-return t))))
-      (t
+             ;; Non-empty row: call `org-return-indent'.
+             (org-return t))))
+     (t
       ;; All other cases: call `org-return-indent'.
       (org-return t)))))
 
 (map!
-  :after evil-org
-  :map evil-org-mode-map
-  :i [return] #'tecosaur/org-return-dwim
-  :i "C-k" nil)
+ :after evil-org
+ :map evil-org-mode-map
+ :i [return] #'tecosaur/org-return-dwim
+ :i "C-k" nil)
 
 (setq org-blank-before-new-entry
       '((heading . auto)
         (plain-list-item . nil)))
 
-(map! :leader (:prefix "i"
-               :desc "Insert timestamp."
-               :n "d" #'org-time-stamp))
+(map! :leader
+      (:prefix "i"
+       :desc "Insert timestamp."
+       :n "d" #'org-time-stamp))
 
 (map! :map emacs-everywhere-mode-map :n "ZZ" nil)
 (map! :map emacs-everywhere-mode-map :n "ZZ" #'emacs-everywhere-finish-or-ctrl-c-ctrl-c)
@@ -347,14 +352,15 @@ Source: https://emacs.stackexchange.com/a/43662."
   "Sort entries by a custom keyword order."
   (interactive)
   (let ((org-todo-keywords '((sequence "TODO(n)" "DONE(t)" "NEXT(d)")
- (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
+                             (sequence "|" "WAIT(w)" "HOLD(h)" "PROJ(p)" "CANCELED(c)"))))
     (org-reload)
     (org-sort-entries nil ?o)))
 
 (defun crj/open-tasks-file ()
   (interactive)
-  (find-file "/home/abbreviatedman/org-stuff/readme.org"))
+  (find-file "~/org-stuff/readme.org"))
 
-(map! :leader (:prefix "o"
-               :desc "Open tasks repo."
-               :n "o" #'crj/open-tasks-file))
+(map! :leader
+      (:prefix "o"
+       :desc "Open tasks repo."
+       :n "o" #'crj/open-tasks-file))

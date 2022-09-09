@@ -10,25 +10,25 @@
         (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
   (mapc 'load modules))
 
-; TODO fix display-buffer-alist in crj/git-cloud-save
-; TODO set :leader and number to persp switches
+;; TODO fix display-buffer-alist in crj/git-cloud-save
+;; TODO set :leader and number to persp switches
 ;; changing custom no-window shell command keybindings
-; TODO add persp buffer functions to SPC TAB map:
+;; TODO add persp buffer functions to SPC TAB map:
 ;; - SPC TAB a - add buffer to perspective
 ;; - SPC TAB k - remove buffer from perspective
 ;; - SPC TAB t - add buffer to perspective /temporarily/
 ;; - SPC TAB S - save workspaces to file
 ;; - SPC TAB L - load workspaces from file
-; TODO add doom modeline zoom-out
-; TODO add function to swap ctrl and caps and back
-; TODO OS should open files with emacsclient
-; TODO experiment with de-bounce in Planck settings
-; TODO add space-W for deleting word and capitalizing next one
-; TODO space-something for lower-casing word and entering insert mode a word before it
-;   "Help me!" -> "| help me!"
-; TODO run projectile-cache-update (or whatever) every time we create a file
+;; TODO add doom modeline zoom-out
+;; TODO add function to swap ctrl and caps and back
+;; TODO OS should open files with emacsclient
+;; TODO experiment with de-bounce in Planck settings
+;; TODO add space-W for deleting word and capitalizing next one
+;; TODO space-something for lower-casing word and entering insert mode a word before it
+;;   "Help me!" -> "| help me!"
+;; TODO run projectile-cache-update (or whatever) every time we create a file
 ;; ensure that updating the cache is handled gracefully if we're not in a project
-; TODO remove spelling tasing as you go
+;; TODO remove spelling tasing as you go
 ;; TODO above all, what is the order code runs?
 ;; TODO no completion in minibuffer without Ctrl-space
 ;; TODO no completion in comments
@@ -83,7 +83,7 @@
 ;; DONE write theme-switcher function
 ;; DONE function to rename buffer with the project name as a prefix
 
-; Projects
+;; Projects
 ;; TODO sexp/target text objects
 ;; TODO space liner (look to evil-surround)
 ;; TODO nocturn.el - runs hooks on daylight change
@@ -94,17 +94,18 @@
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
 ;; Also, use the hydra as a better UI for window management.
 ;; Lastly, make window movement wrap around.
-(map! :leader (:prefix "w"
-               :desc "split window vertically and follow"
-                 :n "v" #'+evil/window-vsplit-and-follow
-               :desc "split vertically"
-                 :n "V" #'evil-window-vsplit
-               :desc "split window and follow"
-                 :n "s" #'+evil/window-split-and-follow
-               :desc "split window"
-                 :n "S" #'evil-window-split
-               :desc "Activate Window Hydra."
-                 :n "a" #'hydra/crj-window-nav/body))
+(map! :leader
+      (:prefix "w"
+       :desc "split window vertically and follow"
+       :n "v" #'+evil/window-vsplit-and-follow
+       :desc "split vertically"
+       :n "V" #'evil-window-vsplit
+       :desc "split window and follow"
+       :n "s" #'+evil/window-split-and-follow
+       :desc "split window"
+       :n "S" #'evil-window-split
+       :desc "Activate Window Hydra."
+       :n "a" #'hydra/crj-window-nav/body))
 
 (setq windmove-wrap-around t)
 
@@ -113,11 +114,12 @@
 
 ;; network interface
 (require 'nm)
-(map! :leader (:prefix "o"
-               :desc "Connect to network."
-               :n "c" 'nm/connect-with-profile
-               :desc "Connect to new network."
-               :n "C" 'nm/connect-basic))
+(map! :leader
+      (:prefix "o"
+       :desc "Connect to network."
+       :n "c" 'nm/connect-with-profile
+       :desc "Connect to new network."
+       :n "C" 'nm/connect-basic))
 
 ;; Rotate the symbol at point.
 (use-package! parrot
@@ -209,7 +211,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 ;; (add-hook 'emacs-startup-hook 'toggle-transparency)
 
 
-; Indentation
+;; Indentation
 
 ;; Tabs should be 2 spaces by default.
 (setq! indent-tabs-mode nil)
@@ -231,7 +233,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (setq save-interprogram-paste-before-kill t)
 
 
-; Font Settings
+;; Font Settings
 
 (defun crj/make-custom-face-adjustments ()
   "Customizations to faces whenever the theme is changed.
@@ -430,7 +432,7 @@ It toggles:
 ;; Best way to remove global-hl-line-mode in Doom.
 (remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
 
-; Search specific engines.
+;; Search specific engines.
 (engine-mode t)
 
 (defengine duck-duck-go
@@ -484,9 +486,10 @@ It toggles:
 ;; (add-hook 'after-init-hook #'global-prettier-mode)
 
 ;; Manually format JS/HTML/MD instead!
-(map! :leader (:prefix "b"
-               :desc "Prettify current buffer."
-               :n "p" #'prettier-prettify))
+(map! :leader
+      (:prefix "b"
+       :desc "Prettify current buffer."
+       :n "p" #'prettier-prettify))
 
 (setenv "NODE_PATH" "/usr/local/lib/node_modules")
 
@@ -543,8 +546,7 @@ It toggles:
 
 (setq scroll-on-jump-duration 1)
 
-(setq eradio-channels '(
-("Chill Lounge Florida" . "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://us5.internet-radio.com:8283/listen.pls&t=.pls")
+(setq eradio-channels '(("Chill Lounge Florida" . "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://us5.internet-radio.com:8283/listen.pls&t=.pls")
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
                         ("SomaFM - Beat Blender" . "https://somafm.com/beatblender.pls")
@@ -621,8 +623,7 @@ instead."
 ;; Show digraphs.
 (map! :n "SPC h D" #'evil-ex-show-digraphs)
 
-                                        ; Pomodoro settings
-
+;; Pomodoro settings
 ;; Allow manual breaks in Pomodoro.
 (setq org-pomodoro-manual-break t)
 
@@ -647,7 +648,9 @@ instead."
   (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help))
 
 ;; Switch frames. (Particularly useful on macOS.)
-(map! :leader (:prefix "w" :n "f" #'other-frame))
+(map! :leader
+      (:prefix "w"
+       :n "f" #'other-frame))
 
 ;; use subwords always
 ;; makes 'w' work with the subwords of a camelCase word
@@ -657,7 +660,9 @@ instead."
 ;; weather config
 (setq wttrin-default-cities '("Manhattan" ))
 (setq wttrin-default-accept-language '("Accept-Language" . "en-US"))
-(map! :leader (:prefix "o" :n "w" #'wttrin))
+(map! :leader
+      (:prefix "o"
+       :n "w" #'wttrin))
 
 ;; Lisp structural editing commands without a lispy-like mode.
 (map! :leader
@@ -681,9 +686,10 @@ instead."
   (interactive)
   (switch-to-buffer (get-buffer "*Messages*")))
 
-(map! :leader (:prefix "o"
-               :desc "Switch to messages buffer."
-               :n "M" #'crj/switch-to-messages-buffer))
+(map! :leader
+      (:prefix "o"
+       :desc "Switch to messages buffer."
+       :n "M" #'crj/switch-to-messages-buffer))
 
 ;; Fixes a bug in RJSX Mode where it doesn't handle the fragment syntax.
 (defun crj/rjsx-electric-gt-fragment-a (n)
@@ -744,9 +750,9 @@ instead."
 (add-hook! '(sql-mode-hook sql-interactive-mode-hook) #'sqlup-mode)
 (remove-hook 'org-mode-hook #'sqlup-mode)
 (map! "C-c U" 'sqlup-capitalize-keywords-in-region
-        "C-c u" 'sqlup-capitalize-keywords-in-buffer
-        :map sql-interactive-mode-map
-        "M-RET" #'sql-accumulate-and-indent)
+      "C-c u" 'sqlup-capitalize-keywords-in-buffer
+      :map sql-interactive-mode-map
+      "M-RET" #'sql-accumulate-and-indent)
 
 (after! sqlup-mode
   (add-to-list 'sqlup-blacklist "name"))
@@ -763,12 +769,23 @@ Probably something like this already exists!"
 (setq browse-url-browser-function 'browse-url-default-browser)
 
 ;; Atomic Chrome
+;; (use-package! atomic-chrome
+;;   :config
+;;   (atomic-chrome-start-server)
+(require 'atomic-chrome)
 (atomic-chrome-start-server)
 (setq atomic-chrome-default-major-mode 'markdown-mode)
 (setq atomic-chrome-buffer-open-style 'frame)
-(map! :map atomic-chrome-edit-mode-map :leader (:prefix "c"
-        :desc "Exit Ghost Text buffer." :n "z" #'atomic-chrome-close-current-buffer
-        :desc "Fix up Ghost Text buffer." :n "p" #'crj/remove-html-from-markdown-and-clean-up))
+(use-package! atomic-chrome
+  :config
+  (map!
+   :map atomic-chrome-edit-mode-map
+   :leader
+   (:prefix "c"
+    :desc "Exit Ghost Text buffer."
+    :n "z" #'atomic-chrome-close-current-buffer
+    :desc "Fix up Ghost Text buffer."
+    :n "p" #'crj/remove-html-from-markdown-and-clean-up)))
 
 ;;; atomic chrome converts some text boxes to html, and we want to convert to markdown
 ;;; this function, or its individual pieces, can help
@@ -788,7 +805,7 @@ Probably something like this already exists!"
       (widen)
       (goto-char (point-min))
       (while (re-search-forward "<[^<]*>" (point-max) t)
-    (replace-match "\\1"))
+        (replace-match "\\1"))
       (goto-char (point-min))
       (replace-string "&copy;" "(c)")
       (goto-char (point-min))
@@ -799,6 +816,6 @@ Probably something like this already exists!"
       (replace-string "&gt;" ">")
       (goto-char (point-min)))))
 
-; some available keybinding prefixes
+;; some available keybinding prefixes
 ;; SPC l
 ;; SPC and any capital letter

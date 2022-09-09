@@ -13,10 +13,11 @@
       (bury-buffer)
     (kill-buffer (current-buffer))))
 
-(map! :leader (:prefix "b"
-               :desc "Save and close buffer."
-               :n "q"
-               #'crj/save-and-kill-or-bury-current-buffer
-               :desc "Kill buffer."
-               :n "d"
-               #'crj/kill-or-bury-current-buffer))
+(map! :leader
+      (:prefix "b"
+       :desc "Save and close buffer."
+       :n "q"
+       #'crj/save-and-kill-or-bury-current-buffer
+       :desc "Kill buffer."
+       :n "d"
+       #'crj/kill-or-bury-current-buffer))
