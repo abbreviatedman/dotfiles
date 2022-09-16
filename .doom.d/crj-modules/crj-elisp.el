@@ -4,8 +4,10 @@
 ;;; I'm not a huge fan of ligatures in general.
 ;;; But the lambda symbol is a nice shortening.
 (add-hook 'lisp-mode-hook
-          #'(lambda () (setq-local prettify-symbols-alist
-                              (append prettify-symbols-alist '(("lambda" . λ))))))
+          #'(lambda ()
+              (setq-local prettify-symbols-alist
+                              (append prettify-symbols-alist '(("lambda" . λ))))
+              (prettify-symbols-mode)))
 
 ;;; Learning Elisp.
 

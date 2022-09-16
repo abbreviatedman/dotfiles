@@ -1,15 +1,3 @@
-;; Load my (many) config files. But not the flycheck ones.
-;; Not sure I /needed/ to avoid loading those.
-;; But I /did/ want to practice my lisp-fu!
-(defun crj--not-a-flycheck-filename-p (filename)
-  (not (string-search "flycheck" filename)))
-
-(let* ((unsanitized-modules
-        (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
-       (modules
-        (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
-  (mapc 'load modules))
-
 ;; TODO fix display-buffer-alist in crj/git-cloud-save
 ;; TODO set :leader and number to persp switches
 ;; changing custom no-window shell command keybindings
@@ -370,7 +358,7 @@ See `transpose-chars' for more info on the original function."
 (setq crj/presentation-mode-line-height 320)
 (setq crj/working-line-number-type 'relative)
 (setq crj/presentation-line-number-type t)
-(global-prettify-symbols-mode 1)
+(setq prettify-symbols-alist '())
 
 (defun crj/toggle-presentation-mode ()
   "Toggles between presenting code and working with code.
@@ -379,7 +367,6 @@ It toggles:
 
 - theme (ensuring we use a light theme),
 - line number type,
-- ligatures,
 - and text size, both in regular buffer and the mode line."
 
   (interactive)
@@ -778,6 +765,18 @@ Probably something like this already exists!"
 (setq atomic-chrome-buffer-open-style 'frame)
 (use-package! atomic-chrome
   :config
+  (defun crj/set-up-ghost-text-buffer (orig-fun &rest args)
+    "Sanitizes text from Atomic Chrome.
+
+Added as advice below. So... careful!"
+    (let* ((orig-text (nth 3 args))
+           (new-text (with-temp-buffer
+                   (insert orig-text)
+                   (sc/strip-html)
+                   (buffer-string)))
+          (list (remove orig-text args)))
+      (apply orig-fun (add-to-list 'list new-text t))))
+  (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
   (map!
    :map atomic-chrome-edit-mode-map
    :leader
@@ -815,6 +814,18 @@ Probably something like this already exists!"
       (goto-char (point-min))
       (replace-string "&gt;" ">")
       (goto-char (point-min)))))
+
+;; Load my (many) config files. But not the flycheck ones.
+;; Not sure I /needed/ to avoid loading those.
+;; But I /did/ want to practice my lisp-fu!
+(defun crj--not-a-flycheck-filename-p (filename)
+  (not (string-search "flycheck" filename)))
+
+(let* ((unsanitized-modules
+        (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
+       (modules
+        (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
+  (mapc 'load modules))
 
 ;; some available keybinding prefixes
 ;; SPC l

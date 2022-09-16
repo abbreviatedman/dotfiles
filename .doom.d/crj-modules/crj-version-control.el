@@ -37,7 +37,7 @@ Only changes were:
       ((display-buffer-alist
         '(shell-command-buffer-name '(#'display-buffer-no-window))))
     (shell-command
-     (format "git commit -m \"Updates %s.\""
+     (format "git commit -m \"Update %s.\""
              (projectile-default-project-name
               (projectile-project-name))))
     (shell-command "git push")))
