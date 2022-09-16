@@ -594,6 +594,7 @@ It toggles:
 ;; Uses Vim's original meaning of `G`, which puts you at the last NON-EMPTY line.
 (defun crj/end-of-buffer ()
   "Go to beginning of last line in buffer.
+
 If last line is empty, go to beginning of penultimate one
 instead."
   (interactive)
