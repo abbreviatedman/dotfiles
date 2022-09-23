@@ -116,8 +116,6 @@
   (define-key evil-normal-state-map (kbd "]r") 'parrot-rotate-next-word-at-point)
   (setq parrot-rotate-dict (append parrot-rotate-dict '((:rot ("const" "let"))))))
 
-(plist-get (car parrot-rotate-dict) :rot)
-
 (defun crj/flatten-list (list)
   "A function to flatten the given LIST.
 Taken from https://stackoverflow.com/a/13173391.
@@ -762,6 +760,11 @@ Probably something like this already exists!"
 ;;   (atomic-chrome-start-server)
 (require 'atomic-chrome)
 (atomic-chrome-start-server)
+(defun crj/test-func ()
+  (interactive)
+  (let ((cleanup-func 'forward-line))
+        (funcall 'next-line)))
+;; (crj/test-func)
 (setq atomic-chrome-default-major-mode 'markdown-mode)
 (setq atomic-chrome-buffer-open-style 'frame)
 (use-package! atomic-chrome
@@ -771,11 +774,15 @@ Probably something like this already exists!"
 
 Added as advice below. So... careful!"
     (let* ((orig-text (nth 3 args))
+           ;; (cleanup-func (if (> (count-lines (point-min) (point-max)) 1)
+           ;;                   #'sc/strip-html
+           ;;                 #'crj/remove-html-from-markdown-and-clean-up))
            (new-text (with-temp-buffer
-                   (insert orig-text)
-                   (sc/strip-html)
-                   (buffer-string)))
-          (list (remove orig-text args)))
+                       (insert orig-text)
+                       ;; (funcall 'cleanup-func)
+                       (sc/strip-html)
+                       (buffer-string)))
+           (list (remove orig-text args)))
       (apply orig-fun (add-to-list 'list new-text t))))
   (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
   (map!

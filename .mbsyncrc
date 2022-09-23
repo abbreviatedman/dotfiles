@@ -2,7 +2,7 @@ IMAPStore posteo-remote
 Host posteo.de
 Port 993
 User abbreviatedman@posteo.net
-PassCmd "pass mail/posteo/abbreviatedman"
+PassCmd "gpg --quiet --for-your-eyes-only --no-tty --decrypt ~/.password-store/mail/posteo/abbreviatedman.gpg"
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 

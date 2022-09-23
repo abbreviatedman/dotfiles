@@ -1,5 +1,5 @@
 ;;; crj-fonts.el -*- lexical-binding: t; -*-
-
+(setq doom-unicode-font (font-spec :family "Fira Code"))
 (setq crj/variable-font "Fira Code")
 (setq crj/doom-modeline-default-height 0.7)
 (setq doom-font (font-spec :family crj/variable-font :size 18))

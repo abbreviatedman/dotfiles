@@ -18,8 +18,6 @@
 (require 'yasnippet)
 (after! yasnippet (crj/set-up-snippets))
 
-(add-hook 'before-make-frame-hook #'crj/set-up-orderless)
-
 ;; don't add newlines to end of snippet files
 (defun no-final-newline-in-buffer ()
   (setq-local require-final-newline nil))
@@ -60,13 +58,14 @@
  (:prefix ("t" . "toggle")
   :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
-(after! orderless (crj/set-up-orderless))
-
 (defun crj/set-up-orderless ()
   (setq completion-category-defaults nil
         orderless-component-separator "\_"
         orderless-style-dispatchers '(+vertico-orderless-dispatch)
         orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp)))
+
+(after! orderless (crj/set-up-orderless))
+(add-hook 'before-make-frame-hook #'crj/set-up-orderless)
 
 (use-package vertico
   :after orderless

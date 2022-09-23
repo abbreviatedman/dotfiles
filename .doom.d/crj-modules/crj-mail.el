@@ -10,6 +10,7 @@
         message-send-mail-function #'message-send-mail-with-sendmail
         user-full-name  "Colin Jaffe"
         mu4e-get-mail-command "mbsync --all -c ~/.mbsyncrc"
+        auth-source-cache-expiry 28800
         mu4e-main-hide-personal-addresses t
         mu4e-drafts-folder "/Drafts"
         mu4e-trash-folder "/Trash"
