@@ -162,60 +162,60 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
 
 
 
-(use-package! org-trello
-  :after (dash s)
-  :config
-  ;; Hack to keep flycheck mode off in org-trello buffers
-  (put 'org-trello-mode 'mode-class 'special)
+; (use-package! org-trello
+;   :after (dash s)
+;   :config
+;   ;; Hack to keep flycheck mode off in org-trello buffers
+;   (put 'org-trello-mode 'mode-class 'special)
 
-  ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
-  ;; Additionally, turn off some modes and settings that conflict with org-trello.
-  (defun crj/add-org-trello-mode-maybe ()
-    (let ((old-warning-suppress-types warning-suppress-types))
-      (setq-local warning-suppress-types (append warning-suppress-types '((org-element-cache))))
-      (let ((filename (buffer-file-name (current-buffer))))
-        (if (and filename (string= "trello" (file-name-extension filename)))
-            (progn
-              (org-trello-mode)
-              (sleep-for 2)
-              (org-cycle-hide-drawers 'all)
-              (flyspell-mode -1))
-          (setq-local warning-suppress-types old-warning-suppress-types)))))
+;   ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.
+;   ;; Additionally, turn off some modes and settings that conflict with org-trello.
+;   (defun crj/add-org-trello-mode-maybe ()
+;     (let ((old-warning-suppress-types warning-suppress-types))
+;       (setq-local warning-suppress-types (append warning-suppress-types '((org-element-cache))))
+;       (let ((filename (buffer-file-name (current-buffer))))
+;         (if (and filename (string= "trello" (file-name-extension filename)))
+;             (progn
+;               (org-trello-mode)
+;               (sleep-for 2)
+;               (org-cycle-hide-drawers 'all)
+;               (flyspell-mode -1))
+;           (setq-local warning-suppress-types old-warning-suppress-types)))))
 
-  (defun crj/save-and-clean-org-trello-buffer ()
-    (interactive)
-    (save-buffer)
-    (org-cycle-hide-drawers 'all))
+;   (defun crj/save-and-clean-org-trello-buffer ()
+;     (interactive)
+;     (save-buffer)
+;     (org-cycle-hide-drawers 'all))
 
-  (add-hook 'org-mode-hook 'crj/add-org-trello-mode-maybe)
-  (map! :map org-trello-mode-map
-        :leader
-        (:prefix ("m" . "Markup")
-         (:prefix ("t" . "Trello")
-          :desc "Assign a user to card."
-          :n "a" #'org-trello-toggle-assign-user
-          :desc "Assign yourself to card."
-          :n "A" #'org-trello-toggle-assign-me
-          :desc "Browse trello board."
-          :n "b" #'org-trello-jump-to-trello-board
-          :desc "Browse trello card."
-          :n "B" #'org-trello-jump-to-trello-card
-          :desc "Remove current entity."
-          :n "k" #'org-trello-kill-entity
-          :desc "Sync buffer to Trello."
-          :n "g" #'org-trello-sync-buffer
-          :desc "Sync buffer from Trello."
-          :n "G" #'(lambda () (interactive) (org-trello-sync-buffer t))
-          :desc "Sync card to Trello."
-          :n "c" #'org-trello-sync-card
-          :desc "Sync card from Trello."
-          :n "C" #'(lambda () (interactive) (org-trello-sync-card t))
-          :desc "Add comment to card."
-          :n "r" #'org-trello-add-card-comment
-          :desc "Sync comment."
-          :n "R" #'org-trello-sync-comment
-          :desc "Save and clean buffer."
-          :n "s" #'crj/save-and-clean-org-trello-buffer))))
+;   (add-hook 'org-mode-hook 'crj/add-org-trello-mode-maybe)
+;   (map! :map org-trello-mode-map
+;         :leader
+;         (:prefix ("m" . "Markup")
+;          (:prefix ("t" . "Trello")
+;           :desc "Assign a user to card."
+;           :n "a" #'org-trello-toggle-assign-user
+;           :desc "Assign yourself to card."
+;           :n "A" #'org-trello-toggle-assign-me
+;           :desc "Browse trello board."
+;           :n "b" #'org-trello-jump-to-trello-board
+;           :desc "Browse trello card."
+;           :n "B" #'org-trello-jump-to-trello-card
+;           :desc "Remove current entity."
+;           :n "k" #'org-trello-kill-entity
+;           :desc "Sync buffer to Trello."
+;           :n "g" #'org-trello-sync-buffer
+;           :desc "Sync buffer from Trello."
+;           :n "G" #'(lambda () (interactive) (org-trello-sync-buffer t))
+;           :desc "Sync card to Trello."
+;           :n "c" #'org-trello-sync-card
+;           :desc "Sync card from Trello."
+;           :n "C" #'(lambda () (interactive) (org-trello-sync-card t))
+;           :desc "Add comment to card."
+;           :n "r" #'org-trello-add-card-comment
+;           :desc "Sync comment."
+;           :n "R" #'org-trello-sync-comment
+;           :desc "Save and clean buffer."
+;           :n "s" #'crj/save-and-clean-org-trello-buffer))))
 
 ;; Mark current todo DONE and next todo NEXT
 (map! :map org-mode-map :leader
