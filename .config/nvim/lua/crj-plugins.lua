@@ -19,12 +19,11 @@ return require('packer').startup(function(use)
   }
 
   use {
-    'hrsh7th/nvim-cmp',
+    'git@github.com:hrsh7th/nvim-cmp',
     requires = {
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lua',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-luasnip',
+      'git@github.com:hrsh7th/cmp-nvim-lsp',
+      'git@github.com:hrsh7th/cmp-nvim-lua',
+      'git@github.com:hrsh7th/cmp-path',
     },
 
     config = [[ require('plugin-configs/crj-cmp') ]]
@@ -35,8 +34,6 @@ return require('packer').startup(function(use)
     require = {
       'rafamadriz/friendly-snippets',
     },
-
-    config = [[ require('plugin-configs/crj-luasnip') ]]
   }
 
   -- use {
@@ -63,9 +60,9 @@ return require('packer').startup(function(use)
     'kyazdani42/nvim-tree.lua',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function() require('nvim-tree').setup{
-      auto_close = true,
       view = {
-        auto_resize = true,
+        -- this appears to have been deprecated
+        -- auto_resize = true,
         number = true,
         relativenumber = true
       },

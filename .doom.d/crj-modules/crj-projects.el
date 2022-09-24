@@ -1,4 +1,12 @@
 (setq projectile-track-known-projects-automatically nil)
+(use-package! projectile
+  :config
+  (projectile-register-project-type 'npm '("package.json")
+                                    :project-file "package.json"
+                                    :compile "npm install"
+                                    :test "npm test"
+                                    :run "npm start"
+                                    :test-suffix ".spec"))
 
 ;; Opens minibuffer to select a root folder from which to discover projects.
 (map! :leader
