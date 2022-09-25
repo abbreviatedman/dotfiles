@@ -59,23 +59,12 @@
 ;; Modus themes
 (package! modus-themes)
 
-;; Zenburn theme
-(package! zenburn-theme)
-
 ;; pomodoro
 (package! org-pomodoro)
-
-;; company improvements
-(package! company-posframe :disable t)
-(package! company-box :disable t)
-(package! company :disable t)
 
 ;; Smooth scrolling.
 (package! scroll-on-jump
   :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
-
-;; ligatures
-(package! fira-code-mode)
 
 ;; streaming radio
 (package! eradio)
@@ -185,3 +174,6 @@
 
 ;;; Visualize undo.
 (package! vundo)
+
+;; Font management
+(package! fontaine)

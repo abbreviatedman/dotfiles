@@ -124,7 +124,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
   (cl-loop for e in list
            nconc
            (if (consp e)
-               (copy-list e)
+               (cl-copy-list e)
              (list e))))
 
 (defun crj/parrot-extra--get-symbols-from-rotation-list (list)
@@ -219,26 +219,6 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (setq save-interprogram-paste-before-kill t)
 
 
-;; Font Settings
-
-(defun crj/make-custom-face-adjustments ()
-  "Customizations to faces whenever the theme is changed.
-
-Fixes many things according to how the author likes them.
-
-Also fixes a pernicious issue where line numbers become variable pitch fonts along with everything else. There's gotta be a better way to fix that than this, but... this works."
-
-  (interactive)
-  ;; (custom-set-faces
-  ;;  '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
-  ;;  '(highlight ((t :background "#b5d0ff")))
-  ;;  '(line-number ((t :family "Hack")))
-  ;;  '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
-  ;;  '(success ((t :foreground "#0031a9")))
-  ;;  '(line-number-current-line ((t :family "Hack"))))
-  )
-
-(add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
 
 ;; Not currently using this, could be useful again though.
 (defun crj/swap-chars ()
@@ -274,10 +254,10 @@ See `transpose-chars' for more info on the original function."
 (show-smartparens-global-mode)
 (setq sp-show-pair-from-inside nil)
 
-                                        ; use better emojis (requires this font!)
-(if (>= emacs-major-version 27)
-    (set-fontset-font t '(#x1f000 . #x1faff)
-                      (font-spec :family "Noto Color Emoji")))
+;;; use better emojis (requires this font!)
+;; (if (>= emacs-major-version 27)
+;;     (set-fontset-font t '(#x1f000 . #x1faff)
+;;                       (font-spec :family "Noto Color Emoji")))
 ;; Theme Settings
 ;;; Modus
 (require 'modus-themes)
@@ -295,13 +275,14 @@ See `transpose-chars' for more info on the original function."
               (2 . (rainbow 1.6))
               (3 . (rainbow 1.4))
               (4 . (rainbow 1.2)))))
-(set-face-attribute 'modus-themes-hl-line nil
-                    :extend nil
-                    :background 'unspecified)
+;; (set-face-attribute 'modus-themes-hl-line nil
+;;                     :extend nil
+;;                     :background 'unspecified)
 (setq modus-themes-completions (quote ((matches . (intense background underline bold))
                                        (selection . (accented intense bold))
                                        (popup . (accented intense bold)))))
 
+(load-theme 'modus-operandi t)
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
@@ -346,17 +327,15 @@ See `transpose-chars' for more info on the original function."
   (let ((new-theme (crj/get-current-theme)))
     (load-theme new-theme t)))
 
-(crj/switch-to-appropriate-theme)
-(crj/make-custom-face-adjustments)
+;; (crj/switch-to-appropriate-theme)
 
-(set-face-attribute 'highlight nil :background "#b5d0ff")
+;; (set-face-attribute 'highlight nil :background "#b5d0ff")
 
 ;; Constants for crj/toggle-presentation-mode
 (setq crj/working-mode-line-height 160)
 (setq crj/presentation-mode-line-height 320)
 (setq crj/working-line-number-type 'relative)
 (setq crj/presentation-line-number-type t)
-(setq prettify-symbols-alist '())
 
 (defun crj/toggle-presentation-mode ()
   "Toggles between presenting code and working with code.
@@ -561,7 +540,7 @@ It toggles:
          (global-hide-mode-line-mode))
        (redraw-display))
 
-                                        ; toggle for
+;;; toggle for
 ;; radio
 ;; pomodoro
 ;; modeline
