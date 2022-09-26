@@ -283,9 +283,9 @@ See `transpose-chars' for more info on the original function."
 ;;                                        (popup . (accented intense bold)))))
 
 (mapc #'disable-theme custom-enabled-themes)
-;; (load-theme 'modus-operandi t)
+(load-theme 'modus-operandi t)
 ;; (load-theme 'ef-deuteranopia-light :no-confirm)
-(load-theme 'leuven :no-confirm)
+;; (load-theme 'leuven :no-confirm)
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
