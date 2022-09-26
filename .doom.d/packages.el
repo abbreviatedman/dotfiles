@@ -55,7 +55,7 @@
 (package! color-theme-sanityinc-solarized)
 
 (package! modus-themes)
-
+(package! leuven-theme)
 (package! ef-themes)
 
 (package! org-pomodoro)
