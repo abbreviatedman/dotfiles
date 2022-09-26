@@ -95,6 +95,12 @@ when you're mixing pitches"
 ;;   (doom/reload-theme)
 ;;   (remove-hook 'org-mode-hook #'crj/reload-theme-once)
 ;;   (remove-hook 'markdown-mode-hook #'crj/reload-theme-once))
+(setq emojify-display-style 'unicode)
+(if (>= emacs-major-version 27)
+    (set-fontset-font
+     t
+     'symbol
+     (font-spec :family "Noto Color Emoji")))
 
 ;; (add-hook 'org-mode-hook #'crj/reload-theme-once)
 ;; (add-hook 'markdown-mode-hook #'crj/reload-theme-once)

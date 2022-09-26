@@ -253,10 +253,6 @@ See `transpose-chars' for more info on the original function."
 (show-smartparens-global-mode)
 (setq sp-show-pair-from-inside nil)
 
-;;; use better emojis (requires this font!)
-;; (if (>= emacs-major-version 27)
-;;     (set-fontset-font t '(#x1f000 . #x1faff)
-;;                       (font-spec :family "Noto Color Emoji")))
 ;; Theme Settings
 ;;; Modus
 (require 'modus-themes)
