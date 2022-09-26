@@ -1,5 +1,13 @@
 ;;; crj-fonts.el -*- lexical-binding: t; -*-
 ;; Great if you go back to fixed-pitch programming fonts!
+
+(setq crj/variable-pitch-font "IBM Plex Serif")
+(setq crj/ui-fixed-pitch-font "Hack")
+(setq crj/code-font "Input")
+
+;; (setq doom-font (font-spec :family crj/code-font :size 12))
+;; (setq doom-variable-pitch-font (font-spec :family crj/variable-pitch-font :size 12))
+
 (defface monospace
   '((t
      :family "Hack"
@@ -17,15 +25,11 @@
      :box nil
      :inverse nil
      :stipple nil
-     :font unspecified
+     :font "Hack"
      :fontset unspecified
      :extend nil))
 
   "Face for monospace fonts.")
-
-(setq crj/variable-font "IBM Plex Serif")
-(setq crj/ui-fixed-pitch-font "Hack")
-(setq crj/code-font "Input")
 
 ;; (setq doom-font (font-spec :family crj/code-font :size 12))
 ;; (setq doom-variable-pitch-font crj/variable-font)
@@ -65,33 +69,35 @@ when you're mixing pitches"
   ;; '(success ((t :foreground "#0031a9")))))
   )
 
-
 (require 'mixed-pitch)
 (setq crj/fixed-pitch-faces '(line-number-major-tick
                               line-number-current-line
                               line-number
                               line-number-minor-tick))
 
-(defun crj/set-up-mixed-pitch ()
+(defun crj/make-line-number-face-monospace ()
   (interactive)
   (dolist (face crj/fixed-pitch-faces)
-    (set-face-attribute face t :inherit 'monospace)))
+    (face-remap-add-relative face :family crj/ui-fixed-pitch-font)))
 
-(crj/set-up-mixed-pitch)
+(crj/make-line-number-face-monospace)
+(add-hook 'doom-switch-buffer-hook #'crj/make-line-number-face-monospace)
 (add-hook 'text-mode-hook #'mixed-pitch-mode)
 
-(defun crj/reload-theme-once ()
-  "Solves an annoying font problem. Needed only once.
+;; (defun crj/reload-theme-once ()
+;;   "Solves an annoying font problem. Needed only once.
 
-This solves an issue where the line number face in text mode doesn't respond to
-the `crj/set-up-mixed-pitch' issue until the theme is reloaded.
+;; This solves an issue where the line number face in text mode doesn't respond to
+;; the `crj/set-up-mixed-pitch' issue until the theme is reloaded.
 
-This only happens the first time you load a text mode buffer, so this function
-also removes itself from the hook."
-  (doom/reload-theme)
-  (remove-hook 'text-mode-hook #'crj/reload-theme-once))
+;; This only happens the first time you load a text mode buffer, so this function
+;; also removes itself from the hook."
+;;   (doom/reload-theme)
+;;   (remove-hook 'org-mode-hook #'crj/reload-theme-once)
+;;   (remove-hook 'markdown-mode-hook #'crj/reload-theme-once))
 
-(add-hook 'text-mode-hook #'crj/reload-theme-once)
+;; (add-hook 'org-mode-hook #'crj/reload-theme-once)
+;; (add-hook 'markdown-mode-hook #'crj/reload-theme-once)
 
 (setq fontaine-presets
       '((regular
@@ -126,8 +132,11 @@ also removes itself from the hook."
         ;;  :line-spacing 1)
         ))
 
-(fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
+(when (display-graphic-p)
+  (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular)))
+
 (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
+
 (setq org-hide-emphasis-markers t)
 
 (setq crj/doom-modeline-default-height 0.7)
