@@ -188,8 +188,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
        :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
        :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
        :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
-       :desc "toggle ligatures globally" :n "l" #'global-auto-composition-mode
-       :desc "toggle ligatures in buffer" :n "L" #'auto-composition-mode
+       :desc "toggle ligatures in buffer" :n "l" #'prettify-symbols-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
@@ -298,14 +297,6 @@ See `transpose-chars' for more info on the original function."
 (setq crj/presentation-theme-daytime 'modus-operandi)
 (setq crj/working-theme-nighttime 'modus-vivendi)
 (setq crj/presentation-theme-nighttime 'modus-operandi)
-
-;; But turn them off in text and shell modes.
-(defun crj/turn-off-ligatures-in-buffer ()
-  (auto-composition-mode -1))
-
-(setq crj/no-ligatures-hooks '(text-mode-hook vterm-mode-hook eshell-mode-hook))
-(dolist (hook crj/no-ligatures-hooks)
-  (add-hook hook #'crj/turn-off-ligatures-in-buffer))
 
 (setq crj/daytime-p t)
 (setq crj/presentation-mode-p nil)

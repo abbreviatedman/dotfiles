@@ -104,30 +104,21 @@
 ;;                                  `([,ligature-re 0 font-shape-gstring])))
 ;;          char/ligature-re))
 
+(defun crj/set-up-js-prettify-mode ()
+  "Set ligatures, but, for now, don't turn them on."
+  (setq-local prettify-symbols-alist '(("=>" . 8658) (">=" . 8805) ("<=" . 8804)))
+  ;; and in fact we need to turn it off, because something's turning it on...
+  (prettify-symbols-mode -1))
+
 (defun crj/set-up-elisp-prettify-mode ()
   "About the only ligature I like. An iconic symbol for a homoiconic language."
-  (prettify-symbols-mode)
-  (setq-local prettify-symbols-alist '((lambda . 955))))
+  (setq-local prettify-symbols-alist '(("lambda" . 955)))
+  (prettify-symbols-mode))
 
 (setq prettify-symbols-alist '())
+(global-auto-composition-mode -1)
 (add-hook 'emacs-lisp-mode-hook #'crj/set-up-elisp-prettify-mode)
-
-(defun crj/make-custom-face-adjustments ()
-  "Customizations to faces whenever the theme is changed.
-
-Fixes many things according to how the author likes them.
-
-Including some pretty annoying issues with line numbers being variable pitch when you're mixing pitches"
-
-  (interactive)
-  (custom-set-faces
-   ;; don't THINK we need this line anymore... makes the fixed-pitch font inherit from the variable font... why?
-   ;; I'll get rid of it if I can't figure it out!
-   ;; '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
-   '(highlight ((t :background "#b5d0ff")))
-   '(line-number ((t :family "Hack")))
-   '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
-   '(success ((t :foreground "#0031a9")))
-   '(line-number-current-line ((t :family "Hack")))))
+(add-hook 'rjsx-mode-hook #'crj/set-up-elisp-prettify-mode)
 
 (add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
+(crj/make-custom-face-adjustments)
