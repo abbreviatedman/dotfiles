@@ -82,22 +82,30 @@ when you're mixing pitches"
 
 (crj/make-line-number-face-monospace)
 (add-hook 'doom-switch-buffer-hook #'crj/make-line-number-face-monospace)
+(advice-add 'mu4e-view-mode :after #'crj/make-line-number-face-monospace)
+(advice-add 'revert-buffer :after #'crj/make-line-number-face-monospace)
 (add-hook 'text-mode-hook #'mixed-pitch-mode)
 
-;; (defun crj/reload-theme-once ()
-;;   "Solves an annoying font problem. Needed only once.
+;; Sometimes I really do want fixed-pitch for alignment, such as with terminals.
+(defun crj/use-fixed-pitch ()
+  (set (make-local-variable 'buffer-face-mode-face) 'monospace)
+  (buffer-face-mode t))
 
-;; This solves an issue where the line number face in text mode doesn't respond to
-;; the `crj/set-up-mixed-pitch' issue until the theme is reloaded.
+;; Hooks for modes I want to use fixed pitch in.
+(setq crj/fixed-pitch-mode-hooks
+      '(vterm-mode-hook
+        mu4e-headers-mode-hook))
 
-;; This only happens the first time you load a text mode buffer, so this function
-;; also removes itself from the hook."
-;;   (doom/reload-theme)
-;;   (remove-hook 'org-mode-hook #'crj/reload-theme-once)
-;;   (remove-hook 'markdown-mode-hook #'crj/reload-theme-once))
+(dolist (hook crj/fixed-pitch-mode-hooks)
+  (add-hook hook #'crj/use-fixed-pitch))
 
-;; (add-hook 'org-mode-hook #'crj/reload-theme-once)
-;; (add-hook 'markdown-mode-hook #'crj/reload-theme-once)
+(setq emojify-display-style 'unicode)
+(if (>= emacs-major-version 27)
+    (set-fontset-font
+     t
+     'symbol
+     (font-spec :family "Noto Color Emoji")))
+
 
 (setq fontaine-presets
       '((regular
