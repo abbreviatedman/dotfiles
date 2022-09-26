@@ -49,17 +49,15 @@
 
 ; Themes
 
-;; Non-DOOM Solarized themes.
+;; Many Solarized themes.
 (package! solarized-theme)
-
-;; MORE Solarized themes??
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
 
-;; Modus themes
 (package! modus-themes)
 
-;; pomodoro
+(package! ef-themes)
+
 (package! org-pomodoro)
 
 ;; Smooth scrolling.
@@ -136,6 +134,7 @@
 ;; GraphQL
 (package! graphql-mode)
 
+(package! solaire-mode :disable t)
 ;; different font styles, same file
 (package! mixed-pitch)
 

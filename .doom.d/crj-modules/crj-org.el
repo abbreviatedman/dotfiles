@@ -1,5 +1,3 @@
-;; org agenda setup
-
 ;; Stop indenting my code blocks. Seriously!
 (setq org-edit-src-content-indentation 0)
 (map!

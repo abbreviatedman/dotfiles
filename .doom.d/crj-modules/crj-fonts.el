@@ -1,12 +1,104 @@
 ;;; crj-fonts.el -*- lexical-binding: t; -*-
-;; (setq doom-unicode-font (font-spec :family "Fira Code"))
+;; Great if you go back to fixed-pitch programming fonts!
+(defface monospace
+  '((t
+     :family "Hack"
+     :foundry unspecified
+     :width normal
+     :height 1.0
+     :weight normal
+     :slant normal
+     :foreground "#505050"
+     :distantForeground unspecified
+     :background "#f8f8f8"
+     :underline nil
+     :overline nil
+     :strike-through nil
+     :box nil
+     :inverse nil
+     :stipple nil
+     :font unspecified
+     :fontset unspecified
+     :extend nil))
+
+  "Face for monospace fonts.")
+
 (setq crj/variable-font "IBM Plex Serif")
+(setq crj/ui-fixed-pitch-font "Hack")
+(setq crj/code-font "Input")
+
+;; (setq doom-font (font-spec :family crj/code-font :size 12))
+;; (setq doom-variable-pitch-font crj/variable-font)
+;; (add-hook 'org-mode-hook 'variable-pitch-mode)
+(defun crj/make-custom-face-adjustments ()
+  "Customizations to faces whenever the theme is changed.
+
+Fixes many things according to how the author likes them.
+
+Including some pretty annoying issues with line numbers being variable pitch
+when you're mixing pitches"
+
+  ;; (interactive)
+  ;; (custom-theme-set-faces
+  ;;   'user
+  ;;   '(default ((t (:family crj/ui-fixed-pitch-font :height 100 ))))
+  ;;   '(variable-pitch ((t (:family crj/variable-font :height 1.0))))
+  ;;   '(fixed-pitch ((t ( :family crj/code-font :height 1.0)))))
+  ;; (set-face-attribute 'line-number t :font "Hack" :inherit 'monospace)
+  ;; (set-face-attribute 'line-number-current-line t :font "Hack"))
+  ;; '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
+  ;; '(highlight ((t :background "#b5d0ff")))
+  ;; '(line-number ((t :family "Hack")))
+  ;; '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
+  ;; '(success ((t :foreground "#0031a9")))
+  ;; '(line-number-current-line ((t :family "Hack")))))
+  ;; don't THINK we need this line anymore... makes the fixed-pitch font inherit from the variable font... why?
+  ;; I'll get rid of it if I can't figure it out!
+  ;; '(fixed-pitch ((t :family "Hack" :inherit 'default)))
+  ;; '(default ((t (:family crj/ui-fixed-pitch-font :height 100))))
+  ;; '(variable-pitch ((t (:family crj/variable-font :height 1.0))))
+  ;; '(fixed-pitch ((t ( :family crj/code-font :height 1.0))))))
+  ;; '(highlight ((t :background "#b5d0ff")))
+  ;; '(line-number ((t :family "Hack")))
+  ;; '(line-number-current-line ((t :family "Hack")))
+  ;; '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
+  ;; '(success ((t :foreground "#0031a9")))))
+  )
+
+
+(require 'mixed-pitch)
+(setq crj/fixed-pitch-faces '(line-number-major-tick
+                              line-number-current-line
+                              line-number
+                              line-number-minor-tick))
+
+(defun crj/set-up-mixed-pitch ()
+  (interactive)
+  (dolist (face crj/fixed-pitch-faces)
+    (set-face-attribute face t :inherit 'monospace)))
+
+(crj/set-up-mixed-pitch)
+(add-hook 'text-mode-hook #'mixed-pitch-mode)
+
+(defun crj/reload-theme-once ()
+  "Solves an annoying font problem. Needed only once.
+
+This solves an issue where the line number face in text mode doesn't respond to
+the `crj/set-up-mixed-pitch' issue until the theme is reloaded.
+
+This only happens the first time you load a text mode buffer, so this function
+also removes itself from the hook."
+  (doom/reload-theme)
+  (remove-hook 'text-mode-hook #'crj/reload-theme-once))
+
+(add-hook 'text-mode-hook #'crj/reload-theme-once)
+
 (setq fontaine-presets
       '((regular
          :default-family "Input"
          :default-weight normal
          :default-height 100
-         :fixed-pitch-family "Input"
+         :fixed-pitch-family "Hack"
          :fixed-pitch-weight nil ; falls back to :default-weight
          :fixed-pitch-height 1.0
          :variable-pitch-family "IBM Plex Serif"
@@ -37,8 +129,6 @@
 (fontaine-set-preset (or (fontaine-restore-latest-preset) 'regular))
 (add-hook 'kill-emacs-hook #'fontaine-store-latest-preset)
 (setq org-hide-emphasis-markers t)
-(setq modus-themes-mixed-fonts t)
-(add-hook 'text-mode-hook #'mixed-pitch-mode)
 
 (setq crj/doom-modeline-default-height 0.7)
 ;; (setq doom-font (font-spec :family crj/variable-font :size 18))

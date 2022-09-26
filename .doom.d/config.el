@@ -260,28 +260,32 @@ See `transpose-chars' for more info on the original function."
 ;; Theme Settings
 ;;; Modus
 (require 'modus-themes)
-(setq modus-themes-bold-constructs t)
-(setq modus-themes-italic-constructs t)
-(setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
-(setq modus-themes-paren-match '(intense underline))
-(setq modus-themes-subtle-line-numbers nil)
-(setq modus-themes-deuteranopia t)
-(setq modus-themes-markup '(background))
-(setq modus-themes-region '(no-extend bg-only accented))
-(setq modus-themes-hl-line '(intense underline))
-(setq modus-themes-headings
-      (quote ((1 . (rainbow 1.8))
-              (2 . (rainbow 1.6))
-              (3 . (rainbow 1.4))
-              (4 . (rainbow 1.2)))))
-;; (set-face-attribute 'modus-themes-hl-line nil
-;;                     :extend nil
-;;                     :background 'unspecified)
-(setq modus-themes-completions (quote ((matches . (intense background underline bold))
-                                       (selection . (accented intense bold))
-                                       (popup . (accented intense bold)))))
+;; (setq modus-themes-no-mixed-fonts t)
+;; (setq modus-themes-bold-constructs t)
+;; (setq modus-themes-italic-constructs t)
+;; (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
+;; (setq modus-themes-paren-match '(intense underline))
+;; (setq modus-themes-subtle-line-numbers nil)
+;; (setq modus-themes-deuteranopia t)
+;; (setq modus-themes-markup '(background))
+;; (setq modus-themes-region '(no-extend bg-only accented))
+;; (setq modus-themes-hl-line '(intense underline))
+;; (setq modus-themes-headings
+;;       (quote ((1 . (rainbow 1.8))
+;;               (2 . (rainbow 1.6))
+;;               (3 . (rainbow 1.4))
+;;               (4 . (rainbow 1.2)))))
+;; ;; (set-face-attribute 'modus-themes-hl-line nil
+;; ;;                     :extend nil
+;; ;;                     :background 'unspecified)
+;; (setq modus-themes-completions (quote ((matches . (intense background underline bold))
+;;                                        (selection . (accented intense bold))
+;;                                        (popup . (accented intense bold)))))
 
-(load-theme 'modus-operandi t)
+(mapc #'disable-theme custom-enabled-themes)
+;; (load-theme 'modus-operandi t)
+;; (load-theme 'ef-deuteranopia-light :no-confirm)
+(load-theme 'leuven :no-confirm)
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
@@ -359,12 +363,7 @@ It toggles:
   (crj/switch-to-appropriate-theme)
   (doom-big-font-mode))
 
-;; Great if you go back to fixed-pitch programming fonts!
-;; (use-package mixed-pitch
-;;   :hook
-;;   (text-mode . mixed-pitch-mode))
 ;; ;; If you use `org' and don't want your org files in the default location below,
-
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
 (setq debug-ignored-errors '("^Exit the snippet first!$" "^End of line$" "^Beginning of line$" beginning-of-line beginning-of-buffer end-of-line end-of-buffer end-of-file buffer-read-only file-supersession mark-inactive))
