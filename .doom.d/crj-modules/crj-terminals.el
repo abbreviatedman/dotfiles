@@ -32,9 +32,6 @@
       (:prefix ("v" . "view")
        :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
 
-;; start every emacs frame as a terminal by default
-;; (add-hook 'emacs-startup-hook '+eshell/here)
-
 ;; zsh baby
 (setq vterm-shell "/usr/sbin/zsh")
 

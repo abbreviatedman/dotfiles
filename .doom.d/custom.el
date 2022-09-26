@@ -78,15 +78,3 @@
    ["black" "#ff8059" "#44bc44" "#d0bc00" "#2fafff" "#feacd0" "#00d3d0" "gray65"])
  '(xterm-color-names-bright
    ["gray35" "#ef8b50" "#70b900" "#c0c530" "#79a8ff" "#f78fe7" "#4ae2f0" "white"]))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(highlight ((t :background "#b5d0ff")))
- '(line-number ((t :family "Hack")))
- '(line-number-current-line ((t :family "Hack")))
- '(mode-line ((t (:family "Fira Code" :height 0.7))))
- '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
- '(mode-line-inactive ((t (:family "Fira Code" :height 0.7))))
- '(success ((t :foreground "#0031a9"))))

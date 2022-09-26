@@ -124,7 +124,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
   (cl-loop for e in list
            nconc
            (if (consp e)
-               (copy-list e)
+               (cl-copy-list e)
              (list e))))
 
 (defun crj/parrot-extra--get-symbols-from-rotation-list (list)
@@ -187,9 +187,8 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
        :desc "zoom in buffer" :n "J" #'crj/zoom-in-all-buffers
        :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
        :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
-       :desc "zoom hydra" :n "z" #'crj/hydra/text-zoom/body
-       :desc "toggle ligatures globally" :n "l" #'global-auto-composition-mode
-       :desc "toggle ligatures in buffer" :n "L" #'auto-composition-mode
+       :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
+       :desc "toggle ligatures in buffer" :n "l" #'prettify-symbols-mode
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
@@ -219,26 +218,6 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (setq save-interprogram-paste-before-kill t)
 
 
-;; Font Settings
-
-(defun crj/make-custom-face-adjustments ()
-  "Customizations to faces whenever the theme is changed.
-
-Fixes many things according to how the author likes them.
-
-Also fixes a pernicious issue where line numbers become variable pitch fonts along with everything else. There's gotta be a better way to fix that than this, but... this works."
-
-  (interactive)
-  ;; (custom-set-faces
-  ;;  '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
-  ;;  '(highlight ((t :background "#b5d0ff")))
-  ;;  '(line-number ((t :family "Hack")))
-  ;;  '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
-  ;;  '(success ((t :foreground "#0031a9")))
-  ;;  '(line-number-current-line ((t :family "Hack"))))
-  )
-
-(add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
 
 ;; Not currently using this, could be useful again though.
 (defun crj/swap-chars ()
@@ -274,34 +253,39 @@ See `transpose-chars' for more info on the original function."
 (show-smartparens-global-mode)
 (setq sp-show-pair-from-inside nil)
 
-                                        ; use better emojis (requires this font!)
-(if (>= emacs-major-version 27)
-    (set-fontset-font t '(#x1f000 . #x1faff)
-                      (font-spec :family "Noto Color Emoji")))
+;;; use better emojis (requires this font!)
+;; (if (>= emacs-major-version 27)
+;;     (set-fontset-font t '(#x1f000 . #x1faff)
+;;                       (font-spec :family "Noto Color Emoji")))
 ;; Theme Settings
 ;;; Modus
 (require 'modus-themes)
-(setq modus-themes-bold-constructs t)
-(setq modus-themes-italic-constructs t)
-(setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
-(setq modus-themes-paren-match '(intense underline))
-(setq modus-themes-subtle-line-numbers nil)
-(setq modus-themes-deuteranopia t)
-(setq modus-themes-markup '(background))
-(setq modus-themes-region '(no-extend bg-only accented))
-(setq modus-themes-hl-line '(intense underline))
-(setq modus-themes-headings
-      (quote ((1 . (rainbow 1.8))
-              (2 . (rainbow 1.6))
-              (3 . (rainbow 1.4))
-              (4 . (rainbow 1.2)))))
-(set-face-attribute 'modus-themes-hl-line nil
-                    :extend nil
-                    :background 'unspecified)
-(setq modus-themes-completions (quote ((matches . (intense background underline bold))
-                                       (selection . (accented intense bold))
-                                       (popup . (accented intense bold)))))
+;; (setq modus-themes-no-mixed-fonts t)
+;; (setq modus-themes-bold-constructs t)
+;; (setq modus-themes-italic-constructs t)
+;; (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
+;; (setq modus-themes-paren-match '(intense underline))
+;; (setq modus-themes-subtle-line-numbers nil)
+;; (setq modus-themes-deuteranopia t)
+;; (setq modus-themes-markup '(background))
+;; (setq modus-themes-region '(no-extend bg-only accented))
+;; (setq modus-themes-hl-line '(intense underline))
+;; (setq modus-themes-headings
+;;       (quote ((1 . (rainbow 1.8))
+;;               (2 . (rainbow 1.6))
+;;               (3 . (rainbow 1.4))
+;;               (4 . (rainbow 1.2)))))
+;; ;; (set-face-attribute 'modus-themes-hl-line nil
+;; ;;                     :extend nil
+;; ;;                     :background 'unspecified)
+;; (setq modus-themes-completions (quote ((matches . (intense background underline bold))
+;;                                        (selection . (accented intense bold))
+;;                                        (popup . (accented intense bold)))))
 
+(mapc #'disable-theme custom-enabled-themes)
+;; (load-theme 'modus-operandi t)
+;; (load-theme 'ef-deuteranopia-light :no-confirm)
+(load-theme 'leuven :no-confirm)
 
 ;;; doom-zenburn
 (setq doom-zenburn-comment-bg t)
@@ -317,14 +301,6 @@ See `transpose-chars' for more info on the original function."
 (setq crj/presentation-theme-daytime 'modus-operandi)
 (setq crj/working-theme-nighttime 'modus-vivendi)
 (setq crj/presentation-theme-nighttime 'modus-operandi)
-
-;; But turn them off in text and shell modes.
-(defun crj/turn-off-ligatures-in-buffer ()
-  (auto-composition-mode -1))
-
-(setq crj/no-ligatures-hooks '(text-mode-hook vterm-mode-hook eshell-mode-hook))
-(dolist (hook crj/no-ligatures-hooks)
-  (add-hook hook #'crj/turn-off-ligatures-in-buffer))
 
 (setq crj/daytime-p t)
 (setq crj/presentation-mode-p nil)
@@ -346,17 +322,15 @@ See `transpose-chars' for more info on the original function."
   (let ((new-theme (crj/get-current-theme)))
     (load-theme new-theme t)))
 
-(crj/switch-to-appropriate-theme)
-(crj/make-custom-face-adjustments)
+;; (crj/switch-to-appropriate-theme)
 
-(set-face-attribute 'highlight nil :background "#b5d0ff")
+;; (set-face-attribute 'highlight nil :background "#b5d0ff")
 
 ;; Constants for crj/toggle-presentation-mode
 (setq crj/working-mode-line-height 160)
 (setq crj/presentation-mode-line-height 320)
 (setq crj/working-line-number-type 'relative)
 (setq crj/presentation-line-number-type t)
-(setq prettify-symbols-alist '())
 
 (defun crj/toggle-presentation-mode ()
   "Toggles between presenting code and working with code.
@@ -389,12 +363,7 @@ It toggles:
   (crj/switch-to-appropriate-theme)
   (doom-big-font-mode))
 
-;; Great if you go back to fixed-pitch programming fonts!
-;; (use-package mixed-pitch
-;;   :hook
-;;   (text-mode . mixed-pitch-mode))
 ;; ;; If you use `org' and don't want your org files in the default location below,
-
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Sync/org/")
 (setq debug-ignored-errors '("^Exit the snippet first!$" "^End of line$" "^Beginning of line$" beginning-of-line beginning-of-buffer end-of-line end-of-buffer end-of-file buffer-read-only file-supersession mark-inactive))
@@ -561,7 +530,7 @@ It toggles:
          (global-hide-mode-line-mode))
        (redraw-display))
 
-                                        ; toggle for
+;;; toggle for
 ;; radio
 ;; pomodoro
 ;; modeline

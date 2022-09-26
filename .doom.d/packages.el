@@ -49,33 +49,20 @@
 
 ; Themes
 
-;; Non-DOOM Solarized themes.
+;; Many Solarized themes.
 (package! solarized-theme)
-
-;; MORE Solarized themes??
 (package! color-theme-solarized)
 (package! color-theme-sanityinc-solarized)
 
-;; Modus themes
 (package! modus-themes)
 
-;; Zenburn theme
-(package! zenburn-theme)
+(package! ef-themes)
 
-;; pomodoro
 (package! org-pomodoro)
-
-;; company improvements
-(package! company-posframe :disable t)
-(package! company-box :disable t)
-(package! company :disable t)
 
 ;; Smooth scrolling.
 (package! scroll-on-jump
   :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
-
-;; ligatures
-(package! fira-code-mode)
 
 ;; streaming radio
 (package! eradio)
@@ -147,6 +134,7 @@
 ;; GraphQL
 (package! graphql-mode)
 
+(package! solaire-mode :disable t)
 ;; different font styles, same file
 (package! mixed-pitch)
 
@@ -185,3 +173,6 @@
 
 ;;; Visualize undo.
 (package! vundo)
+
+;; Font management
+(package! fontaine)
