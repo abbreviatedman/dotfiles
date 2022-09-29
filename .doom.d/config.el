@@ -249,9 +249,13 @@ See `transpose-chars' for more info on the original function."
 (setq doom-big-font-increment 8)
 
 ;; Use smart parens version of showing matching pairs instead of the built-in show-paren method. Includes strings, and you can customize it to include more.
-(show-paren-mode -1)
-(show-smartparens-global-mode)
-(setq sp-show-pair-from-inside nil)
+;; But turn off the actual pairing. I'll manage my own bracket pairs, thanks!
+(use-package smartparens
+  :config
+  (show-paren-mode -1)
+  (show-smartparens-global-mode)
+  (setq sp-show-pair-from-inside nil
+        sp-autoinsert-pair nil))
 
 ;; Theme Settings
 ;;; Modus
