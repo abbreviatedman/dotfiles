@@ -256,27 +256,26 @@ See `transpose-chars' for more info on the original function."
 ;; Theme Settings
 ;;; Modus
 (require 'modus-themes)
-;; (setq modus-themes-no-mixed-fonts t)
-;; (setq modus-themes-bold-constructs t)
-;; (setq modus-themes-italic-constructs t)
-;; (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
-;; (setq modus-themes-paren-match '(intense underline))
-;; (setq modus-themes-subtle-line-numbers nil)
-;; (setq modus-themes-deuteranopia t)
-;; (setq modus-themes-markup '(background))
-;; (setq modus-themes-region '(no-extend bg-only accented))
-;; (setq modus-themes-hl-line '(intense underline))
-;; (setq modus-themes-headings
-;;       (quote ((1 . (rainbow 1.8))
-;;               (2 . (rainbow 1.6))
-;;               (3 . (rainbow 1.4))
-;;               (4 . (rainbow 1.2)))))
-;; ;; (set-face-attribute 'modus-themes-hl-line nil
-;; ;;                     :extend nil
-;; ;;                     :background 'unspecified)
-;; (setq modus-themes-completions (quote ((matches . (intense background underline bold))
-;;                                        (selection . (accented intense bold))
-;;                                        (popup . (accented intense bold)))))
+(setq modus-themes-bold-constructs t)
+(setq modus-themes-italic-constructs t)
+(setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
+(setq modus-themes-paren-match '(intense underline))
+(setq modus-themes-subtle-line-numbers nil)
+(setq modus-themes-deuteranopia t)
+(setq modus-themes-markup '(background))
+(setq modus-themes-region '(no-extend bg-only accented))
+(setq modus-themes-hl-line '(intense underline))
+(setq modus-themes-headings
+      (quote ((1 . (rainbow 1.8))
+              (2 . (rainbow 1.6))
+              (3 . (rainbow 1.4))
+              (4 . (rainbow 1.2)))))
+;; (set-face-attribute 'modus-themes-hl-line nil
+;;                     :extend nil
+;;                     :background 'unspecified)
+(setq modus-themes-completions (quote ((matches . (intense background underline bold))
+                                       (selection . (accented intense bold))
+                                       (popup . (accented intense bold)))))
 
 (mapc #'disable-theme custom-enabled-themes)
 (load-theme 'modus-operandi t)
