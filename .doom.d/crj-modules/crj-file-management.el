@@ -29,4 +29,12 @@
 ;; or it's changed programmatically
 (global-auto-revert-mode t)
 
+;; (use-package recentf
+;;   :init
+;;   (recentf-mode)
+;;   :config
+;;   (setq recentf-max-saved-items 1000
+;;         recentf-auto-cleanup 'never)
+;;   (global-set-key (kbd "C-c C-r") #'consult-recent-file))
+
 ;; TODO add projectile cache update advice to new file creation
