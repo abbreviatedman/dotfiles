@@ -8,7 +8,8 @@
 (use-package! org
   :config
   (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
-  (setq org-capture-templates '(("t" "Personal todo" entry
+  (setq org-link-descriptive t
+        org-capture-templates '(("t" "Personal todo" entry
                                  (file+headline +org-capture-todo-file "Inbox")
                                  "* TODO %?\n%i\n%a" :prepend t)
                                 ("n" "Personal notes" entry
