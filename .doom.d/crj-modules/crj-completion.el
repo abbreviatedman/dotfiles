@@ -92,9 +92,13 @@
   :config
   (define-key corfu-map (kbd "M-g") #'corfu-quit)
   (define-key corfu-map (kbd "C-n") #'corfu-next)
+  (define-key corfu-map (kbd "C-j") #'corfu-next)
   (define-key corfu-map (kbd "C-p") #'corfu-previous)
+  (define-key corfu-map (kbd "C-k") #'corfu-previous)
   (define-key corfu-map (kbd "C-S-n") #'corfu-scroll-up)
+  (define-key corfu-map (kbd "C-S-j") #'corfu-scroll-up)
   (define-key corfu-map (kbd "C-S-p") #'corfu-scroll-down)
+  (define-key corfu-map (kbd "C-S-k") #'corfu-scroll-down)
   (define-key corfu-map (kbd "RET") nil)
   (define-key corfu-map (kbd "RET") #'corfu-complete)
   (define-key corfu-map (kbd "TAB") nil)

@@ -77,7 +77,7 @@
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
 
-                                        ; Better window management.
+;;; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
 ;; Also, use the hydra as a better UI for window management.
@@ -96,6 +96,12 @@
        :n "a" #'hydra/crj-window-nav/body))
 
 (setq windmove-wrap-around t)
+
+;; TODO figure out how to use leader keys with built-in keybinding functions
+;; (global-set-key (kbd "SPC h S-g") #'customize-group)
+(map! :leader
+      (:prefix ("h" . "+help")
+       :desc "Customize group." :n "G" #'customize-group))
 
 ;; Start with lisp!
 (setq initial-major-mode 'emacs-lisp-mode)
@@ -217,8 +223,6 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 ;; Stop clobbering my system clipboard, emacs you fiend.
 (setq save-interprogram-paste-before-kill t)
 
-
-
 ;; Not currently using this, could be useful again though.
 (defun crj/swap-chars ()
   (interactive)
@@ -229,12 +233,16 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (defun crj/evil-tranpose-chars ()
   "Transpose characters as one evil action.
 
-Wraps the function `transpose-chars' so that it's more in the style of Evil Mode/Vim. (See info node `(evil)Overview')
+Wraps the function `transpose-chars' so that it's more in the style of Evil
+Mode/Vim. (See info node `(evil)Overview')
 
-- Acts on the current character and the one to the right, which is more in line with Vim's Normal Mode style.
+- Acts on the current character and the one to the right, which is more in line
+with Vim's Normal Mode style.
 - Adds the entire process as one action, adding undo/repeat ability.
 
-This differs greatly from the more Emacs-like `transpose-chars', which allows you to drag a character forward as far as you want, using a count,, but this author found that he preferred the atomicity of Normal Mode.
+This differs greatly from the more Emacs-like `transpose-chars', which allows
+you to drag a character forward as far as you want, using a count,, but this
+author found that he preferred the atomicity of Normal Mode.
 
 See `transpose-chars' for more info on the original function."
   (interactive)
@@ -248,116 +256,127 @@ See `transpose-chars' for more info on the original function."
 ;; For doom-big-font-mode
 (setq doom-big-font-increment 8)
 
-;; Use smart parens version of showing matching pairs instead of the built-in show-paren method. Includes strings, and you can customize it to include more.
-(show-paren-mode -1)
-(show-smartparens-global-mode)
-(setq sp-show-pair-from-inside nil)
+;; Use smart parens version of showing matching pairs instead of the built-in
+;; show-paren method. Includes strings, and you can customize it to include
+;; more.  But turn off the actual pairing. I'll manage my own bracket pairs,
+;; thanks!
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
+
+(use-package smartparens
+  :config
+  (smartparens-global-mode -1)
+  (show-paren-mode -1)
+  (show-smartparens-global-mode)
+  (setq sp-show-pair-from-inside nil))
 
 ;; Theme Settings
 ;;; Modus
-(require 'modus-themes)
-;; (setq modus-themes-no-mixed-fonts t)
-;; (setq modus-themes-bold-constructs t)
-;; (setq modus-themes-italic-constructs t)
-;; (setq modus-themes-syntax '(alt-syntax yellow-comments green-strings))
-;; (setq modus-themes-paren-match '(intense underline))
-;; (setq modus-themes-subtle-line-numbers nil)
-;; (setq modus-themes-deuteranopia t)
-;; (setq modus-themes-markup '(background))
-;; (setq modus-themes-region '(no-extend bg-only accented))
-;; (setq modus-themes-hl-line '(intense underline))
-;; (setq modus-themes-headings
-;;       (quote ((1 . (rainbow 1.8))
-;;               (2 . (rainbow 1.6))
-;;               (3 . (rainbow 1.4))
-;;               (4 . (rainbow 1.2)))))
-;; ;; (set-face-attribute 'modus-themes-hl-line nil
-;; ;;                     :extend nil
-;; ;;                     :background 'unspecified)
-;; (setq modus-themes-completions (quote ((matches . (intense background underline bold))
-;;                                        (selection . (accented intense bold))
-;;                                        (popup . (accented intense bold)))))
+(use-package emacs
+  :init
+  (setq modus-themes-bold-constructs t
+        modus-themes-italic-constructs t
+        modus-themes-syntax '(alt-syntax yellow-comments green-strings)
+        modus-themes-paren-match '(intense underline)
+        modus-themes-subtle-line-numbers nil
+        modus-themes-deuteranopia t
+        modus-themes-markup '(background)
+        modus-themes-org-blocks 'gray-background
+        modus-themes-region '(no-extend bg-only accented)
+        modus-themes-hl-line nil
+        modus-themes-headings (quote
+                               ((1 . (rainbow 1.8))
+                                (2 . (rainbow 1.6))
+                                (3 . (rainbow 1.4))
+                                (4 . (rainbow 1.2))))
+        modus-themes-completions (quote
+                                  ((matches . (intense background underline bold))
+                                   (selection . (accented intense bold))
+                                   (popup . (accented intense bold)))))
+  :config
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme 'modus-operandi t)
+  (setq evil-insert-state-cursor `((bar . 2) ,(modus-themes-color 'red-intense))
+        evil-normal-state-cursor `(box ,(modus-themes-color 'blue-alt)))
 
-(mapc #'disable-theme custom-enabled-themes)
-(load-theme 'modus-operandi t)
-;; (load-theme 'ef-deuteranopia-light :no-confirm)
-;; (load-theme 'leuven :no-confirm)
+  (set-face-attribute 'modus-themes-hl-line nil
+                      :extend nil
+                      :background 'unspecified))
 
 ;;; doom-zenburn
-(setq doom-zenburn-comment-bg t)
-(setq doom-zenburn-brighter-comments t)
-(setq doom-zenburn-brighter-modeline t)
+;; (setq doom-zenburn-comment-bg t)
+;; (setq doom-zenburn-brighter-comments t)
+;; (setq doom-zenburn-brighter-modeline t)
 
 ;;; zenburn
-(setq zenburn-scale-org-headlines t)
-(setq zenburn-scale-outline-headlines t)
+;; (setq zenburn-scale-org-headlines t)
+;; (setq zenburn-scale-outline-headlines t)
 
 ;;; set fave themes
-(setq crj/working-theme-daytime 'modus-operandi)
-(setq crj/presentation-theme-daytime 'modus-operandi)
-(setq crj/working-theme-nighttime 'modus-vivendi)
-(setq crj/presentation-theme-nighttime 'modus-operandi)
+; (setq crj/working-theme-daytime 'modus-operandi)
+; (setq crj/presentation-theme-daytime 'modus-operandi)
+; (setq crj/working-theme-nighttime 'modus-vivendi)
+; (setq crj/presentation-theme-nighttime 'modus-operandi)
 
-(setq crj/daytime-p t)
-(setq crj/presentation-mode-p nil)
+; (setq crj/daytime-p t)
+; (setq crj/presentation-mode-p nil)
 
-(defun crj/get-current-theme ()
-  "Get current theme, depending on time of day and presentation mode."
-  (cond ((and crj/daytime-p crj/presentation-mode-p)
-         crj/presentation-theme-daytime)
-        ((and crj/daytime-p (not crj/presentation-mode-p))
-         crj/working-theme-daytime)
-        ((and (not crj/daytime-p) crj/presentation-mode-p)
-         crj/presentation-theme-nighttime)
-        ((and (not crj/daytime-p) (not crj/presentation-mode-p))
-         crj/working-theme-nighttime)))
+;; (defun crj/get-current-theme ()
+;;   "Get current theme, depending on time of day and presentation mode."
+;;   (cond ((and crj/daytime-p crj/presentation-mode-p)
+;;          crj/presentation-theme-daytime)
+;;         ((and crj/daytime-p (not crj/presentation-mode-p))
+;;          crj/working-theme-daytime)
+;;         ((and (not crj/daytime-p) crj/presentation-mode-p)
+;;          crj/presentation-theme-nighttime)
+;;         ((and (not crj/daytime-p) (not crj/presentation-mode-p))
+;;          crj/working-theme-nighttime)))
 
-(defun crj/switch-to-appropriate-theme ()
-  "Switch to the theme appropriate to the time of day and presentation mode."
-  (mapc #'disable-theme custom-enabled-themes)
-  (let ((new-theme (crj/get-current-theme)))
-    (load-theme new-theme t)))
+;; (defun crj/switch-to-appropriate-theme ()
+;;   "Switch to the theme appropriate to the time of day and presentation mode."
+;;   (mapc #'disable-theme custom-enabled-themes)
+;;   (let ((new-theme (crj/get-current-theme)))
+;;     (load-theme new-theme t)))
 
 ;; (crj/switch-to-appropriate-theme)
 
 ;; (set-face-attribute 'highlight nil :background "#b5d0ff")
 
 ;; Constants for crj/toggle-presentation-mode
-(setq crj/working-mode-line-height 160)
-(setq crj/presentation-mode-line-height 320)
+;; (setq crj/working-mode-line-height 160)
+;; (setq crj/presentation-mode-line-height 320)
 (setq crj/working-line-number-type 'relative)
-(setq crj/presentation-line-number-type t)
+;; (setq crj/presentation-line-number-type t)
 
-(defun crj/toggle-presentation-mode ()
-  "Toggles between presenting code and working with code.
+;; (defun crj/toggle-presentation-mode ()
+;;   "Toggles between presenting code and working with code.
 
-It toggles:
+;; It toggles:
 
-- theme (ensuring we use a light theme),
-- line number type,
-- and text size, both in regular buffer and the mode line."
+;; - theme (ensuring we use a light theme),
+;; - line number type,
+;; - and text size, both in regular buffer and the mode line."
 
-  (interactive)
-  (if crj/presentation-mode-p
-      (progn
-        (setq
-         crj/presentation-mode-p nil
-         display-line-numbers-type crj/working-line-number-type)
-        (global-display-line-numbers-mode 1)
-        (global-hl-line-mode -1)
-        (global-auto-composition-mode 1)
-        (set-face-attribute 'mode-line nil
-                            :height crj/working-mode-line-height))
-    (setq
-     crj/presentation-mode-p t
-     display-line-numbers-type crj/presentation-line-number-type)
-    (global-display-line-numbers-mode 1)
-    (global-hl-line-mode)
-    (global-auto-composition-mode -1)
-    (set-face-attribute 'mode-line nil
-                        :height crj/presentation-mode-line-height))
-  (crj/switch-to-appropriate-theme)
-  (doom-big-font-mode))
+;;   (interactive)
+;;   (if crj/presentation-mode-p
+;;       (progn
+;;         (setq
+;;          crj/presentation-mode-p nil
+;;          display-line-numbers-type crj/working-line-number-type)
+;;         (global-display-line-numbers-mode 1)
+;;         (global-hl-line-mode -1)
+;;         (global-auto-composition-mode 1)
+;;         (set-face-attribute 'mode-line nil
+;;                             :height crj/working-mode-line-height))
+;;     (setq
+;;      crj/presentation-mode-p t
+;;      display-line-numbers-type crj/presentation-line-number-type)
+;;     (global-display-line-numbers-mode 1)
+;;     (global-hl-line-mode)
+;;     (global-auto-composition-mode -1)
+;;     (set-face-attribute 'mode-line nil
+;;                         :height crj/presentation-mode-line-height))
+;;   (crj/switch-to-appropriate-theme)
+;;   (doom-big-font-mode))
 
 ;; ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -379,6 +398,7 @@ It toggles:
   (crj/switch-to-appropriate-theme)
   (crj/make-custom-face-adjustments))
 
+(global-hl-line-mode -1)
 ;; Best way to remove global-hl-line-mode in Doom.
 (remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
 
@@ -591,6 +611,7 @@ instead."
 (when (or (memq window-system '(mac ns x)) (daemonp))
   (setq exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
+
 ;; open links through ace-link
 (define-key help-mode-map (kbd "M-o") #'ace-link-help)
 ;; (define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
