@@ -516,16 +516,17 @@ See `transpose-chars' for more info on the original function."
 
 (setq scroll-on-jump-duration 1)
 
-(setq eradio-channels '(("Chill Lounge Florida" . "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://us5.internet-radio.com:8283/listen.pls&t=.pls")
+(setq eradio-channels '(("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
+                        ("Ethereal Radio" . "http://us4.internet-radio.com:8073/live.m3u")
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
                         ("SomaFM - Beat Blender" . "https://somafm.com/beatblender.pls")
-                        ("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
+                        ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")
                         ("SomaFM - Secret Agent" . "https://somafm.com/secretagent.pls")
                         ("SomaFM - DEF CON" . "https://somafm.com/defcon.pls")
                         ("SomaFM - Space Station Soma" . "https://somafm.com/spacestation.pls")
                         ("SomaFM - Deep Space One" . "https://somafm.com/deepspaceone.pls")
-                        ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")))
+                        ("Chill Lounge Florida" . "https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://us5.internet-radio.com:8283/listen.pls&t=.pls")))
 
 
 ;; Doom Modeline settings.
