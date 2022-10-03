@@ -78,3 +78,4 @@
    ["black" "#ff8059" "#44bc44" "#d0bc00" "#2fafff" "#feacd0" "#00d3d0" "gray65"])
  '(xterm-color-names-bright
    ["gray35" "#ef8b50" "#70b900" "#c0c530" "#79a8ff" "#f78fe7" "#4ae2f0" "white"]))
+(put 'narrow-to-region 'disabled nil)
