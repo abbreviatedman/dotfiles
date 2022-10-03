@@ -46,28 +46,20 @@
  (:prefix ("t" . "toggle")
   :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
-(defun crj/set-up-orderless ()
-  (setq orderless-component-separator "\_"
-        orderless-style-dispatchers '(+vertico-orderless-dispatch)
-        orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp)))
-
-;; (use-package vertico
-;;   :after orderless
-;;   :config
-;;   (crj/set-up-orderless)
-;;   (vertico-indexed-mode)
-;;   (map! :leader
-;;         :desc "Select from previous completions." "\"" #'vertico-repeat-select)
-;;   (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
-;;   (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
+(use-package vertico
+  :config
+  (vertico-indexed-mode)
+  (map! :map vertico-map "C-:" #'crj/embark-act-without-quitting)
+  (map! :leader
+        :desc "Select from previous completions." "\"" #'vertico-repeat-select)
+  (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
+  (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
 
 ;; embark act and resume completion
-;; (defun crj/embark-act-without-quitting ()
-;;   (interactive)
-;;   (let ((embark-quit-after-action nil))
-;;     (embark-act)))
-
-(map! :map vertico-map "C-:" #'crj/embark-act-without-quitting)
+(defun crj/embark-act-without-quitting ()
+  (interactive)
+  (let ((embark-quit-after-action nil))
+    (embark-act)))
 
 (use-package corfu
   :config
@@ -121,8 +113,6 @@
 ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
 ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
 
-;; (setq read-extended-command-predicate #'command-completion-default-include-p)
-
 ;; (add-hook 'web-mode-hook #'lsp)
 ;; (add-hook 'sql-mode-hook #'lsp)
 
@@ -134,21 +124,20 @@
 
 
 ;; completion source extensions
-(use-package! cape
-  ;; Bind dedicated completion commands
-  :bind (("C-c p" . completion-at-point))
-  :init
-  (defun crj/set-up-cape ()
-  "Add `completion-at-point-functions' from cape to the list."
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-tex)
-  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  (add-to-list 'completion-at-point-functions #'cape-sgml)
-  (add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-symbol))
-  :config
-  (crj/set-up-cape))
+;; just not sure I need cape
+;; (use-package! cape
+;;   ;; Bind dedicated completion commands
+;;   :bind (("C-c p" . completion-at-point))
+;;   :init
+;;   (defun crj/set-up-cape ()
+;;   "Add `completion-at-point-functions' from cape to the list."
+;;   (add-to-list 'completion-at-point-functions #'cape-file)
+;;   (add-to-list 'completion-at-point-functions #'cape-tex)
+;;   ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+;;   (add-to-list 'completion-at-point-functions #'cape-keyword)
+;;   (add-to-list 'completion-at-point-functions #'cape-sgml)
+;;   (add-to-list 'completion-at-point-functions #'cape-rfc1345)
+;;   (add-to-list 'completion-at-point-functions #'cape-symbol)))
 
 (after! projectile
   (add-to-list 'projectile-project-root-files ".git"))
@@ -259,7 +248,6 @@
 
 ;; (map! :i "C-SPC" #'complete-symbol)
 
-
 (defun crj/marginalia-toggle ()
   (interactive)
   (mapc
@@ -298,7 +286,6 @@
   :init
   (global-corfu-mode))
 
-;; A few more useful configurations...
 (use-package emacs
   :init
   ;; TAB cycle if there are only few candidates
