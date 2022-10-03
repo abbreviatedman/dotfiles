@@ -94,6 +94,7 @@ when you're mixing pitches"
 ;; Hooks for modes I want to use fixed pitch in.
 (setq crj/fixed-pitch-mode-hooks
       '(vterm-mode-hook
+        calendar-mode-hook
         mu4e-headers-mode-hook))
 
 (dolist (hook crj/fixed-pitch-mode-hooks)

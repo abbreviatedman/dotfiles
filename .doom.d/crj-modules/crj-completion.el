@@ -41,39 +41,17 @@
       (eldoc-mode -1)
     (eldoc-mode 1)))
 
-(setq lsp-diagnostics-attributes
-      `((unnecessary :foreground "unspecified" :underline "gray")
-        (deprecated  :strike-through t)))
-
-(defun crj/setup-lsp ()
-  (interactive)
-  (company-mode -1)
-  (setq lsp-enable-symbol-highlighting nil)
-  (setq lsp-eldoc-enable-hover nil))
-
-(add-hook 'lsp-mode-hook #'crj/setup-lsp)
-
 (map!
  :leader
  (:prefix ("t" . "toggle")
   :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
 
-(defun crj/set-up-orderless ()
-  (setq completion-category-defaults nil
-        orderless-component-separator "\_"
-        orderless-style-dispatchers '(+vertico-orderless-dispatch)
-        orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp)))
-
-(after! orderless (crj/set-up-orderless))
-(add-hook 'before-make-frame-hook #'crj/set-up-orderless)
-
 (use-package vertico
-  :after orderless
   :config
-  (crj/set-up-orderless)
   (vertico-indexed-mode)
+  (map! :map vertico-map "C-:" #'crj/embark-act-without-quitting)
   (map! :leader
-        (:desc "Select from previous completions." "\"" #'vertico-repeat-select))
+        :desc "Select from previous completions." "\"" #'vertico-repeat-select)
   (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
   (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
 
@@ -83,12 +61,7 @@
   (let ((embark-quit-after-action nil))
     (embark-act)))
 
-(map! :map vertico-map "C-:" #'crj/embark-act-without-quitting)
-
 (use-package corfu
-  :hook ((prog-mode . corfu-mode)
-         (eshell-mode . corfu-mode)
-         (vterm-mode . corfu-mode))
   :config
   (define-key corfu-map (kbd "M-g") #'corfu-quit)
   (define-key corfu-map (kbd "C-n") #'corfu-next)
@@ -106,75 +79,65 @@
   (define-key corfu-map (kbd "<tab>") #'corfu-insert)
   (define-key corfu-map (kbd "TAB") #'corfu-insert)
 
-  (defun corfu-beginning-of-prompt ()
-    "Move to beginning of completion input."
-    (interactive)
-    (corfu--goto -1)
-    (goto-char (car completion-in-region--data)))
-
-  (defun corfu-end-of-prompt ()
-    "Move to end of completion input."
-    (interactive)
-    (corfu--goto -1)
-    (goto-char (cadr completion-in-region--data)))
-
-  (define-key corfu-map (kbd "^") #'corfu-beginning-of-prompt)
-  (define-key corfu-map (kbd "$") #'corfu-end-of-prompt)
-
   (setq corfu-commit-predicate nil
-        completion-category-defaults nil
-        completion-category-overrides nil
+        completion-category-overrides '((eglot (styles orderless)))
         corfu-auto t
         corfu-auto-prefix 1
         corfu-quit-no-match t
         corfu-cycle t))
 
-(use-package orderless
-  :after corfu
-  :config
-  (setq completion-category-defaults nil
-        orderless-component-separator "\_"))
+;; (use-package lsp-mode
+;;   :init
+;;   (setq lsp-completion-provider :none
+;;         lsp-diagnostics-attributes `((unnecessary
+;;                                       :foreground unspecified
+;;                                       :underline "gray")
+;;                                      (deprecated
+;;                                       :strike-through t)))
+
+;;   :config
+;;   (setq company-mode -1
+;;         lsp-enable-symbol-highlighting nil
+;;         lsp-eldoc-enable-hover nil))
+
+;; (add-hook 'lsp-after-initialize-hook #'crj/fix-lsp)
 
 (map! :i "C-n" nil)
 (map! :i "C-p" nil)
 
-; Use "_" as the start of Consult's project-wide search (to play better with Orderless)
-(after! consult
+;; Use "_" as the start of Consult's project-wide search (to play better with Orderless)
+(use-package! consult
+  :config
   (plist-put (alist-get 'perl consult-async-split-styles-alist) :initial "_"))
 
-(advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-(advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
+;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
 
-(setq exec-path (append exec-path '("~/go/bin")))
+;; (add-hook 'web-mode-hook #'lsp)
+;; (add-hook 'sql-mode-hook #'lsp)
 
-(setq read-extended-command-predicate #'command-completion-default-include-p)
-
-(add-hook 'web-mode-hook #'lsp)
-
-(add-hook 'sql-mode-hook #'lsp)
-(setq lsp-sqls-workspace-config-path "workspace")
+;; (setq lsp-sqls-workspace-config-path "workspace")
 ;; (setq lsp-sqls-connections
 ;;     '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abbreviatedman sslmode=disable dbname"))))
 
 (map! :map global-map "M-g" nil)
 
-;; Search for snippets.
-(map! :i "C-x s" #'consult-yasnippet)
-(map! :i "C-x C-s" #'consult-yasnippet)
 
 ;; completion source extensions
-(use-package! cape
-  ;; Bind dedicated completion commands
-  :bind (("C-c p" . completion-at-point))
-  :init
-  ;; Add `completion-at-point-functions', used by `completion-at-point'.
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-tex)
-  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-keyword)
-  (add-to-list 'completion-at-point-functions #'cape-sgml)
-  (add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  (add-to-list 'completion-at-point-functions #'cape-symbol))
+;; just not sure I need cape
+;; (use-package! cape
+;;   ;; Bind dedicated completion commands
+;;   :bind (("C-c p" . completion-at-point))
+;;   :init
+;;   (defun crj/set-up-cape ()
+;;   "Add `completion-at-point-functions' from cape to the list."
+;;   (add-to-list 'completion-at-point-functions #'cape-file)
+;;   (add-to-list 'completion-at-point-functions #'cape-tex)
+;;   ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+;;   (add-to-list 'completion-at-point-functions #'cape-keyword)
+;;   (add-to-list 'completion-at-point-functions #'cape-sgml)
+;;   (add-to-list 'completion-at-point-functions #'cape-rfc1345)
+;;   (add-to-list 'completion-at-point-functions #'cape-symbol)))
 
 (after! projectile
   (add-to-list 'projectile-project-root-files ".git"))
@@ -237,54 +200,53 @@
 
 ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
 
-(after! lsp
-  (setq lsp-completion-provider :none
-        lsp-auto-guess-root t))
+;; (setq lsp-completion-provider :none
+;;       lsp-auto-guess-root t)
 
 (map! :leader "/" #'+default/search-buffer)
 
-(cl-defmacro teco/lsp-org-babel-enable (lang)
-  "Support LANG in org source code block."
-  (setq centaur-lsp 'lsp-mode)
-  (cl-check-type lang string)
-  (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
-         (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
-    `(progn
-       (defun ,intern-pre (info)
-         (let ((file-name (->> info caddr (alist-get :file))))
-           (unless file-name
-             (setq file-name (make-temp-file "babel-lsp-")))
-           (setq buffer-file-name file-name)
-           (lsp-deferred)))
-       (put ',intern-pre 'function-documentation
-            (format "Enable lsp-mode in the buffer of org source block (%s)."
-                    (upcase ,lang)))
-       (if (fboundp ',edit-pre)
-           (advice-add ',edit-pre :after ',intern-pre)
-         (progn
-           (defun ,edit-pre (info)
-             (,intern-pre info))
-           (put ',edit-pre 'function-documentation
-                (format "Prepare local buffer environment for org source block (%s)."
-                        (upcase ,lang))))))))
+;; (cl-defmacro teco/lsp-org-babel-enable (lang)
+;;   "Support LANG in org source code block."
+;;   (setq centaur-lsp 'lsp-mode)
+;;   (cl-check-type lang string)
+;;   (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
+;;          (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
+;;     `(progn
+;;        (defun ,intern-pre (info)
+;;          (let ((file-name (->> info caddr (alist-get :file))))
+;;            (unless file-name
+;;              (setq file-name (make-temp-file "babel-lsp-")))
+;;            (setq buffer-file-name file-name)
+;;            (lsp-deferred)))
+;;        (put ',intern-pre 'function-documentation
+;;             (format "Enable lsp-mode in the buffer of org source block (%s)."
+;;                     (upcase ,lang)))
+;;        (if (fboundp ',edit-pre)
+;;            (advice-add ',edit-pre :after ',intern-pre)
+;;          (progn
+;;            (defun ,edit-pre (info)
+;;              (,intern-pre info))
+;;            (put ',edit-pre 'function-documentation
+;;                 (format "Prepare local buffer environment for org source block (%s)."
+;;                         (upcase ,lang))))))))
 
-(defvar org-babel-lang-list
-  '("go" "python" "ipython" "bash" "sh" "js" "javascript" "sql" "sql-mode"))
-(dolist (lang org-babel-lang-list)
-  (eval `(teco/lsp-org-babel-enable ,lang)))
+;; (defvar org-babel-lang-list
+;;   '("go" "python" "ipython" "bash" "sh" "js" "javascript" "sql" "sql-mode"))
+;; (dolist (lang org-babel-lang-list)
+;;   (eval `(teco/lsp-org-babel-enable ,lang)))
 
-(defun org-babel-edit-prep:javascript (babel-info)
-  (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
-  (lsp))
+;; (defun org-babel-edit-prep:javascript (babel-info)
+;;   (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
+;;   (lsp))
 
-(defun org-babel-edit-prep:js (babel-info)
-  (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
-  (lsp))
+;; (defun org-babel-edit-prep:js (babel-info)
+;;   (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
+;;   (lsp))
 
-(map! :leader (:desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring))
+(map! :leader
+      :desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring)
 
-(map! :i "C-SPC" #'complete-symbol)
-
+;; (map! :i "C-SPC" #'complete-symbol)
 
 (defun crj/marginalia-toggle ()
   (interactive)
@@ -298,3 +260,76 @@
 ;; use completion version—for now, it works better for me
 ;; it also works better on smaller screens!
 (setq embark-prompter 'embark-completing-read-prompter)
+
+(use-package corfu
+  ;; Optional customizations
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
+  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+  :init
+  (global-corfu-mode))
+
+(use-package emacs
+  :init
+  ;; TAB cycle if there are only few candidates
+  ;; (setq completion-cycle-threshold 3)
+
+  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete))
+
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-overrides '((file (styles . (partial-completion))))
+        orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+  :config
+  (setq orderless-component-separator "\_"))
+;; (add-to-list completion-category-overrides '(file (styles . partial-completion)))
+  ;; (add-to-list completion-category-overrides '(eglot (styles . orderless))))
+  ;; (setq completion-category-overrides '((file (styles . (partial-completion))))))
+
+(use-package eglot
+  :config
+  ;; not sure I need cape
+  ;; (crj/set-up-cape)
+  )
+
+(use-package elisp-mode
+  :config
+  ;; not sure I need cape
+  ;; (crj/set-up-cape)
+  )
+
+(use-package! flycheck
+  ;; The below is not a great long-term solution... see if this gets resolved:
+  ;; https://github.com/doomemacs/doomemacs/issues/6466
+  :after eglot
+  :config
+  (delq! 'eglot flycheck-checkers))
