@@ -574,18 +574,6 @@ See `transpose-chars' for more info on the original function."
        :desc "ibuffer filter by mode" :n "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" :n "?" #'ibuffer-filter-disable))
 
-;; Uses Vim's original meaning of `G`, which puts you at the last NON-EMPTY line.
-(defun crj/end-of-buffer ()
-  "Go to beginning of last line in buffer.
-
-If last line is empty, go to beginning of penultimate one
-instead."
-  (interactive)
-  (goto-char (point-max))
-  (beginning-of-line (and (looking-at-p "^$") 0)))
-
-(define-key evil-normal-state-map "G" #'crj/end-of-buffer)
-
 (add-hook! 'rjsx-mode-hook #'jest-minor-mode #'emmet-mode)
 
 ;; i3wm mode.
@@ -808,6 +796,10 @@ Added as advice below. So... careful!"
       (goto-char (point-min))
       (replace-string "&gt;" ">")
       (goto-char (point-min)))))
+
+(use-package beginend
+  :config
+  (beginend-global-mode))
 
 ;; Load my (many) config files. But not the flycheck ones.
 ;; Not sure I /needed/ to avoid loading those.

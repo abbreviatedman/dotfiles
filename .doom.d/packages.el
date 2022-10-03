@@ -117,6 +117,10 @@
 (package! cape)
 (package! consult-yasnippet)
 
+;; Nice package for redefining beginnings and ends of some buffers as the
+;; IMPORTANT beginnings and ends.
+(package! beginend)
+
 ;; Slack
 (package! request)
 (package! oauth2)
