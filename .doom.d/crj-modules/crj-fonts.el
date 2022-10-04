@@ -75,10 +75,11 @@ when you're mixing pitches"
                               line-number
                               line-number-minor-tick))
 
-(defun crj/make-line-number-face-monospace ()
+(defun crj/make-line-number-face-monospace (&rest args)
   (interactive)
   (dolist (face crj/fixed-pitch-faces)
-    (face-remap-add-relative face :family crj/ui-fixed-pitch-font)))
+    (face-remap-add-relative face :family crj/ui-fixed-pitch-font))
+  args)
 
 (crj/make-line-number-face-monospace)
 (add-hook 'doom-switch-buffer-hook #'crj/make-line-number-face-monospace)
