@@ -395,4 +395,6 @@ Source: https://emacs.stackexchange.com/a/43662."
        :desc "Open tasks repo."
        :n "o" #'crj/open-tasks-file))
 
+(setq org-fancy-priorities-list '("🔺" "👍" "⬇"))
+
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)
