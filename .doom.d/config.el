@@ -380,7 +380,7 @@ See `transpose-chars' for more info on the original function."
 
 ;; ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Sync/org/")
+(setq org-directory "~/org-stuff")
 (setq debug-ignored-errors '("^Exit the snippet first!$" "^End of line$" "^Beginning of line$" beginning-of-line beginning-of-buffer end-of-line end-of-buffer end-of-file buffer-read-only file-supersession mark-inactive))
                                         ; line number settings
 

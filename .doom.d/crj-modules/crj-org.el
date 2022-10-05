@@ -394,3 +394,5 @@ Source: https://emacs.stackexchange.com/a/43662."
       (:prefix "o"
        :desc "Open tasks repo."
        :n "o" #'crj/open-tasks-file))
+
+(add-hook 'elfeed-search-mode-hook #'elfeed-update)
