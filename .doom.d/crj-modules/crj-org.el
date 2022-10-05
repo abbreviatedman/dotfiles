@@ -395,4 +395,20 @@ Source: https://emacs.stackexchange.com/a/43662."
        :desc "Open tasks repo."
        :n "o" #'crj/open-tasks-file))
 
+;; Make it pretty.
+(setq org-fancy-priorities-list '("🔺" "👍" "⬇")
+      org-pretty-entities t
+      org-link-descriptive t
+      org-hide-emphasis-markers t
+      org-startup-with-inline-images t
+      org-image-actual-width '(300))
+
+(defun crj/org-toggle-character-markers ()
+  (interactive)
+  (crj/toggle-boolean-setting 'org-hide-emphasis-markers)
+  (dolist (buffer (buffer-list (current-buffer)))
+    (with-current-buffer buffer
+      (when (eq 'org-mode major-mode)
+        (org-mode-restart)))))
+
 (add-hook 'elfeed-search-mode-hook #'elfeed-update)

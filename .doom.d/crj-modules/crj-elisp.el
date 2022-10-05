@@ -47,5 +47,5 @@
 (map!
  :leader
  (:prefix ("t" . "Toggle")
-  :desc "Toggle debugging during elisp errors."
+  :desc "debug during elisp errors."
   :n "B" #'toggle-debug-on-error))

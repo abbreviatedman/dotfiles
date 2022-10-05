@@ -77,6 +77,31 @@
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
 
+;; Some helpful utilities.
+(defun crj/cycle-setting (setting potential-values)
+  "Cycle SETTING through POTENTIAL-VALUES.
+
+SETTING is a quoted symbol.
+
+POTENTIAL-VALUES is a list of values to cycle through."
+  (let* ((current (cl-position (eval setting) potential-values))
+         (next (1+ current))
+         (new (if (eq next (length potential-values))
+                  0
+                next)))
+  (set setting (nth new potential-values))))
+
+(defun crj/toggle-boolean-setting (&rest booleans)
+  "Toggle BOOLEANS between t and nil.
+
+Each BOOLEAN must be a quoted symbol.
+
+Like `setq', this function may be used on multiple symbols simultaneously.
+
+Unlike `setq', they must be quoted."
+  (dolist (boolean booleans)
+    (set boolean (not (eval boolean)))))
+
 ;;; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
@@ -192,7 +217,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
        :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
        :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
        :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
-       :desc "toggle ligatures in buffer" :n "l" #'prettify-symbols-mode
+       :desc "toggle ligatures in buffer" :n "l" #'org-toggle-link-display
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
 
@@ -343,7 +368,7 @@ See `transpose-chars' for more info on the original function."
 ;; (setq crj/working-mode-line-height 160)
 ;; (setq crj/presentation-mode-line-height 320)
 (setq crj/working-line-number-type 'relative)
-;; (setq crj/presentation-line-number-type t)
+(setq crj/presentation-line-number-type t)
 
 ;; (defun crj/toggle-presentation-mode ()
 ;;   "Toggles between presenting code and working with code.
@@ -388,8 +413,6 @@ See `transpose-chars' for more info on the original function."
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type crj/working-line-number-type)
 ;; soft wrap lines
-(global-visual-line-mode 1)
-
 (defun crj/toggle-theme-for-time-of-day ()
   (interactive)
   (setq crj/daytime-p (not crj/daytime-p))
@@ -537,30 +560,39 @@ See `transpose-chars' for more info on the original function."
 (line-number-mode 0)
 
 ;; Turn the modeline on and off.
-(defun toggle-mode-line-buffer () (interactive) (hide-mode-line-mode 'toggle) (redraw-display))
+(defun crj/toggle-mode-line-buffer ()
+  (interactive)
+  (hide-mode-line-mode 'toggle)
+  (redraw-display))
 
-(defun toggle-mode-line-global () (interactive)
-       (if global-hide-mode-line-mode
-           (global-hide-mode-line-mode 0)
-         (global-hide-mode-line-mode))
-       (redraw-display))
+(defun crj/toggle-mode-line-global ()
+  (interactive)
+  (if global-hide-mode-line-mode
+      (global-hide-mode-line-mode 0)
+    (global-hide-mode-line-mode))
+  (redraw-display))
 
-;;; toggle for
-;; radio
-;; pomodoro
-;; modeline
-;; presenting code
+(defun crj/toggle-presentation-mode ()
+  (interactive)
+  (doom-big-font-mode 'toggle)
+  (crj/cycle-setting 'display-line-numbers '(relative t)))
+
+(defun crj/cycle-line-numbers ()
+  (interactive)
+  (crj/cycle-setting 'display-line-numbers '(relative t nil)))
 
 (map! :leader
       (:prefix ("t" . "toggle")
-       :desc "toggle radio" :n "m" #'eradio-toggle
+       :desc "line numbers" :n "l" #'crj/cycle-line-numbers
+       :desc "org markers" :n "C" #'crj/org-toggle-character-markers
+       :desc "radio" :n "m" #'eradio-toggle
        :desc "play radio channel" :n "M" #'eradio-play
-       :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
-       :desc "toggle modeline" :n "D" #'toggle-mode-line-global
-       :desc "toggle day/night themes" :n "n" #'crj/toggle-theme-for-time-of-day
-       :desc "toggle code presentation" :n "p" #'crj/toggle-presentation-mode
+       :desc "modeline for buffer" :n "d" #'crj/toggle-mode-line-buffer
+       :desc "modeline" :n "D" #'crj/toggle-mode-line-global
+       :desc "day/night themes" :n "n" #'crj/toggle-theme-for-time-of-day
+       :desc "code presentation" :n "p" #'crj/toggle-presentation-mode
        :desc "org tree slide mode" :n "P" #'org-tree-slide-mode
-       :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer))
+       :desc "pomodoro clock" :n "c" #'org-pomodoro))
 
 ;; Indium.
 (setq indium-chrome-executable "google-chrome-stable")
