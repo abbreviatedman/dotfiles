@@ -153,8 +153,6 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 ;; initialize the targets package
 (targets-setup t)
 
-(map! :map evil-normal-state-map "SPC TAB" #'evil-switch-to-windows-last-buffer)
-
 ;; operator that replaces a motion/text object with what's in a register (the " register by default).
 (map! :map evil-normal-state-map :leader :desc "Replace with register" "r" #'evil-replace-with-register)
 

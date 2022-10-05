@@ -38,6 +38,14 @@
        :desc "Rename buffer"
        :n "R" #'rename-buffer-with-project-name-prefix))
 
+(map! :leader
+      (:prefix ("TAB" . "+workspace")
+               :desc "Switch to other buffer." :n "TAB" #'evil-switch-to-windows-last-buffer))
+
+(map! :leader
+      :desc "Switch to workspace buffer." :n "<" #'+vertico/switch-workspace-buffer
+      :desc "Switch to buffer." :n "," #'consult-buffer)
+
 ;; (map! :leader
 ;;       (:prefix ("p" . "project")
 ;;        :desc "Open a project vterm"
