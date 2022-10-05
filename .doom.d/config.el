@@ -575,15 +575,24 @@ See `transpose-chars' for more info on the original function."
 ;; pomodoro
 ;; modeline
 ;; presenting code
+(defun crj/toggle-presentation-mode ()
+  (interactive)
+  (doom-big-font-mode 'toggle)
+  (crj/cycle-setting 'display-line-numbers '(relative t)))
+
+(defun crj/cycle-line-numbers ()
+  (interactive)
+  (crj/cycle-setting 'display-line-numbers '(relative t nil)))
 
 (map! :leader
       (:prefix ("t" . "toggle")
        :desc "toggle radio" :n "m" #'eradio-toggle
+       :desc "line numbers" :n "l" #'crj/cycle-line-numbers
        :desc "play radio channel" :n "M" #'eradio-play
        :desc "toggle pomodoro clock" :n "c" #'org-pomodoro
        :desc "toggle modeline" :n "D" #'toggle-mode-line-global
        :desc "toggle day/night themes" :n "n" #'crj/toggle-theme-for-time-of-day
-       :desc "toggle code presentation" :n "p" #'crj/toggle-presentation-mode
+       :desc "code presentation" :n "p" #'crj/toggle-presentation-mode
        :desc "org tree slide mode" :n "P" #'org-tree-slide-mode
        :desc "toggle modeline for buffer" :n "d" #'toggle-mode-line-buffer))
 
