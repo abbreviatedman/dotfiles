@@ -44,7 +44,7 @@
 (map!
  :leader
  (:prefix ("t" . "toggle")
-  :desc "Toggle eldoc mode." :n "k" #'toggle-eldoc-mode))
+  :desc "eldoc mode." :n "k" #'toggle-eldoc-mode))
 
 (use-package vertico
   :config

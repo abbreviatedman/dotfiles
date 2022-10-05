@@ -70,11 +70,11 @@
        :desc "Open eshell in other frame"
        :n "E" #'open-eshell-other-frame))
 
-;; Toggleable vterm/eshell popups
+;;; Toggleable vterm/eshell popups
 (map! :map evil-normal-state :leader
       (:prefix ("t" . "toggle")
-       :desc "Toggle eshell popup" "e" #'+eshell/toggle
-       :desc "Toggle vterm popup" "v" #'+vterm/toggle))
+       :desc "eshell popup" "e" #'+eshell/toggle
+       :desc "vterm popup" "v" #'+vterm/toggle))
 
 ;; TODO switch eshell buffers
 
@@ -106,28 +106,32 @@
 (setq async-shell-command-buffer 'new-buffer)
 
 (defun crj/async-shell-command-no-window ()
-  "A version of `async-shell-command' that won't create a window to display its output buffer."
+  "A version of `async-shell-command' that won't create a window to display its
+output buffer."
   (interactive)
   (crj/call-and-bury-window-from-interactive-command
    #'async-shell-command
    shell-command-buffer-name-async))
 
 (defun crj/shell-command-no-window ()
-  "A version of `shell-command' that won't create a window to display its output buffer."
+  "A version of `shell-command' that won't create a window to display its output
+buffer."
   (interactive)
   (crj/call-and-bury-window-from-interactive-command
    #'shell-command
    shell-command-buffer-name))
 
 (defun crj/projectile-run-shell-command-in-root-no-window ()
-  "A version of `projectile-run-shell-command-in-root' that won't create a window to display its output buffer."
+  "A version of `projectile-run-shell-command-in-root' that won't create a
+window to display its output buffer."
   (interactive)
   (crj/call-and-bury-window-from-interactive-command
    #'projectile-run-shell-command-in-root
    shell-command-buffer-name))
 
 (defun crj/projectile-run-async-shell-command-in-root-no-window ()
-  "A version of `projectile-run-async-shell-command-in-root' that won't create a window to display its output buffer."
+  "A version of `projectile-run-async-shell-command-in-root' that won't create a
+window to display its output buffer."
   (interactive)
   (crj/call-and-bury-window-from-interactive-command
    #'projectile-run-async-shell-command-in-root
@@ -148,9 +152,11 @@
 ;; (add-to-list 'display-buffer-alist
 ;; 	     (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 (defun crj/call-and-bury-window-from-interactive-command (command window-name)
-  "A helper function that calls COMMAND interactively while preventing any buffer with the name WINDOW-NAME from creating a window.
+  "A helper function that calls COMMAND interactively while preventing any
+  buffer with the name WINDOW-NAME from creating a window.
 
-This is useful for times when you want a command to create an output buffer without distracting the user."
+This is useful for times when you want a command to create an output buffer
+without distracting the user."
   (let
       ((display-buffer-alist
         '(window-name '(#'display-buffer-no-window))))
