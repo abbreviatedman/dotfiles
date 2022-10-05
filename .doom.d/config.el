@@ -77,6 +77,31 @@
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
 
+;; Some helpful utilities.
+(defun crj/cycle-setting (setting potential-values)
+  "Cycle SETTING through POTENTIAL-VALUES.
+
+SETTING is a quoted symbol.
+
+POTENTIAL-VALUES is a list of values to cycle through."
+  (let* ((current (cl-position (eval setting) potential-values))
+         (next (1+ current))
+         (new (if (eq next (length potential-values))
+                  0
+                next)))
+  (set setting (nth new potential-values))))
+
+(defun crj/toggle-boolean-setting (&rest booleans)
+  "Toggle BOOLEANS between t and nil.
+
+Each BOOLEAN must be a quoted symbol.
+
+Like `setq', this function may be used on multiple symbols simultaneously.
+
+Unlike `setq', they must be quoted."
+  (dolist (boolean booleans)
+    (set boolean (not (eval boolean)))))
+
 ;;; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
