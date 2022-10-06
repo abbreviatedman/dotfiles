@@ -117,6 +117,11 @@ Unlike `setq', they must be quoted."
   (dolist (boolean booleans)
     (set boolean (not (eval boolean)))))
 
+(map! :leader
+      (:prefix ("o" . "+open")
+       :desc "Visualize undo tree."
+       :n "u" #'vundo))
+
 ;;; Better window management.
 ;; Reverse the shortcuts between window splitting with follow vs. without.
 ;; This is because I'm a lot more likely to want to do something with the new split immediately than later.
