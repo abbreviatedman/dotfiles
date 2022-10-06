@@ -78,6 +78,7 @@
 ;; TODO Quokka Thing
 
 ;; Some helpful utilities.
+
 (defun crj/cycle-setting (setting potential-values)
   "Cycle SETTING through POTENTIAL-VALUES.
 
