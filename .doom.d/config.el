@@ -89,6 +89,22 @@ POTENTIAL-VALUES is a list of values to cycle through."
                      (car potential-values)
                    (nth (1+ i) potential-values)))))
 
+(defun crj/cycle-setting-reverse (setting potential-values)
+  "Cycle SETTING backwards through POTENTIAL-VALUES.
+
+TODO currently broken!
+
+SETTING is a quoted symbol.
+
+POTENTIAL-VALUES is a list of values to cycle through.
+
+Backwards in this case means that we move towards the first element in the list,
+cycling back to the last element if we wrap around."
+  (let ((i (cl-position (eval setting) potential-values)))
+    (set setting (if (zerop i)
+                     (car (last potential-values))
+                   (nth (1- i) potential-values)))))
+
 (defun crj/toggle-boolean-setting (&rest booleans)
   "Toggle BOOLEANS between t and nil.
 
