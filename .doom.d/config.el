@@ -839,9 +839,8 @@ Added as advice below. So... careful!"
   (html-to-markdown-this-buffer)
   (prettier-prettify))
 
-;; (while (re-search-forward "<[^<]*>" (point-max) t)
-;;   (kill-whole-line))
 ;; taken from https://emacs.stackexchange.com/questions/18504/gnus-how-to-strip-all-html-tags-from-incoming-mails, which says it's from Sacha Chua (but the link doesn't work, so who knows)
+;; Good function to learn from, though doesn't quite do what I want.
 (defun sc/strip-html ()
   "Remove HTML tags from the current buffer,
    (this will affect the whole buffer regardless of the restrictions in effect)."
