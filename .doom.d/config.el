@@ -782,31 +782,47 @@ Probably something like this already exists!"
 ;; Atomic Chrome
 (require 'atomic-chrome)
 (atomic-chrome-start-server)
-(defun crj/test-func ()
+
+(defun crj/remove-some-html ()
   (interactive)
-  (let ((cleanup-func 'forward-line))
-        (funcall 'next-line)))
-;; (crj/test-func)
-(setq atomic-chrome-default-major-mode 'markdown-mode)
-(setq atomic-chrome-buffer-open-style 'frame)
-(use-package! atomic-chrome
-  :config
-  (defun crj/set-up-ghost-text-buffer (orig-fun &rest args)
-    "Sanitizes text from Atomic Chrome.
+  (goto-char (point-min))
+  (while (re-search-forward "</[^/>]*[^/]>" (point-max) t)
+    (replace-match ""))
+  (goto-char (point-min))
+  (while (re-search-forward "<p>" (point-max) t)
+    (replace-match "\n"))
+  (goto-char (point-min))
+  (while (re-search-forward "<br>" (point-max) t)
+    (replace-match ""))
+  )
+
+(defun crj/fix-ghost-text-buffer ()
+  (goto-char (point-min))
+  (gfm-mode)
+  (insert orig-text)
+  (crj/remove-some-html)
+  (prettier-prettify)
+  (goto-char (point-max))
+  (kill-whole-line -1))
+
+
+(defun crj/set-up-ghost-text-buffer (orig-fun &rest args)
+  "Sanitizes text from Atomic Chrome.
 
 Added as advice below. So... careful!"
-    (let* ((orig-text (nth 3 args))
-           ;; (cleanup-func (if (> (count-lines (point-min) (point-max)) 1)
-           ;;                   #'sc/strip-html
-           ;;                 #'crj/remove-html-from-markdown-and-clean-up))
-           (new-text (with-temp-buffer
-                       (insert orig-text)
-                       ;; (funcall 'cleanup-func)
-                       (sc/strip-html)
-                       (buffer-string)))
-           (list (remove orig-text args)))
-      (apply orig-fun (add-to-list 'list new-text t))))
-  ;; (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
+  (let* ((orig-text (nth 3 args))
+         (new-text (with-temp-buffer
+                     (crj/fix-ghost-text-buffer)
+                     (buffer-string)))
+         (list (remove orig-text args)))
+    (apply orig-fun (add-to-list 'list new-text t))))
+
+(use-package! atomic-chrome
+  :init
+  (setq atomic-chrome-default-major-mode 'gfm-mode)
+  (setq atomic-chrome-buffer-open-style 'frame)
+  :config
+  (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
   (map!
    :map atomic-chrome-edit-mode-map
    :leader
@@ -814,16 +830,17 @@ Added as advice below. So... careful!"
     :desc "Exit Ghost Text buffer."
     :n "z" #'atomic-chrome-close-current-buffer
     :desc "Fix up Ghost Text buffer."
-    :n "p" #'crj/remove-html-from-markdown-and-clean-up)))
+    :n "p" #'crj/fix-ghost-text-buffer)))
 
 ;;; atomic chrome converts some text boxes to html, and we want to convert to markdown
 ;;; this function, or its individual pieces, can help
 (defun crj/remove-html-from-markdown-and-clean-up ()
   (interactive)
   (html-to-markdown-this-buffer)
-  (sc/strip-html)
   (prettier-prettify))
 
+;; (while (re-search-forward "<[^<]*>" (point-max) t)
+;;   (kill-whole-line))
 ;; taken from https://emacs.stackexchange.com/questions/18504/gnus-how-to-strip-all-html-tags-from-incoming-mails, which says it's from Sacha Chua (but the link doesn't work, so who knows)
 (defun sc/strip-html ()
   "Remove HTML tags from the current buffer,
