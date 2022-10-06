@@ -1,5 +1,7 @@
 (map! :leader :n "d" #'dired-jump)
 
+(define-key dired-mode-map (kbd "C-c f") #'dired-create-empty-file)
+
 (defun crj-set-up-dired ()
   (dired-omit-mode)
   (dired-hide-details-mode))
