@@ -84,12 +84,10 @@
 SETTING is a quoted symbol.
 
 POTENTIAL-VALUES is a list of values to cycle through."
-  (let* ((current (cl-position (eval setting) potential-values))
-         (next (1+ current))
-         (new (if (eq next (length potential-values))
-                  0
-                next)))
-  (set setting (nth new potential-values))))
+  (let ((i (cl-position (eval setting) potential-values)))
+    (set setting (if (eq (1+ i) (length potential-values))
+                     (car potential-values)
+                   (nth (1+ i) potential-values)))))
 
 (defun crj/toggle-boolean-setting (&rest booleans)
   "Toggle BOOLEANS between t and nil.
