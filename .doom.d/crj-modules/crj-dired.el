@@ -1,4 +1,4 @@
-(map! :leader :n "d" #'dired-jump)
+(map! :leader :n "d" #'+default/dired)
 
 (define-key dired-mode-map (kbd "C-c f") #'dired-create-empty-file)
 
