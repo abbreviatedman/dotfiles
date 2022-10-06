@@ -775,9 +775,6 @@ Probably something like this already exists!"
 (setq browse-url-browser-function 'browse-url-default-browser)
 
 ;; Atomic Chrome
-;; (use-package! atomic-chrome
-;;   :config
-;;   (atomic-chrome-start-server)
 (require 'atomic-chrome)
 (atomic-chrome-start-server)
 (defun crj/test-func ()
@@ -804,7 +801,7 @@ Added as advice below. So... careful!"
                        (buffer-string)))
            (list (remove orig-text args)))
       (apply orig-fun (add-to-list 'list new-text t))))
-  (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
+  ;; (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
   (map!
    :map atomic-chrome-edit-mode-map
    :leader
