@@ -154,11 +154,11 @@ Unlike `setq', they must be quoted."
 ;; network interface
 (require 'nm)
 (map! :leader
-      (:prefix "o"
-       :desc "Connect to network."
-       :n "c" 'nm/connect-with-profile
-       :desc "Connect to new network."
-       :n "C" 'nm/connect-basic))
+      (:prefix ("o" . "+open")
+               (:prefix ("n" . "+network")
+                :desc "Connect to network." :n "c" 'nm/connect-with-profile
+                :desc "Connect to new network." :n "C" 'nm/connect-basic
+                :desc "Check network status." :n "s" #'nm/show-wifi-status)))
 
 ;; Rotate the symbol at point.
 (use-package! parrot
