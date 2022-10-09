@@ -46,24 +46,22 @@
 ;; Lisp Layer
 (use-package symex
   :init
-  ;; possible keybinding overrides
-  ;; (setq symex--user-evil-keyspec
-  ;;       '(("j" . symex-go-up)
-  ;;         ("k" . symex-go-down)
-  ;;         ("C-j" . symex-climb-branch)
-  ;;         ("C-k" . symex-descend-branch)
-  ;;         ("M-j" . symex-goto-highest)
-  ;;         ("M-k" . symex-goto-lowest)
-  ;;         ("^" . symex-goto-first)
-  ;;         ("K" . +lookup/documentation)
-  ;;         ("gK" . paredit-raise-sexp)))
+  (setq evil-symex-state-cursor `(box ,(modus-themes-color 'fg-main))
+        symex--user-evil-keyspec
+        '(("j" . symex-go-up)
+          ("k" . symex-go-down)
+          ("C-j" . symex-climb-branch)
+          ("C-k" . symex-descend-branch)
+          ("M-j" . symex-goto-highest)
+          ("M-k" . symex-goto-lowest)
+          ("^" . symex-goto-first)
+          ("K" . +lookup/documentation)))
   :config
   (symex-initialize)
   (evil-define-key 'normal symex-mode-map
     (kbd "<escape>") 'symex-mode-interface)
-
   (evil-define-key 'insert symex-mode-map
-    (kbd "<escape>") 'symex-mode-interface))
+    (kbd "<escape>") #'symex-mode-interface))
 
 ;; stay in Symex editing by default in lisp
 ;; (map! :map emacs-lisp-mode-map :i "<escape>" nil)
