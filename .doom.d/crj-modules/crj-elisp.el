@@ -36,13 +36,43 @@
 
 ;;; Manipulating Expressions
 ;;; Lisp structural editing commands without a lispy-like mode.
-(map!
- :leader
- (:prefix ("y" . "lisp")
-  :desc "slurp" :n "s" #'sp-forward-slurp-sexp
-  :desc "barf" :n "b" #'sp-forward-barf-sexp
-  :desc "raise" :n "r" #'sp-raise-sexp))
+;; (map!
+;;  :leader
+;;  (:prefix ("y" . "lisp")
+;;   :desc "slurp" :n "s" #'sp-forward-slurp-sexp
+;;   :desc "barf" :n "b" #'sp-forward-barf-sexp
+;;   :desc "raise" :n "r" #'sp-raise-sexp))
 
+;; Lisp Layer
+(use-package symex
+  :init
+  ;; possible keybinding overrides
+  ;; (setq symex--user-evil-keyspec
+  ;;       '(("j" . symex-go-up)
+  ;;         ("k" . symex-go-down)
+  ;;         ("C-j" . symex-climb-branch)
+  ;;         ("C-k" . symex-descend-branch)
+  ;;         ("M-j" . symex-goto-highest)
+  ;;         ("M-k" . symex-goto-lowest)
+  ;;         ("^" . symex-goto-first)
+  ;;         ("K" . +lookup/documentation)
+  ;;         ("gK" . paredit-raise-sexp)))
+  :config
+  (symex-initialize)
+  (evil-define-key 'normal symex-mode-map
+    (kbd "<escape>") 'symex-mode-interface)
+
+  (evil-define-key 'insert symex-mode-map
+    (kbd "<escape>") 'symex-mode-interface))
+
+;; stay in Symex editing by default in lisp
+;; (map! :map emacs-lisp-mode-map :i "<escape>" nil)
+;; (map! :map emacs-lisp-mode-map :i "<escape>" #'(lambda ()
+;;                                                  (interactive)
+;;                                                  (evil-normal-state)
+;;                                                  (symex-mode-interface)))
+;; (map! :map emacs-lisp-mode-map
+;;  :n "M-<escape>" #'symex-mode-interface)
 ;;; Gotta catch 'em all.
 (map!
  :leader

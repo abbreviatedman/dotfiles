@@ -675,13 +675,6 @@ See `transpose-chars' for more info on the original function."
       (:prefix "o"
        :n "w" #'wttrin))
 
-;; Lisp structural editing commands without a lispy-like mode.
-(map! :leader
-      (:prefix ("y" . "lisp")
-       :desc "slurp" "s" #'sp-forward-slurp-sexp
-       :desc "barf" "b" #'sp-forward-barf-sexp
-       :desc "raise" "r" #'sp-raise-sexp))
-
 (fset 'convert-react-class-to-functional-component
       (kmacro-lambda-form [?g ?g ?/ ?c ?l ?a ?s ?s return ?c ?i ?w ?c ?o ?n ?s ?t escape ?2 ?W ?c ?2 ?w ?= ?  ?\( ?\) ?  ?= ?> escape ?/ ?r ?e ?n ?d ?e ?r return ?$ ?% ?d ?d ?N ?d ?d] 0 "%d"))
 
@@ -713,31 +706,6 @@ See `transpose-chars' for more info on the original function."
 ;; Opening very large files.
 (require 'vlf-setup)
 (setq vlf-application 'dont-ask)
-
-;; Lisp Layer
-;; (use-package symex
-;;   :init
-;;   (setq symex--user-evil-keyspec
-;;         '(("j" . symex-go-up)
-;;           ("k" . symex-go-down)
-;;           ("C-j" . symex-climb-branch)
-;;           ("C-k" . symex-descend-branch)
-;;           ("M-j" . symex-goto-highest)
-;;           ("M-k" . symex-goto-lowest)
-;;           ("^" . symex-goto-first)
-;;           ("K" . +lookup/documentation)
-;;           ("gK" . paredit-raise-sexp)))
-;;   :config
-;;   (symex-initialize))
-
-;; stay in Symex editing by default in lisp
-;; (map! :map emacs-lisp-mode-map :i "<escape>" nil)
-;; (map! :map emacs-lisp-mode-map :i "<escape>" #'(lambda ()
-;;                                                  (interactive)
-;;                                                  (evil-normal-state)
-;;                                                  (symex-mode-interface)))
-;; (map! :map emacs-lisp-mode-map
-;;  :n "M-<escape>" #'symex-mode-interface)
 
 (map! :map Info-mode-map :n "q" nil)
 
