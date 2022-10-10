@@ -142,7 +142,7 @@
 ;; different font styles, same file
 (package! mixed-pitch)
 
-;; Elisp tree navigation system.
+;; Lisp tree navigation system.
 (package! symex)
 
 (package! pcmpl-args)

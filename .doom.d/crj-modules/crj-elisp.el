@@ -36,12 +36,37 @@
 
 ;;; Manipulating Expressions
 ;;; Lisp structural editing commands without a lispy-like mode.
-(map!
- :leader
- (:prefix ("y" . "lisp")
-  :desc "slurp" :n "s" #'sp-forward-slurp-sexp
-  :desc "barf" :n "b" #'sp-forward-barf-sexp
-  :desc "raise" :n "r" #'sp-raise-sexp))
+;; (map!
+;;  :leader
+;;  (:prefix ("y" . "lisp")
+;;   :desc "slurp" :n "s" #'sp-forward-slurp-sexp
+;;   :desc "barf" :n "b" #'sp-forward-barf-sexp
+;;   :desc "raise" :n "r" #'sp-raise-sexp))
+
+;; Lisp Layer
+(use-package symex
+  :init
+  (setq evil-symex-state-cursor `(box ,(modus-themes-color 'fg-main))
+        symex--user-evil-keyspec
+        '(("j" . symex-go-up)
+          ("k" . symex-go-down)
+          ("C-j" . symex-climb-branch)
+          ("C-k" . symex-descend-branch)
+          ("M-j" . symex-goto-highest)
+          ("M-k" . symex-goto-lowest)
+          ("^" . symex-goto-first)
+          ("K" . +lookup/documentation)
+          ("C-S-j" . symex-emit-forward)
+          ("C-S-k" . symex-emit-backward)))
+  :config
+  (symex-initialize)
+  (evil-define-key 'normal symex-mode-map
+    (kbd "<escape>") 'symex-mode-interface)
+  (evil-define-key 'insert symex-mode-map
+    (kbd "<escape>") #'symex-mode-interface))
+
+;; test function
+;; (message "%s" (- (* 8 6) (+ 3 8) 6))
 
 ;;; Gotta catch 'em all.
 (map!

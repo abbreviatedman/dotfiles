@@ -154,11 +154,11 @@ Unlike `setq', they must be quoted."
 ;; network interface
 (require 'nm)
 (map! :leader
-      (:prefix "o"
-       :desc "Connect to network."
-       :n "c" 'nm/connect-with-profile
-       :desc "Connect to new network."
-       :n "C" 'nm/connect-basic))
+      (:prefix ("o" . "+open")
+               (:prefix ("n" . "+network")
+                :desc "Connect to network." :n "c" 'nm/connect-with-profile
+                :desc "Connect to new network." :n "C" 'nm/connect-basic
+                :desc "Check network status." :n "s" #'nm/show-wifi-status)))
 
 ;; Rotate the symbol at point.
 (use-package! parrot
@@ -299,18 +299,10 @@ See `transpose-chars' for more info on the original function."
 ;; For doom-big-font-mode
 (setq doom-big-font-increment 8)
 
-;; Use smart parens version of showing matching pairs instead of the built-in
-;; show-paren method. Includes strings, and you can customize it to include
-;; more.  But turn off the actual pairing. I'll manage my own bracket pairs,
-;; thanks!
-(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
-
-(use-package smartparens
-  :config
-  (smartparens-global-mode -1)
-  (show-paren-mode -1)
-  (show-smartparens-global-mode)
-  (setq sp-show-pair-from-inside nil))
+;; Use smart parens version of showing matching pairs instead of the built-in show-paren method. Includes strings, and you can customize it to include more.
+(show-paren-mode -1)
+(show-smartparens-global-mode)
+(setq sp-show-pair-from-inside nil)
 
 ;; Theme Settings
 ;;; Modus
@@ -340,11 +332,9 @@ See `transpose-chars' for more info on the original function."
   (load-theme 'modus-operandi t)
   (setq evil-insert-state-cursor `((bar . 2) ,(modus-themes-color 'red-intense))
         evil-normal-state-cursor `(box ,(modus-themes-color 'blue-alt)))
-
   (set-face-attribute 'modus-themes-hl-line nil
                       :extend nil
                       :background 'unspecified))
-
 ;;; doom-zenburn
 ;; (setq doom-zenburn-comment-bg t)
 ;; (setq doom-zenburn-brighter-comments t)
@@ -675,13 +665,6 @@ See `transpose-chars' for more info on the original function."
       (:prefix "o"
        :n "w" #'wttrin))
 
-;; Lisp structural editing commands without a lispy-like mode.
-(map! :leader
-      (:prefix ("y" . "lisp")
-       :desc "slurp" "s" #'sp-forward-slurp-sexp
-       :desc "barf" "b" #'sp-forward-barf-sexp
-       :desc "raise" "r" #'sp-raise-sexp))
-
 (fset 'convert-react-class-to-functional-component
       (kmacro-lambda-form [?g ?g ?/ ?c ?l ?a ?s ?s return ?c ?i ?w ?c ?o ?n ?s ?t escape ?2 ?W ?c ?2 ?w ?= ?  ?\( ?\) ?  ?= ?> escape ?/ ?r ?e ?n ?d ?e ?r return ?$ ?% ?d ?d ?N ?d ?d] 0 "%d"))
 
@@ -713,31 +696,6 @@ See `transpose-chars' for more info on the original function."
 ;; Opening very large files.
 (require 'vlf-setup)
 (setq vlf-application 'dont-ask)
-
-;; Lisp Layer
-;; (use-package symex
-;;   :init
-;;   (setq symex--user-evil-keyspec
-;;         '(("j" . symex-go-up)
-;;           ("k" . symex-go-down)
-;;           ("C-j" . symex-climb-branch)
-;;           ("C-k" . symex-descend-branch)
-;;           ("M-j" . symex-goto-highest)
-;;           ("M-k" . symex-goto-lowest)
-;;           ("^" . symex-goto-first)
-;;           ("K" . +lookup/documentation)
-;;           ("gK" . paredit-raise-sexp)))
-;;   :config
-;;   (symex-initialize))
-
-;; stay in Symex editing by default in lisp
-;; (map! :map emacs-lisp-mode-map :i "<escape>" nil)
-;; (map! :map emacs-lisp-mode-map :i "<escape>" #'(lambda ()
-;;                                                  (interactive)
-;;                                                  (evil-normal-state)
-;;                                                  (symex-mode-interface)))
-;; (map! :map emacs-lisp-mode-map
-;;  :n "M-<escape>" #'symex-mode-interface)
 
 (map! :map Info-mode-map :n "q" nil)
 
