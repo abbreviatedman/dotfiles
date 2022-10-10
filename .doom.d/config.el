@@ -738,8 +738,6 @@ Probably something like this already exists!"
 (setq browse-url-browser-function 'browse-url-default-browser)
 
 ;; Atomic Chrome
-(require 'atomic-chrome)
-(atomic-chrome-start-server)
 
 (defun crj/remove-some-html ()
   (interactive)
