@@ -299,18 +299,10 @@ See `transpose-chars' for more info on the original function."
 ;; For doom-big-font-mode
 (setq doom-big-font-increment 8)
 
-;; Use smart parens version of showing matching pairs instead of the built-in
-;; show-paren method. Includes strings, and you can customize it to include
-;; more.  But turn off the actual pairing. I'll manage my own bracket pairs,
-;; thanks!
-(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
-
-(use-package smartparens
-  :config
-  (smartparens-global-mode -1)
-  (show-paren-mode -1)
-  (show-smartparens-global-mode)
-  (setq sp-show-pair-from-inside nil))
+;; Use smart parens version of showing matching pairs instead of the built-in show-paren method. Includes strings, and you can customize it to include more.
+(show-paren-mode -1)
+(show-smartparens-global-mode)
+(setq sp-show-pair-from-inside nil)
 
 ;; Theme Settings
 ;;; Modus
