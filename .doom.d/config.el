@@ -835,6 +835,11 @@ Added as advice below. So... careful!"
         (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
   (mapc 'load modules))
 
+(let* ((unsanitized-modules
+        (file-expand-wildcards "~/.doom.d/external-modules/*.el"))
+       (modules
+        (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
+  (mapc 'load modules))
 ;; some available keybinding prefixes
 ;; SPC l
 ;; SPC and any capital letter
