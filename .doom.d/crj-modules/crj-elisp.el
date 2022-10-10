@@ -55,7 +55,9 @@
           ("M-j" . symex-goto-highest)
           ("M-k" . symex-goto-lowest)
           ("^" . symex-goto-first)
-          ("K" . +lookup/documentation)))
+          ("K" . +lookup/documentation)
+          ("C-S-j" . symex-emit-forward)
+          ("C-S-k" . symex-emit-backward)))
   :config
   (symex-initialize)
   (evil-define-key 'normal symex-mode-map
@@ -63,14 +65,9 @@
   (evil-define-key 'insert symex-mode-map
     (kbd "<escape>") #'symex-mode-interface))
 
-;; stay in Symex editing by default in lisp
-;; (map! :map emacs-lisp-mode-map :i "<escape>" nil)
-;; (map! :map emacs-lisp-mode-map :i "<escape>" #'(lambda ()
-;;                                                  (interactive)
-;;                                                  (evil-normal-state)
-;;                                                  (symex-mode-interface)))
-;; (map! :map emacs-lisp-mode-map
-;;  :n "M-<escape>" #'symex-mode-interface)
+;; test function
+;; (message "%s" (- (* 8 6) (+ 3 8) 6))
+
 ;;; Gotta catch 'em all.
 (map!
  :leader
