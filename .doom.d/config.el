@@ -423,6 +423,8 @@ See `transpose-chars' for more info on the original function."
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type crj/working-line-number-type)
 ;; soft wrap lines
+(visual-line-mode)
+
 (defun crj/toggle-theme-for-time-of-day ()
   (interactive)
   (setq crj/daytime-p (not crj/daytime-p))
