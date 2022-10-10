@@ -340,11 +340,9 @@ See `transpose-chars' for more info on the original function."
   (load-theme 'modus-operandi t)
   (setq evil-insert-state-cursor `((bar . 2) ,(modus-themes-color 'red-intense))
         evil-normal-state-cursor `(box ,(modus-themes-color 'blue-alt)))
-
   (set-face-attribute 'modus-themes-hl-line nil
                       :extend nil
                       :background 'unspecified))
-
 ;;; doom-zenburn
 ;; (setq doom-zenburn-comment-bg t)
 ;; (setq doom-zenburn-brighter-comments t)
