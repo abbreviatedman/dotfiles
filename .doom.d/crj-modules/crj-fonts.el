@@ -165,8 +165,8 @@ when you're mixing pitches"
 ;;                          (* height multiplier)
 ;;                        crj/doom-modeline-default-height)))
 ;;     (custom-set-faces
-;;      `(mode-line ((t (:family ,crj/variable-font :height ,new-height))))
-;;      `(mode-line-inactive ((t (:family ,crj/variable-font :height ,new-height))))))
+;;      `(mode-line ((t (:family ,crj/ui-fixed-pitch-font :height ,new-height))))
+;;      `(mode-line-inactive ((t (:family ,crj/ui-fixed-pitch-font :height ,new-height))))))
 ;;   (setq doom-modeline-height 1))
 
 ;; testing code
