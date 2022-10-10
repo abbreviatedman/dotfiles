@@ -775,6 +775,7 @@ Added as advice below. So... careful!"
 
 (use-package! atomic-chrome
   :init
+  (atomic-chrome-start-server)
   (setq atomic-chrome-default-major-mode 'gfm-mode)
   (setq atomic-chrome-buffer-open-style 'frame)
   :config
