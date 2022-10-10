@@ -236,7 +236,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
        :desc "zoom in buffer" :n "J" #'crj/zoom-in-all-buffers
        :desc "zoom out buffer" :n "K" #'crj/zoom-out-all-buffers
        :desc "zoom out buffer" :n "B" #'crj/zoom-reset-all-buffers
-       :desc "zoom hydra" :n "z" #'+hydra/text-zoom/body
+       :desc "zoom hydra" :n "z" #'crj/hydra/text-zoom/body
        :desc "toggle ligatures in buffer" :n "l" #'org-toggle-link-display
        :desc "toggle prettier globally" :n "p" #'global-prettier-mode
        :desc "toggle transparency" :n "t" #'toggle-transparency))
