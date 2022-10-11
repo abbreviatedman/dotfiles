@@ -1,6 +1,7 @@
 (use-package! markdown-mode
   :config
-  (add-hook 'markdown-mode-hook #'variable-pitch-mode)
+ (define-key markdown-mode-command-map (kbd "d") #'crj/kill-all-text-in-buffer)
+ (add-hook 'markdown-mode-hook #'variable-pitch-mode)
   (map!
    :map markdown-mode-map
    :n "gj" #'evil-next-visual-line
