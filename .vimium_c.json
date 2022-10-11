@@ -1,20 +1,25 @@
 {
 	"name": "Vimium C",
-	"@time": "7/12/2022, 9:25:35 AM",
-	"time": 1657632335867,
+	"@time": "10/11/2022, 9:19:53 AM",
+	"time": 1665494393730,
 	"environment": {
-		"extension": "1.98.3",
+		"extension": "1.99.3",
 		"platform": "linux",
-		"chromium": "101"
+		"chromium": "105"
 	},
 	"exclusionRules": [
 		{
 			"passKeys": "",
 			"pattern": ":https://appacademy.github.io/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://replit.com/"
 		}
 	],
 	"grabBackFocus": true,
-	"ignoreCapsLock": 2,
+	"hideHud": true,
+	"keyLayout": 20,
 	"keyMappings": [
 		"#!no-check",
 		"map J nextTab",
@@ -37,8 +42,11 @@
 		"map gI LinkHints.activateOpenImage",
 		"map zD closeDownloadBar",
 		"map zf LinkHints.activateFocus",
+		"map ; passNextKey",
+		"map <a-z> LinkHints.activateOpenInNewForegroundTab",
 		""
 	],
 	"searchUrl": "https://duckduckgo.com/?q=$s DuckDuckGo",
-	"smoothScroll": false
+	"smoothScroll": false,
+	"ignoreCapsLock": 2
 }
