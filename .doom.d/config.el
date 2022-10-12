@@ -253,6 +253,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (setq-default evil-shift-width 2)
 (setq! tab-width 2)
 (setq! evil-shift-width 2)
+(setq standard-indent 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
 (dtrt-indent-global-mode)
 
