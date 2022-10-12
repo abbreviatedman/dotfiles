@@ -739,6 +739,7 @@ Probably something like this already exists!"
 (setq auth-sources '(password-store))
 (setq browse-url-browser-function 'browse-url-default-browser)
 
+
 ;; Atomic Chrome
 
 (defun crj/remove-some-html ()
@@ -751,8 +752,7 @@ Probably something like this already exists!"
     (replace-match "\n"))
   (goto-char (point-min))
   (while (re-search-forward "<br>" (point-max) t)
-    (replace-match ""))
-  )
+    (replace-match "")))
 
 (defun crj/fix-ghost-text-buffer ()
   (interactive)

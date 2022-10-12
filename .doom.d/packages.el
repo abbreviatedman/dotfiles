@@ -99,7 +99,7 @@
 (package! exec-path-from-shell)
 (package! ace-link)
 
-(package! org-trello)
+(package! org-trello :disable t)
 
 (package! jest)
 
