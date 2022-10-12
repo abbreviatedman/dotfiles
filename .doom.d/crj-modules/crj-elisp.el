@@ -12,13 +12,15 @@
 ;;; Learning Elisp.
 
 (defun crj/open-intro-to-elisp ()
-  "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info node '(eintr)'), re-using the current window."
+  "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info
+  node '(eintr)'), re-using the current window."
   (interactive)
   (info "eintr")
   (delete-other-windows))
 
 (defun crj/open-elisp-reference-manual ()
-  "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node '(elisp)'), re-using the current window."
+  "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node
+  '(elisp)'), re-using the current window."
   (interactive)
   (info "elisp")
   (delete-other-windows))
@@ -44,29 +46,26 @@
 ;;   :desc "raise" :n "r" #'sp-raise-sexp))
 
 ;; Lisp Layer
-(use-package symex
-  :init
-  (setq evil-symex-state-cursor `(box ,(modus-themes-color 'fg-main))
-        symex--user-evil-keyspec
-        '(("j" . symex-go-up)
-          ("k" . symex-go-down)
-          ("C-j" . symex-climb-branch)
-          ("C-k" . symex-descend-branch)
-          ("M-j" . symex-goto-highest)
-          ("M-k" . symex-goto-lowest)
-          ("^" . symex-goto-first)
-          ("K" . +lookup/documentation)
-          ("C-S-j" . symex-emit-forward)
-          ("C-S-k" . symex-emit-backward)))
-  :config
-  (symex-initialize)
-  (evil-define-key 'normal symex-mode-map
-    (kbd "<escape>") 'symex-mode-interface)
-  (evil-define-key 'insert symex-mode-map
-    (kbd "<escape>") #'symex-mode-interface))
-
-;; test function
-;; (message "%s" (- (* 8 6) (+ 3 8) 6))
+;; (use-package symex
+;;   :init
+;;   (setq evil-symex-state-cursor `(box ,(modus-themes-color 'fg-main))
+;;         symex--user-evil-keyspec
+;;         '(("j" . symex-go-up)
+;;           ("k" . symex-go-down)
+;;           ("C-j" . symex-climb-branch)
+;;           ("C-k" . symex-descend-branch)
+;;           ("M-j" . symex-goto-highest)
+;;           ("M-k" . symex-goto-lowest)
+;;           ("^" . symex-goto-first)
+;;           ("K" . +lookup/documentation)
+;;           ("C-S-j" . symex-emit-forward)
+;;           ("C-S-k" . symex-emit-backward)))
+;;   :config
+;;   (symex-initialize)
+;;   (evil-define-key 'normal symex-mode-map
+;;     (kbd "<escape>") 'symex-mode-interface)
+;;   (evil-define-key 'insert symex-mode-map
+;;     (kbd "<escape>") #'symex-mode-interface))
 
 ;;; Gotta catch 'em all.
 (map!

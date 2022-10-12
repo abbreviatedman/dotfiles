@@ -36,7 +36,9 @@
                            "~/org-stuff/trello/9-3-fellow-cards.trello"
                            "/home/abbreviatedman/org-stuff/readme.org"
                            "/home/abbreviatedman/org-stuff/personal.org"
-                           "/home/abbreviatedman/org-stuff/archive.org")
+                           "/home/abbreviatedman/org-stuff/archive.org"
+                           "~/Sync/org/cal.org"
+                           "~/org-stuff/gcal/colin@pursuit.org.org")
         +org-capture-emails-file "~/org-stuff/readme.org"
         org-agenda-file-regexp "\\`[^.].*\\.org\\'"
         org-startup-folded 'showeverything
@@ -141,10 +143,6 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
         :desc "delete" :n "d" #'org-gcal-delete-at-point
         :desc "sync" :n "s" #'org-gcal-sync
         :desc "fetch" :n "f" #'org-gcal-fetch)))
-
-
-;; sync which org file handles which gcal
-(setq org-gcal-fetch-file-alist '(("colin@pursuit.org" . "~/Sync/org/cal.org")))
 
 ;; timestamp manipulation
 (map! :leader

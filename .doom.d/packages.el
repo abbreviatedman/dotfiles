@@ -12,7 +12,16 @@
 (package! ssh-agency)
 
 ;; adds gcal integration
-(package! org-gcal)
+(package! org-gcal
+  :recipe
+  (:host github
+   :repo "telotortium/org-gcal.el"
+   :branch "oauth2-auto"))
+
+(package! emacs-oauth2-auto
+  :recipe
+  (:host github
+   :repo "rhaps0dy/emacs-oauth2-auto"))
 
 (package! emacs-nm
   :recipe
@@ -141,9 +150,6 @@
 (package! solaire-mode :disable t)
 ;; different font styles, same file
 (package! mixed-pitch)
-
-;; Lisp tree navigation system.
-(package! symex)
 
 (package! pcmpl-args)
 
