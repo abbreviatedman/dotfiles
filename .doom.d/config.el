@@ -244,6 +244,57 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 ;; start every emacs frame with transparency
 ;; (add-hook 'emacs-startup-hook 'toggle-transparency)
 
+(use-package! pulsar
+  :init
+  (setq pulsar-pulse t)
+  (setq pulsar-delay .01)
+  (setq pulsar-iterations 30)
+  (setq pulsar-face 'pulsar-generic)
+  :config
+  (dolist (function '(evil-scroll-up
+                      evil-scroll-down
+                      evil-goto-line
+                      evil-beginend-prog-mode-goto-beginning
+                      evil-beginend-prog-mode-goto-end
+                      evil-beginend-org-mode-goto-beginning
+                      evil-beginend-org-mode-goto-end
+                      evil-beginend-dired-mode-goto-beginning
+                      evil-beginend-dired-mode-goto-end
+                      evil-beginend-message-mode-goto-beginning
+                      evil-beginend-message-mode-goto-end
+                      evil-beginend-org-agenda-mode-goto-beginning
+                      evil-beginend-org-agenda-mode-goto-end
+                      evil-beginend-compilation-mode-goto-beginning
+                      evil-beginend-compilation-mode-goto-end
+                      evil-beginend-magit-status-mode-goto-beginning
+                      evil-beginend-magit-status-mode-goto-end
+                      evil-beginend-magit-revision-mode-goto-beginning
+                      evil-beginend-magit-revision-mode-goto-end
+                      evil-goto-first-line
+                      evil-goto-mark-line
+                      evil-scroll-page-up
+                      evil-scroll-page-down
+                      +evil/window-move-up
+                      bury-buffer
+                      kill-buffer
+                      doom/window-enlargen
+                      crj/toggle-presentation-mode
+                      doom
+                      +evil/window-move-down
+                      +evil/window-move-left
+                      +evil/window-move-right
+                      delete-other-windows
+                      winner-undo
+                      evil-window-up
+                      evil-window-down
+                      evil-window-left
+                      evil-window-right
+                      evil-window-new
+                      evil-window-vnew))
+  (add-to-list 'pulsar-pulse-functions function))
+
+  (pulsar-global-mode 1)
+  (map! :leader (:prefix ("h" . "+help") :desc "View current line." :n "j" #'pulsar-pulse-line)))
 
 ;; Indentation
 

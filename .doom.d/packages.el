@@ -11,6 +11,8 @@
 ;; internal ssh handling
 (package! ssh-agency)
 
+(package! pulsar)
+
 ;; adds gcal integration
 (package! org-gcal
   :recipe
