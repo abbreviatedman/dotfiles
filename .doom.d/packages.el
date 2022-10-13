@@ -11,6 +11,8 @@
 ;; internal ssh handling
 (package! ssh-agency)
 
+(package! pulsar)
+
 ;; adds gcal integration
 (package! org-gcal
   :recipe
@@ -101,6 +103,8 @@
 ;; JS debugging
 (package! indium)
 
+(package! dimmer)
+
 (package! peep-dired)
 ;; Nice replace speed.
 (package! evil-replace-with-register)
@@ -108,7 +112,7 @@
 (package! exec-path-from-shell)
 (package! ace-link)
 
-(package! org-trello)
+(package! org-trello :disable t)
 
 (package! jest)
 

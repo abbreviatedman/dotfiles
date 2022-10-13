@@ -244,6 +244,66 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 ;; start every emacs frame with transparency
 ;; (add-hook 'emacs-startup-hook 'toggle-transparency)
 
+(use-package! pulsar
+  :init
+  (setq pulsar-pulse t)
+  (setq pulsar-delay .01)
+  (setq pulsar-iterations 30)
+  (setq pulsar-face 'pulsar-generic)
+  :config
+  (dolist (function '(evil-scroll-up
+                      evil-scroll-down
+                      evil-goto-line
+                      evil-beginend-prog-mode-goto-beginning
+                      evil-beginend-prog-mode-goto-end
+                      evil-beginend-org-mode-goto-beginning
+                      evil-beginend-org-mode-goto-end
+                      evil-beginend-dired-mode-goto-beginning
+                      evil-beginend-dired-mode-goto-end
+                      evil-beginend-message-mode-goto-beginning
+                      evil-beginend-message-mode-goto-end
+                      evil-beginend-org-agenda-mode-goto-beginning
+                      evil-beginend-org-agenda-mode-goto-end
+                      evil-beginend-compilation-mode-goto-beginning
+                      evil-beginend-compilation-mode-goto-end
+                      evil-beginend-magit-status-mode-goto-beginning
+                      evil-beginend-magit-status-mode-goto-end
+                      evil-beginend-magit-revision-mode-goto-beginning
+                      evil-beginend-magit-revision-mode-goto-end
+                      evil-goto-first-line
+                      evil-goto-mark-line
+                      evil-scroll-page-up
+                      evil-scroll-page-down
+                      +evil/window-move-up
+                      bury-buffer
+                      kill-buffer
+                      doom/window-enlargen
+                      crj/toggle-presentation-mode
+                      doom
+                      +evil/window-move-down
+                      +evil/window-move-left
+                      +evil/window-move-right
+                      delete-other-windows
+                      winner-undo
+                      evil-window-up
+                      evil-window-down
+                      evil-window-left
+                      evil-window-right
+                      evil-window-new
+                      evil-window-vnew))
+  (add-to-list 'pulsar-pulse-functions function))
+
+  (pulsar-global-mode 1)
+  (map! :leader (:prefix ("h" . "+help") :desc "View current line." :n "j" #'pulsar-pulse-line)))
+
+(use-package! dimmer
+  :config
+  (dimmer-configure-org)
+  (dimmer-configure-hydra)
+  (dimmer-configure-magit)
+  (dimmer-configure-which-key)
+  (setq dimmer-fraction 0.2)
+  (dimmer-mode t))
 
 ;; Indentation
 
@@ -253,6 +313,7 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
 (setq-default evil-shift-width 2)
 (setq! tab-width 2)
 (setq! evil-shift-width 2)
+(setq standard-indent 2)
 (setq! tab-stop-list (number-sequence 2 120 2))
 (dtrt-indent-global-mode)
 
@@ -550,6 +611,8 @@ See `transpose-chars' for more info on the original function."
 (setq scroll-on-jump-duration 1)
 
 (setq eradio-channels '(("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
+                        ("DropSignal - Chillstep" . "http://188.165.152.45:8000/listen.pls?sid=1&t=.pls")
+                        ("LO FLY Radio" . "http://64.20.39.8:8421/listen.pls?sid=1&t=.pls")
                         ("Ethereal Radio" . "http://us4.internet-radio.com:8073/live.m3u")
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
@@ -739,6 +802,7 @@ Probably something like this already exists!"
 (setq auth-sources '(password-store))
 (setq browse-url-browser-function 'browse-url-default-browser)
 
+
 ;; Atomic Chrome
 
 (defun crj/remove-some-html ()
@@ -751,19 +815,15 @@ Probably something like this already exists!"
     (replace-match "\n"))
   (goto-char (point-min))
   (while (re-search-forward "<br>" (point-max) t)
-    (replace-match ""))
-  )
+    (replace-match "")))
 
 (defun crj/fix-ghost-text-buffer ()
   (interactive)
   (goto-char (point-min))
-  (gfm-mode)
   (insert orig-text)
   (crj/remove-some-html)
-  (prettier-prettify)
-  (goto-char (point-max))
-  (kill-whole-line -1))
-
+  (goto-char (point-min))
+  (kill-line))
 
 (defun crj/set-up-ghost-text-buffer (orig-fun &rest args)
   "Sanitizes text from Atomic Chrome.
@@ -786,7 +846,7 @@ Added as advice below. So... careful!"
   (setq atomic-chrome-default-major-mode 'gfm-mode)
   (setq atomic-chrome-buffer-open-style 'frame)
   :config
-  ;; (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
+  (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
   (map!
    :map atomic-chrome-edit-mode-map
    :leader
