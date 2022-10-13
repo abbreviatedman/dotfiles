@@ -811,13 +811,10 @@ Probably something like this already exists!"
 (defun crj/fix-ghost-text-buffer ()
   (interactive)
   (goto-char (point-min))
-  (gfm-mode)
   (insert orig-text)
   (crj/remove-some-html)
-  (prettier-prettify)
-  (goto-char (point-max))
-  (kill-whole-line -1))
-
+  (goto-char (point-min))
+  (kill-line))
 
 (defun crj/set-up-ghost-text-buffer (orig-fun &rest args)
   "Sanitizes text from Atomic Chrome.
@@ -840,7 +837,7 @@ Added as advice below. So... careful!"
   (setq atomic-chrome-default-major-mode 'gfm-mode)
   (setq atomic-chrome-buffer-open-style 'frame)
   :config
-  ;; (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
+  (advice-add 'atomic-chrome-create-buffer :around #'crj/set-up-ghost-text-buffer)
   (map!
    :map atomic-chrome-edit-mode-map
    :leader

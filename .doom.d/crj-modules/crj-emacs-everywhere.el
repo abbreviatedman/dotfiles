@@ -23,3 +23,20 @@
   (clipboard-kill-ring-save
    (point-min)
    (point-max)))
+
+(defun crj/delete-consecutive-blank-lines ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "^$" (point-max) t)
+      (delete-blank-lines)
+      (forward-line))))
+
+(use-package! emacs-everywhere
+  :config
+  ;; (add-hook 'emacs-everywhere-init-hooks #'crj/delete-consecutive-blank-lines)
+  (setq crj/no-markdown-apps '("Slack"))
+  (dolist (app crj/no-markdown-apps)
+    (delete app emacs-everywhere-markdown-apps)
+    (delete app emacs-everywhere-markdown-windows))
+  )
