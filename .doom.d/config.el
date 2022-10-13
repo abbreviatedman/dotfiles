@@ -296,6 +296,15 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
   (pulsar-global-mode 1)
   (map! :leader (:prefix ("h" . "+help") :desc "View current line." :n "j" #'pulsar-pulse-line)))
 
+(use-package! dimmer
+  :config
+  (dimmer-configure-org)
+  (dimmer-configure-hydra)
+  (dimmer-configure-magit)
+  (dimmer-configure-which-key)
+  (setq dimmer-fraction 0.2)
+  (dimmer-mode t))
+
 ;; Indentation
 
 ;; Tabs should be 2 spaces by default.
