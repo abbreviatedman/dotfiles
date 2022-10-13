@@ -103,6 +103,8 @@
 ;; JS debugging
 (package! indium)
 
+(package! dimmer)
+
 (package! peep-dired)
 ;; Nice replace speed.
 (package! evil-replace-with-register)
