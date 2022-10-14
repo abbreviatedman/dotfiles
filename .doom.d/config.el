@@ -614,6 +614,7 @@ See `transpose-chars' for more info on the original function."
                         ("DropSignal - Chillstep" . "http://188.165.152.45:8000/listen.pls?sid=1&t=.pls")
                         ("LO FLY Radio" . "http://64.20.39.8:8421/listen.pls?sid=1&t=.pls")
                         ("Ethereal Radio" . "http://us4.internet-radio.com:8073/live.m3u")
+                        ("test" . "	http://streams.fluxfm.de/Chillhop/mp3-320")
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
                         ("SomaFM - Beat Blender" . "https://somafm.com/beatblender.pls")
