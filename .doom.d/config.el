@@ -614,6 +614,7 @@ See `transpose-chars' for more info on the original function."
                         ("DropSignal - Chillstep" . "http://188.165.152.45:8000/listen.pls?sid=1&t=.pls")
                         ("LO FLY Radio" . "http://64.20.39.8:8421/listen.pls?sid=1&t=.pls")
                         ("Ethereal Radio" . "http://us4.internet-radio.com:8073/live.m3u")
+                        ("test" . "	http://streams.fluxfm.de/Chillhop/mp3-320")
                         ("SomaFM - Mission Control" . "https://somafm.com/missioncontrol.pls")
                         ("SomaFM - Cliqhop IDM" . "https://somafm.com/cliqhop.pls")
                         ("SomaFM - Beat Blender" . "https://somafm.com/beatblender.pls")
@@ -688,18 +689,22 @@ See `transpose-chars' for more info on the original function."
 ;; Show digraphs.
 (map! :n "SPC h D" #'evil-ex-show-digraphs)
 
-;; Pomodoro settings
-;; Allow manual breaks in Pomodoro.
-(setq org-pomodoro-manual-break t)
-
-;; A canceled Pomodoro is the same as a completed Pomodoro.
-(setq org-pomodoro-keep-killed-pomodoro-time t)
-
-;; Mode-line appearance
-(setq org-pomodoro-format "P%s")
-(setq org-pomodoro-time-format "%m")
-(setq org-pomodoro-long-break-format "L~%s")
-(setq org-pomodoro-short-break-format "S~%s")
+(use-package! org-pomodoro
+  :init
+  (dolist (player-args-setting '(org-pomodoro-start-sound-args
+                                 org-pomodoro-killed-sound-args
+                                 org-pomodoro-ticking-sound-args
+                                 org-pomodoro-finished-sound-args
+                                 org-pomodoro-overtime-sound-args
+                                 org-pomodoro-long-break-sound-args
+                                 org-pomodoro-short-break-sound-args))
+    (set player-args-setting "volume=15000"))
+  (setq org-pomodoro-manual-break t)
+  (setq org-pomodoro-keep-killed-pomodoro-time t)
+  (setq org-pomodoro-format "P%s")
+  (setq org-pomodoro-time-format "%m")
+  (setq org-pomodoro-long-break-format "L~%s")
+  (setq org-pomodoro-short-break-format "S~%s"))
 
 ;; set up exec-path-from-shell
 (when (or (memq window-system '(mac ns x)) (daemonp))
