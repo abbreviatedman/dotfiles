@@ -48,7 +48,7 @@
        vc-gutter                ; VCS diff in the fringe
        ;; vi-tilde-fringe          ; fringe tildes to mark beyond EOB
        ;; window-select     ; visually switch windows
-       workspaces        ; tab emulation, persistence & separate workspaces
+       ;; workspaces        ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-free coding or writing
 
        :editor
@@ -113,7 +113,7 @@
        ;;agda              ; types of types of types of types...
        ;;beancount
        ;;cc                ; C/C++/Obj-C madness
-       ;;clojure           ; java with a lisp
+       (clojure +lsp)           ; java with a lisp
        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
