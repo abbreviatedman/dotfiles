@@ -38,7 +38,12 @@
                            "/home/abbreviatedman/org-stuff/personal.org"
                            "/home/abbreviatedman/org-stuff/archive.org"
                            "~/Sync/org/cal.org"
-                           "~/org-stuff/gcal/colin@pursuit.org.org")
+                           "~/org-stuff/calendars/lectures-calendar.org"
+                           "~/org-stuff/calendars/work-calendar.org"
+                           "~/org-stuff/calendars/personal-calendar.org"
+                           "~/org-stuff/calendars/9-3-calendar.org"
+                           "~/org-stuff/calendars/home-calendar.org")
+
         +org-capture-emails-file "~/org-stuff/readme.org"
         org-agenda-file-regexp "\\`[^.].*\\.org\\'"
         org-startup-folded 'showeverything
@@ -52,11 +57,7 @@
                              "WAIT(w)"
                              "HOLD(h)"
                              "PROJ(p)"
-                             "CANCELED(c)"))
-        org-agenda-custom-commands '(("d" "Agenda and next todos"
-                                      ((agenda "")
-                                       (todo "IN-PROGRESS")
-                                       (todo "NEXT"))))))
+                             "CANCELED(c)"))))
 
 
 ;; This works for removing Doom's bindings.
