@@ -155,6 +155,8 @@
 ;; different font styles, same file
 (package! mixed-pitch)
 
+(package! org-caldav)
+
 (package! pcmpl-args)
 
 (package! svg-lib)

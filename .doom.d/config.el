@@ -76,6 +76,7 @@
 ;; TODO space liner (look to evil-surround)
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
+(add-to-list 'tramp-default-proxies-alist '(".*" "\\`root\\'" "/ssh:%h:"))
 
 ;; Some helpful utilities.
 

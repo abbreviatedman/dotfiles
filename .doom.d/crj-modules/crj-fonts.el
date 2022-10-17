@@ -96,6 +96,7 @@ when you're mixing pitches"
 (setq crj/fixed-pitch-mode-hooks
       '(vterm-mode-hook
         calendar-mode-hook
+        cfw:calendar-mode-hook
         mu4e-headers-mode-hook))
 
 (dolist (hook crj/fixed-pitch-mode-hooks)
