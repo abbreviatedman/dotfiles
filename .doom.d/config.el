@@ -699,6 +699,7 @@ See `transpose-chars' for more info on the original function."
                                  org-pomodoro-long-break-sound-args
                                  org-pomodoro-short-break-sound-args))
     (set player-args-setting "volume=15000"))
+
   (setq org-pomodoro-manual-break t)
   (setq org-pomodoro-keep-killed-pomodoro-time t)
   (setq org-pomodoro-format "P%s")
