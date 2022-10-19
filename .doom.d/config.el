@@ -76,6 +76,19 @@
 ;; TODO space liner (look to evil-surround)
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
+
+(defun crj/turn-off-visual-line-mode ()
+  (visual-line-mode -1))
+
+(use-package proced
+  :init
+  (add-hook 'proced-mode-hook #'crj/turn-off-visual-line-mode)
+  (map! :leader
+        (:prefix ("o" . "+open")
+                 :desc "Proced" :n "p" #'proced))
+  :config
+  (define-key proced-mode-map (kbd "g z") #'proced-toggle-auto-update))
+
 (add-to-list 'tramp-default-proxies-alist '(".*" "\\`root\\'" "/ssh:%h:"))
 
 ;; Some helpful utilities.

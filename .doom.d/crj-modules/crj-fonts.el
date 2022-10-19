@@ -87,8 +87,9 @@ when you're mixing pitches"
 (advice-add 'revert-buffer :after #'crj/make-line-number-face-monospace)
 (add-hook 'text-mode-hook #'mixed-pitch-mode)
 
-;; Sometimes I really do want fixed-pitch for alignment, such as with terminals.
 (defun crj/use-fixed-pitch ()
+  "Sometimes I really do want fixed-pitch for alignment, such as with terminals."
+  (interactive)
   (set (make-local-variable 'buffer-face-mode-face) 'monospace)
   (buffer-face-mode t))
 
@@ -96,6 +97,7 @@ when you're mixing pitches"
 (setq crj/fixed-pitch-mode-hooks
       '(vterm-mode-hook
         calendar-mode-hook
+        proced-mode-hook
         cfw:calendar-mode-hook
         mu4e-headers-mode-hook))
 
