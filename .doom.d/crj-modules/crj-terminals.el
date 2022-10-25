@@ -1,5 +1,7 @@
 (require 'dwim-shell-commands)
 
+(setq vterm-max-scrollback 100000)
+
 (defun crj/toggle-eshell-scrollback ()
   (interactive)
   (if (equal eshell-scroll-to-bottom-on-output 'all)
