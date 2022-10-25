@@ -231,10 +231,18 @@
 ;;                 (format "Prepare local buffer environment for org source block (%s)."
 ;;                         (upcase ,lang))))))))
 
-;; (defvar org-babel-lang-list
-;;   '("go" "python" "ipython" "bash" "sh" "js" "javascript" "sql" "sql-mode"))
-;; (dolist (lang org-babel-lang-list)
-;;   (eval `(teco/lsp-org-babel-enable ,lang)))
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (sql-mode . t)
+   (python . t)
+   (ipython . t)
+   (bash . t)
+   (sh . t)
+   (js . t)
+   (javascript . t)
+   (sql . t)
+   (go . t)))
 
 ;; (defun org-babel-edit-prep:javascript (babel-info)
 ;;   (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
