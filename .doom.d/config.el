@@ -786,8 +786,7 @@ See `transpose-chars' for more info on the original function."
 
 (setq org-babel-header-args:sql-mode '((:product . :postgres) (:session . :any))
       org-babel-default-header-args:sql-mode '((:product . "postgres"))
-      sql-connection-alist '(("animes" (sql-product 'postgres) (sql-user "abbreviatedman") (sql-database "animes_dev") (sql-server "")))
-      )
+      sql-connection-alist '(("animes" (sql-product 'postgres) (sql-user "abbreviatedman") (sql-database "animes_dev") (sql-server ""))))
 ;; PORT=3003
 ;; PG_HOST=localhost
 ;; PG_PORT=5432

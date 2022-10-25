@@ -313,8 +313,8 @@
   :config
   (setq orderless-component-separator "\_"))
 ;; (add-to-list completion-category-overrides '(file (styles . partial-completion)))
-  ;; (add-to-list completion-category-overrides '(eglot (styles . orderless))))
-  ;; (setq completion-category-overrides '((file (styles . (partial-completion))))))
+;; (add-to-list completion-category-overrides '(eglot (styles . orderless))))
+;; (setq completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package eglot
   :config
