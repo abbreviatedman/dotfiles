@@ -161,6 +161,13 @@
 
 (package! svg-lib)
 
+;; Racket
+(package! ob-racket 
+  :recipe
+  (:host github :repo "hasu/emacs-ob-racket"))
+
+(package! racket-mode)
+
 ;; SQL
 (package! ob-sql-mode)
 (package! sqlup-mode)

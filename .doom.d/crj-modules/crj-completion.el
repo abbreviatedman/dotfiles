@@ -231,10 +231,13 @@
 ;;                 (format "Prepare local buffer environment for org source block (%s)."
 ;;                         (upcase ,lang))))))))
 
+(require 'ob-racket)
+(setq org-babel-command:racket "/usr/sbin/racket")
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
    (sql-mode . t)
+   (racket . t)
    (python . t)
    (ipython . t)
    (bash . t)
