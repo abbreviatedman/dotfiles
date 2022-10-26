@@ -3,10 +3,10 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("How to Design Programs, Second Edition"
- (front-context-string . " ▼    How to Des")
- (rear-context-string)
- (position . 1)
- (location . "http://htdp.org/2022-8-7/Book/index.html")
+ (front-context-string . "DrRacket and the")
+ (rear-context-string . "ced concepts.\n\n ")
+ (position . 9618)
+ (location . "http://htdp.org/2022-8-7/Book/part_preface.html")
  (handler . eww-bookmark-jump))
 ("org-refile-last-stored"
  (filename . "~/org-stuff/readme.org")
