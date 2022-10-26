@@ -77,6 +77,8 @@
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
 
+(setq bookmark-save-flag 1)
+
 (defun crj/turn-off-visual-line-mode ()
   (visual-line-mode -1))
 
