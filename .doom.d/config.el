@@ -612,9 +612,9 @@ See `transpose-chars' for more info on the original function."
   (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
   (scroll-on-jump-with-scroll-advice-add evil-scroll-page-up)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
-  (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom)
+  ;; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
+  ;; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
+  ;; (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom)
   (scroll-on-jump-with-scroll-advice-add evil-goto-line))
 
 (with-eval-after-load 'goto-chg
