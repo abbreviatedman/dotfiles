@@ -36,14 +36,12 @@
 
 ;; better evil text objects
 (package! targets
-  :recipe (
-           :host github
+  :recipe (:host github
            :repo "noctuid/targets.el"))
 
 ;; Sync a buffer with a Chrome text box.
 (package! atomic-chrome
-  :recipe (
-           :host github
+  :recipe (:host github
            :repo "alpha22jp/atomic-chrome"))
 
 ;; convert html to markdown (atomic chrome gives you html unfortunately)
@@ -73,7 +71,8 @@
 
 ;; Smooth scrolling.
 (package! scroll-on-jump
-  :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
+  :recipe (:host gitlab
+           :repo "ideasman42/emacs-scroll-on-jump"))
 
 ;; streaming radio
 (package! eradio)
@@ -112,8 +111,7 @@
 (package! exec-path-from-shell)
 (package! ace-link)
 
-(package! org-trello :disable t)
-
+;; Jest packages
 (package! jest)
 
 ;; Weather

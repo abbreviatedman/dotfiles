@@ -697,7 +697,9 @@ See `transpose-chars' for more info on the original function."
        :desc "ibuffer filter by mode" :n "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" :n "?" #'ibuffer-filter-disable))
 
-(add-hook! 'rjsx-mode-hook #'jest-minor-mode #'emmet-mode)
+(use-package! jest
+  :config
+  (add-hook! 'rjsx-mode-hook #'jest-minor-mode #'emmet-mode))
 
 ;; i3wm mode.
 (add-hook! 'i3wm-config-mode-hook #'rainbow-mode)
@@ -913,9 +915,15 @@ Added as advice below. So... careful!"
 ;; Load my (many) config files. But not the flycheck ones.
 ;; Not sure I /needed/ to avoid loading those.
 ;; But I /did/ want to practice my lisp-fu!
+
+;; Utility function.
+
 (defun crj--not-a-flycheck-filename-p (filename)
   (not (string-search "flycheck" filename)))
 
+;; Forked repos.
+
+;; My modules. Should probably combine these two snippets..
 (let* ((unsanitized-modules
         (file-expand-wildcards "~/.doom.d/crj-modules/*.el"))
        (modules
@@ -927,6 +935,8 @@ Added as advice below. So... careful!"
        (modules
         (seq-filter #'crj--not-a-flycheck-filename-p unsanitized-modules)))
   (mapc 'load modules))
+
+
 ;; some available keybinding prefixes
 ;; SPC l
 ;; SPC and any capital letter
