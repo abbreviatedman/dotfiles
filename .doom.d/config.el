@@ -697,9 +697,20 @@ See `transpose-chars' for more info on the original function."
        :desc "ibuffer filter by mode" :n "m" #'ibuffer-filter-by-mode
        :desc "remove ibuffer filter" :n "?" #'ibuffer-filter-disable))
 
-(use-package! jest
+(use-package jest-test-mode
+  :commands jest-test-mode
+  :hook (rjsx-mode typescript-mode js-mode typescript-tsx-mode)
   :config
-  (add-hook! 'rjsx-mode-hook #'jest-minor-mode #'emmet-mode))
+  (add-to-list 'jest-test-options "--watch-all")
+  (map!
+   :map jest-test-mode-map
+   (:prefix
+    "C-c"
+    (:prefix ("t" . "test")
+     :desc "Run all project tests." "p" #'jest-test-run-all-tests
+     :desc "Run current test file." "n" #'jest-test-run
+     :desc "Re-run last test." "a" #'jest-test-rerun-test
+     :desc "Run test at point." "t" #'jest-test-run-at-point))))
 
 ;; i3wm mode.
 (add-hook! 'i3wm-config-mode-hook #'rainbow-mode)

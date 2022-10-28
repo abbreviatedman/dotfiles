@@ -105,14 +105,15 @@
 (package! dimmer)
 
 (package! peep-dired)
+
 ;; Nice replace speed.
 (package! evil-replace-with-register)
+
 (package! i3wm-config-mode)
 (package! exec-path-from-shell)
 (package! ace-link)
 
-;; Jest packages
-(package! jest)
+(package! jest-test-mode)
 
 ;; Weather
 ;; TODO needs patching!
