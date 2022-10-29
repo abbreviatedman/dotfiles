@@ -310,7 +310,9 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
   (add-to-list 'pulsar-pulse-functions function))
 
   (pulsar-global-mode 1)
-  (map! :leader (:prefix ("h" . "+help") :desc "View current line." :n "j" #'pulsar-pulse-line)))
+  (map! :leader (:prefix ("v" . "+view")
+                          :desc "Pulse current line." :n "l" #'pulsar-pulse-line
+                          :desc "Highlight current line." :n "L" #'pulsar-highlight-line)))
 
 (use-package! dimmer
   :config
