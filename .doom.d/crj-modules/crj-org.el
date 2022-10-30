@@ -6,6 +6,8 @@
   :desc "Repair list" :n "r" #'org-list-repair))
 
 (use-package! org
+  :init
+  (setq org-use-property-inheritance t)
   :config
   (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
   (setq org-link-descriptive t
