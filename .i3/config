@@ -82,9 +82,8 @@ floating_modifier $mod
 
 # start Emacs terminal 1 (vterm)
 bindsym $mod+Return exec emacsclient -cn -a ""
-
 # start Emacs terminal 2 (eshell)
-bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+eshell/here)"
+bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+vterm/here nil)"
 
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
