@@ -161,9 +161,9 @@
 (package! svg-lib)
 
 ;; Racket
-(package! ob-racket 
+(package! ob-racket
   :recipe
-  (:host github :repo "hasu/emacs-ob-racket"))
+  (:host github :repo "DEADB17/ob-racket"))
 
 (package! racket-mode)
 
