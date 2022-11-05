@@ -166,6 +166,9 @@
    :repo "matasar/code-review"
    :branch "fix-signature-magit-diff-insert-file-section")
   :pin "975465487aa2388b8a2544a2b64dce4c0279c572")
+
+(package! on-parens)
+
 ;; Racket
 (package! ob-racket
   :recipe
