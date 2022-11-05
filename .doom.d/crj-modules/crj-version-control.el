@@ -52,9 +52,4 @@ Only changes were:
 (after! magit
   (setq magit-revision-show-gravatars '("^Author:     " . "^Commit:     ")))
 
-(add-hook 'code-review-mode-hook
-          (lambda ()
-            ;; include *Code-Review* buffer into current workspace
-            (persp-add-buffer (current-buffer))))
-
 (setq code-review-auth-login-marker 'forge)
