@@ -679,7 +679,7 @@ See `transpose-chars' for more info on the original function."
       (:prefix ("t" . "toggle")
        :desc "line numbers" :n "l" #'crj/cycle-line-numbers
        :desc "org markers" :n "C" #'crj/org-toggle-character-markers
-       :desc "radio" :n "m" #'eradio-toggle
+       :desc "radio" :n "m" #'eradio-stop
        :desc "play radio channel" :n "M" #'eradio-play
        :desc "modeline for buffer" :n "d" #'crj/toggle-mode-line-buffer
        :desc "modeline" :n "D" #'crj/toggle-mode-line-global
