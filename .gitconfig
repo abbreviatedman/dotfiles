@@ -6,7 +6,7 @@
 [core]
 	excludesFile = ~/.gitignore-global
 	ignorecase = false
-	editor = emacsclient -t -a=\\\"\\\"
+	editor = nvim
 [interactive]
 	singleKey = true
 [init]
