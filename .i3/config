@@ -186,9 +186,10 @@ bindsym $mod+Shift+n exec dunstctl history-pop
 bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 # Screenshots
-bindsym Print --release exec --no-startup-id spectacle -b
-bindsym Shift+Print --release exec --no-startup-id spectacle -rb
-bindsym $mod+Print --release exec --no-startup-id spectacle -ab
+bindsym Print --release exec --no-startup-id spectacle
+bindsym Shift+Print --release exec --no-startup-id spectacle -r
+bindsym $mod+Print --release exec --no-startup-id spectacle -a
+bindsym Ctrl+Print --release exec --no-startup-id spectacle -m
 
 # change focus
 bindsym $mod+h focus left
