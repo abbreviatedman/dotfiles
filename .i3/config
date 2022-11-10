@@ -34,7 +34,7 @@ set $alt Mod1
 bindsym $mod+w exec emacsclient --eval "(emacs-everywhere)"
 
 ## Simple writing terminal.
-bindsym $mod+Shift+w exec emacsclient -cn ~/Sync/org/quick-note.md
+bindsym $mod+Shift+w exec emacsclient -cn ~/org-stuff/quick-note.md
 
 ## Todos
 bindsym $mod+Shift+t exec emacsclient -cn ~/org-stuff/readme.org
