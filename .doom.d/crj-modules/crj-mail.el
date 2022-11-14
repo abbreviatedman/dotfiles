@@ -1,4 +1,4 @@
-(after! mu4e
+(use-package! mu4e
   (mu4e-alert-set-default-style 'message)
   (setq user-mail-address "abbreviatedman@posteo.net"
         doom-modeline-mu4e nil
@@ -16,6 +16,7 @@
         mu4e-trash-folder "/Trash"
         mu4e-sent-folder "/Sent"
         mu4e-index-cleanup t
+        mu4e-update-interval 60
         mu4e-index-lazy-check nil
         mu4e-attachment-dir "~/Downloads"
         smtpmail-debug-info t
