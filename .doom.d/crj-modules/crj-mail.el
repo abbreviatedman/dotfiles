@@ -1,5 +1,5 @@
 (use-package! mu4e
-  (mu4e-alert-set-default-style 'message)
+  :init
   (setq user-mail-address "abbreviatedman@posteo.net"
         doom-modeline-mu4e nil
         +mu4e-alert-bell-cmd nil
@@ -27,7 +27,10 @@
         mu4e-maildir-shortcuts '(("/INBOX"      . ?i)
                                  ("/Sent" . ?s)
                                  ("/Drafts"     . ?d)
-                                 ("/Trash"      . ?t))))
+                                 ("/Trash"      . ?t)))
+  :config
+  (mu4e-alert-disable-notifications)
+  (mu4e-alert-disable-mode-line-display))
 
 
 (defun crj/mark-all-as-read ()
