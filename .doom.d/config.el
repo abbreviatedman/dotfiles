@@ -76,6 +76,7 @@
 ;; TODO space liner (look to evil-surround)
 ;; TODO nocturn.el - runs hooks on daylight change
 ;; TODO Quokka Thing
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 
 (setq bookmark-save-flag 1)
 
@@ -747,8 +748,6 @@ See `transpose-chars' for more info on the original function."
 (define-key help-mode-map (kbd "M-o") #'ace-link-help)
 ;; (define-key compilation-mode-map (kbd "M-o") #'ace-link-compilation)
 (map! :map org-mode-map :n (kbd "M-o") #'ace-link-org)
-(after! mu4e
-  (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help))
 
 ;; Switch frames. (Particularly useful on macOS.)
 (map! :leader

@@ -4,6 +4,7 @@
         doom-modeline-mu4e nil
         +mu4e-alert-bell-cmd nil
         sendmail-program (executable-find "msmtp")
+        smtpmail-smtp-service 587
         send-mail-function #'smtpmail-send-it
         message-sendmail-f-is-evil t
         message-sendmail-extra-arguments '("--read-envelope-from")
@@ -29,12 +30,9 @@
                                  ("/Drafts"     . ?d)
                                  ("/Trash"      . ?t)))
   :config
+  (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help)
   (mu4e-alert-disable-notifications)
   (mu4e-alert-disable-mode-line-display))
-
-(use-package! mu4e-config
-  :after mu4e
-  :load-path "/usr/share/emacs/site-lisp/mu4e")
 
 
 (defun crj/mark-all-as-read ()
