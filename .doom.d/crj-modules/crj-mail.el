@@ -32,6 +32,10 @@
   (mu4e-alert-disable-notifications)
   (mu4e-alert-disable-mode-line-display))
 
+(use-package! mu4e-config
+  :after mu4e
+  :load-path "/usr/share/emacs/site-lisp/mu4e")
+
 
 (defun crj/mark-all-as-read ()
   "Marks all visible messages as read.
