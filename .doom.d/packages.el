@@ -170,8 +170,7 @@
 
 ;; Racket
 (package! ob-racket
-  :recipe
-  (:host github :repo "DEADB17/ob-racket"))
+  :recipe (:host github :repo "DEADB17/ob-racket"))
 
 (package! racket-mode)
 
