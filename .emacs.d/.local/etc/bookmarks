@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("Org Babel Reference"
+(("org-capture-last-stored"
+ (filename . "~/org-stuff/todo.org")
+ (front-context-string . "** TODO make Cod")
+ (rear-context-string)
+ (position . 9))
+("Org Babel Reference"
  (front-context-string . "Org Babel refere")
  (rear-context-string)
  (position . 1)
