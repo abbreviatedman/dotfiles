@@ -8,6 +8,11 @@
  (position . 1)
  (location . "https://jrsinclair.com/articles/2022/whats-so-great-about-functional-programming-anyway/")
  (handler . eww-bookmark-jump))
+(("org-capture-last-stored"
+ (filename . "~/org-stuff/todo.org")
+ (front-context-string . "** TODO add Magi")
+ (rear-context-string)
+ (position . 9))
 ("Org Babel Reference"
  (front-context-string . "Org Babel refere")
  (rear-context-string)
