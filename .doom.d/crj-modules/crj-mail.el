@@ -1,14 +1,58 @@
+;; (use-package! mu4e
+;;   :init
+;;   (setq user-mail-address "abbreviatedman@posteo.net"
+;;         doom-modeline-mu4e nil
+;;         +mu4e-alert-bell-cmd nil
+;;         sendmail-program (executable-find "msmtp")
+;;         smtpmail-smtp-service 587
+;;         send-mail-function #'smtpmail-send-it
+;;         message-sendmail-f-is-evil t
+;;         message-sendmail-extra-arguments '("--read-envelope-from")
+;;         message-send-mail-function #'message-send-mail-with-sendmail
+;;         user-full-name  "Colin Jaffe"
+;;         mu4e-get-mail-command "mbsync --all -c ~/.mbsyncrc"
+;;         auth-source-cache-expiry 28800
+;;         smtpmail-servers-requiring-authorization "*"
+;;         mu4e-main-hide-personal-addresses t
+;;         mu4e-drafts-folder "/Drafts"
+;;         mu4e-trash-folder "/Trash"
+;;         mu4e-sent-folder "/Sent"
+;;         mu4e-index-cleanup t
+;;         mu4e-update-interval 60
+;;         mu4e-index-lazy-check nil
+;;         mu4e-attachment-dir "~/Downloads"
+;;         smtpmail-debug-info t
+;;         +mu4e-personal-addresses '("colin@pursuit.org"
+;;                                    "colin.jaffe@gmail.com"
+;;                                    "balloonasaurus@gmail.com"
+;;                                    "abbreviatedman@posteo.net")
+;;         mu4e-maildir-shortcuts '(("/INBOX"      . ?i)
+;;                                  ("/Sent" . ?s)
+;;                                  ("/Drafts"     . ?d)
+;;                                  ("/Trash"      . ?t)))
+;;   :config
+;;   (map! :map mu4e-view-mode-map :n (kbd "M-o") #'ace-link-help)
+;;   (mu4e-alert-disable-notifications)
+;;   (mu4e-alert-disable-mode-line-display))
+
+;;; TODO Alternate, non-msmtp version:
+(use-package! smtpmail)
 (use-package! mu4e
   :init
   (setq user-mail-address "abbreviatedman@posteo.net"
+        smtpmail-smtp-user "abbreviatedman@posteo.net"
+        auth-sources '("~/.authinfo.gpg")
+        smtpmail-stream-type 'starttls
         doom-modeline-mu4e nil
+        smtpmail-debug-info t
+        smtpmail-debug-verb t
         +mu4e-alert-bell-cmd nil
-        sendmail-program (executable-find "msmtp")
         smtpmail-smtp-service 587
+        smtpmail-smtp-server "posteo.de"
         send-mail-function #'smtpmail-send-it
         message-sendmail-f-is-evil t
-        message-sendmail-extra-arguments '("--read-envelope-from")
-        message-send-mail-function #'message-send-mail-with-sendmail
+        message-send-mail-function #'smtpmail-send-it
+        send-mail-function #'smtpmail-send-it
         user-full-name  "Colin Jaffe"
         mu4e-get-mail-command "mbsync --all -c ~/.mbsyncrc"
         auth-source-cache-expiry 28800
@@ -18,7 +62,7 @@
         mu4e-trash-folder "/Trash"
         mu4e-sent-folder "/Sent"
         mu4e-index-cleanup t
-        mu4e-update-interval 60
+        mu4e-update-interval 600
         mu4e-index-lazy-check nil
         mu4e-attachment-dir "~/Downloads"
         smtpmail-debug-info t
