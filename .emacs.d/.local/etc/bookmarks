@@ -4,7 +4,7 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
  (filename . "~/org-stuff/readme.org")
- (front-context-string . "** TODO Config i")
+ (front-context-string . "** TODO config: ")
  (rear-context-string . "saging.\n* Inbox\n")
  (position . 220))
 ("What’s so great about functional programming anyway?"
