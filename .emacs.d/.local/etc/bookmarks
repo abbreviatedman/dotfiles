@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("Org Babel Reference"
+(("What’s so great about functional programming anyway?"
+ (front-context-string . "James Sinclair\n\n")
+ (rear-context-string)
+ (position . 1)
+ (location . "https://jrsinclair.com/articles/2022/whats-so-great-about-functional-programming-anyway/")
+ (handler . eww-bookmark-jump))
+("Org Babel Reference"
  (front-context-string . "Org Babel refere")
  (rear-context-string)
  (position . 1)
