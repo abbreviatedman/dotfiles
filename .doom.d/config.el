@@ -690,7 +690,9 @@ See `transpose-chars' for more info on the original function."
        :desc "pomodoro clock" :n "c" #'org-pomodoro))
 
 ;; Indium.
-(setq indium-chrome-executable "google-chrome-stable")
+(use-package! indium
+  :init
+  (setq indium-chrome-executable "google-chrome-stable"))
 
 ;; Ibuffer commands.
 (map! :leader

@@ -67,6 +67,7 @@
         mu4e-attachment-dir "~/Downloads"
         smtpmail-debug-info t
         +mu4e-personal-addresses '("colin@pursuit.org"
+                                   "colin.jaffe@posteo.net"
                                    "colin.jaffe@gmail.com"
                                    "balloonasaurus@gmail.com"
                                    "abbreviatedman@posteo.net")
