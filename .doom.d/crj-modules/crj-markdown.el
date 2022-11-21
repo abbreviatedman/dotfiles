@@ -1,6 +1,12 @@
+(defun crj/kill-all-text-and-save-and-kill-buffer ()
+  (interactive)
+  (crj/kill-all-text-in-buffer)
+  (save-buffer)
+  (kill-buffer))
+
 (use-package! markdown-mode
   :config
- (define-key markdown-mode-command-map (kbd "d") #'crj/kill-all-text-in-buffer)
+ (define-key markdown-mode-command-map (kbd "d") #'crj/kill-all-text-and-save-and-kill-buffer)
  (add-hook 'markdown-mode-hook #'variable-pitch-mode)
   (map!
    :map markdown-mode-map
