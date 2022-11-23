@@ -62,7 +62,7 @@
         mu4e-trash-folder "/Trash"
         mu4e-sent-folder "/Sent"
         mu4e-index-cleanup t
-        mu4e-update-interval 600
+        mu4e-update-interval nil
         mu4e-index-lazy-check nil
         mu4e-attachment-dir "~/Downloads"
         smtpmail-debug-info t
