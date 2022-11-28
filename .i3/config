@@ -607,3 +607,7 @@ bindsym $mod+Shift+Ctrl+e exec "xrandr --output eDP-1 --primary --mode 1920x1080
 
 # Just the laptop screen.
 bindsym $mod+Shift+Ctrl+d exec "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
+
+
+# refresh laptop monitor (shuts off sometimes!)
+bindsym $mod+Shift+Ctrl+r exec "xrandr --output eDP-1 --off; xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --rotate normal --output DP-1 --mode 3840x2160 --pos 1920x0 --rotate normal --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
