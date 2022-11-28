@@ -97,14 +97,16 @@
 ;; Some helpful utilities.
 
 ;; Taken from https://emacs.stackexchange.com/a/62238
-;; Gets a list of all modes a mode derives from.
-(defun crj-get-derived-modes (mode)
+;; TODO add completing-read
+(defun crj/get-mode-inheritance (mode)
+  "Gets a list of all modes a mode derives from."
   (interactive (list major-mode))
   (defun iter (mode)
     (and mode
          (cons mode
                (iter (get mode 'derived-mode-parent)))))
   (message "%s" (iter mode)))
+
 (defun crj/cycle-setting (setting potential-values)
   "Cycle SETTING through POTENTIAL-VALUES.
 
