@@ -9,14 +9,12 @@
  (define-key markdown-mode-command-map (kbd "d") #'crj/kill-all-text-and-save)
  (add-hook 'markdown-mode-hook #'variable-pitch-mode)
   (map!
-   :map markdown-mode-map
+   :map (markdown-mode-map evil-markdown-mode-map)
    :n "gj" #'evil-next-visual-line
    :n "gk" #'evil-previous-visual-line
    :i "TAB" #'markdown-demote
    :i "<backtab>" #'markdown-promote
    :i "M-b" nil)
-  (map! :map (markdown-mode-style-map evil-markdown-mode-map)
-        :i "M-b" nil)
 
   (setq markdown-header-scaling t)
   (setq markdown-header-scaling-values '(2.5 2.0 2.0 1.5 1.0 1.0))
