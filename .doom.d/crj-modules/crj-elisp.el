@@ -36,14 +36,6 @@
 (map! :leader :n "e" #'+eval:region)
 (map! :leader :n "E" #'+eval:replace-region)
 
-;;; Manipulating Expressions
-;;; Lisp structural editing commands without a lispy-like mode.
-;; (map!
-;;  :leader
-;;  (:prefix ("y" . "lisp")
-;;   :desc "slurp" :n "s" #'sp-forward-slurp-sexp
-;;   :desc "barf" :n "b" #'sp-forward-barf-sexp
-;;   :desc "raise" :n "r" #'sp-raise-sexp))
 
 ;; Lisp Layer
 ;; (use-package symex
