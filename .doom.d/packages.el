@@ -1,6 +1,11 @@
 ;; adds browsing for links
 (package! browse-at-remote)
 
+(package! hungry-delete
+  :recipe
+  (:host github
+   :repo "nflath/hungry-delete"))
+
 (package! json-process-client)
 
 (package! enwc)

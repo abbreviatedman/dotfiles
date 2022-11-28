@@ -873,6 +873,13 @@ Added as advice below. So... careful!"
          (list (remove orig-text args)))
     (apply orig-fun (add-to-list 'list new-text t))))
 
+(use-package! hungry-delete
+  :init
+  (setq hungry-delete-join-reluctantly t)
+  :config
+  (map! :i "S-<backspace>" #'hungry-delete-backward)
+  (map! :i "S-<delete>" #'hungry-delete-forward))
+
 (defun crj/kill-all-text-in-buffer ()
   (interactive)
   (evil-delete (point-min) (point-max)))
