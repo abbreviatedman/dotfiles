@@ -80,10 +80,10 @@
 
 (defun crj/split-line-between-pairs ()
   (interactive)
-  (newline 2)
-  (evil-indent-line (bol) (eol))
+  (newline-and-indent)
   (forward-line -1)
-  (indent-for-tab-command))
+  (doom/forward-to-last-non-comment-or-eol)
+  (newline-and-indent))
 
 (global-set-key (kbd "M-RET") #'crj/split-line-between-pairs)
 
