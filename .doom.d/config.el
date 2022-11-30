@@ -87,6 +87,20 @@
 
 (global-set-key (kbd "M-RET") #'crj/split-line-between-pairs)
 
+(defun crj/split-line-between-pairs-advice ()
+  (newline)
+  (evil-indent-line (bol) (eol))
+  (forward-line -1)
+  (doom/forward-to-last-non-comment-or-eol))
+
+(defun crj/split-pairs-maybe ()
+  (interactive)
+  (when (or (and (looking-back (regexp-quote "{") 1) (looking-at (regexp-quote "}")))
+          (and (looking-back (regexp-quote "[") 1) (looking-at (regexp-quote "]"))))
+      (crj/split-line-between-pairs-advice)))
+
+(advice-add #'newline-and-indent :before #'crj/split-pairs-maybe)
+
 ;; Configure Tempel
 (use-package tempel
   ;; Require trigger prefix before template name when completing.
