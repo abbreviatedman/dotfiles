@@ -78,6 +78,15 @@
 ;; TODO Quokka Thing
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 
+(defun crj/split-line-between-pairs ()
+  (interactive)
+  (newline 2)
+  (evil-indent-line (bol) (eol))
+  (forward-line -1)
+  (indent-for-tab-command))
+
+(global-set-key (kbd "M-RET") #'crj/split-line-between-pairs)
+
 ;; Configure Tempel
 (use-package tempel
   ;; Require trigger prefix before template name when completing.
