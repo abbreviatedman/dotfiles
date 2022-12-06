@@ -1,7 +1,6 @@
-(defun crj/kill-all-text-and-save ()
+(defun crj/kill-and-stop-editing ()
   (interactive)
   (crj/kill-all-text-in-buffer)
-  (save-buffer)
   (evil-force-normal-state))
 
 (use-package! markdown-mode
@@ -17,7 +16,8 @@
                                          1.0
                                          1.0))
 
-  (define-key markdown-mode-command-map (kbd "d") #'crj/kill-all-text-and-save)
+  (define-key markdown-mode-command-map (kbd "d") #'crj/kill-and-stop-editing)
+  (define-key markdown-mode-command-map (kbd "C-d") #'crj/kill-and-stop-editing)
   (add-hook 'markdown-mode-hook #'variable-pitch-mode)
   (evil-define-key
     'normal markdown-mode-map
