@@ -161,6 +161,8 @@
 
 (package! org-caldav)
 
+(package! tempel)
+
 (package! pcmpl-args)
 
 (package! svg-lib)

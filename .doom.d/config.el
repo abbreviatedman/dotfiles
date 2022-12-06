@@ -78,6 +78,61 @@
 ;; TODO Quokka Thing
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 
+(defun crj/split-line-between-pairs ()
+  (interactive)
+  (newline 2)
+  (evil-indent-line (bol) (eol))
+  (forward-line -1)
+  (indent-for-tab-command))
+
+(global-set-key (kbd "M-RET") #'crj/split-line-between-pairs)
+
+(defun crj/split-line-between-pairs-advice ()
+  (newline)
+  (evil-indent-line (bol) (eol))
+  (forward-line -1)
+  (doom/forward-to-last-non-comment-or-eol))
+
+(defun crj/split-pairs-maybe ()
+  (interactive)
+  (when (or (and (looking-back (regexp-quote "{") 1) (looking-at (regexp-quote "}")))
+          (and (looking-back (regexp-quote "[") 1) (looking-at (regexp-quote "]"))))
+      (crj/split-line-between-pairs-advice)))
+
+(advice-add #'newline-and-indent :before #'crj/split-pairs-maybe)
+
+;; Configure Tempel
+(use-package tempel
+  ;; Require trigger prefix before template name when completing.
+  ;; :custom
+  ;; (tempel-trigger-prefix "<")
+
+  :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
+         ("M-*" . tempel-insert))
+
+  :init
+  (setq tempel-path "~/.config/emacs/templates")
+  ;; Setup completion at point
+  (defun tempel-setup-capf ()
+    ;; Add the Tempel Capf to `completion-at-point-functions'.
+    ;; `tempel-expand' only triggers on exact matches. Alternatively use
+    ;; `tempel-complete' if you want to see all matches, but then you
+    ;; should also configure `tempel-trigger-prefix', such that Tempel
+    ;; does not trigger too often when you don't expect it. NOTE: We add
+    ;; `tempel-expand' *before* the main programming mode Capf, such
+    ;; that it will be tried first.
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+
+  (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  (add-hook 'text-mode-hook 'tempel-setup-capf)
+
+  ;; Optionally make the Tempel templates available to Abbrev,
+  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
+  (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
+  (global-tempel-abbrev-mode))
+
 (setq bookmark-save-flag 1)
 
 (defun crj/turn-off-visual-line-mode ()
