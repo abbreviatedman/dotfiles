@@ -19,16 +19,12 @@
 (package! pulsar)
 
 ;; adds gcal integration
-(package! org-gcal
-  :recipe
-  (:host github
-   :repo "telotortium/org-gcal.el"
-   :branch "oauth2-auto"))
+;; (package! org-gcal)
 
-(package! emacs-oauth2-auto
-  :recipe
-  (:host github
-   :repo "rhaps0dy/emacs-oauth2-auto"))
+;; (package! emacs-oauth2-auto
+;;   :recipe
+;;   (:host github
+;;    :repo "rhaps0dy/emacs-oauth2-auto"))
 
 (package! emacs-nm
   :recipe
