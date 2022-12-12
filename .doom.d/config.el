@@ -99,8 +99,6 @@
           (and (looking-back (regexp-quote "[") 1) (looking-at (regexp-quote "]"))))
       (crj/split-line-between-pairs-advice)))
 
-(advice-add #'newline-and-indent :before #'crj/split-pairs-maybe)
-
 ;; Configure Tempel
 (use-package tempel
   ;; Require trigger prefix before template name when completing.
