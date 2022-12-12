@@ -72,9 +72,9 @@
 
 ;; Smooth scrolling.
 (package! scroll-on-jump
-  :recipe (:host gitlab
+  :recipe (:host codeberg
            :repo "ideasman42/emacs-scroll-on-jump"))
-
+;; https://codeberg.org/ideasman42/emacs-scroll-on-jump
 ;; streaming radio
 (package! eradio)
 
