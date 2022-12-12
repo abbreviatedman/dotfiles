@@ -130,6 +130,9 @@
 (package! cape)
 (package! consult-yasnippet)
 
+;; Jupyter Notebooks
+(package! ein)
+
 ;; Nice package for redefining beginnings and ends of some buffers as the
 ;; IMPORTANT beginnings and ends.
 (package! beginend)
