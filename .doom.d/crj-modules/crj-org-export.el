@@ -10,7 +10,6 @@
                                         (:exports . "both")
                                         (:noweb . "strip-export")
                                         (:session . "none")
-                                        (:eval . "no")
                                         (:padline . "no"))))
 
 ;; Quick and dirty CSS.
