@@ -2,7 +2,15 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored"
+(("DI Instructor Handbook.pdf"
+ (filename . "~/Downloads/DI Instructor Handbook.pdf")
+ (position . 1)
+ (page . 1)
+ (slice)
+ (size . fit-page)
+ (origin 0.0 . 0.0)
+ (handler . pdf-view-bookmark-jump-handler))
+("org-capture-last-stored"
  (filename . "~/org-stuff/readme.org")
  (front-context-string . "** TODO config: ")
  (rear-context-string . "saging.\n* Inbox\n")
