@@ -9,6 +9,9 @@
 
 (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
+
+(map! :leader (:prefix "g" :desc "Checkout pull request." :n "v" #'forge-checkout-pullreq))
+
 (map! :map evil-normal-state-map :leader
       :desc "magit with yadm" "g d" (lambda () (interactive (magit-status "/yadm::"))))
 
