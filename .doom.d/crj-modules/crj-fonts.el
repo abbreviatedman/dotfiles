@@ -83,8 +83,10 @@ when you're mixing pitches"
 
 (crj/make-line-number-face-monospace)
 (add-hook 'doom-switch-buffer-hook #'crj/make-line-number-face-monospace)
+(add-hook 'code-review-mode-hook #'crj/make-line-number-face-monospace)
 (advice-add 'mu4e-view-mode :after #'crj/make-line-number-face-monospace)
 (advice-add 'revert-buffer :after #'crj/make-line-number-face-monospace)
+
 (add-hook 'text-mode-hook #'mixed-pitch-mode)
 
 (defun crj/use-fixed-pitch ()
