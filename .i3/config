@@ -80,21 +80,17 @@ bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#0
 # Use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
-# start Emacs terminal 1 (vterm)
-bindsym $mod+Return exec emacsclient -cn -a ""
-# start Emacs terminal 2 (eshell)
+# start Emacs terminal
 bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+vterm/here nil)"
-
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
-
-# start browser 1
+# start work browser
 bindsym $mod+Shift+Return exec "google-chrome-stable"
-
-# start browser 2
+# start personal browser
+bindsym $mod+Return exec emacsclient -cn -a "" -e '(eww-browse-url "" t)'
+# start alt browser 1
 bindsym $mod+$alt+g exec "chromium"
-
-# start browser 3
+# start alt browser 2
 bindsym $mod+$alt+f exec "firefox"
 
 # start team communication app
