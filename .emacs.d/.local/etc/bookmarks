@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("DI Instructor Handbook.pdf"
+(("Which Disney villain are you? | Disney villain quiz"
+ (front-context-string . "PsyCat Games 🎉 P")
+ (rear-context-string)
+ (position . 1)
+ (location . "https://psycatgames.com/quiz/which-disney-villain-are-you/")
+ (handler . eww-bookmark-jump))
+("DI Instructor Handbook.pdf"
  (filename . "~/Downloads/DI Instructor Handbook.pdf")
  (position . 1)
  (page . 1)
