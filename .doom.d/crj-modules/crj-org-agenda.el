@@ -3,77 +3,36 @@
 ;;                                       ((agenda "")
 ;;                                        (todo "IN-PROGRESS")
 ;;                                        (todo "NEXT")))))
-
-(use-package! org
+(use-package! org-agenda
   :init
-  (setq org-agenda-custom-commands
-        `(("A" "Daily agenda and top priority tasks"
-           ((tags-todo "*"
+  (defun crj/agenda () (interactive) (org-agenda t "g"))
+  ;; (global-set-key (kbd "C-c g") #'(lambda () (interactive) (org-agenda t "g")))
+  (setq org-agenda-start-day nil
+        org-agenda-custom-commands '(("g" "Daily agenda and top priority tasks"
+           ((todo "WAIT" ((org-agenda-overriding-header "Tasks On Hold\n")))
+            (tags-todo "*"
                        ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
                         (org-agenda-skip-function
                          `(org-agenda-skip-entry-if
                            'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
                         (org-agenda-block-separator nil)
-                        (org-agenda-overriding-header "Important tasks without a date\n")))
+                        (org-agenda-overriding-header "Important Tasks\n")))
             (agenda "" ((org-agenda-span 1)
                         (org-deadline-warning-days 0)
                         (org-agenda-block-separator nil)
                         (org-scheduled-past-days 0)
-                        ;; We don't need the `org-agenda-date-today'
-                        ;; highlight because that only has a practical
-                        ;; utility in multi-day views.
-                        (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                        (org-agenda-day-face-function (lambda (_) 'org-agenda-date))
                         (org-agenda-format-date "%A %-e %B %Y")
-                        (org-agenda-overriding-header "\nToday's agenda\n")))
+                        (org-agenda-overriding-header "\nToday's Agenda\n")))
             (agenda "" ((org-agenda-start-on-weekday nil)
                         (org-agenda-start-day "+1d")
                         (org-agenda-span 3)
                         (org-deadline-warning-days 0)
                         (org-agenda-block-separator nil)
                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                        (org-agenda-overriding-header "\nNext three days\n")))
+                        (org-agenda-overriding-header "\nNext Three Days\n")))
             (agenda "" ((org-agenda-time-grid nil)
                         (org-agenda-start-on-weekday nil)
-                        ;; We don't want to replicate the previous section's
-                        ;; three days, so we start counting from the day after.
-                        (org-agenda-start-day "+4d")
-                        (org-agenda-span 14)
-                        (org-agenda-show-all-dates nil)
-                        (org-deadline-warning-days 0)
-                        (org-agenda-block-separator nil)
-                        (calendar-mode)
-                        (org-agenda-entry-types '(:deadline))
-                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                        (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n")))))
-          ("P" "Plain text daily agenda and top priorities"
-           ((tags-todo "*"
-                       ((org-agenda-skip-function '(org-agenda-skip-if nil '(timestamp)))
-                        (org-agenda-skip-function
-                         `(org-agenda-skip-entry-if
-                           'notregexp ,(format "\\[#%s\\]" (char-to-string org-priority-highest))))
-                        (org-agenda-block-separator nil)
-                        (org-agenda-overriding-header "Important tasks without a date\n")))
-            (agenda "" ((org-agenda-span 1)
-                        (org-deadline-warning-days 0)
-                        (org-agenda-block-separator nil)
-                        (org-scheduled-past-days 0)
-                        ;; We don't need the `org-agenda-date-today'
-                        ;; highlight because that only has a practical
-                        ;; utility in multi-day views.
-                        (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                        (org-agenda-format-date "%A %-e %B %Y")
-                        (org-agenda-overriding-header "\nToday's agenda\n")))
-            (agenda "" ((org-agenda-start-on-weekday nil)
-                        (org-agenda-start-day "+1d")
-                        (org-agenda-span 3)
-                        (org-deadline-warning-days 0)
-                        (org-agenda-block-separator nil)
-                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                        (org-agenda-overriding-header "\nNext three days\n")))
-            (agenda "" ((org-agenda-time-grid nil)
-                        (org-agenda-start-on-weekday nil)
-                        ;; We don't want to replicate the previous section's
-                        ;; three days, so we start counting from the day after.
                         (org-agenda-start-day "+4d")
                         (org-agenda-span 14)
                         (org-agenda-show-all-dates nil)
@@ -81,12 +40,7 @@
                         (org-agenda-block-separator nil)
                         (org-agenda-entry-types '(:deadline))
                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                        (org-agenda-overriding-header "\nUpcoming deadlines (+14d)\n"))))
-           ((org-agenda-with-colors nil)
-            (org-agenda-prefix-format "%t %s")
-            (org-agenda-current-time-string ,(car (last org-agenda-time-grid)))
-            (org-agenda-fontify-priorities nil)
-            (org-agenda-remove-tags t))
-           ("agenda.txt"))))
+                        (org-agenda-overriding-header "\nUpcoming Deadlines (+14d)\n")))))))
   :bind
-  ("C-c a" . org-agenda))
+  (("C-c a" . org-agenda)
+   ("C-c g" . crj/agenda)))
