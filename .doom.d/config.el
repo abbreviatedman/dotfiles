@@ -417,6 +417,11 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
     (transpose-chars 1)
     (backward-char)))
 
+(use-package! emacs
+  :bind
+  (:map evil-insert-state-map
+  ("C-S-k" . kill-line)))
+
 (defun crj/evil-tranpose-chars ()
   "Transpose characters as one vim-style action.
 
