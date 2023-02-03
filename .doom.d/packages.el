@@ -160,7 +160,7 @@
 
 (package! org-caldav)
 
-(package! tempel)
+(package! tempel :disable t)
 
 (package! pcmpl-args)
 

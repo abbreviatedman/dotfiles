@@ -99,38 +99,6 @@
           (and (looking-back (regexp-quote "[") 1) (looking-at (regexp-quote "]"))))
       (crj/split-line-between-pairs-advice)))
 
-;; Configure Tempel
-(use-package tempel
-  ;; Require trigger prefix before template name when completing.
-  ;; :custom
-  ;; (tempel-trigger-prefix "<")
-
-  :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
-         ("M-*" . tempel-insert))
-
-  :init
-  (setq tempel-path "~/.config/emacs/templates")
-  ;; Setup completion at point
-  (defun tempel-setup-capf ()
-    ;; Add the Tempel Capf to `completion-at-point-functions'.
-    ;; `tempel-expand' only triggers on exact matches. Alternatively use
-    ;; `tempel-complete' if you want to see all matches, but then you
-    ;; should also configure `tempel-trigger-prefix', such that Tempel
-    ;; does not trigger too often when you don't expect it. NOTE: We add
-    ;; `tempel-expand' *before* the main programming mode Capf, such
-    ;; that it will be tried first.
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      completion-at-point-functions)))
-
-  (add-hook 'prog-mode-hook 'tempel-setup-capf)
-  (add-hook 'text-mode-hook 'tempel-setup-capf)
-
-  ;; Optionally make the Tempel templates available to Abbrev,
-  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
-  (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
-  (global-tempel-abbrev-mode))
-
 (setq bookmark-save-flag 1)
 
 (defun crj/turn-off-visual-line-mode ()
@@ -417,6 +385,11 @@ With a minor bug fix of adding `cl-loop' in place of `loop'"
     (transpose-chars 1)
     (backward-char)))
 
+(use-package! emacs
+  :bind
+  (:map evil-insert-state-map
+  ("C-S-k" . kill-line)))
+
 (defun crj/evil-tranpose-chars ()
   "Transpose characters as one vim-style action.
 
@@ -463,7 +436,6 @@ See `transpose-chars' for more info on the original function."
         modus-themes-markup '(background)
         modus-themes-org-blocks 'gray-background
         modus-themes-region '(no-extend bg-only accented)
-        modus-themes-hl-line nil
         modus-themes-headings (quote
                                ((1 . (rainbow 1.8))
                                 (2 . (rainbow 1.6))
@@ -476,11 +448,12 @@ See `transpose-chars' for more info on the original function."
   :config
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme 'modus-operandi t)
-  (setq evil-insert-state-cursor `((bar . 2) ,(modus-themes-color 'red-intense))
-        evil-normal-state-cursor `(box ,(modus-themes-color 'blue-alt)))
-  (set-face-attribute 'modus-themes-hl-line nil
-                      :extend nil
-                      :background 'unspecified))
+  ;; (setq evil-insert-state-cursor `((bar . 2) ,(modus-themes-color 'red-intense))
+        ;; evil-normal-state-cursor `(box ,(modus-themes-color 'blue-alt)))
+  ;; (set-face-attribute 'modus-themes-hl-line nil
+                      ;; :extend nil
+                      ;; :background 'unspecified)
+                      )
 ;;; doom-zenburn
 ;; (setq doom-zenburn-comment-bg t)
 ;; (setq doom-zenburn-brighter-comments t)
@@ -628,7 +601,7 @@ See `transpose-chars' for more info on the original function."
 ;; ;; spelling dictionary location
 ;; (setq ispell-personal-dictionary "~/.doom.d/spelling/en.pws")
 
-(setq undo-fu-allow-undo-in-region t)
+;; (setq undo-fu-allow-undo-in-region t)
 
 ;; formatting
 

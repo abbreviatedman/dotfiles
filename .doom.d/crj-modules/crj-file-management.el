@@ -10,6 +10,7 @@
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("\\.trello" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.zsh-theme" . shell-script-mode))
 
 ; General Settings
 

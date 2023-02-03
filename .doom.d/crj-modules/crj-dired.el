@@ -1,8 +1,6 @@
 (map! :leader :n "d" #'+default/dired)
 
-(use-package dired
-  :config
-  (define-key dired-mode-map (kbd "C-c f") #'dired-create-empty-file))
+;; (use-package dired)
 
 (defun crj-set-up-dired ()
   (dired-omit-mode)

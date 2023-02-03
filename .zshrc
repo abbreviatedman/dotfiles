@@ -7,15 +7,12 @@ alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
 
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
 
 # If you come from bash you might have to change your $PATH.
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
-export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:/usr/local/bin:/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local:$HOME/go/bin:$HOME/.local/bin:$HOME/.npm-global
+export PATH=$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:/usr/local/bin:.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:~/Applications:~/.cargo/bin/snap/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:/.fzf/bin:/Android/Sdk/tools:/Android/Sdk/tools/bin:/Android/Sdk/platform-tools:/usr/bin:/snap/bin:~/.emacs.d/bin:/.local/kitty.app/bin:~/.local:$HOME/go/bin:$HOME/.local/bin:$HOME/.npm-global
 
 VIM_MODE_VICMD_KEY='^Q'
 
@@ -365,3 +362,19 @@ export FZF_DEFAULT_OPTS="--ansi"
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/abbreviatedman/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/abbreviatedman/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/abbreviatedman/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/abbreviatedman/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
