@@ -17,6 +17,7 @@
                                          1.0))
 
   (define-key markdown-mode-command-map (kbd "d") #'crj/kill-and-stop-editing)
+  (define-key markdown-mode-map (kbd "C-c d") #'crj/kill-and-stop-editing)
   (define-key markdown-mode-command-map (kbd "C-d") #'crj/kill-and-stop-editing)
   (add-hook 'markdown-mode-hook #'variable-pitch-mode)
   (evil-define-key
