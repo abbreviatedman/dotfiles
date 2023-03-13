@@ -13,6 +13,7 @@
   :config
   (add-to-list 'org-todo-keyword-faces '("NEXT" . +org-todo-project))
   (setq org-link-descriptive t
+        +org-capture-todo-file "inbox.org"
         org-capture-templates '(("t" "Personal todo" entry
                                  (file+headline +org-capture-todo-file "Inbox")
                                  "* TODO %?\n%i\n%a" :prepend t)
