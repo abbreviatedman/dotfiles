@@ -37,18 +37,10 @@
                                 ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
                                 ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
                                 ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
-        org-agenda-files '("~/org-stuff/trello/9-3-co-instructors.trello"
-                           "~/org-stuff/inbox.org"
-                           "~/org-stuff/trello/9-3-fellow-cards.trello"
-                           "/home/abbreviatedman/org-stuff/readme.org"
-                           "/home/abbreviatedman/org-stuff/personal.org"
-                           "/home/abbreviatedman/org-stuff/archive.org"
-                           "~/Sync/org/cal.org"
-                           "~/org-stuff/calendars/lectures-calendar.org"
-                           "~/org-stuff/calendars/work-calendar.org"
-                           "~/org-stuff/calendars/personal-calendar.org"
-                           "~/org-stuff/calendars/9-3-calendar.org"
-                           "~/org-stuff/calendars/home-calendar.org")
+        org-agenda-files '("~/org-stuff/inbox.org"
+                           "~/org-stuff/readme.org"
+                           "~/org-stuff/personal.org"
+                           "~/org-stuff/archive.org")
 
         +org-capture-emails-file "~/org-stuff/readme.org"
         org-agenda-file-regexp "\\`[^.].*\\.org\\'"

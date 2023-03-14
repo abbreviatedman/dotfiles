@@ -1,9 +1,3 @@
-;; This is the expanded view of my code (which is further below):
-;; (setq org-agenda-custom-commands '(("d" "Agenda and next todos"
-;;                                       ((agenda "")
-;;                                        (todo "IN-PROGRESS")
-;;                                        (todo "NEXT")))))
-;; This is the expanded view of my code (which is further below):
 (use-package! org-agenda
   :init
   (defun crj/agenda () (interactive) (org-agenda t "g"))
