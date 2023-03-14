@@ -17,10 +17,10 @@
  (origin 0.0 . 0.0)
  (handler . pdf-view-bookmark-jump-handler))
 ("org-capture-last-stored"
- (filename . "~/org-stuff/todo.org")
- (front-context-string . "** TODO helath i")
- (rear-context-string)
- (position . 9))
+ (filename . "~/org-stuff/inbox.org")
+ (front-context-string . "** TODO Lots of ")
+ (rear-context-string . "every morning*.\n")
+ (position . 275))
 ("What’s so great about functional programming anyway?"
  (front-context-string . "James Sinclair\n\n")
  (rear-context-string)
