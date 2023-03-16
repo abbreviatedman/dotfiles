@@ -337,9 +337,24 @@
   ;; (crj/set-up-cape)
   )
 
-(use-package! flycheck
-  ;; The below is not a great long-term solution... see if this gets resolved:
-  ;; https://github.com/doomemacs/doomemacs/issues/6466
-  :after eglot
+(use-package! flymake
   :config
-  (delq! 'eglot flycheck-checkers))
+  (evil-global-set-key 'normal "]e" #'flymake-goto-next-error)
+  (evil-global-set-key 'normal "[e" #'flymake-goto-prev-error)
+  (map! :leader
+        (:prefix ("c" . "+code")
+                 :desc "Show diagnostics in buffer." :n "x" #'+default/diagnostics
+                 :desc "Show project diagnostics." :n "X" #'flymake-show-project-diagnostics))
+  :bind
+  (("C-c c x" . +default/diagnostics)
+   ("C-c c X" . flymake-show-project-diagnostics)
+   ;; ("] e" . flymake-goto-next-error)
+   ;; ("[ e" . flymake-goto-prev-error)
+   ))
+;; Unneeded for now, switching to flymake.
+;; (use-package! flycheck
+;;   ;; The below is not a great long-term solution... see if this gets resolved:
+;;   ;; https://github.com/doomemacs/doomemacs/issues/6466
+;;   :after eglot
+;;   :config
+;;   (delq! 'eglot flycheck-checkers))
