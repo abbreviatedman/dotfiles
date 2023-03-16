@@ -71,9 +71,7 @@
 (package! org-pomodoro)
 
 ;; Smooth scrolling.
-(package! scroll-on-jump
-  :recipe (:host codeberg
-           :repo "ideasman42/emacs-scroll-on-jump"))
+(package! scroll-on-jump)
 ;; https://codeberg.org/ideasman42/emacs-scroll-on-jump
 ;; streaming radio
 (package! eradio)
