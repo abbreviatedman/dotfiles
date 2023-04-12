@@ -9,6 +9,10 @@
                                              ((org-agenda-overriding-header "Tasks On Hold\n")
                                               (org-agenda-block-separator nil)))
                                        (todo "TODO"
+                                             ((org-agenda-files '("~/org-stuff/invite.org"))
+                                              (org-agenda-block-separator nil)
+                                              (org-agenda-overriding-header "\n Invited Events\n")))
+                                       (todo "TODO"
                                              ((org-agenda-files '("~/org-stuff/inbox.org"))
                                               (org-agenda-block-separator nil)
                                               (org-agenda-overriding-header "\nInbox Items\n")))
