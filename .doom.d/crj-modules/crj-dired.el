@@ -1,4 +1,4 @@
-(map! :leader :n "d" #'+default/dired)
+;; (map! :leader :n "d" #'+default/dired)
 
 ;; (use-package dired)
 
