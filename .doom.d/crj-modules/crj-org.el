@@ -120,7 +120,7 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
    :desc "Sort children by todo keyword."
    :n "O" #'crj/sort-entries-by-todo-state-for-children)))
 
-(defun open-calendar ()
+(defun crj/open-calendar ()
   (interactive)
   (cfw:open-calendar-buffer
    :contents-sources
@@ -137,7 +137,7 @@ See `org-todo-keywords' for what order `org-sort-entries' uses."
        :desc "view projects" :n "p" #'(lambda () (interactive) (find-file "~/Sync/org/projects.org"))
        :desc "file" :n "f" #'org-refile
        (:prefix ("c" . "calendar")
-        :desc "view" :n "v" #'open-calendar
+        :desc "view" :n "v" #'crj/open-calendar
         :desc "view org file" :n "o" #'(lambda () (interactive) (find-file "~/Sync/org/cal.org"))
         :desc "post" :n "p" #'org-gcal-post-at-point
         :desc "delete" :n "d" #'org-gcal-delete-at-point
