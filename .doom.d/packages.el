@@ -131,6 +131,9 @@
 ;; Jupyter Notebooks
 (package! ein)
 
+(unpin! evil-collection)
+(package! evil-collection
+  :recipe (:repo "meliache/evil-collection" :branch "mu4e-development"))
 ;; Nice package for redefining beginnings and ends of some buffers as the
 ;; IMPORTANT beginnings and ends.
 (package! beginend)
