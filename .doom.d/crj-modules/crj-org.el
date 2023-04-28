@@ -38,7 +38,7 @@
                                 ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
                                 ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
         org-agenda-files '("~/org-stuff/inbox.org"
-                           "~/org-stuff/invite.org"
+                           "~/org-stuff/gcal-ics.org"
                            "~/org-stuff/readme.org"
                            "~/org-stuff/personal.org"
                            "~/org-stuff/archive.org")
