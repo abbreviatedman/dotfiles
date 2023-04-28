@@ -8,10 +8,6 @@
                                       ((todo "WAIT"
                                              ((org-agenda-overriding-header "Tasks On Hold\n")
                                               (org-agenda-block-separator nil)))
-                                       (agenda ""
-                                             ((org-agenda-files '("~/org-stuff/invite.org"))
-                                              (org-agenda-block-separator nil)
-                                              (org-agenda-overriding-header "\n Invited Events\n")))
                                        (agenda "" ((org-agenda-span 1)
                                                    (org-deadline-warning-days 0)
                                                    (org-agenda-block-separator nil)
