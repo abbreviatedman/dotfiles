@@ -51,10 +51,3 @@ Currently is slightly off-kilter for non-Visual-Block visual modes."
   (kbd "SPC k") #'space-liner-bring-line-up-visual-mode
   (kbd "SPC j") #'space-liner-bring-line-down-visual-mode)
 
-;; For someday making a video about programming Emacs in Elisp.
-(defun simple-space-liner (&optional n)
-  (interactive "p")
-  (kill-whole-line)
-  (next-line (or n 1))
-  (yank)
-  (next-line -1))
