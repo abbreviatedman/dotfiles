@@ -67,6 +67,7 @@
         mu4e-attachment-dir "~/Downloads"
         smtpmail-debug-info t
         +mu4e-personal-addresses '("colin@pursuit.org"
+                                   "colin@anniecannons.com"
                                    "colin.jaffe@posteo.net"
                                    "colin.jaffe@gmail.com"
                                    "balloonasaurus@gmail.com"
@@ -106,6 +107,8 @@ Forget where I got this, but it's pretty sweet."
               "colin.jaffe@gmail.com")
              ((mu4e-message-contact-field-matches msg :to "balloonasaurus@gmail.com")
               "balloonasaurus@gmail.com")
+             ((mu4e-message-contact-field-matches msg :to "colin@anniecannons.com")
+              "colin@anniecannons.com")
              ((mu4e-message-contact-field-matches msg :to "colin@pursuit.org")
               "colin@pursuit.org")
              (t "abbreviatedman@posteo.net"))))))
