@@ -113,7 +113,7 @@
   :config
   (define-key proced-mode-map (kbd "g z") #'proced-toggle-auto-update))
 
-(add-to-list 'tramp-default-proxies-alist '(".*" "\\`root\\'" "/ssh:%h:"))
+; (add-to-list 'tramp-default-proxies-alist '(".*" "\\`root\\'" "/ssh:%h:"))
 
 ;; Some helpful utilities.
 
