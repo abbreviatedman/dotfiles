@@ -1,0 +1,252 @@
+#+PROPERTY: header-args:emacs-lisp :tangle ./config.el :mkdirp yes
+
+* Colin Jaffe's Literate Config
+Increasing my efficiency as inefficiently as possible.
+
+** Introduction
+
+I've been running with a Doom Emacs config for a long time, but it's /rather/ creaky. Plus, I don't know what's going on half the time, since only half the config is my code.
+
+So I've based a new config on Crafted Emacs, which is a very sparse system.
+
+The first step is going through the Crafted Emacs modules in the first section, taking ideas from them, adding my own config carefully, and then removing the original module.
+
+The second step (and the bigger one) is going to be going through Doom's vast built-in modules, taking the code I want. Doom's modules are so well done and (usually) intuitive that I miss a lot of their quality-of-life improvements. A good example of this is their elegant intermixing of Vim and vanilla Emacs keybindings. I don't have that in this config yet, and I truly feel the absence. But a massive massive amount of work has gone into their modules, and it's going to take a long while to untangle it all and build up my own config.
+
+Okay, let's start with the built-in Crafted Modules!
+
+** Crafted Modules
+
+These modules are from Crafted Emacs, and can be found in another directory. I'm going one-by-one through them and deciding what to keep and what to lose.
+
+#+begin_src emacs-lisp
+  (require 'crafted-defaults)    ; Sensible default settings for Emacs
+  (require 'crafted-updates)     ; Tools to upgrade Crafted Emacs
+  (require 'crafted-completion)  ; selection framework based on `vertico`
+  (require 'crafted-windows)     ; Window management configuration
+  (require 'crafted-editing)     ; Whitspace trimming, auto parens etc.
+  (require 'crafted-evil)        ; An `evil-mode` configuration
+  (require 'crafted-org)         ; org-appear, clickable hyperlinks etc.
+  (require 'crafted-project)     ; built-in alternative to projectile
+  (require 'crafted-screencast)  ; show current command and binding in modeline
+  (require 'crafted-compile)     ; automatically compile some emacs lisp files
+#+end_src
+
+**  Literate Config Setup
+
+#+begin_src emacs-lisp
+(defun crafted--org-babel-tangle-config ()
+"Tangle code blocks from our config.org file on save.
+
+A nice little helper from Crafted Emacs.
+
+Thanks, Crafted!"
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "config.org" crafted-config-path))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
+#+end_src
+
+** Package System
+There are many different package systems for Emacs. Let's try to navigate them.
+
+*** Setting Crafted To Use Straight
+
+Many prefer the =straight= package system to Emacs' built-in package system (called simply =package=) because of its reproducibility and use of Git. I'm gonna give it a try!
+
+#+begin_src emacs-lisp
+(setq package-enable-at-startup nil)
+(setq crafted-package-system 'straight)
+(crafted-package-bootstrap crafted-package-system)
+#+end_src
+
+*** Adding Use-Package
+=use-package= is a fantastic way to keep your configurations tidy and organized. I'm used to using it with Doom, but I discovered it later, so lots of the old config were littered here and there haphazardly, and I'd like most if not all of this config to be well-organized, so we'll use =use-package= from the start.
+
+That said, writing y config in a literate document like this one gives e headings and a hierarchy that adds its own layer of organization, in large part achieving the same result that =use-package= does.
+
+But since you can't have enough organization...
+
+[[https://media.giphy.com/media/3o85xIO33l7RlmLR4I/giphy.gif]]
+
+So let's install =use-package= too!
+
+First step: use =straight= to install =use-package=.
+
+#+begin_src emacs-lisp
+(straight-use-package 'use-package)
+#+end_src
+
+The second and quite confusing step is to use =use-package= to configure =straight= to use =use-package= to know what packages to install.
+
+(Yes, this is a weird Ouroboros situation. Don't think about it too hard.)
+
+#+begin_src emacs-lisp
+(use-package straight
+  :custom
+  (straight-use-package-by-default t))
+#+end_src
+
+And between those two, we've got a fantastic system where--as you see below with =pulsar=--we can just add a =use-package= block and set the configuration variables for a package, and =straight= will install it the first time the block is run.
+
+Pretty sweet.
+
+** General UI
+*** Scrolling Around
+When you jump around as fast as you can in Emacs, it's nice to get a quick visual reminder of where the cursor is now.
+
+There are many packages that do this (including a built-in one), but Prot's =pulsar= is my favorite.
+
+#+begin_src emacs-lisp
+(use-package pulsar
+  :init
+  (setq pulsar-pulse t)
+  (setq pulsar-delay .01)
+  (setq pulsar-iterations 30)
+  (setq pulsar-face 'pulsar-generic)
+  :config
+  (setq crj--far-jumping-functions '(evil-scroll-up
+                                     evil-scroll-down
+                                     evil-goto-line
+                                     evil-beginend-prog-mode-goto-beginning
+                                     evil-beginend-prog-mode-goto-end
+                                     evil-beginend-org-mode-goto-beginning
+                                     evil-beginend-org-mode-goto-end
+                                     evil-beginend-dired-mode-goto-beginning
+                                     evil-beginend-dired-mode-goto-end
+                                     evil-beginend-message-mode-goto-beginning
+                                     evil-beginend-message-mode-goto-end
+                                     evil-beginend-org-agenda-mode-goto-beginning
+                                     evil-beginend-org-agenda-mode-goto-end
+                                     evil-beginend-compilation-mode-goto-beginning
+                                     evil-beginend-compilation-mode-goto-end
+                                     evil-beginend-magit-status-mode-goto-beginning
+                                     evil-beginend-magit-status-mode-goto-end
+                                     evil-beginend-magit-revision-mode-goto-beginning
+                                     evil-beginend-magit-revision-mode-goto-end
+                                     evil-goto-first-line
+                                     evil-goto-mark-line
+                                     evil-scroll-page-up
+                                     evil-scroll-page-down
+                                     bury-buffer
+                                     kill-buffer
+                                     doom/window-enlargen
+                                     crj--toggle-presentation-mode
+                                     doom
+                                     delete-other-windows
+                                     winner-undo
+                                     evil-window-up
+                                     evil-window-down
+                                     evil-window-left
+                                     evil-window-right
+                                     evil-window-new
+                                     evil-window-vnew))
+
+  (dolist (function crj--far-jumping-functions)
+    (add-to-list 'pulsar-pulse-functions function))
+
+  (pulsar-global-mode 1))
+#+end_src
+
+*** Line Numbers
+**** Basic Line Number Settings
+
+Crafted Emacs has some nice custom functions for handling modes you've decided should have line numbers and those that don't.
+
+But I really like line numbers /everywhere/, so I'll be ignoring all of that!
+
+#+begin_src emacs-lisp
+(use-package emacs
+  :init
+  ;; Display relative line nubers everywhere.
+  (global-display-line-numbers-mode 1)
+  (setq display-line-numbers-type 'relative
+        display-line-numbers-width-start t
+        ;; I even want line numbers in Magit.
+        magit-disable-line-numbers nil
+        magit-section-disable-line-numbers nil))
+#+end_src
+
+A nice little line number switcher, made possible by the utility function I'll probably be using a lot.
+#+begin_src emacs-lisp
+(defun crj--cycle-line-numbers ()
+  "Toggle line number display style in the current buffer
+
+Toggles the style between relative numbers, absolute numbers, and no numbers at all."
+  (interactive)
+  (crj--cycle-setting 'display-line-numbers '(relative t nil)))
+#+end_src
+
+**** Use Monospace Font For Line Numbers
+Switching the line number font to monospace (or "fixed pitch") is necessary when your main font is variable pitch.
+
+So this is a solution to a rather niche problem, but I really like using a made-for-coding-but-variable-pitch font, so I needed to figure this one out.
+
+#+begin_src emacs-lisp
+(setq crj--ui-fixed-pitch-font "Hack")
+
+(use-package emacs
+  :init
+  (setq crj--line-number-faces '(line-number
+                                line-number-current-line
+                                line-number-major-tick
+                                line-number-minor-tick))
+
+  (defun crj--make-line-number-face-monospace (&rest args)
+    (interactive)
+    (dolist (face crj--line-number-faces)
+        (set-face-attribute face nil :family crj--ui-fixed-pitch-font))
+    args)
+
+  ;; From trial and error, just after the Scratch buffer loads appears to be the right time to adjust the faces.
+  (advice-add 'fundamental-mode :after #'crj--make-line-number-face-monospace))
+#+end_src
+
+
+** Font and theme settings
+
+*** Font settings
+
+Set the default face. The default face is the basis for most other faces used in Emacs. A "face" is a configuration including font, font size, foreground and background colors and other attributes.  The fixed-pitch and fixed-pitch-serif faces are monospace faces generally used as the default face for code. The variable-pitch face is used when `variable-pitch-mode' is turned on, generally whenever a non-monospace face is preferred.
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (custom-set-faces
+               `(default ((t (:font "Input 14"))))
+               `(fixed-pitch ((t (:inherit (default)))))
+               `(fixed-pitch-serif ((t (:inherit (default)))))
+               `(variable-pitch ((t (:font "IBM Plex Serif 14")))))))
+#+end_src
+
+*** Theme settings
+
+Themes are color customization packages which coordinate the various colors, and in some cases, font-sizes for various aspects of text editing within Emacs, toolbars, tab-bars and modeline. Several themes are built-in to Emacs, by default, Crafted Emacs uses the `deeper-blue' theme. Here is an example of loading a different theme from the venerable Doom Emacs project.
+
+
+#+begin_src emacs-lisp
+  (progn
+    (disable-theme 'deeper-blue)          ; first turn off the built-in Crafted Emacs deeper-blue theme
+    (load-theme 'modus-operandi t))       ; load the doom-palenight theme
+#+end_src
+
+** Utility Functions
+Making my life easier!
+
+#+begin_src emacs-lisp
+(defun crj--cycle-setting (setting potential-values)
+  "Cycle SETTING through POTENTIAL-VALUES.
+
+SETTING is a quoted symbol.
+
+POTENTIAL-VALUES is a list of values to cycle through."
+  (let ((i (cl-position (eval setting) potential-values)))
+    (set setting (if (eq (1+ i) (length potential-values))
+                     (car potential-values)
+                   (nth (1+ i) potential-values)))))
+#+end_src
