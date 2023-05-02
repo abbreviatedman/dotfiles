@@ -2,4 +2,5 @@
                (server-name . "doom")
                (env . (("DOOMDIR" . "~/.doom-emacs.d")))))
  ("crafted" . ((user-emacs-directory . "~/.crafted-emacs.d")
-               (server-name . "crafted"))))
+               (server-name . "crafted")
+               (env . (("CRAFTED_EMACS_HOME" . "~/.config/crafted-emacs"))))))
