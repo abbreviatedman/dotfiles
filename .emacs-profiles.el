@@ -1,0 +1,5 @@
+(("default" . ((user-emacs-directory . "~/.doom-emacs.d")
+               (server-name . "doom")
+               (env . (("DOOMDIR" . "~/.doom-emacs.d")))))
+ ("crafted" . ((user-emacs-directory . "~/.crafted-emacs.d")
+               (server-name . "crafted"))))
