@@ -549,8 +549,12 @@ See `transpose-chars' for more info on the original function."
 (defun crj/toggle-theme-for-time-of-day ()
   (interactive)
   (setq crj/daytime-p (not crj/daytime-p))
-  (crj/switch-to-appropriate-theme)
-  (crj/make-custom-face-adjustments))
+  (crj/switch-to-appropriate-theme))
+
+;; This will probably work if I get away from the Doom Modeline at some point.
+(use-package keycast
+  :init
+  (customize-set-variable 'keycast-remove-tail-elements nil))
 
 (global-hl-line-mode -1)
 ;; Best way to remove global-hl-line-mode in Doom.

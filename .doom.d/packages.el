@@ -16,6 +16,9 @@
 ;; send search to browser
 (package! engine-mode)
 
+;; show functions you're running with your keypresses
+(package! keycast)
+
 ;; internal ssh handling
 (package! ssh-agency)
 
