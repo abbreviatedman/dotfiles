@@ -34,40 +34,6 @@
 ;; (setq doom-font (font-spec :family crj/code-font :size 12))
 ;; (setq doom-variable-pitch-font crj/variable-font)
 ;; (add-hook 'org-mode-hook 'variable-pitch-mode)
-(defun crj/make-custom-face-adjustments ()
-  "Customizations to faces whenever the theme is changed.
-
-Fixes many things according to how the author likes them.
-
-Including some pretty annoying issues with line numbers being variable pitch
-when you're mixing pitches"
-
-  ;; (interactive)
-  ;; (custom-theme-set-faces
-  ;;   'user
-  ;;   '(default ((t (:family crj/ui-fixed-pitch-font :height 100 ))))
-  ;;   '(variable-pitch ((t (:family crj/variable-font :height 1.0))))
-  ;;   '(fixed-pitch ((t ( :family crj/code-font :height 1.0)))))
-  ;; (set-face-attribute 'line-number t :font "Hack" :inherit 'monospace)
-  ;; (set-face-attribute 'line-number-current-line t :font "Hack"))
-  ;; '(fixed-pitch ((t :family crj/variable-font :inherit 'default)))
-  ;; '(highlight ((t :background "#b5d0ff")))
-  ;; '(line-number ((t :family "Hack")))
-  ;; '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
-  ;; '(success ((t :foreground "#0031a9")))
-  ;; '(line-number-current-line ((t :family "Hack")))))
-  ;; don't THINK we need this line anymore... makes the fixed-pitch font inherit from the variable font... why?
-  ;; I'll get rid of it if I can't figure it out!
-  ;; '(fixed-pitch ((t :family "Hack" :inherit 'default)))
-  ;; '(default ((t (:family crj/ui-fixed-pitch-font :height 100))))
-  ;; '(variable-pitch ((t (:family crj/variable-font :height 1.0))))
-  ;; '(fixed-pitch ((t ( :family crj/code-font :height 1.0))))))
-  ;; '(highlight ((t :background "#b5d0ff")))
-  ;; '(line-number ((t :family "Hack")))
-  ;; '(line-number-current-line ((t :family "Hack")))
-  ;; '(mode-line-highlight ((t :foreground "#d7d7d7" :background "#0030b4")))
-  ;; '(success ((t :foreground "#0031a9")))))
-  )
 
 (require 'mixed-pitch)
 (setq crj/fixed-pitch-faces '(line-number-major-tick
@@ -236,4 +202,3 @@ when you're mixing pitches"
 (add-hook 'rjsx-mode-hook #'crj/set-up-elisp-prettify-mode)
 
 (add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
-(crj/make-custom-face-adjustments)
