@@ -97,10 +97,25 @@ And between those two, we've got a fantastic system where--as you see below with
 Pretty sweet.
 
 ** General UI
+
+Not a lot here yet, but there will be!
+
+*** Keypress Transparency
+
+It's nice to know what you're pressing!
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :init
+  (which-key-mode))
+#+end_src
+
 *** Scrolling Around
 When you jump around as fast as you can in Emacs, it's nice to get a quick visual reminder of where the cursor is now.
 
 There are many packages that do this (including a built-in one), but Prot's =pulsar= is my favorite.
+
+Not a huge necessity— the only reason I added pulsar early is to confirm the =use-package=/=straight= combo was working.
 
 #+begin_src emacs-lisp
 (use-package pulsar
