@@ -6,7 +6,10 @@
   (:host github
    :repo "nflath/hungry-delete"))
 
-(package! json-process-client)
+(package! json-process-client
+  :recipe
+  (:host github
+   :repo "emacsmirror/json-process-client"))
 
 (package! enwc)
 
