@@ -21,6 +21,7 @@ These modules are from Crafted Emacs, and can be found in another directory. I'm
 
 #+begin_src emacs-lisp
   (require 'crafted-defaults)    ; Sensible default settings for Emacs
+  (require 'crafted-ide)
   (require 'crafted-updates)     ; Tools to upgrade Crafted Emacs
   (require 'crafted-completion)  ; selection framework based on `vertico`
   (require 'crafted-windows)     ; Window management configuration
