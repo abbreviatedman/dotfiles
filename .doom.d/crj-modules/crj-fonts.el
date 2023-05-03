@@ -200,5 +200,3 @@
 (global-auto-composition-mode -1)
 (add-hook 'emacs-lisp-mode-hook #'crj/set-up-elisp-prettify-mode)
 (add-hook 'rjsx-mode-hook #'crj/set-up-elisp-prettify-mode)
-
-(add-hook 'doom-load-theme-hook #'crj/make-custom-face-adjustments)
