@@ -164,8 +164,6 @@
 
 (package! org-caldav)
 
-(package! tempel :disable t)
-
 (package! pcmpl-args)
 
 (package! svg-lib)
