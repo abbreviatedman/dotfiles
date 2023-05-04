@@ -231,7 +231,7 @@ So this is a solution to a rather niche problem, but I really like using a made-
 
 #+begin_src emacs-lisp
   (use-package emacs
-    :config
+    :init
     (global-visual-line-mode 1))
 #+end_src
 
