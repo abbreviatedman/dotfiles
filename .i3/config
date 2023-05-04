@@ -31,13 +31,13 @@ set $alt Mod1
 # writing terminals
 
 ## emacs-everywhere
-bindsym $mod+w exec emacsclient -cn -s "doom" -a "" --eval "(emacs-everywhere)"
+bindsym $mod+w exec emacsclient -cn -a "" --eval "(emacs-everywhere)"
 
 ## Simple writing terminal.
-bindsym $mod+Shift+w exec emacsclient -cn -s "doom" -a "" ~/org-stuff/quick-note.md
+bindsym $mod+Shift+w exec emacsclient -cn -a "" ~/org-stuff/quick-note.md
 
 ## Todos
-bindsym $mod+Shift+t exec  emacsclient -cn -s "doom" -a "" ~/org-stuff/readme.org
+bindsym $mod+Shift+t exec  emacsclient -cn -a "" ~/org-stuff/readme.org
 
 bindsym $mod+Shift+c exec org-capture
 
@@ -81,7 +81,7 @@ bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#0
 floating_modifier $mod
 
 # start Emacs terminal
-bindsym $mod+BackSpace exec emacsclient -cn -s "doom" -a "" -e "(+vterm/here nil)"
+bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(+vterm/here nil)"
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
 # start work browser
@@ -89,7 +89,7 @@ bindsym $mod+Shift+Return exec "google-chrome-stable"
 # start personal browser
 bindsym $mod+$alt+Return exec "vivaldi-stable"
 # start emacs browser
-bindsym $mod+Return exec emacsclient -cn -s "doom" -a "" -e '(eww-browse-url "" t)'
+bindsym $mod+Return exec emacsclient -cn -a "" -e '(eww-browse-url "" t)'
 # start alt browser 1
 bindsym $mod+$alt+g exec "chromium"
 # start alt browser 2
@@ -103,10 +103,10 @@ bindsym $mod+$alt+s exec "slack"
 
 # start IDE
 ## Doom Emacs
-bindsym $mod+$alt+d exec "emacs --with-profile default"
+bindsym $mod+$alt+d exec "emacs"
 
-## Vanilla Emacs
-bindsym $mod+$alt+c exec "emacs --with-profile crafted"
+## Crafted Emacs
+bindsym $mod+$alt+c exec "~/Documents/with-emacs.sh/with-emacs.sh --dir ~/.crafted-emacs.d -R -P"
 
 # start Files
 bindsym $mod+$alt+n exec "nemo"
