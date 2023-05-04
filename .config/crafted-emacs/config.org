@@ -219,8 +219,7 @@ So this is a solution to a rather niche problem, but I really like using a made-
         (set-face-attribute face nil :family crj--ui-fixed-pitch-font))
     args)
 
-  ;; From trial and error, just after the Scratch buffer loads appears to be the right time to adjust the faces.
-  (advice-add 'fundamental-mode :after #'crj--make-line-number-face-monospace))
+  (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
 #+end_src
 
 ** Text Editing
@@ -253,13 +252,15 @@ Evil (Emacs VI Layer) is a package for getting Vim keybindings in Emacs. I hesit
 Set the default face. The default face is the basis for most other faces used in Emacs. A "face" is a configuration including font, font size, foreground and background colors and other attributes.  The fixed-pitch and fixed-pitch-serif faces are monospace faces generally used as the default face for code. The variable-pitch face is used when `variable-pitch-mode' is turned on, generally whenever a non-monospace face is preferred.
 
 #+begin_src emacs-lisp
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (custom-set-faces
+(use-package emacs
+  :config
+  (defun crj--set-fonts ()
+   (custom-set-faces
                `(default ((t (:font "Input 14"))))
                `(fixed-pitch ((t (:inherit (default)))))
                `(fixed-pitch-serif ((t (:inherit (default)))))
-               `(variable-pitch ((t (:font "IBM Plex Serif 14")))))))
+               `(variable-pitch ((t (:font "IBM Plex Serif 14"))))))
+  (add-hook 'emacs-startup-hook #'crj--set-fonts))
 #+end_src
 
 *** Theme settings
