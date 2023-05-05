@@ -74,7 +74,7 @@ Many prefer the =straight= package system to Emacs' built-in package system (cal
 *** Adding Use-Package
 =use-package= is a fantastic way to keep your configurations tidy and organized. I'm used to using it with Doom, but I discovered it later, so lots of the old config were littered here and there haphazardly, and I'd like most if not all of this config to be well-organized, so we'll use =use-package= from the start.
 
-That said, writing y config in a literate document like this one gives e headings and a hierarchy that adds its own layer of organization, in large part achieving the same result that =use-package= does.
+That said, writing my config in a literate document like this one gives me headings and a hierarchy that adds its own layer of organization, in large part achieving the same result that =use-package= does.
 
 But since you can't have enough organization...
 
