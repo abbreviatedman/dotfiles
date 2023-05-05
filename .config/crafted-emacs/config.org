@@ -11,16 +11,14 @@ This is my code so far.
 
 [[https://www.explainxkcd.com/wiki/index.php/297:_Lisp_Cycles][https://www.explainxkcd.com/wiki/images/e/eb/lisp_cycles.png]]
 
-I've been using a popular third-party config (and config system) called Doom Emacs config for a long time now, but it's grown /rather/ creaky, between their code, my code, and Emacs' code. I don't know what's going on an unfortunate amount of the time, since it's a three-way scrum. So I'm declaring config bankruptcy and starting over.
+I've been using a popular third-party config (and config system) called Doom Emacs for a long time now, but it's grown /rather/ creaky, between their code, my code, and Emacs' code. I don't know what's going on an unfortunate amount of the time because of this three-way scrum. So I'm declaring configuration bankruptcy and starting over. (Though I'm not ready for this to be my main config yet. Still dooming it up for /work/ work until I can get this version up to speed.)
 
-I'm basing this new config on Crafted Emacs for now, which is a very sparse system. Eventually I'll cut that out too.
+I'm basing this new config on Crafted Emacs for now, which is a more sparse system. Eventually I'll cut that out too.
 
 The big task is going to be going through Doom's vast built-in modules, taking the code I want. Doom's modules are so well done and (usually) intuitive that I miss a lot of their quality-of-life improvements. A good example of this is their elegant intermixing of Vim and vanilla Emacs keybindings. I don't have that in this config yet, and I truly feel the absence. But a massive massive amount of work has gone into their modules, and it's going to take a long while to untangle it all and build up my own config.
 
 So that's where we started and where we're going. Let's look at some code!
 
-  (require 'crafted-compile)     ; automatically compile some emacs lisp files
-#+end_src
 
 **  Literate Config Setup
 Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of prose. The document you're reading right now is an example of literate programming, often called a literate config when it's about configuring apps. All of the code blocks in this document are "tangled", which means that they are copied from the document to a code file. This code file is rarely edited directly—instead, I make sure that any code in here is documented, that there's a /reason/ it exists. The documentation can't fall behind the code—the documentation /is/ the code.
@@ -60,8 +58,12 @@ These modules are from Crafted Emacs, and are being pulled in from another direc
   (require 'crafted-org)         ; org-appear, clickable hyperlinks etc.
   (require 'crafted-project)     ; built-in alternative to projectile
   (require 'crafted-screencast)  ; show current command and binding in modeline
+  (require 'crafted-compile)     ; automatically compile some emacs lisp files
+#+end_src
 
-** Package System
+
+** Packages
+
 There are many different package systems for Emacs. Let's try to navigate them.
 
 *** Setting Crafted To Use Straight
