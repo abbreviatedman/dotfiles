@@ -5,19 +5,21 @@ Increasing my efficiency as inefficiently as possible.
 
 ** Introduction
 
-I've been running with a Doom Emacs config for a long time, but it's /rather/ creaky. Plus, I don't know what's going on half the time, since only half the config is my code.
+This is my config code for Emacs, which most people use predominantly as a text editor, but is at its heart a Lisp programming environment. Setting Emacs' preferences and extending it with third-party code is all done through Lisp code that the Emacs user writes. This is my code so far.
 
-So I've based a new config on Crafted Emacs, which is a very sparse system.
+[[https://www.explainxkcd.com/wiki/index.php/297:_Lisp_Cycles][https://www.explainxkcd.com/wiki/images/e/eb/lisp_cycles.png]]
 
-The first step is going through the Crafted Emacs modules in the first section, taking ideas from them, adding my own config carefully, and then removing the original module.
+I've been using a popular third-party config (and config system) called Doom Emacs config for a long time now, but it's grown /rather/ creaky, between their code, my code, and Emacs' code. I don't know what's going on half the time, since it's a three-way scrum. So I'm declaring config bankruptcy and starting over.
 
-The second step (and the bigger one) is going to be going through Doom's vast built-in modules, taking the code I want. Doom's modules are so well done and (usually) intuitive that I miss a lot of their quality-of-life improvements. A good example of this is their elegant intermixing of Vim and vanilla Emacs keybindings. I don't have that in this config yet, and I truly feel the absence. But a massive massive amount of work has gone into their modules, and it's going to take a long while to untangle it all and build up my own config.
+I'm basing this new config on Crafted Emacs for now, which is a very sparse system. Eventually I'll cut that out too.
+
+The big task is going to be going through Doom's vast built-in modules, taking the code I want. Doom's modules are so well done and (usually) intuitive that I miss a lot of their quality-of-life improvements. A good example of this is their elegant intermixing of Vim and vanilla Emacs keybindings. I don't have that in this config yet, and I truly feel the absence. But a massive massive amount of work has gone into their modules, and it's going to take a long while to untangle it all and build up my own config.
 
 Okay, let's start with the built-in Crafted Modules!
 
 ** Crafted Modules
 
-These modules are from Crafted Emacs, and can be found in another directory. I'm going one-by-one through them and deciding what to keep and what to lose.
+These modules are from Crafted Emacs, and are being pulled in from another directory (you can see them in the Crafted Emacs repository on GitHub). I'm currently going one-by-one through them and deciding what to keep and what to lose.
 
 #+begin_src emacs-lisp
   (require 'crafted-defaults)    ; Sensible default settings for Emacs
