@@ -106,7 +106,7 @@ bindsym $mod+$alt+s exec "slack"
 bindsym $mod+$alt+d exec "emacs"
 
 ## Crafted Emacs
-bindsym $mod+$alt+c exec "~/Documents/with-emacs.sh/with-emacs.sh --dir ~/.crafted-emacs.d -R -P"
+bindsym $mod+$alt+c exec "~/Documents/with-emacs.sh/with-emacs.sh --dir ~/.emacs-from-scratch.d -R -P"
 
 # start Files
 bindsym $mod+$alt+n exec "nemo"
