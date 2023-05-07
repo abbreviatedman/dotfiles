@@ -43,25 +43,6 @@ Thanks, Crafted!"
             (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
 #+end_src
 
-** Crafted Modules
-
-These modules are from Crafted Emacs, and are being pulled in from another directory (you can see them in the Crafted Emacs repository on GitHub). I'm currently going one-by-one through them and deciding what to keep and what to lose.
-
-#+begin_src emacs-lisp
-  (require 'crafted-defaults)    ; Sensible default settings for Emacs
-  (require 'crafted-ide)
-  (require 'crafted-updates)     ; Tools to upgrade Crafted Emacs
-  (require 'crafted-completion)  ; selection framework based on `vertico`
-  (require 'crafted-windows)     ; Window management configuration
-  (require 'crafted-editing)     ; Whitspace trimming, auto parens etc.
-  (require 'crafted-evil)        ; An `evil-mode` configuration
-  (require 'crafted-org)         ; org-appear, clickable hyperlinks etc.
-  (require 'crafted-project)     ; built-in alternative to projectile
-  (require 'crafted-screencast)  ; show current command and binding in modeline
-  (require 'crafted-compile)     ; automatically compile some emacs lisp files
-#+end_src
-
-
 ** Packages
 
 There are many different package systems for Emacs. Let's try to navigate them.
@@ -103,9 +84,23 @@ The second and quite confusing step is to use =use-package= to configure =straig
   (straight-use-package-by-default t))
 #+end_src
 
-And between those two, we've got a fantastic system where--as you see below with =pulsar=--we can just add a =use-package= block and set the configuration variables for a package, and =straight= will install it the first time the block is run.
+And between those two, we've got a fantastic system where we can just add a =use-package= block and set the configuration variables for a package, and =straight= will install it the first time the block is run.
 
 Pretty sweet.
+
+** Crafted Modules
+
+These modules are from Crafted Emacs, and are being pulled in from another directory (you can see them in the Crafted Emacs repository on GitHub). I'm currently going one-by-one through them and deciding what to keep and what to lose.
+
+#+begin_src emacs-lisp
+  (require 'crafted-defaults)    ; Sensible default settings for Emacs
+  (require 'crafted-windows)     ; Window management configuration
+  (require 'crafted-editing)     ; Whitspace trimming, auto parens etc.
+  (require 'crafted-org)         ; org-appear, clickable hyperlinks etc.
+  (require 'crafted-project)     ; built-in alternative to projectile
+  (require 'crafted-screencast)  ; show current command and binding in modeline
+  (require 'crafted-compile)     ; automatically compile some emacs lisp files
+#+end_src
 
 ** General UI
 
@@ -232,27 +227,79 @@ So this is a solution to a rather niche problem, but I really like using a made-
   (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
 #+end_src
 
+** Files
+
+*** Recent Files
+
+Keep track of recent files.
+
+#+begin_src emacs-lisp
+(recentf-mode 1)
+#+end_src
+
 ** Text Editing
 
 *** General Settings
 
 #+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (global-visual-line-mode 1))
+(use-package emacs
+  :init
+  (global-visual-line-mode 1))
 #+end_src
 
 *** Evil
 
 Evil (Emacs VI Layer) is a package for getting Vim keybindings in Emacs. I hesitate to say "Vim emulation", because in many ways, it is MORE Vim than Vim itself. This is an argument to make another time, but an argument I'm willing to make in the right space.
 
+I do want some more classic Emacs keybindings available in Evil Mode. I'm working on it!
+
 #+begin_src emacs-lisp
+  (customize-set-variable 'evil-want-integration t)
+  (customize-set-variable 'evil-want-keybinding nil)
+  (customize-set-variable 'evil-want-C-i-jump nil)
+  (customize-set-variable 'evil-respect-visual-line-mode nil)
+  (customize-set-variable 'evil-undo-system 'undo-redo)
+  (customize-set-variable 'evil-want-fine-undo t)
   (use-package evil
-    :custom
-    (evil-want-C-i-jump t)
-    (evil-want-Y-yank-to-eol t)
-    (evil-want-fine-undo t)
-    (evil-respect-visual-line-mode nil))
+    :init
+    (evil-mode 1)
+    :config
+    (evil-select-search-module 'evil-search-module 'evil-search) ;; not sure if necessary
+    (evil-define-key '(normal visual) 'global
+      "gj" #'evil-next-visual-line
+      "gk" #'evil-previous-visual-line
+      "$" #'evil-end-of-line
+      "g$" #'evil-end-of-visual-line)
+    (evil-define-key '(normal visual) org-mode-map
+      "gj" #'evil-next-visual-line
+      "gk" #'evil-previous-visual-line)
+    (dolist (mode '(custom-mode
+                    eshell-mode
+                    term-mode))
+      (add-to-list 'evil-emacs-state-modes mode))
+
+    :bind
+    ("C-M-u" . universal-argument))
+
+  (use-package evil-collection
+    :init
+    (evil-collection-init))
+
+  (use-package evil-nerd-commenter
+    :config
+    (evilnc-default-hotkeys))
+#+end_src
+
+*** Emacs Style Keybindings
+.
+*** Undo
+
+I need more undo settings here at some point. The Emacs community has a wide variety of powerful undo systems. This is... one of them. I think I want to install =vundo= again? More research is needed.
+
+#+begin_src emacs-lisp
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
 #+end_src
 
 ** Look And Feel
@@ -299,3 +346,7 @@ POTENTIAL-VALUES is a list of values to cycle through."
                      (car potential-values)
                    (nth (1+ i) potential-values)))))
 #+end_src
+
+** Modes
+
+Modes are programs run at certain times. There are Major Modes, which are 
