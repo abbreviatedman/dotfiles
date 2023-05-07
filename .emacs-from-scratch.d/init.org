@@ -227,8 +227,7 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
     (defun crj--turn-off-line-numbers ()
       (display-line-numbers-mode 0))
 
-    (defvar crj--hooks-for-modes-without-line-numbers '(org-mode-hook
-                                                        term-mode-hook
+    (defvar crj--hooks-for-modes-without-line-numbers '(term-mode-hook
                                                         shell-mode-hook
                                                         treemacs-mode-hook
                                                         eshell-mode-hook))
@@ -238,15 +237,6 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
 #+end_src
 
 Except don't use line numbers for for some modes.
-
-#+begin_src emacs-lisp
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  treemacs-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+end_src
 
 This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
 
@@ -266,31 +256,108 @@ This next part is for making line numbers use a fixed pitch font. I like a varia
   (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
 #+end_src
 
-** Keybinding System
+** Keybindings
 
-Like many Vimmers, I eventually realized that the things I personally liked about Vim were even more present in Emacs. Including Vim keybindings through Evil Mode, which are, in a lot of ways, /more Vim than Vim/. This is something I could argue at length, but... maybe not in this space. (Yet?)
+Like many Vimmers, I eventually realized that the things I personally liked about Vim were even more present in Emacs. This very much includes Vim keybindings, which are available through Evil Mode, In a lot of ways, Evil mode is /more Vim than Vim/. This is something I could argue at length, but... maybe not in this space. (Yet?)
 
-*** General
+*** Installing And Using General
 
 Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package= and =evil=.
 
-I don't think this is the system I'll be using for keybindings, but it /is/ neat that I can define the leader-key keybinding for =crj--open-config-file= so easily!
+I don't think that =general-create-definer= is the system I'll be using for keybindings, but it /is/ neat that I can define the leader-key keybinding for =crj--open-config-file= so easily!
 
 #+begin_src emacs-lisp
-(use-package general
-  :after evil
-  :config
-  (general-create-definer crj--leader-key
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
+  (use-package general
+    :after evil
 
-  (crj--leader-key "fc" #'crj--open-config-file))
+    :config
+    (defun crj--open-literate-config-file ()
+      "Open the literate config file in the user directory."
+      (interactive)
+      (find-file (expand-file-name "init.org" user-emacs-directory)))
 
-(defun crj--open-config-file ()
-  "Open the literate config file in the user directory."
-  (interactive)
-  (find-file (expand-file-name "init.org" user-emacs-directory)))
+    (general-create-definer crj--leader-key
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+
+    (crj--leader-key "fc" #'crj--open-literate-config-file))
+#+end_src
+
+*** General Emacs' Keybindings
+
+Many of my keybindings are taken from Doom Emacs' well-thought-through keybindings—although part of this is certainly that I'm just used to using them for the last couple of years.
+
+In Vanilla Emacs' keybinding land, the focus is on often elaborate key "chords", where you use a series of modifier key-letter pairs, while in Vim/Evil, most commands use a "leader" key.
+
+For example, opening a file in Vanilla Emacs keybindings would be =C-x C-f=, which means to hold down the =Control= key, press =x=, then, still holding down =Control= (or re-pressing and holding it), press =f=. This can be a bit of a strain on your hand, although certainly less so if you follow best practices and swap =Control= and =Caps Lock=.
+
+In Evil-Mode-style keybindings, the same command might be someting like =SPC f o=, which means press the =spacebar=, then press the =f= key, then press the =o= key.
+
+This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, =/= begins a text search (like =C-f= or =Command-f= in many apps), and =dd= deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is =i= (for =i=nsert).
+
+This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like =Control= and =Alt= and =Command= to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use =SPC f o= to =o= pen a =f= ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
+
+Let's see some examples!
+
+The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as just three quick presses.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (:prefix "SPC" :keymaps 'normal
+             "f" '(:ignore t
+                    :which-key "File.")
+             "fs" '(save-buffer
+                    :which-key "Save current buffer.")))
+#+end_src
+
+The =:prefix "SPC"= tells =general= that this is a "leader key", a key that leads off a set of commands. =:keymaps normal= indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ="f"= one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The =:which-key= keyword in that and the following line, where we finally bind the =save-buffer= command, tells =which-key= (see the "Which Key" section below) how to label the menu and commands for discoverability.
+
+You don't always have to have long keybindings in "file" and "toggle" sections, though. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
+
+#+begin_src emacs-lisp
+    (use-package emacs
+      :general
+      (:prefix "SPC" :keymaps 'normal
+              "." '(counsel-find-file
+                    :which-key "Open or create file.")))
+#+end_src
+
+I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+              "," '(ivy-switch-buffer
+                    :which-key "Switch buffer.")
+              "TAB" '(evil-switch-to-windows-last-buffer
+                      :which-key "Previous buffer.")
+              ";" '(counsel-M-x
+                    :which-key "Run interactive command.")
+              ":" '(eval-expression
+                    :which-key "Evaluate expression.")
+              "h" '(:ignore t
+                      :which-key "Help.")
+              "hv" '(helpful-variable
+                     :which-key "Describe variable.")
+              "hf" '(helpful-function
+                     :which-key "Describe function.")
+              "hF" '(helpful-face
+                     :which-key "Describe face.")
+              "hk" '(helpful-key
+                     :which-key "Describe key.")
+              "hW" '(woman
+                     :which-key "Search for manual page.")
+              "b" '(:ignore t
+                      :which-key "Buffer.")
+              "bd" '(crj/kill-or-bury-current-buffer
+                     :which-key "Kill buffer.")
+              "m" '(:ignore t
+                      :which-key "Markup.")
+              "m." '(counsel-outline
+                     :which-key "Search current headings.")))
 #+end_src
 
 *** Evil Mode
@@ -307,7 +374,7 @@ TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch 
     (setq evil-want-integration t
           evil-want-keybinding nil
           evil-want-C-u-scroll t
-          evil-want-C-i-jump nil
+          evil-want-C-i-jump t
           evil-undo-system 'undo-redo
           evil-want-fine-undo t
           evil-respect-visual-line-mode nil)
@@ -353,15 +420,13 @@ Some basic settings.
   (auto-revert-mode 1)
 #+end_src
 
-** UI Configuration
-
 ** Color Theme
 
 Modus Operandi is a fantastic theme for readability and accessiblity. It's about the uncoolest theme you can do, but... if you're using Emacs to be hip, you're doing it wrong.
 
 #+begin_src emacs-lisp
-(use-package modus-themes
-  :init (load-theme 'modus-operandi t))
+  (use-package modus-themes
+    :init (load-theme 'modus-operandi t))
 #+end_src
 
 ** Better Modeline
@@ -371,10 +436,10 @@ Modus Operandi is a fantastic theme for readability and accessiblity. It's about
 *NOTE:* The first time you load your configuration on a new machine, you'll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
 
 #+begin_src emacs-lisp
-(use-package all-the-icons)
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom ((doom-modeline-height 15)))
 #+end_src
 
 ** Which Key
@@ -448,7 +513,7 @@ This Prescient configuration is optimized for use in System Crafters videos and 
     (ivy-prescient-enable-filtering nil)
     :config
     ;; Uncomment the following line to have sorting remembered across sessions!
-    ;(prescient-persist-mode 1)
+                                          ;(prescient-persist-mode 1)
     (ivy-prescient-mode 1))
 
 #+end_src
@@ -563,103 +628,103 @@ This section contains the basic configuration for =org-mode= plus the configurat
     (setq org-habit-graph-column 60)
 
     (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-        (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
     (setq org-refile-targets
-      '(("Archive.org" :maxlevel . 1)
-        ("Tasks.org" :maxlevel . 1)))
+          '(("Archive.org" :maxlevel . 1)
+            ("Tasks.org" :maxlevel . 1)))
 
     ;; Save Org buffers after refiling!
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
     (setq org-tag-alist
-      '((:startgroup)
-         ; Put mutually exclusive tags here
-         (:endgroup)
-         ("@errand" . ?E)
-         ("@home" . ?H)
-         ("@work" . ?W)
-         ("agenda" . ?a)
-         ("planning" . ?p)
-         ("publish" . ?P)
-         ("batch" . ?b)
-         ("note" . ?n)
-         ("idea" . ?i)))
+          '((:startgroup)
+                                          ; Put mutually exclusive tags here
+            (:endgroup)
+            ("@errand" . ?E)
+            ("@home" . ?H)
+            ("@work" . ?W)
+            ("agenda" . ?a)
+            ("planning" . ?p)
+            ("publish" . ?P)
+            ("batch" . ?b)
+            ("note" . ?n)
+            ("idea" . ?i)))
 
     ;; Configure custom agenda views
     (setq org-agenda-custom-commands
-     '(("d" "Dashboard"
-       ((agenda "" ((org-deadline-warning-days 7)))
-        (todo "NEXT"
-          ((org-agenda-overriding-header "Next Tasks")))
-        (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+          '(("d" "Dashboard"
+             ((agenda "" ((org-deadline-warning-days 7)))
+              (todo "NEXT"
+                    ((org-agenda-overriding-header "Next Tasks")))
+              (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-      ("n" "Next Tasks"
-       ((todo "NEXT"
-          ((org-agenda-overriding-header "Next Tasks")))))
+            ("n" "Next Tasks"
+             ((todo "NEXT"
+                    ((org-agenda-overriding-header "Next Tasks")))))
 
-      ("W" "Work Tasks" tags-todo "+work-email")
+            ("W" "Work Tasks" tags-todo "+work-email")
 
-      ;; Low-effort next actions
-      ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-       ((org-agenda-overriding-header "Low Effort Tasks")
-        (org-agenda-max-todos 20)
-        (org-agenda-files org-agenda-files)))
+            ;; Low-effort next actions
+            ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+             ((org-agenda-overriding-header "Low Effort Tasks")
+              (org-agenda-max-todos 20)
+              (org-agenda-files org-agenda-files)))
 
-      ("w" "Workflow Status"
-       ((todo "WAIT"
-              ((org-agenda-overriding-header "Waiting on External")
-               (org-agenda-files org-agenda-files)))
-        (todo "REVIEW"
-              ((org-agenda-overriding-header "In Review")
-               (org-agenda-files org-agenda-files)))
-        (todo "PLAN"
-              ((org-agenda-overriding-header "In Planning")
-               (org-agenda-todo-list-sublevels nil)
-               (org-agenda-files org-agenda-files)))
-        (todo "BACKLOG"
-              ((org-agenda-overriding-header "Project Backlog")
-               (org-agenda-todo-list-sublevels nil)
-               (org-agenda-files org-agenda-files)))
-        (todo "READY"
-              ((org-agenda-overriding-header "Ready for Work")
-               (org-agenda-files org-agenda-files)))
-        (todo "ACTIVE"
-              ((org-agenda-overriding-header "Active Projects")
-               (org-agenda-files org-agenda-files)))
-        (todo "COMPLETED"
-              ((org-agenda-overriding-header "Completed Projects")
-               (org-agenda-files org-agenda-files)))
-        (todo "CANC"
-              ((org-agenda-overriding-header "Cancelled Projects")
-               (org-agenda-files org-agenda-files)))))))
+            ("w" "Workflow Status"
+             ((todo "WAIT"
+                    ((org-agenda-overriding-header "Waiting on External")
+                     (org-agenda-files org-agenda-files)))
+              (todo "REVIEW"
+                    ((org-agenda-overriding-header "In Review")
+                     (org-agenda-files org-agenda-files)))
+              (todo "PLAN"
+                    ((org-agenda-overriding-header "In Planning")
+                     (org-agenda-todo-list-sublevels nil)
+                     (org-agenda-files org-agenda-files)))
+              (todo "BACKLOG"
+                    ((org-agenda-overriding-header "Project Backlog")
+                     (org-agenda-todo-list-sublevels nil)
+                     (org-agenda-files org-agenda-files)))
+              (todo "READY"
+                    ((org-agenda-overriding-header "Ready for Work")
+                     (org-agenda-files org-agenda-files)))
+              (todo "ACTIVE"
+                    ((org-agenda-overriding-header "Active Projects")
+                     (org-agenda-files org-agenda-files)))
+              (todo "COMPLETED"
+                    ((org-agenda-overriding-header "Completed Projects")
+                     (org-agenda-files org-agenda-files)))
+              (todo "CANC"
+                    ((org-agenda-overriding-header "Cancelled Projects")
+                     (org-agenda-files org-agenda-files)))))))
 
     (setq org-capture-templates
-      `(("t" "Tasks / Projects")
-        ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+          `(("t" "Tasks / Projects")
+            ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
              "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-        ("j" "Journal Entries")
-        ("jj" "Journal" entry
+            ("j" "Journal Entries")
+            ("jj" "Journal" entry
              (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
              "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
              ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
              :clock-in :clock-resume
              :empty-lines 1)
-        ("jm" "Meeting" entry
+            ("jm" "Meeting" entry
              (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
              "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
              :clock-in :clock-resume
              :empty-lines 1)
 
-        ("w" "Workflows")
-        ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+            ("w" "Workflows")
+            ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
              "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-        ("m" "Metrics Capture")
-        ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-         "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+            ("m" "Metrics Capture")
+            ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
     (define-key global-map (kbd "C-c j")
       (lambda () (interactive) (org-capture nil "jj")))
@@ -681,22 +746,6 @@ This section contains the basic configuration for =org-mode= plus the configurat
 
 #+end_src
 
-*** Center Org Buffers
-
-We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]] to center =org-mode= buffers for a more pleasing writing experience as it centers the contents of the buffer horizontally to seem more like you are editing a document.  This is really a matter of personal preference so you can remove the block below if you don't like the behavior.
-
-#+begin_src emacs-lisp
-
-  (defun efs/org-mode-visual-fill ()
-    (setq visual-fill-column-width 100
-          visual-fill-column-center-text t)
-    (visual-fill-column-mode 1))
-
-  (use-package visual-fill-column
-    :hook (org-mode . efs/org-mode-visual-fill))
-
-#+end_src
-
 ** Configure Babel Languages
 
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
@@ -705,9 +754,9 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((emacs-lisp . t)
-        (python . t)))
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)))
 
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
@@ -730,26 +779,6 @@ You can add more =src= block templates below by copying one of the lines and cha
     (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
 #+end_src
-
-** Auto-tangle Configuration Files
-
-This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
-
-#+begin_src emacs-lisp
-
-  ;; Automatically tangle our Emacs.org config file when we save it
-  (defun efs/org-babel-tangle-config ()
-    (when (string-equal (file-name-directory (buffer-file-name))
-                        (expand-file-name user-emacs-directory))
-      ;; Dynamic scoping to the rescue
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-
-#+end_src
-
-** Development
 
 ** Languages
 
@@ -847,9 +876,9 @@ Try these commands with =M-x=:
 
     ;; Bind `C-c l d` to `dap-hydra` for easy access
     (general-define-key
-      :keymaps 'lsp-mode-map
-      :prefix lsp-keymap-prefix
-      "d" '(dap-hydra t :wk "debugger")))
+     :keymaps 'lsp-mode-map
+     :prefix lsp-keymap-prefix
+     "d" '(dap-hydra t :wk "debugger")))
 
 #+end_src
 
@@ -871,7 +900,7 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 
 #+begin_src shell :tangle no
 
-npm install -g typescript-language-server typescript
+  npm install -g typescript-language-server typescript
 
 #+end_src
 
@@ -885,7 +914,7 @@ Make sure you have the =pyls= language server installed before trying =lsp-mode=
 
 #+begin_src sh :tangle no
 
-pip install --user "python-language-server[all]"
+  pip install --user "python-language-server[all]"
 
 #+end_src
 
@@ -930,9 +959,9 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
     :after lsp-mode
     :hook (lsp-mode . company-mode)
     :bind (:map company-active-map
-           ("<tab>" . company-complete-selection))
-          (:map lsp-mode-map
-           ("<tab>" . company-indent-or-complete-common))
+                ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
     :custom
     (company-minimum-prefix-length 1)
     (company-idle-delay 0.0))
@@ -991,8 +1020,8 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+begin_src emacs-lisp
 
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
 
@@ -1261,4 +1290,36 @@ Dial the GC threshold back down so that garbage collection happens more frequent
   ;; Make gc pauses faster by decreasing the threshold.
   (setq gc-cons-threshold (* 2 1000 1000))
 
+#+end_src
+
+** Utility Functions
+Making my life easier!
+
+#+begin_src emacs-lisp
+(defun crj--cycle-setting (setting potential-values)
+  "Cycle SETTING through POTENTIAL-VALUES.
+
+SETTING is a quoted symbol.
+
+POTENTIAL-VALUES is a list of values to cycle through."
+  (let ((i (cl-position (eval setting) potential-values)))
+    (set setting (if (eq (1+ i) (length potential-values))
+                     (car potential-values)
+                   (nth (1+ i) potential-values)))))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defvar crj/immortal-buffer-names '("*scratch*"
+                                      "#emacs"
+                                      "*Messages*"
+                                      shell-command-buffer-name shell-command-buffer-name-async))
+
+  (defun crj/kill-or-bury-current-buffer ()
+    "Kill the current buffer.
+
+  Unless it's a buffer we should always keep alive, in which case we just bury it in the buffer list."
+    (interactive)
+    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
+        (bury-buffer)
+      (kill-buffer (current-buffer))))
 #+end_src
