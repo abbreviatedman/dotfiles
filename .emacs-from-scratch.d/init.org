@@ -310,7 +310,7 @@ TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch 
           evil-want-C-i-jump nil
           evil-undo-system 'undo-redo
           evil-want-fine-undo t
-          evil-respect-visual-line-mode t)
+          evil-respect-visual-line-mode nil)
 
     :config
     (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
