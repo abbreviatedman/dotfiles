@@ -3,6 +3,7 @@
 
 * Colin Jaffe's Literate Config
 ** Introduction
+ 
 Emacs is a text editor. Well, most people use it predominantly as a text editor, but at its nerdy awkward heart it's actually a Lisp programming environment. Setting Emacs' preferences and extending it with third-party code is all done through Lisp code that the Emacs user writes.
 
 This is my code so far.
@@ -42,27 +43,6 @@ Thanks, Crafted!"
             (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
 #+end_src
 
-** Startup Performance
-
-Increase the size of the garbage collector.
-
-#+begin_src emacs-lisp
-(setq gc-cons-threshold (* 50 1000 1000))
-#+end_src
-
-This is a bit of code taken from Emacs From Scratch.
-
-#+begin_src emacs-lisp
-(defun efs/display-startup-time ()
-  "Display how long it took to start Emacs."
-  (message "Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds"
-                   (float-time
-                    (time-subtract after-init-time before-init-time)))
-           gcs-done))
-
-(add-hook 'emacs-startup-hook #'efs/display-startup-time)
-#+end_src
 
 ** Package System
 
@@ -132,14 +112,15 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 First, some definitions of fonts by their use.
 
-TODO explain the thinking behind coding with a variable pitch font.
+**** TODO add full mixed-font experience
+**** TODO explain the thinking behind coding with a variable pitch font.
 
 #+begin_src emacs-lisp
   (defvar crj--fixed-pitch-font "Hack")
   (defvar crj--variable-pitch-coding-font "Input")
   (defvar crj--variable-pitch-font "IBM Plex Serif")
   (defvar crj--coding-font crj--variable-pitch-coding-font)
-  (defvar crj--default-font-size 180)
+  (defvar crj--default-font-size 120)
 
   (use-package emacs
     :config
@@ -148,12 +129,92 @@ TODO explain the thinking behind coding with a variable pitch font.
                         :height crj--default-font-size)
     (set-face-attribute 'fixed-pitch nil
                         :font crj--coding-font
-                        :height crj--default-font-size)
+                        :height 1.0)
     (set-face-attribute 'variable-pitch nil
                         :font crj--variable-pitch-font
-                        :height crj--default-font-size
+                        :height 1.0
                         :weight 'regular))
 #+end_src
+
+#+begin_src emacs-lisp
+  ;; (use-package mixed-pitch
+  ;;   :config
+  ;;   (add-hook 'text-mode-hook #'mixed-pitch-mode))
+#+end_src
+
+*** Zooming Text
+
+Zooming in and out in Emacs is... tricky. Part of this is because fonts in general are tricky! And part of it is that Emacs gives you so much control over your fonts that there are a /lot/ of moving parts, making it trickier still. And the last part is that Emacs' font system is hugely unintuitive.
+
+Still, I've got a /pretty/ good system for zooming fonts up and down, here. It's split into zooming per-buffer and zooming globally, depending on your needs. It's easy to zoom more or less for fine-grained refinement, while also being easy to zoom by huge amounts in one go with a count.
+
+There are some edge cases here, though, so I'll probably be returning to it.
+
+First, some functions to zoom and reset one buffer:
+
+#+begin_src emacs-lisp
+      (defun crj--zoom-in (arg)
+    "Incease text size in current buffer.
+
+  ARG is a count—increase the count to zoom in more."
+	(interactive "p")
+	(text-scale-increase arg))
+
+      (defun crj--zoom-out (arg)
+    "Decrease text size in current buffer.
+
+  ARG is a count—increase the count to zoom out more."
+	(interactive "p")
+	(text-scale-increase (* arg -1)))
+
+      (defun crj--zoom-reset (arg)
+  "Reset current buffer's text size."
+	(interactive "p")
+	(text-scale-increase 0))
+#+end_src
+
+From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the =buffer-list= and run the above functions in each.
+
+#+begin_src emacs-lisp
+  (defun crj--zoom-in-all-buffers (arg)
+    "Zooms in on all current buffers."
+    (interactive "p")
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (crj--zoom-in arg))))
+
+  (defun crj--zoom-out-all-buffers (arg)
+    "Zooms out on all current buffers."
+    (interactive "p")
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (crj--zoom-out arg))))
+
+  (defun crj--zoom-reset-all-buffers (arg)
+    "Resets zoom for all current buffers."
+    (interactive "p")
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (crj--zoom-reset arg))))
+#+end_src
+
+Then we make some keybindings for them:
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :after general
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+              "z" '(:ignore t :which-key "zoom")
+              "zj" '(crj--zoom-in-all-buffers :which-key "Zoom in globally.")
+              "zk" '(crj--zoom-out-all-buffers :which-key "Zoom out globally.")
+              "zb" '(crj--zoom-reset-all-buffers :which-key "Reset zoom globally.")
+              "zJ" '(crj--zoom-in :which-key "Zoom in.")
+              "zK" '(crj--zoom-out :which-key "Zoom out.")
+              "zB" '(crj--zoom-reset :which-key "Reset zoom.")))
+
+#+end_src
+
 
 *** Scrolling
 
@@ -218,7 +279,6 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
   (use-package emacs
     :init
     (setq display-line-numbers-type 'relative
-          display-line-numbers-width-start t
           magit-disable-line-numbers nil
           magit-section-disable-line-numbers nil)
 
@@ -241,20 +301,32 @@ Except don't use line numbers for for some modes.
 This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
 
 #+begin_src emacs-lisp
-(use-package emacs
-  :init
-  (setq crj--line-number-faces '(line-number
-                                line-number-current-line
-                                line-number-major-tick
-                                line-number-minor-tick))
+  (use-package emacs
+  
+    :init
+    (setq crj--line-number-faces '(line-number
+                                   line-number-current-line
+                                   line-number-major-tick
+                                   line-number-minor-tick))
 
-  (defun crj--make-line-number-face-monospace (&rest args)
-    (dolist (face crj--line-number-faces)
-        (set-face-attribute face nil :family crj--fixed-pitch-font))
-    args)
+    (defun crj--make-line-number-face-monospace (&rest args)
+      "Makes line numbers monospace and fixes them in size."
+      (interactive)
+      (dolist (face crj--line-number-faces)
+          (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
+      args)
 
-  (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
+    (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
 #+end_src
+
+#+begin_src emacs-lisp
+  (defun crj--reset-line-number-height ()
+    (interactive)
+    (set-face-attribute 'line-number nil :height crj--default-font-size))
+#+end_src
+
+#+RESULTS:
+: Hack
 
 ** Keybindings
 
@@ -314,13 +386,15 @@ The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as
 
 The =:prefix "SPC"= tells =general= that this is a "leader key", a key that leads off a set of commands. =:keymaps normal= indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ="f"= one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The =:which-key= keyword in that and the following line, where we finally bind the =save-buffer= command, tells =which-key= (see the "Which Key" section below) how to label the menu and commands for discoverability.
 
-You don't always have to have long keybindings in "file" and "toggle" sections, though. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
+To see a good example of a menu with many commands in it, see the section on Helpful commands.
+
+You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
 
 #+begin_src emacs-lisp
     (use-package emacs
       :general
       (:prefix "SPC" :keymaps 'normal
-              "." '(counsel-find-file
+              "." '(find-file
                     :which-key "Open or create file.")))
 #+end_src
 
@@ -330,33 +404,21 @@ I think you get the basics—as I did with learning and writing this section! Le
   (use-package emacs
     :general
     (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
-              "," '(ivy-switch-buffer
-                    :which-key "Switch buffer.")
+              "," '(consult-buffer
+                    :which-key "Switch buffer or open recent file.")
               "TAB" '(evil-switch-to-windows-last-buffer
                       :which-key "Previous buffer.")
-              ";" '(counsel-M-x
+              ";" '(execute-extended-command
                     :which-key "Run interactive command.")
               ":" '(eval-expression
                     :which-key "Evaluate expression.")
-              "h" '(:ignore t
-                      :which-key "Help.")
-              "hv" '(helpful-variable
-                     :which-key "Describe variable.")
-              "hf" '(helpful-function
-                     :which-key "Describe function.")
-              "hF" '(helpful-face
-                     :which-key "Describe face.")
-              "hk" '(helpful-key
-                     :which-key "Describe key.")
-              "hW" '(woman
-                     :which-key "Search for manual page.")
               "b" '(:ignore t
                       :which-key "Buffer.")
               "bd" '(crj/kill-or-bury-current-buffer
                      :which-key "Kill buffer.")
               "m" '(:ignore t
                       :which-key "Markup.")
-              "m." '(counsel-outline
+              "m." '(consult-outline
                      :which-key "Search current headings.")))
 #+end_src
 
@@ -401,34 +463,654 @@ TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch 
     :bind
     ("C-M-u" . universal-argument))
 
-  (use-package evil-nerd-commenter
-    :config
-    (evilnc-default-hotkeys))
+  #+end_src
 
+Some extra Evil Mode stuff.
+
+TODO I will definitely want to go through and pick what I like and don't. For now, I'm taking everything but =unimpaired=, but even that has some stuff I want from it.
+#+begin_src emacs-lisp
   (use-package evil-collection
     :after evil
-    :config
+    :custom
+    (evil-collection-want-unimpaired-p nil)
+    :init
     (evil-collection-init))
 #+end_src
 
-** Files
+**** Working With Surrounding Text
 
-Some basic settings.
+This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
 
 #+begin_src emacs-lisp
-  (recentf-mode 1)
-  (auto-revert-mode 1)
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+#+end_src
+**** Commenting
+
+  Vim-style commenting.
+
+  #+begin_src emacs-lisp
+      (use-package evil-nerd-commenter
+        :config
+        :general
+        ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
+        (:keymaps 'normal :prefix "g"
+                  "c" '(evilnc-comment-operator :which-key "Comment operator.")))
+#+end_src
+
+**** Easier Go-To-Character Navigation
+
+I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ragnes. And when it isn't? You just press =;= to go to the next one.
+
+Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
+
+#+begin_src emacs-lisp
+  (use-package evil-snipe
+    :init
+    (evil-snipe-mode 1)
+    (evil-snipe-override-mode 1)
+    :config
+    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+    (setq evil-snipe-scope 'buffer
+          evil-snipe-smart-case t
+          evil-snipe-char-fold t))
+#+end_src
+
+**** Replace With Clipboard
+
+This is an invaluable command, especially since it's a motion I can combine with a text object.
+
+Being able to type =SPC r i )= to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
+
+#+begin_src emacs-lisp
+  (use-package evil-replace-with-register
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+              "r" '(evil-replace-with-register
+                    :which-key "Replace text with register.")))
+#+end_src
+
+**** Exchanging Text
+
+Another fantastic efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
+
+#+begin_src emacs-lisp
+(use-package evil-exchange)
+#+end_src
+
+** Under The Hood
+
+Remember recent files and update buffers if the file changes on disk.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (recentf-mode 1)
+    (auto-revert-mode 1))
+#+end_src
+
+Save minibuffer history.
+
+#+begin_src emacs-lisp
+(use-package savehist
+  :init
+  (savehist-mode))
+#+end_src
+
+Increase the size of the garbage collector.
+
+#+begin_src emacs-lisp
+(setq gc-cons-threshold (* 50 1000 1000))
+#+end_src
+
+Measure startup time using an excellent bit of code taken from Emacs From Scratch.
+
+#+begin_src emacs-lisp
+(defun efs/display-startup-time ()
+  "Display how long it took to start Emacs."
+  (message "Emacs loaded in %s with %d garbage collections."
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
+
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
 
 ** Color Theme
 
-Modus Operandi is a fantastic theme for readability and accessiblity. It's about the uncoolest theme you can do, but... if you're using Emacs to be hip, you're doing it wrong.
+Modus Operandi is a fantastic theme for readability and accessiblity, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
 
 #+begin_src emacs-lisp
   (use-package modus-themes
-    :init (load-theme 'modus-operandi t))
+    :custom
+    (modus-themes-italic-constructs t)
+    (modus-themes-bold-constructs t)
+    (modus-themes-org-blocks 'gray-background)
+    (modus-themes-completions (quote
+                               ((matches . (intense background underline bold))
+                                (selection . (accented intense bold)))))
+
+    (modus-themes-headings (quote
+                            ((0 . (variable-pitch rainbow 1.8))
+                             ((1 . (variable-pitch rainbow 1.8))
+                              (2 . (variable-pitch rainbow 1.6))
+                              (3 . (variable-pitch rainbow 1.4))
+                              (4 . (variable-pitch rainbow 1.2)))))
+                           :config
+                           (setq modus-themes-common-palette-overrides
+                                 modus-themes-preset-overrides-intense)
+                           (load-theme 'modus-operandi-deuteranopia)))
 #+end_src
 
+** Languages
+
+Configurations specific to certain languages.
+
+*** Emacs Lisp
+
+** Completion
+
+Because so much in Emacs is driven by text, good completion is the difference between hard-to-use and effortless.
+
+*** Minibuffer Completion 
+
+Minibuffer completion is a different beast than in-buffer completion, which is what most people mean when they talk about completion in other apps. The minibuffer is a kind of menu you get in Emacs, and it usually serves as a place to search for something. 
+
+In Emacs, minibuffer menus can be used to search for:
+
+- a command you're looking to run
+- a command you're looking to get more info on
+- a file or directory you're looking to open
+- a project to open
+- a buffer to choose
+- a Git branch to switch to
+- a wi-fi network to join
+- an emoji to insert
+- and lots of other things I use every day
+
+Other apps now have this equivalent—the one people know most developers know these days is the Comand Palette in VS Code, which offers very good menu completion, but there are similar examples in Slack and Discord and Vivaldi and many other apps. But in Emacs land, because you can search for practically anything you do, having /one/ interface for searching for what you want to do next is incredibly powerful, and one of the main unique selling points of Emacs.
+
+**** Some Basic Minibuffer Settings
+
+Set Emacs to only include commands that are relevant to the current "major mode" (what you would call a file type outside of Emacs).
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq read-extended-command-predicate #'command-completion-default-include-p))
+#+end_src
+
+**** Minibuffer Interface
+
+A popular Emacs minibuffer interface is Vertico. It gives you a simple but powerful UI for accessing whatever you're looking to access, and it does it with a minimum of code, mostly focusing on extending the built-in Emacs interface. This makes it fast to use and, importantly, easy for the devs to debug.
+
+It doesn't even take much code to set up! What we'll do is:
+
+- Install it.
+- Turn it on.
+- Set Emacs to remember Vertico's history.
+- Set the results of searches to wrap from bottom to top.
+- Add the Vertico extension =vertico-repeat= and a keybinding to repeat previous searches.
+- Add keybindings for more Vim-like =j=/=k= scrolling as well as scrolling by page-lengths.
+
+Here that is!
+
+#+begin_src emacs-lisp
+  (use-package vertico
+    :init
+    (vertico-mode)
+
+    :config
+    (setq vertico-cycle t)
+    (with-eval-after-load 'savehist
+      (add-to-list 'savehist-additional-variables 'vertico-repeat-history))
+    (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+
+    :straight (vertico :files (:defaults "extensions/*")
+                       :includes (vertico-repeat))
+
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+              "'" '(vertico-repeat-select
+                    :which-key "Repeat previous vertico searches."))
+
+    :bind
+    (:map vertico-map
+          ("C-j" . vertico-next)
+          ("C-k" . vertico-previous)
+          ("C-S-n" . vertico-scroll-up)
+          ("C-S-p" . vertico-scroll-down)
+          ("C-S-j" . vertico-scroll-up)
+          ("C-S-k" . vertico-scroll-down)))
+#+end_src
+
+**** Minibuffer Search Data Sets
+
+=consult= is a library containing a set of functions that each search a different set of data. That sounds dry, but it's really not!
+
+What it enables you to do is decide whether your search will be of:
+
+- lines in the current buffer
+- lines in any file in your project or directory
+- titles of currently open buffers
+- paths to recent files
+- text in Emacs' clipboard history (the "kill ring")
+- headings in a markup file (how I get around this document!)
+- color themes
+- manual pages for Unix commands
+
+And that's not even all of them! Minibuffer searches are a /huge/ part of how you use Emacs, and Consult is just one of many ways to decide what to search through.
+
+#+begin_src emacs-lisp
+  ;; Use "_" as the start of Consult's project-wide search (to play better with Orderless)
+  ;; Temporarily turned off so I can 
+  (use-package consult
+    ;; :config
+    ;; (plist-put (alist-get 'perl consult-async-split-styles-alist) :initial "_")
+    )
+#+end_src
+
+**** Minibuffer Search Filtering
+
+The Orderless package is powerful and fascinating. It decides the data you're searching is filtered as you type, and you can even search in different ways in the same search.
+
+Here's an example using the setup below. I can start typing the path of a file I want to open in a minibuffer search, then notice that ost of the results are in a directory I want to exclude. So I type in a =!= (a pretty universal developer symbol for "not" and the name of that directory, and those results are filtered out. Then I realize I want the path to begin with the home directory, excluding everything in the =/usr= and =/tmp= and such directories. So I type =^= (developer for "starts with") and =~= (the alias for the home directory). Finally, I want only JavaScript files, so I type =$= (developer for "ends with") and then type =js=, and boom!
+
+Once you're used to this speedy filtering process, it /greatly/ cuts down on the time spent searching for whatever it is you want to do.
+
+#+begin_src emacs-lisp
+  (use-package orderless
+    :init
+    (defun crj/vertico-orderless-dispatch (pattern _index _total)
+      "The set of dispatch commands I use for filtering searches.
+
+  Taken from the Doom Emacs project, which has added so much useful configuration code to the Emacs world. Thanks, Doom contributors!"
+      (cond
+       ;; Ensure $ works with Consult commands, which add disambiguation suffixes
+       ((string-suffix-p "$" pattern)
+        `(orderless-regexp . ,(concat (substring pattern 0 -1) "[\x200000-\x300000]*$")))
+       ;; Ignore single !
+       ((string= "!" pattern) `(orderless-literal . ""))
+       ;; Without literal
+       ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
+       ;; Character folding
+       ((string-prefix-p "%" pattern) `(char-fold-to-regexp . ,(substring pattern 1)))
+       ((string-suffix-p "%" pattern) `(char-fold-to-regexp . ,(substring pattern 0 -1)))
+       ;; Initialism matching
+       ((string-prefix-p "`" pattern) `(orderless-initialism . ,(substring pattern 1)))
+       ((string-suffix-p "`" pattern) `(orderless-initialism . ,(substring pattern 0 -1)))
+       ;; Literal matching
+       ((string-prefix-p "=" pattern) `(orderless-literal . ,(substring pattern 1)))
+       ((string-suffix-p "=" pattern) `(orderless-literal . ,(substring pattern 0 -1)))
+       ;; Flex matching
+       ((string-prefix-p "~" pattern) `(orderless-flex . ,(substring pattern 1)))
+       ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
+
+    (setq completion-ignore-case t
+          completion-styles '(orderless basic)
+          completion-category-defaults nil
+          orderless-component-separator "#"
+          orderless-style-dispatchers '(crj/vertico-orderless-dispatch)
+          orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp)
+          completion-category-overrides '((file (styles partial-completion)))))
+
+#+end_src
+
+#+begin_src emacs-lisp
+					  ; snippet settings
+
+  ;; (defun crj/set-up-snippets ()
+  ;;   (yas-global-mode)
+  ;;   (setq yas-snippet-dirs '("~/.doom.d/snippets"))
+  ;;   (yas-reload-all)
+  ;;   ;; I like having a specific (non-tab) and easy key for expanding snippets
+  ;;   (map! :i [M-tab] #'yas-expand
+  ;; 	:map yas-keymap "TAB" nil
+  ;; 	"<tab>" nil
+  ;; 	[M-tab] #'yas-next-field-or-maybe-expand))
+
+  ;; (require 'yasnippet)
+  ;; (after! yasnippet (crj/set-up-snippets))
+
+  ;; ;; don't add newlines to end of snippet files
+  ;; (defun no-final-newline-in-buffer ()
+  ;;   (setq-local require-final-newline nil))
+  ;; (add-hook! 'snippet-mode-hook 'no-final-newline-in-buffer)
+
+  ;; tide and LSP
+  ;; (defun setup-tide-mode ()
+  ;;   (interactive)
+  ;;   (tide-setup)
+  ;;   (flycheck-mode +1)
+  ;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  ;;   (tide-hl-identifier-mode +1))
+
+  ;; (map! :i [C-tab] nil)
+  ;; (map! :i [C-tab] #'emmet-expand-line)
+  ;; (map! :map emmet-mode-keymap "<tab>" nil)
+
+  ;; (defun toggle-eldoc-mode ()
+  ;;   (interactive)
+  ;;   (if eldoc-mode
+  ;;       (eldoc-mode -1)
+  ;;     (eldoc-mode 1)))
+
+  ;; (map!
+  ;;  :leader
+  ;;  (:prefix ("t" . "toggle")
+  ;; 	  :desc "eldoc for current symbol" :n "k" #'eldoc
+  ;; 	  :desc "eldoc mode." :n "K" #'toggle-eldoc-mode))
+
+  ;; (use-package vertico
+  ;;   :config
+  ;;   (vertico-indexed-mode)
+  ;;   (map! :map vertico-map "C-:" #'crj/embark-act-without-quitting)
+  ;;   (map! :leader
+  ;; 	:desc "Select from previous completions." "\"" #'vertico-repeat-select)
+  ;;   (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
+  ;;   (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
+
+  ;; embark act and resume completion
+  ;; (defun crj/embark-act-without-quitting ()
+  ;;   (interactive)
+  ;;   (let ((embark-quit-after-action nil))
+  ;;     (embark-act)))
+
+  ;; (use-package corfu
+  ;;   :config
+  ;;   (define-key corfu-map (kbd "M-g") #'corfu-quit)
+  ;;   (define-key corfu-map (kbd "C-n") #'corfu-next)
+  ;;   (define-key corfu-map (kbd "C-j") #'corfu-next)
+    ;; (define-key corfu-map (kbd "C-p") #'corfu-previous)
+    ;; (define-key corfu-map (kbd "C-k") #'corfu-previous)
+    ;; (define-key corfu-map (kbd "C-S-n") #'corfu-scroll-up)
+    ;; (define-key corfu-map (kbd "C-S-j") #'corfu-scroll-up)
+    ;; (define-key corfu-map (kbd "C-S-p") #'corfu-scroll-down)
+  ;;   (define-key corfu-map (kbd "C-S-k") #'corfu-scroll-down)
+  ;;   (define-key corfu-map (kbd "RET") nil)
+  ;;   (define-key corfu-map (kbd "RET") #'corfu-complete)
+  ;;   (define-key corfu-map (kbd "TAB") nil)
+  ;;   (define-key corfu-map (kbd "<tab>") nil)
+  ;;   (define-key corfu-map (kbd "<tab>") #'corfu-insert)
+  ;;   (define-key corfu-map (kbd "TAB") #'corfu-insert)
+
+  ;;   (setq corfu-commit-predicate nil
+  ;; 	completion-category-overrides '((eglot (styles orderless)))
+  ;; 	corfu-auto t
+  ;; 	corfu-auto-prefix 1
+  ;; 	corfu-quit-no-match t
+  ;; 	corfu-cycle t))
+
+  ;; ;; (use-package lsp-mode
+  ;; ;;   :init
+  ;; ;;   (setq lsp-completion-provider :none
+  ;; ;;         lsp-diagnostics-attributes `((unnecessary
+  ;; ;;                                       :foreground unspecified
+  ;; ;;                                       :underline "gray")
+  ;; ;;                                      (deprecated
+  ;; ;;                                       :strike-through t)))
+
+  ;; ;;   :config
+  ;; ;;   (setq company-mode -1
+  ;; ;;         lsp-enable-symbol-highlighting nil
+  ;; ;;         lsp-eldoc-enable-hover nil))
+
+  ;; ;; (add-hook 'lsp-after-initialize-hook #'crj/fix-lsp)
+
+  ;; (map! :i "C-n" nil)
+  ;; (map! :i "C-p" nil)
+
+
+  ;; ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+  ;; ;; (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)
+
+  ;; ;; (add-hook 'web-mode-hook #'lsp)
+  ;; ;; (add-hook 'sql-mode-hook #'lsp)
+
+  ;; ;; (setq lsp-sqls-workspace-config-path "workspace")
+  ;; ;; (setq lsp-sqls-connections
+  ;; ;;     '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abbreviatedman sslmode=disable dbname"))))
+
+  ;; (map! :map global-map "M-g" nil)
+
+
+  ;; ;; completion source extensions
+  ;; ;; just not sure I need cape
+  ;; ;; (use-package! cape
+  ;; ;;   ;; Bind dedicated completion commands
+  ;; ;;   :bind (("C-c p" . completion-at-point))
+  ;; ;;   :init
+  ;; ;;   (defun crj/set-up-cape ()
+  ;; ;;   "Add `completion-at-point-functions' from cape to the list."
+  ;; ;;   (add-to-list 'completion-at-point-functions #'cape-file)
+  ;; ;;   (add-to-list 'completion-at-point-functions #'cape-tex)
+  ;; ;;   ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  ;; ;;   (add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;; ;;   (add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;; ;;   (add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;; ;;   (add-to-list 'completion-at-point-functions #'cape-symbol)))
+
+  ;; (after! projectile
+  ;; 	(add-to-list 'projectile-project-root-files ".git"))
+
+  ;; ;; I don't need the "symbol class" info in my documentation.
+  ;; (after! marginalia
+  ;; 	(setf (alist-get 'variable marginalia-annotator-registry)
+  ;; 	      '(crj/custom-marginalia-annotate-variable builtin none))
+  ;; 	(setf (alist-get 'symbol marginalia-annotator-registry)
+  ;; 	      '(crj/custom-marginalia-annotate-symbol builtin none))
+  ;; 	(setf (alist-get 'function marginalia-annotator-registry)
+  ;; 	      '(crj/custom-marginalia-annotate-function none)))
+
+  ;; ;; TODO remove permissions from annotation of file
+  ;; ;; things to keep in mind:
+  ;; ;; - which fields show up are in helper function
+  ;; ;; - there's a project file version as well
+  ;; ;; (defun crj/custom-marginalia-annotate-file (cand))
+
+  ;; (defun crj/custom-marginalia-annotate-symbol (cand)
+  ;;   "Annotate symbol CAND with its documentation string."
+  ;;   (when-let (sym (intern-soft cand))
+  ;;     (concat
+  ;;      (marginalia-annotate-binding cand)
+  ;;      (marginalia--fields
+  ;;       ((cond
+  ;; 	((fboundp sym) (marginalia--function-doc sym))
+  ;; 	((facep sym) (documentation-property sym 'face-documentation))
+  ;; 	(t (documentation-property sym 'variable-documentation)))
+  ;;        :truncate 1.0 :face 'marginalia-documentation)))))
+
+  ;; (defun crj/custom-marginalia-annotate-variable (cand)
+  ;;   "Annotate variable CAND with its documentation string."
+  ;;   (when-let (sym (intern-soft cand))
+  ;;     (marginalia--fields
+  ;;      ((marginalia--variable-value sym) :truncate 0.5)
+  ;;      ((documentation-property sym 'variable-documentation)
+  ;;       :truncate 1.0 :face 'marginalia-documentation))))
+
+  ;; (defun crj/custom-marginalia-annotate-function (cand)
+  ;;   "Annotate function CAND with its documentation string."
+  ;;   (when-let (sym (intern-soft cand))
+  ;;     (when (fboundp sym)
+  ;;       (concat
+  ;;        (marginalia-annotate-binding cand)
+  ;;        (marginalia--fields
+  ;; 	((marginalia--function-args sym) :face 'marginalia-value
+  ;; 	 :truncate 0.5)
+  ;; 	((marginalia--function-doc sym) :truncate 1.0
+  ;; 	 :face 'marginalia-documentation))))))
+
+
+  ;; ;; uncomment the following function and its hook to get corfu minibuffer completion.
+  ;; ;; (defun corfu-enable-always-in-minibuffer ()
+  ;; ;;   "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+  ;; ;;   (unless (or (bound-and-true-p mct--active)
+  ;; ;;               (bound-and-true-p vertico--input))
+  ;; ;;     (setq-local corfu-auto t)
+  ;; ;;     (corfu-mode 1)))
+
+  ;; ;; (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
+
+  ;; ;; (setq lsp-completion-provider :none
+  ;; ;;       lsp-auto-guess-root t)
+
+  ;; (map! :leader "/" #'+default/search-buffer)
+
+  ;; ;; (cl-defmacro teco/lsp-org-babel-enable (lang)
+  ;; ;;   "Support LANG in org source code block."
+  ;; ;;   (setq centaur-lsp 'lsp-mode)
+  ;; ;;   (cl-check-type lang string)
+  ;; ;;   (let* ((edit-pre (intern (format "org-babel-edit-prep:%s" lang)))
+  ;; ;;          (intern-pre (intern (format "lsp--%s" (symbol-name edit-pre)))))
+  ;; ;;     `(progn
+  ;; ;;        (defun ,intern-pre (info)
+  ;; ;;          (let ((file-name (->> info caddr (alist-get :file))))
+  ;; ;;            (unless file-name
+  ;; ;;              (setq file-name (make-temp-file "babel-lsp-")))
+  ;; ;;            (setq buffer-file-name file-name)
+  ;; ;;            (lsp-deferred)))
+  ;; ;;        (put ',intern-pre 'function-documentation
+  ;; ;;             (format "Enable lsp-mode in the buffer of org source block (%s)."
+  ;; ;;                     (upcase ,lang)))
+  ;; ;;        (if (fboundp ',edit-pre)
+  ;; ;;            (advice-add ',edit-pre :after ',intern-pre)
+  ;; ;;          (progn
+  ;; ;;            (defun ,edit-pre (info)
+  ;; ;;              (,intern-pre info))
+  ;; ;;            (put ',edit-pre 'function-documentation
+  ;; ;;                 (format "Prepare local buffer environment for org source block (%s)."
+  ;; ;;                         (upcase ,lang))))))))
+
+  ;; (org-babel-do-load-languages
+  ;;  'org-babel-load-languages
+  ;;  '((emacs-lisp . t)
+  ;;    (sql-mode . t)
+  ;;    (racket . t)
+  ;;    (python . t)
+  ;;    (ipython . t)
+  ;;    (bash . t)
+  ;;    (sh . t)
+  ;;    (js . t)
+  ;;    (javascript . t)
+  ;;    (sql . t)
+  ;;    (go . t)))
+
+  ;; ;; (defun org-babel-edit-prep:javascript (babel-info)
+  ;; ;;   (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
+  ;; ;;   (lsp))
+
+  ;; ;; (defun org-babel-edit-prep:js (babel-info)
+  ;; ;;   (setq-local buffer-file-name (->> babel-info caddr (alist-get :tangle)))
+  ;; ;;   (lsp))
+
+  ;; (map! :leader
+  ;;       :desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring)
+
+  ;; ;; (map! :i "C-SPC" #'complete-symbol)
+
+  ;; (defun crj/marginalia-toggle ()
+  ;;   (interactive)
+  ;;   (mapc
+  ;;    (lambda (x)
+  ;;      (setcdr x (append (reverse (remq 'none
+  ;; 				      (remq 'builtin (cdr x))))
+  ;; 		       '(builtin none))))
+  ;;    marginalia-annotator-registry))
+
+  ;; ;; use completion version—for now, it works better for me
+  ;; ;; it also works better on smaller screens!
+  ;; (setq embark-prompter 'embark-completing-read-prompter)
+
+  ;; (use-package corfu
+  ;;   ;; Optional customizations
+  ;;   :custom
+  ;;   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  ;;   (corfu-auto t)                 ;; Enable auto completion
+  ;;   (corfu-separator ?\s)          ;; Orderless field separator
+  ;;   (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;;   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;;   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;;   ;; (corfu-preselect-first nil)    ;; Disable candidate preselection
+  ;;   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;;   ;; (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+  ;;   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;;   ;; Enable Corfu only for certain modes.
+  ;;   ;; :hook ((prog-mode . corfu-mode)
+  ;;   ;;        (shell-mode . corfu-mode)
+  ;;   ;;        (eshell-mode . corfu-mode))
+
+  ;;   ;; Recommended: Enable Corfu globally.
+  ;;   ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;;   ;; See also `corfu-excluded-modes'.
+  ;;   :init
+  ;;   (global-corfu-mode))
+
+  ;; (use-package emacs
+  ;;   :init
+  ;;   ;; TAB cycle if there are only few candidates
+  ;;   ;; (setq completion-cycle-threshold 3)
+
+  ;;   ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;;   ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  ;;   (setq read-extended-command-predicate
+  ;; 	#'command-completion-default-include-p)
+
+  ;;   ;; Enable indentation+completion using the TAB key.
+  ;;   ;; `completion-at-point' is often bound to M-TAB.
+  ;;   (setq tab-always-indent 'complete))
+
+  ;; ;; Optionally use the `orderless' completion style.
+  ;; (use-package orderless
+  ;;   :init
+  ;;   ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;;   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  ;;   (setq completion-styles '(orderless basic)
+  ;; 	completion-category-overrides '((file (styles . (partial-completion))))
+  ;; 	orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp))
+  ;;   :config
+  ;;   (setq orderless-component-separator "\_"))
+  ;; ;; (add-to-list completion-category-overrides '(file (styles . partial-completion)))
+  ;; ;; (add-to-list completion-category-overrides '(eglot (styles . orderless))))
+  ;; ;; (setq completion-category-overrides '((file (styles . (partial-completion))))))
+
+  ;; (use-package eglot
+  ;;   :config
+  ;;   ;; not sure I need cape
+  ;;   ;; (crj/set-up-cape)
+  ;;   )
+
+  ;; (use-package elisp-mode
+  ;;   :config
+  ;;   ;; not sure I need cape
+  ;;   ;; (crj/set-up-cape)
+  ;;   )
+
+  #+end_src
+
+*** Flymake
+
+  A great error-navigation library.
+  
+  #+begin_src emacs-lisp
+
+    (use-package flymake
+      :hook (prog-mode . flymake-mode)
+      :general
+      (:keymaps 'normal
+                "]e" '(flymake-goto-next-error
+                       :which-key "Go to next error.")
+                "[e" '(flymake-goto-prev-error
+                       :which-key "Go to previous error."))
+      (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+                "c" '(:ignore t
+                        :which-key "Code.")
+                "cX" '(flymake-show-project-diagnostics
+                       :which-key "Describe variable.")))
+      #+end_src
 ** Better Modeline
 
 [[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
@@ -441,6 +1123,7 @@ Modus Operandi is a fantastic theme for readability and accessiblity. It's about
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 15)))
 #+end_src
+
 
 ** Which Key
 
@@ -465,37 +1148,37 @@ Modus Operandi is a fantastic theme for readability and accessiblity. It's about
 
 #+begin_src emacs-lisp
 
-  (use-package ivy
-    :diminish
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
-    :config
-    (ivy-mode 1))
+  ;; (use-package ivy
+  ;;   :diminish
+  ;;   :bind (("C-s" . swiper)
+  ;;          :map ivy-minibuffer-map
+  ;;          ("TAB" . ivy-alt-done)
+  ;;          ("C-l" . ivy-alt-done)
+  ;; ("C-j" . ivy-next-line)
+  ;; ("C-k" . ivy-previous-line)
+  ;;        :map ivy-switch-buffer-map
+  ;;        ("C-k" . ivy-previous-line)
+  ;;        ("C-l" . ivy-done)
+  ;;        ("C-d" . ivy-switch-buffer-kill)
+  ;;        :map ivy-reverse-i-search-map
+  ;;        ("C-k" . ivy-previous-line)
+  ;;        ("C-d" . ivy-reverse-i-search-kill))
+  ;; :config
+  ;; (ivy-mode 1))
 
-  (use-package ivy-rich
-    :after ivy
-    :init
-    (ivy-rich-mode 1))
+  ;; (use-package ivy-rich
+  ;;   :after ivy
+  ;;   :init
+  ;;   (ivy-rich-mode 1))
 
-  (use-package counsel
-    :bind (("C-M-j" . 'counsel-switch-buffer)
-           :map minibuffer-local-map
-           ("C-r" . 'counsel-minibuffer-history))
-    :custom
-    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-    :config
-    (counsel-mode 1))
+  ;; (use-package counsel
+  ;;   :bind (("C-M-j" . 'counsel-switch-buffer)
+  ;;          :map minibuffer-local-map
+  ;;          ("C-r" . 'counsel-minibuffer-history))
+  ;;   :custom
+  ;; (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  ;; :config
+  ;; (counsel-mode 1))
 
 #+end_src
 
@@ -507,34 +1190,69 @@ This Prescient configuration is optimized for use in System Crafters videos and 
 
 #+begin_src emacs-lisp
 
-  (use-package ivy-prescient
-    :after counsel
-    :custom
-    (ivy-prescient-enable-filtering nil)
-    :config
-    ;; Uncomment the following line to have sorting remembered across sessions!
-                                          ;(prescient-persist-mode 1)
-    (ivy-prescient-mode 1))
+  ;; (use-package ivy-prescient
+  ;;   :after counsel
+  ;;   :custom
+  ;; (ivy-prescient-enable-filtering nil)
+  ;; :config
+  ;; ;; Uncomment the following line to have sorting remembered across sessions!
+  ;;                                       ;(prescient-persist-mode 1)
+  ;; (ivy-prescient-mode 1))
 
 #+end_src
 
-** Helpful Help Commands
+** Improving Help Commands
 
+Original description of Emacs From Scratch's equivalent section perfectly sums it up, so I'll let it do so:
+
+#+begin_quote
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
+#+end_quote
+
+Besides different keybindings, I've only added a couple extra configuraitons here:
+
+- =woman= is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
+- =helpful-at-point= is a great quick Emacs Lisp documentation lookup. With Evil, I can just press =K= on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
 
 #+begin_src emacs-lisp
-
   (use-package helpful
-    :commands (helpful-callable helpful-variable helpful-command helpful-key)
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function)
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key))
+    :init
+    (defun crj--set-elisp-lookup-function ()
+      "Sets the documentation function for Emacs Lisp."
+      (setq evil-lookup-func #'helpful-at-point))
+    (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
+  
+    :commands (helpful-callable
+               helpful-command
+               helpful-variable
+               helpful-at-point
+               helpful-key
+               helpful-face)
 
+    :general
+    (:keymaps '(normal emacs insert) :prefix "SPC" :global-prefix "M-SPC"
+              "h" '(:ignore t
+                            :which-key "Help.")
+              "hv" '(helpful-variable
+                     :which-key "Describe variable.")
+              "hf" '(helpful-callable
+                     :which-key "Describe function.")
+              "hF" '(helpful-face
+                     :which-key "Describe face.")
+              "hk" '(helpful-key
+                     :which-key "Describe key.")
+              "hx" '(helpful-command
+                     :which-key "Describe command.")
+              "hW" '(woman
+                     :which-key "Search for manual page.")
+              "hg" '(customize-group
+                     :which-key "Search for customize group."))
+    ([remap describe-function] #'helpful-callable)
+    ([remap describe-command] #'helpful-command)
+
+    ([remap describe-variable] #'helpful-variable)
+    ([remap describe-key] #'helpful-key)
+    ("C-h g" #'customize-group))
 #+end_src
 
 ** Text Scaling
@@ -566,34 +1284,73 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 The =efs/org-font-setup= function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in =org-mode=.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
 #+begin_src emacs-lisp
+  (defun my/buffer-face-mode-variable ()
+    "Set font to a variable width (proportional) fonts in current buffer"
+    (interactive)
+    (setq buffer-face-mode-face '(:family "IBM Plex Serif"
+                                  :height 120
+                                  :width normal))
+    (buffer-face-mode))
 
-  (defun efs/org-font-setup ()
-    ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    (defun my/set-general-faces-org ()
+      (my/buffer-face-mode-variable)
+      (setq line-spacing 0.1
+            org-pretty-entities t
+            org-startup-indented t
+            org-adapt-indentation nil)
+      (variable-pitch-mode +1)
+      (mapc
+       (lambda (face) ;; Other fonts that require it are set to fixed-pitch.
+         (set-face-attribute face nil :inherit 'fixed-pitch))
+       (list 'org-block
+             'org-table
+             'org-verbatim
+             'org-block-begin-line
+             'org-block-end-line
+             'org-meta-line
+             'org-date
+             'org-drawer
+             'org-property-value
+             'org-special-keyword
+             'org-document-info-keyword))
+      (mapc ;; This sets the fonts to a smaller size
+       (lambda (face)
+         (set-face-attribute face nil :height 0.8))
+       (list 'org-document-info-keyword
+             'org-block-begin-line
+             'org-block-end-line
+             'org-meta-line
+             'org-drawer
+             'org-property-value
+             )))
 
-    ;; Set faces for heading levels
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+      (defun efs/org-font-setup ()
+        ;; Replace list hyphen with dot
+        (font-lock-add-keywords 'org-mode
+                                '(("^ *\\([-]\\) "
+                                   (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch))
+        ;; Set faces for heading levels
+        (dolist (face '((org-level-1 . 1.2)
+                        (org-level-2 . 1.1)
+                        (org-level-3 . 1.05)
+                        (org-level-4 . 1.0)
+                        (org-level-5 . 1.1)
+                        (org-level-6 . 1.1)
+                        (org-level-7 . 1.1)
+                        (org-level-8 . 1.1)))
+          (set-face-attribute (car face) nil :weight 'regular :height (cdr face)))
+
+        ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+        (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
+        (set-face-attribute 'org-table nil    :font crj--coding-font)
+        (set-face-attribute 'org-formula nil  :font crj--coding-font)
+        (set-face-attribute 'org-code nil     :font crj--coding-font)
+        (set-face-attribute 'org-table nil    :font crj--coding-font)
+        (set-face-attribute 'org-verbatim nil :font crj--coding-font)
+        (set-face-attribute 'org-special-keyword nil :font crj--coding-font)
+        (set-face-attribute 'org-meta-line nil :font crj--coding-font)
+        (set-face-attribute 'org-checkbox nil  :font crj--coding-font))
 
 #+end_src
 
@@ -602,134 +1359,141 @@ The =efs/org-font-setup= function configures various text faces to tweak the siz
 This section contains the basic configuration for =org-mode= plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
 
 #+begin_src emacs-lisp
+    (defun efs/org-mode-setup ()
+      (org-indent-mode)
+      ;; (variable-pitch-mode 1)
+      (visual-line-mode 1))
 
-  (defun efs/org-mode-setup ()
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (visual-line-mode 1))
+    (use-package org
+      :hook
+      (org-mode . efs/org-mode-setup)
+      (org-mode . my/set-general-faces-org)
+      ;; :config (efs/org-font-setup)
+      )
 
-  (use-package org
-    :commands (org-capture org-agenda)
-    :hook (org-mode . efs/org-mode-setup)
-    :config
-    (setq org-ellipsis " ▾")
+    ;; (use-package org
+    ;;   :commands (org-capture org-agenda)
+    ;;   :hook (org-mode . efs/org-mode-setup)
+    ;;   :config
+    ;;   (setq org-ellipsis " ▾")
 
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
+    ;;   (setq org-agenda-start-with-log-mode t)
+    ;;   (setq org-log-done 'time)
+    ;;   (setq org-log-into-drawer t)
 
-    (setq org-agenda-files
-          '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
-            "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
-            "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
+    ;;   (setq org-agenda-files
+    ;;         '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
+    ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
+    ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
 
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60)
+    ;;   (require 'org-habit)
+    ;;   (add-to-list 'org-modules 'org-habit)
+    ;;   (setq org-habit-graph-column 60)
 
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+    ;;   (setq org-todo-keywords
+    ;;         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+    ;;           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-    (setq org-refile-targets
-          '(("Archive.org" :maxlevel . 1)
-            ("Tasks.org" :maxlevel . 1)))
+    ;;   (setq org-refile-targets
+    ;;         '(("Archive.org" :maxlevel . 1)
+    ;;           ("Tasks.org" :maxlevel . 1)))
 
-    ;; Save Org buffers after refiling!
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+    ;;   ;; Save Org buffers after refiling!
+    ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-    (setq org-tag-alist
-          '((:startgroup)
-                                          ; Put mutually exclusive tags here
-            (:endgroup)
-            ("@errand" . ?E)
-            ("@home" . ?H)
-            ("@work" . ?W)
-            ("agenda" . ?a)
-            ("planning" . ?p)
-            ("publish" . ?P)
-            ("batch" . ?b)
-            ("note" . ?n)
-            ("idea" . ?i)))
+    ;;   (setq org-tag-alist
+    ;;         '((:startgroup)
+    ;;                                         ; Put mutually exclusive tags here
+    ;;           (:endgroup)
+      ;;         ("@errand" . ?E)
+      ;;         ("@home" . ?H)
+      ;;         ("@work" . ?W)
+      ;;         ("agenda" . ?a)
+      ;;         ("planning" . ?p)
+      ;;         ("publish" . ?P)
+      ;;         ("batch" . ?b)
+      ;;         ("note" . ?n)
+      ;;         ("idea" . ?i)))
 
-    ;; Configure custom agenda views
-    (setq org-agenda-custom-commands
-          '(("d" "Dashboard"
-             ((agenda "" ((org-deadline-warning-days 7)))
-              (todo "NEXT"
-                    ((org-agenda-overriding-header "Next Tasks")))
-              (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+      ;; ;; Configure custom agenda views
+      ;; (setq org-agenda-custom-commands
+      ;;       '(("d" "Dashboard"
+      ;;          ((agenda "" ((org-deadline-warning-days 7)))
+      ;;           (todo "NEXT"
+      ;;                 ((org-agenda-overriding-header "Next Tasks")))
+      ;;           (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-            ("n" "Next Tasks"
-             ((todo "NEXT"
-                    ((org-agenda-overriding-header "Next Tasks")))))
+      ;;         ("n" "Next Tasks"
+      ;;          ((todo "NEXT"
+      ;;                 ((org-agenda-overriding-header "Next Tasks")))))
 
-            ("W" "Work Tasks" tags-todo "+work-email")
+      ;;         ("W" "Work Tasks" tags-todo "+work-email")
 
-            ;; Low-effort next actions
-            ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-             ((org-agenda-overriding-header "Low Effort Tasks")
-              (org-agenda-max-todos 20)
-              (org-agenda-files org-agenda-files)))
+      ;;         ;; Low-effort next actions
+      ;;         ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+      ;;          ((org-agenda-overriding-header "Low Effort Tasks")
+      ;;           (org-agenda-max-todos 20)
+      ;;           (org-agenda-files org-agenda-files)))
 
-            ("w" "Workflow Status"
-             ((todo "WAIT"
-                    ((org-agenda-overriding-header "Waiting on External")
-                     (org-agenda-files org-agenda-files)))
-              (todo "REVIEW"
-                    ((org-agenda-overriding-header "In Review")
-                     (org-agenda-files org-agenda-files)))
-              (todo "PLAN"
-                    ((org-agenda-overriding-header "In Planning")
-                     (org-agenda-todo-list-sublevels nil)
-                     (org-agenda-files org-agenda-files)))
-              (todo "BACKLOG"
-                    ((org-agenda-overriding-header "Project Backlog")
-                     (org-agenda-todo-list-sublevels nil)
-                     (org-agenda-files org-agenda-files)))
-              (todo "READY"
-                    ((org-agenda-overriding-header "Ready for Work")
-                     (org-agenda-files org-agenda-files)))
-              (todo "ACTIVE"
-                    ((org-agenda-overriding-header "Active Projects")
-                     (org-agenda-files org-agenda-files)))
-              (todo "COMPLETED"
-                    ((org-agenda-overriding-header "Completed Projects")
-                     (org-agenda-files org-agenda-files)))
-              (todo "CANC"
-                    ((org-agenda-overriding-header "Cancelled Projects")
-                     (org-agenda-files org-agenda-files)))))))
+      ;;         ("w" "Workflow Status"
+      ;;          ((todo "WAIT"
+      ;;                 ((org-agenda-overriding-header "Waiting on External")
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "REVIEW"
+      ;;                 ((org-agenda-overriding-header "In Review")
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "PLAN"
+      ;;                 ((org-agenda-overriding-header "In Planning")
+      ;;                  (org-agenda-todo-list-sublevels nil)
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "BACKLOG"
+      ;;                 ((org-agenda-overriding-header "Project Backlog")
+      ;;                  (org-agenda-todo-list-sublevels nil)
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "READY"
+      ;;                 ((org-agenda-overriding-header "Ready for Work")
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "ACTIVE"
+      ;;                 ((org-agenda-overriding-header "Active Projects")
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "COMPLETED"
+      ;;                 ((org-agenda-overriding-header "Completed Projects")
+      ;;                  (org-agenda-files org-agenda-files)))
+      ;;           (todo "CANC"
+      ;;                 ((org-agenda-overriding-header "Cancelled Projects")
+      ;;                  (org-agenda-files org-agenda-files)))))))
 
-    (setq org-capture-templates
-          `(("t" "Tasks / Projects")
-            ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
-             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+      ;; (setq org-capture-templates
+      ;;       `(("t" "Tasks / Projects")
+      ;;         ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+      ;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-            ("j" "Journal Entries")
-            ("jj" "Journal" entry
-             (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-             ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-             :clock-in :clock-resume
-             :empty-lines 1)
-            ("jm" "Meeting" entry
-             (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-             "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-             :clock-in :clock-resume
-             :empty-lines 1)
+      ;;         ("j" "Journal Entries")
+      ;;         ("jj" "Journal" entry
+      ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+      ;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+      ;;          ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+      ;;          :clock-in :clock-resume
+      ;;          :empty-lines 1)
+      ;;         ("jm" "Meeting" entry
+      ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+      ;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+      ;;          :clock-in :clock-resume
+      ;;          :empty-lines 1)
 
-            ("w" "Workflows")
-            ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-             "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+      ;;         ("w" "Workflows")
+      ;;         ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+      ;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-            ("m" "Metrics Capture")
-            ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+      ;;         ("m" "Metrics Capture")
+      ;;         ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+      ;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
-    (define-key global-map (kbd "C-c j")
-      (lambda () (interactive) (org-capture nil "jj")))
+      ;; (define-key global-map (kbd "C-c j")
+      ;;   (lambda () (interactive) (org-capture nil "jj")))
 
-    (efs/org-font-setup))
+      ;; (efs/org-font-setup)
+      ;; )
 
 #+end_src
 
@@ -794,17 +1558,17 @@ The =which-key= integration adds helpful descriptions of the various keys so you
 
 #+begin_src emacs-lisp
 
-  (defun efs/lsp-mode-setup ()
-    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-    (lsp-headerline-breadcrumb-mode))
+  ;; (defun efs/lsp-mode-setup ()
+  ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  ;;   (lsp-headerline-breadcrumb-mode))
 
-  (use-package lsp-mode
-    :commands (lsp lsp-deferred)
-    :hook (lsp-mode . efs/lsp-mode-setup)
-    :init
-    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-    :config
-    (lsp-enable-which-key-integration t))
+  ;; (use-package lsp-mode
+  ;;   :commands (lsp lsp-deferred)
+  ;;   :hook (lsp-mode . efs/lsp-mode-setup)
+  ;;   :init
+  ;;   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+  ;;   :config
+  ;;   (lsp-enable-which-key-integration t))
 
 #+end_src
 
@@ -814,10 +1578,10 @@ The =which-key= integration adds helpful descriptions of the various keys so you
 
 #+begin_src emacs-lisp
 
-  (use-package lsp-ui
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    (lsp-ui-doc-position 'bottom))
+  ;; (use-package lsp-ui
+  ;;   :hook (lsp-mode . lsp-ui-mode)
+  ;;   :custom
+  ;;   (lsp-ui-doc-position 'bottom))
 
 #+end_src
 
@@ -835,8 +1599,8 @@ This package is built on the [[https://github.com/Alexander-Miller/treemacs][tre
 
 #+begin_src emacs-lisp
 
-  (use-package lsp-treemacs
-    :after lsp)
+  ;; (use-package lsp-treemacs
+  ;;   :after lsp)
 
 #+end_src
 
@@ -851,8 +1615,8 @@ Try these commands with =M-x=:
 
 #+begin_src emacs-lisp
 
-  (use-package lsp-ivy
-    :after lsp)
+  ;; (use-package lsp-ivy
+    ;; :after lsp)
 
 #+end_src
 
@@ -862,23 +1626,23 @@ Try these commands with =M-x=:
 
 #+begin_src emacs-lisp
 
-  (use-package dap-mode
+  ;; (use-package dap-mode
     ;; Uncomment the config below if you want all UI panes to be hidden by default!
     ;; :custom
     ;; (lsp-enable-dap-auto-configure nil)
     ;; :config
     ;; (dap-ui-mode 1)
-    :commands dap-debug
-    :config
+    ;; :commands dap-debug
+    ;; :config
     ;; Set up Node debugging
-    (require 'dap-node)
-    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+    ;; (require 'dap-node)
+    ;; (dap-node-setup) ;; Automatically installs Node debug adapter if needed
 
     ;; Bind `C-c l d` to `dap-hydra` for easy access
-    (general-define-key
-     :keymaps 'lsp-mode-map
-     :prefix lsp-keymap-prefix
-     "d" '(dap-hydra t :wk "debugger")))
+    ;; (general-define-key
+     ;; :keymaps 'lsp-mode-map
+     ;; :prefix lsp-keymap-prefix
+     ;; "d" '(dap-hydra t :wk "debugger")))
 
 #+end_src
 
@@ -922,16 +1686,16 @@ There are a number of other language servers for Python so if you find that =pyl
 
 #+begin_src emacs-lisp
 
-  (use-package python-mode
-    :ensure t
-    :hook (python-mode . lsp-deferred)
-    :custom
-    ;; NOTE: Set these if Python 3 is called "python3" on your system!
-    ;; (python-shell-interpreter "python3")
-    ;; (dap-python-executable "python3")
-    (dap-python-debugger 'debugpy)
-    :config
-    (require 'dap-python))
+  ;; (use-package python-mode
+  ;;   :ensure t
+  ;;   :hook (python-mode . lsp-deferred)
+  ;;   :custom
+  ;;   ;; NOTE: Set these if Python 3 is called "python3" on your system!
+  ;;   ;; (python-shell-interpreter "python3")
+  ;;   ;; (dap-python-executable "python3")
+  ;;   (dap-python-debugger 'debugpy)
+  ;;   :config
+  ;;   (require 'dap-python))
 
 
 #+end_src
@@ -940,10 +1704,10 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+begin_src emacs-lisp
 
-  (use-package pyvenv
-    :after python-mode
-    :config
-    (pyvenv-mode 1))
+  ;; (use-package pyvenv
+  ;;   :after python-mode
+  ;;   :config
+  ;;   (pyvenv-mode 1))
 
 #+end_src
 
@@ -955,19 +1719,19 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+begin_src emacs-lisp
 
-  (use-package company
-    :after lsp-mode
-    :hook (lsp-mode . company-mode)
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-          ("<tab>" . company-indent-or-complete-common))
-    :custom
-    (company-minimum-prefix-length 1)
-    (company-idle-delay 0.0))
+  ;; (use-package company
+  ;;   :after lsp-mode
+  ;;   :hook (lsp-mode . company-mode)
+  ;;   :bind (:map company-active-map
+  ;;               ("<tab>" . company-complete-selection))
+  ;;   (:map lsp-mode-map
+  ;;         ("<tab>" . company-indent-or-complete-common))
+  ;;   :custom
+  ;;   (company-minimum-prefix-length 1)
+  ;;   (company-idle-delay 0.0))
 
-  (use-package company-box
-    :hook (company-mode . company-box-mode))
+  ;; (use-package company-box
+  ;;   :hook (company-mode . company-box-mode))
 
 #+end_src
 
@@ -977,21 +1741,21 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+begin_src emacs-lisp
 
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    (when (file-directory-p "~/Projects/Code")
-      (setq projectile-project-search-path '("~/Projects/Code")))
-    (setq projectile-switch-project-action #'projectile-dired))
+  ;; (use-package projectile
+  ;;   :diminish projectile-mode
+  ;;   :config (projectile-mode)
+  ;;   ;; :custom ((projectile-completion-system 'ivy))
+  ;;   :bind-keymap
+  ;;   ("C-c p" . projectile-command-map)
+  ;;   :init
+  ;;   ;; NOTE: Set this to the folder where you keep your Git repos!
+  ;;   (when (file-directory-p "~/Projects/Code")
+  ;;     (setq projectile-project-search-path '("~/Projects/Code")))
+  ;;   (setq projectile-switch-project-action #'projectile-dired))
 
-  (use-package counsel-projectile
-    :after projectile
-    :config (counsel-projectile-mode))
+  ;; (use-package counsel-projectile
+  ;;   :after projectile
+  ;;   :config (counsel-projectile-mode))
 
 #+end_src
 
@@ -1296,16 +2060,16 @@ Dial the GC threshold back down so that garbage collection happens more frequent
 Making my life easier!
 
 #+begin_src emacs-lisp
-(defun crj--cycle-setting (setting potential-values)
-  "Cycle SETTING through POTENTIAL-VALUES.
+  (defun crj--cycle-setting (setting potential-values)
+    "Cycle SETTING through POTENTIAL-VALUES.
 
-SETTING is a quoted symbol.
+  SETTING is a quoted symbol.
 
-POTENTIAL-VALUES is a list of values to cycle through."
-  (let ((i (cl-position (eval setting) potential-values)))
-    (set setting (if (eq (1+ i) (length potential-values))
-                     (car potential-values)
-                   (nth (1+ i) potential-values)))))
+  POTENTIAL-VALUES is a list of values to cycle through."
+    (let ((i (cl-position (eval setting) potential-values)))
+      (set setting (if (eq (1+ i) (length potential-values))
+                       (car potential-values)
+                     (nth (1+ i) potential-values)))))
 #+end_src
 
 #+begin_src emacs-lisp
