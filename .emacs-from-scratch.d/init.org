@@ -87,7 +87,219 @@ Tell =use-package= to always install packages using =straight=.
   (straight-use-package-by-default t))
 #+end_src
 
+** Keybindings
+
+Like many Vimmers, I eventually realized that the things I personally liked about Vim were even more present in Emacs. This very much includes Vim keybindings, which are available through Evil Mode, In a lot of ways, Evil mode is /more Vim than Vim/. This is something I could argue at length, but... maybe not in this space. (Yet?)
+
+*** Installing And Using General
+
+Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package= and =evil=.
+
+I don't think that =general-create-definer= is the system I'll be using for keybindings, but it /is/ neat that I can define the leader-key keybinding for =crj--open-config-file= so easily!
+
+#+begin_src emacs-lisp
+  (use-package general
+    :after evil
+
+    :config
+    (defun crj--open-literate-config-file ()
+      "Open the literate config file in the user directory."
+      (interactive)
+      (find-file (expand-file-name "init.org" user-emacs-directory)))
+
+    (general-create-definer crj--leader-key
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+
+    (crj--leader-key "fc" #'crj--open-literate-config-file))
+#+end_src
+
+*** General Emacs' Keybindings
+
+Many of my keybindings are taken from Doom Emacs' well-thought-through keybindings—although part of this is certainly that I'm just used to using them for the last couple of years.
+
+In Vanilla Emacs' keybinding land, the focus is on often elaborate key "chords", where you use a series of modifier key-letter pairs, while in Vim/Evil, most commands use a "leader" key.
+
+For example, opening a file in Vanilla Emacs keybindings would be =C-x C-f=, which means to hold down the =Control= key, press =x=, then, still holding down =Control= (or re-pressing and holding it), press =f=. This can be a bit of a strain on your hand, although certainly less so if you follow best practices and swap =Control= and =Caps Lock=.
+
+In Evil-Mode-style keybindings, the same command might be someting like =SPC f o=, which means press the =spacebar=, then press the =f= key, then press the =o= key.
+
+This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, =/= begins a text search (like =C-f= or =Command-f= in many apps), and =dd= deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is =i= (for =i=nsert).
+
+This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like =Control= and =Alt= and =Command= to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use =SPC f o= to =o= pen a =f= ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
+
+Let's see some examples!
+
+The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as just three quick presses.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (:prefix "SPC" :keymaps 'normal
+             "f" '(:ignore t
+                    :which-key "File.")
+             "fs" '(save-buffer
+                    :which-key "Save current buffer.")))
+#+end_src
+
+The =:prefix "SPC"= tells =general= that this is a "leader key", a key that leads off a set of commands. =:keymaps normal= indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ="f"= one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The =:which-key= keyword in that and the following line, where we finally bind the =save-buffer= command, tells =which-key= (see the "Which Key" section below) how to label the menu and commands for discoverability.
+
+To see a good example of a menu with many commands in it, see the section on Helpful commands.
+
+You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
+
+#+begin_src emacs-lisp
+    (use-package emacs
+      :general
+      (:prefix "SPC" :keymaps 'normal
+              "." '(find-file
+                    :which-key "Open or create file.")))
+#+end_src
+
+I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+              "," '(consult-buffer
+                    :which-key "Switch buffer or open recent file.")
+              "TAB" '(evil-switch-to-windows-last-buffer
+                      :which-key "Previous buffer.")
+              ";" '(execute-extended-command
+                    :which-key "Run interactive command.")
+              ":" '(eval-expression
+                    :which-key "Evaluate expression.")
+              "b" '(:ignore t
+                      :which-key "Buffer.")
+              "bd" '(crj/kill-or-bury-current-buffer
+                     :which-key "Kill buffer.")
+              "m" '(:ignore t
+                      :which-key "Markup.")
+              "m." '(consult-outline
+                     :which-key "Search current headings.")))
+#+end_src
+
+*** Evil Mode
+
+Time to spend a vast amount of time thinking through Vim-style keybindings!
+
+TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch bindings where they're changing them.
+
+**** Evil Mode Setup
+
+#+begin_src emacs-lisp
+  (use-package evil
+    :init
+    (setq evil-want-integration t
+          evil-want-keybinding nil
+          evil-want-C-u-scroll t
+          evil-want-C-i-jump t
+          evil-undo-system 'undo-redo
+          evil-want-fine-undo t
+          evil-respect-visual-line-mode nil)
+
+    :config
+    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+    (evil-mode 1)
+    (evil-select-search-module 'evil-search-module 'evil-search)
+    (evil-define-key '(normal visual) 'global
+      "j" #'evil-next-line
+      "gj" #'evil-next-visual-line
+      "k" #'evil-previous-line
+      "gk" #'evil-previous-visual-line
+      "$" #'evil-end-of-line
+      "g$" #'evil-end-of-visual-line)
+    (evil-define-key '(normal visual) org-mode-map
+      "gj" #'evil-next-visual-line
+      "gk" #'evil-previous-visual-line)
+    (dolist (mode '(custom-mode
+                    eshell-mode
+                    term-mode))
+      (add-to-list 'evil-emacs-state-modes mode))
+
+    :bind
+    ("C-M-u" . universal-argument))
+
+  #+end_src
+
+Some extra Evil Mode stuff.
+
+TODO I will definitely want to go through and pick what I like and don't. For now, I'm taking everything but =unimpaired=, but even that has some stuff I want from it.
+#+begin_src emacs-lisp
+  (use-package evil-collection
+    :after evil
+    :custom
+    (evil-collection-want-unimpaired-p nil)
+    :init
+    (evil-collection-init))
+#+end_src
+
+**** Working With Surrounding Text
+
+This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
+
+#+begin_src emacs-lisp
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+#+end_src
+**** Commenting
+
+  Vim-style commenting.
+
+  #+begin_src emacs-lisp
+      (use-package evil-nerd-commenter
+        :config
+        :general
+        ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
+        (:keymaps 'normal :prefix "g"
+                  "c" '(evilnc-comment-operator :which-key "Comment operator.")))
+#+end_src
+
+**** Easier Go-To-Character Navigation
+
+I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ragnes. And when it isn't? You just press =;= to go to the next one.
+
+Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
+
+#+begin_src emacs-lisp
+  (use-package evil-snipe
+    :init
+    (evil-snipe-mode 1)
+    (evil-snipe-override-mode 1)
+    :config
+    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+    (setq evil-snipe-scope 'buffer
+          evil-snipe-smart-case t
+          evil-snipe-char-fold t))
+#+end_src
+
+**** Replace With Clipboard
+
+This is an invaluable command, especially since it's a motion I can combine with a text object.
+
+Being able to type =SPC r i )= to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
+
+#+begin_src emacs-lisp
+  (use-package evil-replace-with-register
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+              "r" '(evil-replace-with-register
+                    :which-key "Replace text with register.")))
+#+end_src
+
+**** Exchanging Text
+
+Another efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
+
+#+begin_src emacs-lisp
+(use-package evil-exchange)
+#+end_src
+
 ** Look and Feel
+
 *** Basic UI Configuration
 
 These are some sane defaults for getting rid of extra UI elements, like the menu bar and scroll bar.
@@ -323,220 +535,6 @@ This next part is for making line numbers use a fixed pitch font. I like a varia
   (defun crj--reset-line-number-height ()
     (interactive)
     (set-face-attribute 'line-number nil :height crj--default-font-size))
-#+end_src
-
-#+RESULTS:
-: Hack
-
-** Keybindings
-
-Like many Vimmers, I eventually realized that the things I personally liked about Vim were even more present in Emacs. This very much includes Vim keybindings, which are available through Evil Mode, In a lot of ways, Evil mode is /more Vim than Vim/. This is something I could argue at length, but... maybe not in this space. (Yet?)
-
-*** Installing And Using General
-
-Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package= and =evil=.
-
-I don't think that =general-create-definer= is the system I'll be using for keybindings, but it /is/ neat that I can define the leader-key keybinding for =crj--open-config-file= so easily!
-
-#+begin_src emacs-lisp
-  (use-package general
-    :after evil
-
-    :config
-    (defun crj--open-literate-config-file ()
-      "Open the literate config file in the user directory."
-      (interactive)
-      (find-file (expand-file-name "init.org" user-emacs-directory)))
-
-    (general-create-definer crj--leader-key
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "C-SPC")
-
-    (crj--leader-key "fc" #'crj--open-literate-config-file))
-#+end_src
-
-*** General Emacs' Keybindings
-
-Many of my keybindings are taken from Doom Emacs' well-thought-through keybindings—although part of this is certainly that I'm just used to using them for the last couple of years.
-
-In Vanilla Emacs' keybinding land, the focus is on often elaborate key "chords", where you use a series of modifier key-letter pairs, while in Vim/Evil, most commands use a "leader" key.
-
-For example, opening a file in Vanilla Emacs keybindings would be =C-x C-f=, which means to hold down the =Control= key, press =x=, then, still holding down =Control= (or re-pressing and holding it), press =f=. This can be a bit of a strain on your hand, although certainly less so if you follow best practices and swap =Control= and =Caps Lock=.
-
-In Evil-Mode-style keybindings, the same command might be someting like =SPC f o=, which means press the =spacebar=, then press the =f= key, then press the =o= key.
-
-This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, =/= begins a text search (like =C-f= or =Command-f= in many apps), and =dd= deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is =i= (for =i=nsert).
-
-This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like =Control= and =Alt= and =Command= to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use =SPC f o= to =o= pen a =f= ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
-
-Let's see some examples!
-
-The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as just three quick presses.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (:prefix "SPC" :keymaps 'normal
-             "f" '(:ignore t
-                    :which-key "File.")
-             "fs" '(save-buffer
-                    :which-key "Save current buffer.")))
-#+end_src
-
-The =:prefix "SPC"= tells =general= that this is a "leader key", a key that leads off a set of commands. =:keymaps normal= indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ="f"= one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The =:which-key= keyword in that and the following line, where we finally bind the =save-buffer= command, tells =which-key= (see the "Which Key" section below) how to label the menu and commands for discoverability.
-
-To see a good example of a menu with many commands in it, see the section on Helpful commands.
-
-You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
-
-#+begin_src emacs-lisp
-    (use-package emacs
-      :general
-      (:prefix "SPC" :keymaps 'normal
-              "." '(find-file
-                    :which-key "Open or create file.")))
-#+end_src
-
-I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
-              "," '(consult-buffer
-                    :which-key "Switch buffer or open recent file.")
-              "TAB" '(evil-switch-to-windows-last-buffer
-                      :which-key "Previous buffer.")
-              ";" '(execute-extended-command
-                    :which-key "Run interactive command.")
-              ":" '(eval-expression
-                    :which-key "Evaluate expression.")
-              "b" '(:ignore t
-                      :which-key "Buffer.")
-              "bd" '(crj/kill-or-bury-current-buffer
-                     :which-key "Kill buffer.")
-              "m" '(:ignore t
-                      :which-key "Markup.")
-              "m." '(consult-outline
-                     :which-key "Search current headings.")))
-#+end_src
-
-*** Evil Mode
-
-Time to spend a vast amount of time thinking through Vim-style keybindings!
-
-TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch bindings where they're changing them.
-
-**** Evil Mode Setup
-
-#+begin_src emacs-lisp
-  (use-package evil
-    :init
-    (setq evil-want-integration t
-          evil-want-keybinding nil
-          evil-want-C-u-scroll t
-          evil-want-C-i-jump t
-          evil-undo-system 'undo-redo
-          evil-want-fine-undo t
-          evil-respect-visual-line-mode nil)
-
-    :config
-    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-    (evil-mode 1)
-    (evil-select-search-module 'evil-search-module 'evil-search)
-    (evil-define-key '(normal visual) 'global
-      "j" #'evil-next-line
-      "gj" #'evil-next-visual-line
-      "k" #'evil-previous-line
-      "gk" #'evil-previous-visual-line
-      "$" #'evil-end-of-line
-      "g$" #'evil-end-of-visual-line)
-    (evil-define-key '(normal visual) org-mode-map
-      "gj" #'evil-next-visual-line
-      "gk" #'evil-previous-visual-line)
-    (dolist (mode '(custom-mode
-                    eshell-mode
-                    term-mode))
-      (add-to-list 'evil-emacs-state-modes mode))
-
-    :bind
-    ("C-M-u" . universal-argument))
-
-  #+end_src
-
-Some extra Evil Mode stuff.
-
-TODO I will definitely want to go through and pick what I like and don't. For now, I'm taking everything but =unimpaired=, but even that has some stuff I want from it.
-#+begin_src emacs-lisp
-  (use-package evil-collection
-    :after evil
-    :custom
-    (evil-collection-want-unimpaired-p nil)
-    :init
-    (evil-collection-init))
-#+end_src
-
-**** Working With Surrounding Text
-
-This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
-
-#+begin_src emacs-lisp
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
-#+end_src
-**** Commenting
-
-  Vim-style commenting.
-
-  #+begin_src emacs-lisp
-      (use-package evil-nerd-commenter
-        :config
-        :general
-        ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
-        (:keymaps 'normal :prefix "g"
-                  "c" '(evilnc-comment-operator :which-key "Comment operator.")))
-#+end_src
-
-**** Easier Go-To-Character Navigation
-
-I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ragnes. And when it isn't? You just press =;= to go to the next one.
-
-Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
-
-#+begin_src emacs-lisp
-  (use-package evil-snipe
-    :init
-    (evil-snipe-mode 1)
-    (evil-snipe-override-mode 1)
-    :config
-    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-    (setq evil-snipe-scope 'buffer
-          evil-snipe-smart-case t
-          evil-snipe-char-fold t))
-#+end_src
-
-**** Replace With Clipboard
-
-This is an invaluable command, especially since it's a motion I can combine with a text object.
-
-Being able to type =SPC r i )= to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
-
-#+begin_src emacs-lisp
-  (use-package evil-replace-with-register
-    :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
-              "r" '(evil-replace-with-register
-                    :which-key "Replace text with register.")))
-#+end_src
-
-**** Exchanging Text
-
-Another fantastic efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
-
-#+begin_src emacs-lisp
-(use-package evil-exchange)
 #+end_src
 
 ** Under The Hood
@@ -1287,7 +1285,7 @@ The =efs/org-font-setup= function configures various text faces to tweak the siz
   (defun my/buffer-face-mode-variable ()
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
-    (setq buffer-face-mode-face '(:family "IBM Plex Serif"
+    (setq buffer-face-mode-face '(:family crj--variable-pitch-font
                                   :height 120
                                   :width normal))
     (buffer-face-mode))
