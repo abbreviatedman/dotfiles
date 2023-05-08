@@ -138,7 +138,7 @@ The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as
     :general
     (:prefix "SPC" :keymaps 'normal
              "f" '(:ignore t
-                    :which-key "File.")
+                    :which-key "file")
              "fs" '(save-buffer
                     :which-key "Save current buffer.")))
 #+end_src
@@ -172,11 +172,11 @@ I think you get the basics—as I did with learning and writing this section! Le
               ":" '(eval-expression
                     :which-key "Evaluate expression.")
               "b" '(:ignore t
-                      :which-key "Buffer.")
+                      :which-key "buffer")
               "bd" '(crj/kill-or-bury-current-buffer
                      :which-key "Kill buffer.")
               "m" '(:ignore t
-                      :which-key "Markup.")
+                      :which-key "markup")
               "m." '(consult-outline
                      :which-key "Search current headings.")))
 #+end_src
@@ -410,11 +410,12 @@ From there, I can use those to zoom in on all current buffers. These functions s
         (crj--zoom-reset arg))))
 #+end_src
 
-Then we make some keybindings for them:
+What I haven't figured out yet is how to have that zoom level remain for new buffers. Could dive into that at some point!
+
+Next, we make some keybindings for them.
 
 #+begin_src emacs-lisp
   (use-package emacs
-    :after general
     :general
     (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
               "z" '(:ignore t :which-key "zoom")
@@ -424,9 +425,34 @@ Then we make some keybindings for them:
               "zJ" '(crj--zoom-in :which-key "Zoom in.")
               "zK" '(crj--zoom-out :which-key "Zoom out.")
               "zB" '(crj--zoom-reset :which-key "Reset zoom.")))
-
 #+end_src
 
+And finally, there's a special type of Emacs interface I don't use often, a third-party package called Hydra, that's perfect for an activity like zooming text. Once you've decided to zoom, you're entering a kind of session where you'll be entering related commands. You'll be zooming in a couple times, then zooming out if you've gone too far. And at that point that can even repeat, if you change your mind as to what zoom level you actually want. What Hydra does is enter an interface perfect for this kind of situation.
+
+With the below code, the user (almost definitely me!) can type =SPC z z=, at which point, instead of entering complex keybindings, they can type =j= to zoom in, =k= to zoom out (these are meaningful letters to Vim users), do that as much as they want, and then get back to what they were doing by pressing =escape= or any other key that's not part of this system.
+
+There are other, similar libraries (I've heard Transient is even better), but I highly recommend an interface like this. It's fantastic.
+
+We'll install Hydra, define its interface, and then put that hydra command in our keybindings.
+
+#+begin_src emacs-lisp
+  (use-package hydra
+    :config
+    (defhydra crj--hydra/text-zoom (:hint nil :color red)
+      "
+	Global zoom: _j_:zoom in, _k_:zoom out, _b_:reset
+	Buffer zoom: _J_:zoom in, _K_:zoom out, _B_:reset
+  "
+      ("J" crj--zoom-in)
+      ("K" crj--zoom-out)
+      ("B" crj--zoom-reset)
+      ("j" crj--zoom-in-all-buffers)
+      ("k" crj--zoom-out-all-buffers)
+      ("b" crj--zoom-reset-all-buffers))
+    :general
+    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+	      "zz" '(crj--hydra/text-zoom/body :which-key "Zoom hydra interface.")))
+#+end_src
 
 *** Scrolling
 
@@ -1105,7 +1131,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
                        :which-key "Go to previous error."))
       (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
                 "c" '(:ignore t
-                        :which-key "Code.")
+                        :which-key "code")
                 "cX" '(flymake-show-project-diagnostics
                        :which-key "Describe variable.")))
       #+end_src
@@ -1219,7 +1245,7 @@ Besides different keybindings, I've only added a couple extra configuraitons her
       "Sets the documentation function for Emacs Lisp."
       (setq evil-lookup-func #'helpful-at-point))
     (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
-  
+
     :commands (helpful-callable
                helpful-command
                helpful-variable
@@ -1230,12 +1256,12 @@ Besides different keybindings, I've only added a couple extra configuraitons her
     :general
     (:keymaps '(normal emacs insert) :prefix "SPC" :global-prefix "M-SPC"
               "h" '(:ignore t
-                            :which-key "Help.")
+                            :which-key "help")
               "hv" '(helpful-variable
                      :which-key "Describe variable.")
               "hf" '(helpful-callable
                      :which-key "Describe function.")
-              "hF" '(helpful-face
+              "hF" '(describe-face
                      :which-key "Describe face.")
               "hk" '(helpful-key
                      :which-key "Describe key.")
@@ -1247,10 +1273,10 @@ Besides different keybindings, I've only added a couple extra configuraitons her
                      :which-key "Search for customize group."))
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
-
     ([remap describe-variable] #'helpful-variable)
     ([remap describe-key] #'helpful-key)
-    ("C-h g" #'customize-group))
+    ("C-h g" #'customize-group)
+    ("C-h F" #'describe-face))
 #+end_src
 
 ** Text Scaling
