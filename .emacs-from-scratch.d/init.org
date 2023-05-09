@@ -93,26 +93,24 @@ Like many Vimmers, I eventually realized that the things I personally liked abou
 
 *** Installing And Using General
 
-Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package= and =evil=.
+Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package=, =evil=, and =which-key=.
 
-I don't think that =general-create-definer= is the system I'll be using for keybindings, but it /is/ neat that I can define the leader-key keybinding for =crj--open-config-file= so easily!
+We can use =general-create-definer= to define a pair of leader keys  that we'll call =crj-leader-keys= (=M-SPC= everywhere, and =SPC= alone in Normal Mode—see the very next section for what these terms mean), and then define commands that start with those leader keys using =crj-leader-keys= as a function.
 
 #+begin_src emacs-lisp
   (use-package general
-    :after evil
-
-    :config
-    (defun crj--open-literate-config-file ()
+    :init
+    (defun crj-open-literate-config-file ()
       "Open the literate config file in the user directory."
       (interactive)
       (find-file (expand-file-name "init.org" user-emacs-directory)))
 
-    (general-create-definer crj--leader-key
+    (general-create-definer crj-leader-keys
       :keymaps '(normal insert visual emacs)
       :prefix "SPC"
-      :global-prefix "C-SPC")
+      :global-prefix "M-SPC")
 
-    (crj--leader-key "fc" #'crj--open-literate-config-file))
+    (crj-leader-keys "fc" #'crj-open-literate-config-file))
 #+end_src
 
 *** General Emacs' Keybindings
@@ -136,7 +134,7 @@ The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (:prefix "SPC" :keymaps 'normal
+    (crj-leader-keys
              "f" '(:ignore t
                     :which-key "file")
              "fs" '(save-buffer
@@ -189,6 +187,8 @@ TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch 
 
 **** Evil Mode Setup
 
+There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using =describe-variable= to see what they do and what their possible values are!
+
 #+begin_src emacs-lisp
   (use-package evil
     :init
@@ -198,6 +198,11 @@ TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch 
           evil-want-C-i-jump t
           evil-undo-system 'undo-redo
           evil-want-fine-undo t
+          evil-mode-line-format 'nil
+          evil-symbol-word-search t
+          evil-visual-state-cursor 'hollow
+          evil-ex-interactive-search-highlight 'selected-window
+          evil-kbd-macro-suppress-motion-error t
           evil-respect-visual-line-mode nil)
 
     :config
@@ -236,7 +241,23 @@ TODO I will definitely want to go through and pick what I like and don't. For no
     (evil-collection-init))
 #+end_src
 
-**** Working With Surrounding Text
+**** Visualizing Evil Commands
+
+=evil-goggles= helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
+
+#+begin_src emacs-lisp
+  (use-package evil-goggles
+    :init
+    (setq evil-goggles-duration 0.3
+          evil-goggles-pulse nil
+          evil-goggles-enable-delete nil
+          evil-goggles-enable-change nil)
+
+    :config
+    (evil-goggles-mode))
+#+end_src
+
+**** Working With Surrounding Text In Evil
 
 This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
 
@@ -245,7 +266,10 @@ This library is amazing for working with surrounding text. Changing double quote
   :config
   (global-evil-surround-mode 1))
 #+end_src
-**** Commenting
+
+***** TODO add Evil Embrace
+
+**** Evil-Style Commenting
 
   Vim-style commenting.
 
@@ -258,7 +282,7 @@ This library is amazing for working with surrounding text. Changing double quote
                   "c" '(evilnc-comment-operator :which-key "Comment operator.")))
 #+end_src
 
-**** Easier Go-To-Character Navigation
+**** Jumping By Character Pairs In Evil
 
 I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ragnes. And when it isn't? You just press =;= to go to the next one.
 
@@ -276,7 +300,7 @@ Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and
           evil-snipe-char-fold t))
 #+end_src
 
-**** Replace With Clipboard
+**** Replace With Clipboard In Evil
 
 This is an invaluable command, especially since it's a motion I can combine with a text object.
 
@@ -290,12 +314,55 @@ Being able to type =SPC r i )= to say "replace what's in these parens with what 
                     :which-key "Replace text with register.")))
 #+end_src
 
-**** Exchanging Text
+**** Evil Motion For Exchanging Text
 
 Another efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
 
 #+begin_src emacs-lisp
-(use-package evil-exchange)
+  (use-package evil-exchange
+    :general
+    (:states '(normal visual)
+             "gx" '(evil-exchange :which-key "Exchange text objects.")))
+#+end_src
+
+**** Evil Text Objects
+
+This package gives you an Evil text object for XML/HTML attributes. It's helpful!
+
+#+begin_src emacs-lisp
+(use-package exato
+  :commands (evil-outer-xml-attr evil-inner-xml-attr))
+#+end_src
+
+**** Evil Search From Visual Mode
+
+Allows you to select some text in Visual State and then hit =*= or =#= to search for that text. Another very occasionally very useful trick.
+
+#+begin_src emacs-lisp
+  (use-package evil-visualstar
+    :commands (evil-visualstar/begin-search
+               evil-visualstar/begin-search-forward
+               evil-visualstar/begin-search-backward)
+    :init
+    (global-evil-visualstar-mode))
+#+end_src
+***** TODO add more evil text objects
+***** TODO add targets
+***** TODO add treesitter in Emacs 29
+
+**** Evil Motion For Diffing Text
+
+Shows you the difference between two different bits of text. Very occasionally very useful!
+
+#+begin_src emacs-lisp
+  (use-package evil-quick-diff
+    :init (evil-quick-diff-install)
+
+    :straight (evil-quick-diff
+               :type git
+               :repo "rgrinberg/evil-quick-diff")
+
+    :commands (evil-quick-diff evil-quick-diff-cancel))
 #+end_src
 
 ** Look and Feel
@@ -641,7 +708,7 @@ Modus Operandi is a fantastic theme for readability and accessiblity, and even t
                                    (4 . (variable-pitch rainbow 1.2)))))
 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
-    (load-theme 'modus-operandi-deuteranopia))
+    (load-theme 'modus-operandi-deuteranopia t))
 #+end_src
 
 ** Languages
@@ -744,12 +811,10 @@ What it enables you to do is decide whether your search will be of:
 And that's not even all of them! Minibuffer searches are a /huge/ part of how you use Emacs, and Consult is just one of many ways to decide what to search through.
 
 #+begin_src emacs-lisp
-  ;; Use "_" as the start of Consult's project-wide search (to play better with Orderless)
-  ;; Temporarily turned off so I can 
   (use-package consult
-    ;; :config
-    ;; (plist-put (alist-get 'perl consult-async-split-styles-alist) :initial "_")
-    )
+  :commands consult-line
+    :general
+    (crj-leader-keys "/" '(consult-line :which-key "Search in current buffer.")))
 #+end_src
 
 **** Minibuffer Search Filtering
@@ -1151,6 +1216,18 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
                 "cX" '(flymake-show-project-diagnostics
                        :which-key "Describe variable.")))
       #+end_src
+** Window Management
+
+Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on =C-w=, and I also want them on my leader keys.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys "w" '(:keymap evil-window-map :which-key "window")))
+#+end_src
+
+*** TODO include a 
+
 ** Better Modeline
 
 [[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
@@ -1270,7 +1347,7 @@ Besides different keybindings, I've only added a couple extra configuraitons her
                helpful-face)
 
     :general
-    (:keymaps '(normal emacs insert) :prefix "SPC" :global-prefix "M-SPC"
+    (crj-leader-keys
               "h" '(:ignore t
                             :which-key "help")
               "hv" '(helpful-variable
@@ -1310,7 +1387,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     ("k" text-scale-decrease "out")
     ("f" nil "finished" :exit t))
 
-  (crj--leader-key
+  (crj-leader-keys
     "ts" '(hydra-text-scale/body :which-key "scale text"))
 
 #+end_src
@@ -1399,141 +1476,144 @@ The =efs/org-font-setup= function configures various text faces to tweak the siz
 This section contains the basic configuration for =org-mode= plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
 
 #+begin_src emacs-lisp
-    (defun efs/org-mode-setup ()
-      (org-indent-mode)
-      ;; (variable-pitch-mode 1)
-      (visual-line-mode 1))
+  (defun efs/org-mode-setup ()
+    (org-indent-mode)
+    ;; (variable-pitch-mode 1)
+    (visual-line-mode 1))
 
-    (use-package org
-      :hook
-      (org-mode . efs/org-mode-setup)
-      (org-mode . my/set-general-faces-org)
-      ;; :config (efs/org-font-setup)
-      )
+  (use-package org
+    :hook
+    (org-mode . efs/org-mode-setup)
+    (org-mode . my/set-general-faces-org)
+    ;; :config (efs/org-font-setup)
+    :general
+    (:keymaps 'org-mode-map :states 'insert
+              "M-h" #'org-promote-subtree
+              "M-l" #'org-demote-subtree))
 
-    ;; (use-package org
-    ;;   :commands (org-capture org-agenda)
-    ;;   :hook (org-mode . efs/org-mode-setup)
-    ;;   :config
-    ;;   (setq org-ellipsis " ▾")
+  ;; (use-package org
+  ;;   :commands (org-capture org-agenda)
+  ;;   :hook (org-mode . efs/org-mode-setup)
+  ;;   :config
+  ;;   (setq org-ellipsis " ▾")
 
-    ;;   (setq org-agenda-start-with-log-mode t)
-    ;;   (setq org-log-done 'time)
-    ;;   (setq org-log-into-drawer t)
+  ;;   (setq org-agenda-start-with-log-mode t)
+  ;;   (setq org-log-done 'time)
+  ;;   (setq org-log-into-drawer t)
 
-    ;;   (setq org-agenda-files
-    ;;         '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
-    ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
-    ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
+  ;;   (setq org-agenda-files
+  ;;         '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
+  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
+  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
 
-    ;;   (require 'org-habit)
-    ;;   (add-to-list 'org-modules 'org-habit)
-    ;;   (setq org-habit-graph-column 60)
+  ;;   (require 'org-habit)
+  ;;   (add-to-list 'org-modules 'org-habit)
+  ;;   (setq org-habit-graph-column 60)
 
-    ;;   (setq org-todo-keywords
-    ;;         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-    ;;           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+  ;;   (setq org-todo-keywords
+  ;;         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+  ;;           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-    ;;   (setq org-refile-targets
-    ;;         '(("Archive.org" :maxlevel . 1)
-    ;;           ("Tasks.org" :maxlevel . 1)))
+  ;;   (setq org-refile-targets
+  ;;         '(("Archive.org" :maxlevel . 1)
+  ;;           ("Tasks.org" :maxlevel . 1)))
 
-    ;;   ;; Save Org buffers after refiling!
-    ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
+  ;;   ;; Save Org buffers after refiling!
+  ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-    ;;   (setq org-tag-alist
-    ;;         '((:startgroup)
-    ;;                                         ; Put mutually exclusive tags here
-    ;;           (:endgroup)
-      ;;         ("@errand" . ?E)
-      ;;         ("@home" . ?H)
-      ;;         ("@work" . ?W)
-      ;;         ("agenda" . ?a)
-      ;;         ("planning" . ?p)
-      ;;         ("publish" . ?P)
-      ;;         ("batch" . ?b)
-      ;;         ("note" . ?n)
-      ;;         ("idea" . ?i)))
+  ;;   (setq org-tag-alist
+  ;;         '((:startgroup)
+  ;;                                         ; Put mutually exclusive tags here
+  ;;           (:endgroup)
+    ;;         ("@errand" . ?E)
+    ;;         ("@home" . ?H)
+    ;;         ("@work" . ?W)
+    ;;         ("agenda" . ?a)
+    ;;         ("planning" . ?p)
+    ;;         ("publish" . ?P)
+    ;;         ("batch" . ?b)
+    ;;         ("note" . ?n)
+    ;;         ("idea" . ?i)))
 
-      ;; ;; Configure custom agenda views
-      ;; (setq org-agenda-custom-commands
-      ;;       '(("d" "Dashboard"
-      ;;          ((agenda "" ((org-deadline-warning-days 7)))
-      ;;           (todo "NEXT"
-      ;;                 ((org-agenda-overriding-header "Next Tasks")))
-      ;;           (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+    ;; ;; Configure custom agenda views
+    ;; (setq org-agenda-custom-commands
+    ;;       '(("d" "Dashboard"
+    ;;          ((agenda "" ((org-deadline-warning-days 7)))
+    ;;           (todo "NEXT"
+    ;;                 ((org-agenda-overriding-header "Next Tasks")))
+    ;;           (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
 
-      ;;         ("n" "Next Tasks"
-      ;;          ((todo "NEXT"
-      ;;                 ((org-agenda-overriding-header "Next Tasks")))))
+    ;;         ("n" "Next Tasks"
+    ;;          ((todo "NEXT"
+    ;;                 ((org-agenda-overriding-header "Next Tasks")))))
 
-      ;;         ("W" "Work Tasks" tags-todo "+work-email")
+    ;;         ("W" "Work Tasks" tags-todo "+work-email")
 
-      ;;         ;; Low-effort next actions
-      ;;         ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-      ;;          ((org-agenda-overriding-header "Low Effort Tasks")
-      ;;           (org-agenda-max-todos 20)
-      ;;           (org-agenda-files org-agenda-files)))
+    ;;         ;; Low-effort next actions
+    ;;         ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+    ;;          ((org-agenda-overriding-header "Low Effort Tasks")
+    ;;           (org-agenda-max-todos 20)
+    ;;           (org-agenda-files org-agenda-files)))
 
-      ;;         ("w" "Workflow Status"
-      ;;          ((todo "WAIT"
-      ;;                 ((org-agenda-overriding-header "Waiting on External")
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "REVIEW"
-      ;;                 ((org-agenda-overriding-header "In Review")
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "PLAN"
-      ;;                 ((org-agenda-overriding-header "In Planning")
-      ;;                  (org-agenda-todo-list-sublevels nil)
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "BACKLOG"
-      ;;                 ((org-agenda-overriding-header "Project Backlog")
-      ;;                  (org-agenda-todo-list-sublevels nil)
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "READY"
-      ;;                 ((org-agenda-overriding-header "Ready for Work")
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "ACTIVE"
-      ;;                 ((org-agenda-overriding-header "Active Projects")
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "COMPLETED"
-      ;;                 ((org-agenda-overriding-header "Completed Projects")
-      ;;                  (org-agenda-files org-agenda-files)))
-      ;;           (todo "CANC"
-      ;;                 ((org-agenda-overriding-header "Cancelled Projects")
-      ;;                  (org-agenda-files org-agenda-files)))))))
+    ;;         ("w" "Workflow Status"
+    ;;          ((todo "WAIT"
+    ;;                 ((org-agenda-overriding-header "Waiting on External")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "REVIEW"
+    ;;                 ((org-agenda-overriding-header "In Review")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "PLAN"
+    ;;                 ((org-agenda-overriding-header "In Planning")
+    ;;                  (org-agenda-todo-list-sublevels nil)
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "BACKLOG"
+    ;;                 ((org-agenda-overriding-header "Project Backlog")
+    ;;                  (org-agenda-todo-list-sublevels nil)
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "READY"
+    ;;                 ((org-agenda-overriding-header "Ready for Work")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "ACTIVE"
+    ;;                 ((org-agenda-overriding-header "Active Projects")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "COMPLETED"
+    ;;                 ((org-agenda-overriding-header "Completed Projects")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "CANC"
+    ;;                 ((org-agenda-overriding-header "Cancelled Projects")
+    ;;                  (org-agenda-files org-agenda-files)))))))
 
-      ;; (setq org-capture-templates
-      ;;       `(("t" "Tasks / Projects")
-      ;;         ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
-      ;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+    ;; (setq org-capture-templates
+    ;;       `(("t" "Tasks / Projects")
+    ;;         ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+    ;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
 
-      ;;         ("j" "Journal Entries")
-      ;;         ("jj" "Journal" entry
-      ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-      ;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-      ;;          ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-      ;;          :clock-in :clock-resume
-      ;;          :empty-lines 1)
-      ;;         ("jm" "Meeting" entry
-      ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-      ;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-      ;;          :clock-in :clock-resume
-      ;;          :empty-lines 1)
+    ;;         ("j" "Journal Entries")
+    ;;         ("jj" "Journal" entry
+    ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+    ;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+    ;;          ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+    ;;          :clock-in :clock-resume
+    ;;          :empty-lines 1)
+    ;;         ("jm" "Meeting" entry
+    ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+    ;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+    ;;          :clock-in :clock-resume
+    ;;          :empty-lines 1)
 
-      ;;         ("w" "Workflows")
-      ;;         ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-      ;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+    ;;         ("w" "Workflows")
+    ;;         ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+    ;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
 
-      ;;         ("m" "Metrics Capture")
-      ;;         ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-      ;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+    ;;         ("m" "Metrics Capture")
+    ;;         ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+    ;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
 
-      ;; (define-key global-map (kbd "C-c j")
-      ;;   (lambda () (interactive) (org-capture nil "jj")))
+    ;; (define-key global-map (kbd "C-c j")
+    ;;   (lambda () (interactive) (org-capture nil "jj")))
 
-      ;; (efs/org-font-setup)
-      ;; )
+    ;; (efs/org-font-setup)
+    ;; )
 
 #+end_src
 
