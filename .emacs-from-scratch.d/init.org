@@ -700,12 +700,11 @@ Modus Operandi is a fantastic theme for readability and accessiblity, and even t
                                     ((matches . (intense background underline bold))
                                      (selection . (accented intense bold))))
 
-          modus-themes-headings (quote
-                                 ((0 . (variable-pitch rainbow 1.8))
-                                  ((1 . (variable-pitch rainbow 1.8))
-                                   (2 . (variable-pitch rainbow 1.6))
-                                   (3 . (variable-pitch rainbow 1.4))
-                                   (4 . (variable-pitch rainbow 1.2)))))
+          modus-themes-headings '((0 . (variable-pitch  1.8))
+                                  (1 . (variable-pitch  1.8))
+                                   (2 . (variable-pitch  1.6))
+                                   (3 . (variable-pitch  1.4))
+                                   (4 . (variable-pitch  1.2)))
 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
     (load-theme 'modus-operandi-deuteranopia t))
@@ -1446,17 +1445,6 @@ The =efs/org-font-setup= function configures various text faces to tweak the siz
         (font-lock-add-keywords 'org-mode
                                 '(("^ *\\([-]\\) "
                                    (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-        ;; Set faces for heading levels
-        (dolist (face '((org-level-1 . 1.2)
-                        (org-level-2 . 1.1)
-                        (org-level-3 . 1.05)
-                        (org-level-4 . 1.0)
-                        (org-level-5 . 1.1)
-                        (org-level-6 . 1.1)
-                        (org-level-7 . 1.1)
-                        (org-level-8 . 1.1)))
-          (set-face-attribute (car face) nil :weight 'regular :height (cdr face)))
 
         ;; Ensure that anything that should be fixed-pitch in Org files appears that way
         (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
