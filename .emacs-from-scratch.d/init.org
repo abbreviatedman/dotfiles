@@ -711,16 +711,76 @@ Modus Operandi is a fantastic theme for readability and accessiblity, and even t
     (load-theme 'modus-operandi-deuteranopia t))
 #+end_src
 
-** Languages
+** Coding
 
+Settings for... coding.
+
+*** General
+
+Balance parentheses and switch to Smartparens for showing matching parens. (It's prettier.)
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :init
+    (require 'smartparens-config)
+    (show-paren-mode -1)
+    (smartparens-global-mode)
+    (show-smartparens-global-mode)
+
+    :config (setq sp-show-pair-from-inside nil))
+#+end_src
+
+*** Languages
 Configurations specific to certain languages.
 
-*** Emacs Lisp
+**** Markdown
+
+***** TODO configure markdown
+
+**** Emacs Lisp
+
+***** TODO configure elisp more
+***** Symex Manipulation
+
+#+begin_src emacs-lisp
+(use-package on-parens)
+#+end_src
+
+****** TODO configure keybindings
+****** TODO figure out evil keybindings for movement
+
 ***** Emacs Lisp Evaluation
 
 #+begin_src emacs-lisp
   (use-package quickrun)
 #+end_src
+****** TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
+
+***** Emacs Lisp Documentation Lookup
+
+Better go-to-definition function for Emacs Lisp.
+ 
+#+begin_src emacs-lisp
+      (use-package elisp-def
+        :init
+        (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+        (add-hook hook #'elisp-def-mode))
+
+        :general
+        (:keymaps 'org-mode-map :states 'normal
+                  "gd" '(elisp-def :which-key "Go to definition.")))
+#+end_src
+
+***** Emacs Lisp Highlight Quoted Mode
+Don't remember what this one does.
+
+#+begin_src emacs-lisp
+  (use-package highlight-quoted
+    :init
+    (add-hook 'emacs-lisp-mode-hook 'highlight-quoted-mode))
+#+end_src
+
+****** TODO check what higlight-quoted mode does
 
 ** Completion
 
