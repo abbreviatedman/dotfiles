@@ -1533,7 +1533,7 @@ The =efs/org-font-setup= function configures various text faces to tweak the siz
 
 #+end_src
 
-** Basic Config
+*** Basic Config
 
 This section contains the basic configuration for =org-mode= plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
 
@@ -1679,7 +1679,7 @@ This section contains the basic configuration for =org-mode= plus the configurat
 
 #+end_src
 
-*** Nicer Heading Bullets
+**** Nicer Heading Bullets
 
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
