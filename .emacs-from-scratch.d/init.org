@@ -337,7 +337,7 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
 
 **** Evil Search From Visual Mode
 
-Allows you to select some text in Visual State and then hit =*= or =#= to search for that text. Another very occasionally very useful trick.
+Allows you to select some text in Visual State and then hit =*= or =#= to search for that text. Very occasionally very useful!
 
 #+begin_src emacs-lisp
   (use-package evil-visualstar
@@ -353,7 +353,7 @@ Allows you to select some text in Visual State and then hit =*= or =#= to search
 
 **** Evil Motion For Diffing Text
 
-Shows you the difference between two different bits of text. Very occasionally very useful!
+Shows you the difference between two different bits of text. Another very occasionally very useful trick.
 
 #+begin_src emacs-lisp
   (use-package evil-quick-diff
