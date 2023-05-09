@@ -179,13 +179,13 @@ I think you get the basics—as I did with learning and writing this section! Le
                      :which-key "Search current headings.")))
 #+end_src
 
-*** Evil Mode
+** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
 
 TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch bindings where they're changing them.
 
-**** Evil Mode Setup
+*** Evil Mode Setup
 
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using =describe-variable= to see what they do and what their possible values are!
 
@@ -242,7 +242,7 @@ TODO I will definitely want to go through and pick what I like and don't. For no
   (evil-collection-quickrun-setup))
 #+end_src
 
-**** Visualizing Evil Commands
+*** Visualizing Evil Commands
 
 =evil-goggles= helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
 
@@ -258,7 +258,7 @@ TODO I will definitely want to go through and pick what I like and don't. For no
     (evil-goggles-mode))
 #+end_src
 
-**** Working With Surrounding Text In Evil
+*** Working With Surrounding Text In Evil
 
 This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
 
@@ -268,9 +268,9 @@ This library is amazing for working with surrounding text. Changing double quote
   (global-evil-surround-mode 1))
 #+end_src
 
-***** TODO add Evil Embrace
+**** TODO add Evil Embrace
 
-**** Evil-Style Commenting
+*** Evil-Style Commenting
 
   Vim-style commenting.
 
@@ -283,7 +283,7 @@ This library is amazing for working with surrounding text. Changing double quote
                   "c" '(evilnc-comment-operator :which-key "Comment operator.")))
 #+end_src
 
-**** Jumping By Character Pairs In Evil
+*** Jumping By Character Pairs In Evil
 
 I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ragnes. And when it isn't? You just press =;= to go to the next one.
 
@@ -301,7 +301,7 @@ Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and
           evil-snipe-char-fold t))
 #+end_src
 
-**** Replace With Clipboard In Evil
+*** Replace With Clipboard In Evil
 
 This is an invaluable command, especially since it's a motion I can combine with a text object.
 
@@ -315,7 +315,7 @@ Being able to type =SPC r i )= to say "replace what's in these parens with what 
                     :which-key "Replace text with register.")))
 #+end_src
 
-**** Evil Motion For Exchanging Text
+*** Evil Motion For Exchanging Text
 
 Another efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
 
@@ -326,7 +326,7 @@ Another efficient text editing library. This one exchanges two bits of text in a
              "gx" '(evil-exchange :which-key "Exchange text objects.")))
 #+end_src
 
-**** Evil Text Objects
+*** Evil Text Objects
 
 This package gives you an Evil text object for XML/HTML attributes. It's helpful!
 
@@ -335,7 +335,7 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
   :commands (evil-outer-xml-attr evil-inner-xml-attr))
 #+end_src
 
-**** Evil Search From Visual Mode
+*** Evil Search From Visual Mode
 
 Allows you to select some text in Visual State and then hit =*= or =#= to search for that text. Very occasionally very useful!
 
@@ -347,11 +347,11 @@ Allows you to select some text in Visual State and then hit =*= or =#= to search
     :init
     (global-evil-visualstar-mode))
 #+end_src
-***** TODO add more evil text objects
-***** TODO add targets
-***** TODO add treesitter in Emacs 29
+**** TODO add more evil text objects
+**** TODO add targets
+**** TODO add treesitter in Emacs 29
 
-**** Evil Motion For Diffing Text
+*** Evil Motion For Diffing Text
 
 Shows you the difference between two different bits of text. Another very occasionally very useful trick.
 
