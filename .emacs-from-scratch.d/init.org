@@ -431,11 +431,7 @@ The last font is Input, which is another variable pitch font, but one that's ver
                         :weight 'regular))
 #+end_src
 
-#+begin_src emacs-lisp
-  ;; (use-package mixed-pitch
-  ;;   :config
-  ;;   (add-hook 'text-mode-hook #'mixed-pitch-mode))
-#+end_src
+
 
 *** Zooming Text
 
