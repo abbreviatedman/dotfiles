@@ -1397,44 +1397,46 @@ Besides different keybindings, I've only added a couple extra configuraitons her
 - =helpful-at-point= is a great quick Emacs Lisp documentation lookup. With Evil, I can just press =K= on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
 
 #+begin_src emacs-lisp
-  (use-package helpful
-    :init
-    (defun crj--set-elisp-lookup-function ()
-      "Sets the documentation function for Emacs Lisp."
-      (setq evil-lookup-func #'helpful-at-point))
-    (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
+    (use-package helpful
+      :init
+      (defun crj--set-elisp-lookup-function ()
+        "Sets the documentation function for Emacs Lisp."
+        (setq evil-lookup-func #'helpful-at-point))
+      (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
 
-    :commands (helpful-callable
-               helpful-command
-               helpful-variable
-               helpful-at-point
-               helpful-key
-               helpful-face)
+      :commands (helpful-callable
+                 helpful-command
+                 helpful-variable
+                 helpful-at-point
+                 helpful-key
+                 helpful-face)
 
-    :general
-    (crj-leader-keys
-              "h" '(:ignore t
-                            :which-key "help")
-              "hv" '(helpful-variable
-                     :which-key "Describe variable.")
-              "hf" '(helpful-callable
-                     :which-key "Describe function.")
-              "hF" '(describe-face
-                     :which-key "Describe face.")
-              "hk" '(helpful-key
-                     :which-key "Describe key.")
-              "hx" '(helpful-command
-                     :which-key "Describe command.")
-              "hW" '(woman
-                     :which-key "Search for manual page.")
-              "hg" '(customize-group
-                     :which-key "Search for customize group."))
-    ([remap describe-function] #'helpful-callable)
-    ([remap describe-command] #'helpful-command)
-    ([remap describe-variable] #'helpful-variable)
-    ([remap describe-key] #'helpful-key)
-    ("C-h g" #'customize-group)
-    ("C-h F" #'describe-face))
+      :general
+      (crj-leader-keys
+                "h" '(:ignore t
+                              :which-key "help")
+                "hv" '(helpful-variable
+                       :which-key "Describe variable.")
+                "hf" '(helpful-callable
+                       :which-key "Describe function.")
+                "hF" '(describe-face
+                       :which-key "Describe face.")
+                "hk" '(helpful-key
+                       :which-key "Describe key.")
+                "hx" '(helpful-command
+                       :which-key "Describe command.")
+                "hW" '(woman
+                       :which-key "Search for manual page.")
+                "hg" '(customize-group
+                       :which-key "Search for customize group.")
+                "hm" '(describe-mode
+                       :which-key "Describe currently active modes."))
+      ([remap describe-function] #'helpful-callable)
+      ([remap describe-command] #'helpful-command)
+      ([remap describe-variable] #'helpful-variable)
+      ([remap describe-key] #'helpful-key)
+      ("C-h g" #'customize-group)
+      ("C-h F" #'describe-face))
 #+end_src
 
 ** Text Scaling
