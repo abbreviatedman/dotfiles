@@ -537,6 +537,9 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
 	      "zz" '(crj--hydra/text-zoom/body :which-key "Zoom hydra interface.")))
 #+end_src
 
+**** TODO add ability to zoom to preset big size.
+**** TODO add "i" and "o" (or switch those with j/k?) to zoom in by larger increments
+
 *** Scrolling
 
 This package makes scrolling big distances easier to follow by flashing the new line you've moved to.
@@ -1463,7 +1466,10 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
 
-** Better Font Faces
+*** TODO add << and >> bindings for =org-do-promote= and =org-do-demote=, respectively
+*** TODO change =M-h= and =M-l= to the above functions
+
+*** Better Font Faces
 
 The =efs/org-font-setup= function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in =org-mode=.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
