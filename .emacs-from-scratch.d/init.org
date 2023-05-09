@@ -390,7 +390,7 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 *** Fonts
 
-First, some definitions of the fonts I use. For Emacs in code, and for you—and future me!—in this document.
+First, some definitions of the fonts I use. For Emacs in code, eventually, and for you—and future me!—in this document.
 
 My overly arcane setup includes /three/ fonts, all /very/ different in their style and usage.
 
@@ -404,11 +404,45 @@ The second font I use is Hack, which is a "fixed pitch" font—more often called
 
 [[./assets/fixed-pitch.png]]
 
-Most people use a fixed-pitch font for code for several reasons, but we'll get to those in a second. The main feature of a fixed-pitch font is that the width doesn't vary. You'll notice that the "nnnnn" and "mmmmm" lines are the same length. Having all characters be the exact same width makes alignment easier, which many developers use to keep similar lines of code lined up.
+Most people use a fixed-pitch font for code for several reasons, but we'll get to those in a second. The main feature of a fixed-pitch font is that the width doesn't vary. You'll notice in the sample above that the "nnnnn" and "mmmmm" lines are the same length. Having all characters be the exact same width makes alignment easier, which many developers use to keep similar columns of code lined up just so.
 
 The last font is Input, which is another variable pitch font, but one that's very, very different than most. You can see it in the Emacs terminal pictured below:
 
 [[./assets/variable-pitch-coding-font.png]]
+
+If you look closely at Input, it's variable-pitch, no question. The "mmmmm" line is longer than the "nnnnn" line, and the characters are generally less squished-in. Since developers swear by fixed-pitch coding fonts, no respected developer would use this font as a coding font.
+
+I am not a respected developer.
+
+I use Input for coding because when I head about a minority of developers using a variable pitch font for coding, I read up on it, and the few articles I read in defense of it were pretty convincing.
+
+See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and =!= and =:= and =/=,  characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
+
+But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a =!= or an =n= or an =m=. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
+
+Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/. Why not a font that gives code symbols plenty of space to make them properly stand out for their syntactic meaning, without bizarrely deciding that alignment is more important than letter readability? Why not a font that makes /everything/ readable? When your wide letters like "m" and "w" and "c" are squished in while skinny letters like "t" and "l" and "i" are weirdly widened, what you get is a one-size-fits-all approach that prioritizes... nothing in particular. Except trying not to deprioritize anything.
+
+When reading and writing, priorities matter. You want symbols to be readable, because you /definitely/ don't want to miss them as you're reading the code, but you /also/ want to be able to read those function and variable names. A variable-pitch font designed carefully to create a great coding experience unsurprisingly beats a font that is designed simply /not/ to deprioritize symbols.
+
+There's actually even more to say about this than I thought going in, but I'll leave it here for now.
+
+So how do I use these fonts? Well, I still do use my fixed-pitch Hack font for a few places, where alignment can super matter. For files where the columns matter, like spreadsheets and tables, I still use them. I also use them for line numbers, so as to keep the left margin aligned. Otherwise, though, it's Input for coding, and IBM Plex Mono (my variable-pitch serif font) for writing.
+
+Final thing before I get to the code: yes, this is a lot of work for fonts. And I'm not even a font expert! I /do/ think readability matters quite a great deal. But I think there are two related elements of my character that have lead me down this path.
+
+The desire to make my system my own. To craft an app I can live in every day, that I can not only code in but write emails in and use to check the weather and browse the web and manage my local files and manage my cloud files and write blog posts and chat with friends and organize my life, and to /keep/ crafting that personalized app, spending a fair amount of my valuable time making the rest of my work time fun enough to get me through the day.
+
+But the other, and related reason, is that everyone likes to be a little different and weird and have opinions that make you feel smart, even if the end result is just that you have a bizarre font choice that on-lookers likely won't even notice.
+
+The desire to be just a bit of an iconoclast.
+
+[[./assets/iconoclast.gif]]
+
+It's important to make fun of yourself for doing so, but that doesn't change the fact that it feels /good/ to be that weird guy who always wears hats or learned Esperanto or decided Vim was somehow /too mainstream/.
+
+That guy's me, and you're welcome, and I'm sorry.
+
+Here are my font settings.
 
 #+begin_src emacs-lisp
   (defvar crj--fixed-pitch-font "Hack")
@@ -431,6 +465,9 @@ The last font is Input, which is another variable pitch font, but one that's ver
                         :weight 'regular))
 #+end_src
 
+And a picture of what my setup actually looks like:
+
+[[./assets/font-setup-screenshot.png]]
 
 
 *** Zooming Text
