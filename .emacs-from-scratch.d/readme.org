@@ -422,7 +422,7 @@ But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look 
 
 Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/.
 
-[[./assets/why-not-both.webp]]
+[[./assets/why-not-both.gif]]
 
 Why not a font that gives code symbols plenty of space to make them properly stand out for their syntactic meaning, without bizarrely deciding that alignment is more important than letter readability? Why not a font that makes /everything/ readable? When your wide letters like "m" and "w" and "c" are squished in while skinny letters like "t" and "l" and "i" are weirdly widened, what you get is a one-size-fits-all approach that prioritizes... nothing in particular. Except trying not to deprioritize anything.
 
