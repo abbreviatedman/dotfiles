@@ -173,7 +173,7 @@ I think you get the basics—as I did with learning and writing this section! Le
                     :which-key "Evaluate expression.")
               "b" '(:ignore t
                       :which-key "buffer")
-              "bd" '(crj/kill-or-bury-current-buffer
+              "bd" '(crj--kill-or-bury-current-buffer
                      :which-key "Kill buffer.")
               "m" '(:ignore t
                       :which-key "markup")
@@ -322,10 +322,15 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 *** Fonts
 
-First, some definitions of fonts by their use.
+First, some definitions of the fonts I use. For Emacs in code, and for you—and future me!—in this document.
 
-**** TODO add full mixed-font experience
-**** TODO explain the thinking behind coding with a variable pitch font.
+My overly arcane setup includes /three/ fonts, all /very/ different in their style and usage.
+
+Let's look at a picture of the view I'm looking at right now:
+
+[[./assets/font-setup-screenshot.jpg]]
+
+The main text you see, including the heading "Fonts" and the line, "First, some definitions of the fonts I use", uses "IBM Plex Serif", which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs.
 
 #+begin_src emacs-lisp
   (defvar crj--fixed-pitch-font "Hack")
@@ -534,9 +539,11 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
       (add-hook mode #'crj--turn-off-line-numbers)))
 #+end_src
 
-Except don't use line numbers for for some modes.
-
 This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
+
+And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
+
+**** TODO do that thing
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -565,7 +572,7 @@ This next part is for making line numbers use a fixed pitch font. I like a varia
 
 ** Under The Hood
 
-Remember recent files and update buffers if the file changes on disk.
+Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -608,24 +615,23 @@ Modus Operandi is a fantastic theme for readability and accessiblity, and even t
 
 #+begin_src emacs-lisp
   (use-package modus-themes
-    :custom
-    (modus-themes-italic-constructs t)
-    (modus-themes-bold-constructs t)
-    (modus-themes-org-blocks 'gray-background)
-    (modus-themes-completions (quote
-                               ((matches . (intense background underline bold))
-                                (selection . (accented intense bold)))))
+    :config
+    (setq modus-themes-italic-constructs t
+          modus-themes-bold-constructs t
+          modus-themes-org-blocks 'gray-background
+          modus-themes-completions (quote
+                                    ((matches . (intense background underline bold))
+                                     (selection . (accented intense bold))))
 
-    (modus-themes-headings (quote
-                            ((0 . (variable-pitch rainbow 1.8))
-                             ((1 . (variable-pitch rainbow 1.8))
-                              (2 . (variable-pitch rainbow 1.6))
-                              (3 . (variable-pitch rainbow 1.4))
-                              (4 . (variable-pitch rainbow 1.2)))))
-                           :config
-                           (setq modus-themes-common-palette-overrides
-                                 modus-themes-preset-overrides-intense)
-                           (load-theme 'modus-operandi-deuteranopia)))
+          modus-themes-headings (quote
+                                 ((0 . (variable-pitch rainbow 1.8))
+                                  ((1 . (variable-pitch rainbow 1.8))
+                                   (2 . (variable-pitch rainbow 1.6))
+                                   (3 . (variable-pitch rainbow 1.4))
+                                   (4 . (variable-pitch rainbow 1.2)))))
+
+          modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
+    (load-theme 'modus-operandi-deuteranopia))
 #+end_src
 
 ** Languages
@@ -747,7 +753,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
 #+begin_src emacs-lisp
   (use-package orderless
     :init
-    (defun crj/vertico-orderless-dispatch (pattern _index _total)
+    (defun crj--vertico-orderless-dispatch (pattern _index _total)
       "The set of dispatch commands I use for filtering searches.
 
   Taken from the Doom Emacs project, which has added so much useful configuration code to the Emacs world. Thanks, Doom contributors!"
@@ -776,7 +782,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
           completion-styles '(orderless basic)
           completion-category-defaults nil
           orderless-component-separator "#"
-          orderless-style-dispatchers '(crj/vertico-orderless-dispatch)
+          orderless-style-dispatchers '(crj--vertico-orderless-dispatch)
           orderless-matching-styles '(orderless-flex orderless-literal orderless-regexp)
           completion-category-overrides '((file (styles partial-completion)))))
 
@@ -785,7 +791,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
 #+begin_src emacs-lisp
 					  ; snippet settings
 
-  ;; (defun crj/set-up-snippets ()
+  ;; (defun crj--set-up-snippets ()
   ;;   (yas-global-mode)
   ;;   (setq yas-snippet-dirs '("~/.doom.d/snippets"))
   ;;   (yas-reload-all)
@@ -796,7 +802,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; 	[M-tab] #'yas-next-field-or-maybe-expand))
 
   ;; (require 'yasnippet)
-  ;; (after! yasnippet (crj/set-up-snippets))
+  ;; (after! yasnippet (crj--set-up-snippets))
 
   ;; ;; don't add newlines to end of snippet files
   ;; (defun no-final-newline-in-buffer ()
@@ -830,14 +836,14 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; (use-package vertico
   ;;   :config
   ;;   (vertico-indexed-mode)
-  ;;   (map! :map vertico-map "C-:" #'crj/embark-act-without-quitting)
+  ;;   (map! :map vertico-map "C-:" #'crj--embark-act-without-quitting)
   ;;   (map! :leader
   ;; 	:desc "Select from previous completions." "\"" #'vertico-repeat-select)
   ;;   (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
   ;;   (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
 
   ;; embark act and resume completion
-  ;; (defun crj/embark-act-without-quitting ()
+  ;; (defun crj--embark-act-without-quitting ()
   ;;   (interactive)
   ;;   (let ((embark-quit-after-action nil))
   ;;     (embark-act)))
@@ -881,7 +887,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; ;;         lsp-enable-symbol-highlighting nil
   ;; ;;         lsp-eldoc-enable-hover nil))
 
-  ;; ;; (add-hook 'lsp-after-initialize-hook #'crj/fix-lsp)
+  ;; ;; (add-hook 'lsp-after-initialize-hook #'crj--fix-lsp)
 
   ;; (map! :i "C-n" nil)
   ;; (map! :i "C-p" nil)
@@ -906,7 +912,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; ;;   ;; Bind dedicated completion commands
   ;; ;;   :bind (("C-c p" . completion-at-point))
   ;; ;;   :init
-  ;; ;;   (defun crj/set-up-cape ()
+  ;; ;;   (defun crj--set-up-cape ()
   ;; ;;   "Add `completion-at-point-functions' from cape to the list."
   ;; ;;   (add-to-list 'completion-at-point-functions #'cape-file)
   ;; ;;   (add-to-list 'completion-at-point-functions #'cape-tex)
@@ -922,19 +928,19 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; ;; I don't need the "symbol class" info in my documentation.
   ;; (after! marginalia
   ;; 	(setf (alist-get 'variable marginalia-annotator-registry)
-  ;; 	      '(crj/custom-marginalia-annotate-variable builtin none))
+  ;; 	      '(crj--custom-marginalia-annotate-variable builtin none))
   ;; 	(setf (alist-get 'symbol marginalia-annotator-registry)
-  ;; 	      '(crj/custom-marginalia-annotate-symbol builtin none))
+  ;; 	      '(crj--custom-marginalia-annotate-symbol builtin none))
   ;; 	(setf (alist-get 'function marginalia-annotator-registry)
-  ;; 	      '(crj/custom-marginalia-annotate-function none)))
+  ;; 	      '(crj--custom-marginalia-annotate-function none)))
 
   ;; ;; TODO remove permissions from annotation of file
   ;; ;; things to keep in mind:
   ;; ;; - which fields show up are in helper function
   ;; ;; - there's a project file version as well
-  ;; ;; (defun crj/custom-marginalia-annotate-file (cand))
+  ;; ;; (defun crj--custom-marginalia-annotate-file (cand))
 
-  ;; (defun crj/custom-marginalia-annotate-symbol (cand)
+  ;; (defun crj--custom-marginalia-annotate-symbol (cand)
   ;;   "Annotate symbol CAND with its documentation string."
   ;;   (when-let (sym (intern-soft cand))
   ;;     (concat
@@ -946,7 +952,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; 	(t (documentation-property sym 'variable-documentation)))
   ;;        :truncate 1.0 :face 'marginalia-documentation)))))
 
-  ;; (defun crj/custom-marginalia-annotate-variable (cand)
+  ;; (defun crj--custom-marginalia-annotate-variable (cand)
   ;;   "Annotate variable CAND with its documentation string."
   ;;   (when-let (sym (intern-soft cand))
   ;;     (marginalia--fields
@@ -954,7 +960,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;;      ((documentation-property sym 'variable-documentation)
   ;;       :truncate 1.0 :face 'marginalia-documentation))))
 
-  ;; (defun crj/custom-marginalia-annotate-function (cand)
+  ;; (defun crj--custom-marginalia-annotate-function (cand)
   ;;   "Annotate function CAND with its documentation string."
   ;;   (when-let (sym (intern-soft cand))
   ;;     (when (fboundp sym)
@@ -1034,7 +1040,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
 
   ;; ;; (map! :i "C-SPC" #'complete-symbol)
 
-  ;; (defun crj/marginalia-toggle ()
+  ;; (defun crj--marginalia-toggle ()
   ;;   (interactive)
   ;;   (mapc
   ;;    (lambda (x)
@@ -1104,13 +1110,13 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;; (use-package eglot
   ;;   :config
   ;;   ;; not sure I need cape
-  ;;   ;; (crj/set-up-cape)
+  ;;   ;; (crj--set-up-cape)
   ;;   )
 
   ;; (use-package elisp-mode
   ;;   :config
   ;;   ;; not sure I need cape
-  ;;   ;; (crj/set-up-cape)
+  ;;   ;; (crj--set-up-cape)
   ;;   )
 
   #+end_src
@@ -2097,17 +2103,17 @@ Making my life easier!
 #+end_src
 
 #+begin_src emacs-lisp
-  (defvar crj/immortal-buffer-names '("*scratch*"
+  (defvar crj--immortal-buffer-names '("*scratch*"
                                       "#emacs"
                                       "*Messages*"
                                       shell-command-buffer-name shell-command-buffer-name-async))
 
-  (defun crj/kill-or-bury-current-buffer ()
+  (defun crj--kill-or-bury-current-buffer ()
     "Kill the current buffer.
 
   Unless it's a buffer we should always keep alive, in which case we just bury it in the buffer list."
     (interactive)
-    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
+    (if (member (buffer-name (current-buffer)) crj--immortal-buffer-names)
         (bury-buffer)
       (kill-buffer (current-buffer))))
 #+end_src
