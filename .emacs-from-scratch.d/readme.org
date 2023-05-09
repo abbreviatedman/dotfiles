@@ -420,7 +420,11 @@ See, many developers will tell you that the big difference between the two types
 
 But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a =!= or an =n= or an =m=. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
 
-Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/. Why not a font that gives code symbols plenty of space to make them properly stand out for their syntactic meaning, without bizarrely deciding that alignment is more important than letter readability? Why not a font that makes /everything/ readable? When your wide letters like "m" and "w" and "c" are squished in while skinny letters like "t" and "l" and "i" are weirdly widened, what you get is a one-size-fits-all approach that prioritizes... nothing in particular. Except trying not to deprioritize anything.
+Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/.
+
+[[./assets/why-not-both.webp]]
+
+Why not a font that gives code symbols plenty of space to make them properly stand out for their syntactic meaning, without bizarrely deciding that alignment is more important than letter readability? Why not a font that makes /everything/ readable? When your wide letters like "m" and "w" and "c" are squished in while skinny letters like "t" and "l" and "i" are weirdly widened, what you get is a one-size-fits-all approach that prioritizes... nothing in particular. Except trying not to deprioritize anything.
 
 When reading and writing, priorities matter. You want symbols to be readable, because you /definitely/ don't want to miss them as you're reading the code, but you /also/ want to be able to read those function and variable names. A variable-pitch font designed carefully to create a great coding experience unsurprisingly beats a font that is designed simply /not/ to deprioritize symbols.
 
