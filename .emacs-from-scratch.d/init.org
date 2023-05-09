@@ -710,6 +710,10 @@ Modus Operandi is a fantastic theme for readability and accessiblity, and even t
     (load-theme 'modus-operandi-deuteranopia t))
 #+end_src
 
+** Writing
+
+*** TODO add flyspell
+
 ** Coding
 
 Settings for... coding.
