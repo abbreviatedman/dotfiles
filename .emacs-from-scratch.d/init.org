@@ -160,7 +160,7 @@ I think you get the basics—as I did with learning and writing this section! Le
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+    (crj-leader-keys
               "," '(consult-buffer
                     :which-key "Switch buffer or open recent file.")
               "TAB" '(evil-switch-to-windows-last-buffer
@@ -309,7 +309,7 @@ Being able to type =SPC r i )= to say "replace what's in these parens with what 
 #+begin_src emacs-lisp
   (use-package evil-replace-with-register
     :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+    (crj-leader-keys
               "r" '(evil-replace-with-register
                     :which-key "Replace text with register.")))
 #+end_src
@@ -499,7 +499,7 @@ Next, we make some keybindings for them.
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+    (crj-leader-keys
               "z" '(:ignore t :which-key "zoom")
               "zj" '(crj--zoom-in-all-buffers :which-key "Zoom in globally.")
               "zk" '(crj--zoom-out-all-buffers :which-key "Zoom out globally.")
@@ -532,7 +532,7 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
       ("k" crj--zoom-out-all-buffers)
       ("b" crj--zoom-reset-all-buffers))
     :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+    (crj-leader-keys
 	      "zz" '(crj--hydra/text-zoom/body :which-key "Zoom hydra interface.")))
 #+end_src
 
@@ -779,7 +779,7 @@ Here that is!
                        :includes (vertico-repeat))
 
     :general
-    (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+    (crj-leader-keys
               "'" '(vertico-repeat-select
                     :which-key "Repeat previous vertico searches."))
 
@@ -1210,7 +1210,7 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
                        :which-key "Go to next error.")
                 "[e" '(flymake-goto-prev-error
                        :which-key "Go to previous error."))
-      (:keymaps '(normal insert emacs) :prefix "SPC" :global-prefix "M-SPC"
+      (crj-leader-keys
                 "c" '(:ignore t
                         :which-key "code")
                 "cX" '(flymake-show-project-diagnostics
