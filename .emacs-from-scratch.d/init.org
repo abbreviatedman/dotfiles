@@ -326,11 +326,21 @@ First, some definitions of the fonts I use. For Emacs in code, and for you—and
 
 My overly arcane setup includes /three/ fonts, all /very/ different in their style and usage.
 
-Let's look at a picture of the view I'm looking at right now:
+The font I see in Emacs as I write this text looks like this:
 
-[[./assets/font-setup-screenshot.jpg]]
+[[./assets/variable-pitch.png]]
 
-The main text you see, including the heading "Fonts" and the line, "First, some definitions of the fonts I use", uses "IBM Plex Serif", which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs.
+That font is IBM Plex Serif, which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs—look at the capital "T" in the "The quick brown fox" line for an example. And, most relevantly, it's a "variable-pitch" font, which means that the characters vary in pitch (a.k.a. width). This is easiest to see in the "nnnnn" and "mmmmm" lines: the "n" line is much shorter than the "m" line because the latter character is wider than the former. This type of font is perfect for writing prose, where the letters are given the breathing room we're used to seeing them in. In my Emacs setup, this font is /only/ used in text and markup documents like Org Mode and Markdown, where I'm doing lots of classic writing and reading.
+
+The second font I use is Hack, which is a "fixed pitch" font—more often called a "monospace" font. Here is a similar font in a terminal:
+
+[[./assets/fixed-pitch.png]]
+
+Most people use a fixed-pitch font for code for several reasons, but we'll get to those in a second. The main feature of a fixed-pitch font is that the width doesn't vary. You'll notice that the "nnnnn" and "mmmmm" lines are the same length. Having all characters be the exact same width makes alignment easier, which many developers use to keep similar lines of code lined up.
+
+The last font is Input, which is another variable pitch font, but one that's very, very different than most. You can see it in the Emacs terminal pictured below:
+
+[[./assets/variable-pitch-coding-font.png]]
 
 #+begin_src emacs-lisp
   (defvar crj--fixed-pitch-font "Hack")
