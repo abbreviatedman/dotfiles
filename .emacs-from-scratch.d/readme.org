@@ -398,7 +398,9 @@ The font I see in Emacs as I write this text looks like this:
 
 [[./assets/variable-pitch.png]]
 
-That font is IBM Plex Serif, which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs—look at the capital "T" in the "The quick brown fox" line for an example. And, most relevantly, it's a "variable-pitch" font, which means that the characters vary in pitch (a.k.a. width). This is easiest to see in the "nnnnn" and "mmmmm" lines: the "n" line is much shorter than the "m" line because the latter character is wider than the former. This type of font is perfect for writing prose, where the letters are given the breathing room we're used to seeing them in. In my Emacs setup, this font is /only/ used in text and markup documents like Org Mode and Markdown, where I'm doing lots of classic writing and reading.
+That font is IBM Plex Serif, which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs—look at the capital "T" in the "The quick brown fox" line for an example. And, most relevantly, it's a "variable-pitch" font, which means that the characters vary in pitch (a.k.a. width). This is easiest to see in the "nnnnn" and "mmmmm" lines: the "n" line is much shorter than the "m" line because the latter character is wider than the former. This type of font is perfect for writing prose, where the letters are given the breathing room we're used to seeing them in.
+
+In my Emacs setup, this font is /only/ used in text and markup documents like Org Mode and Markdown, where I'm doing lots of classic writing and reading.
 
 The second font I use is Hack, which is a "fixed pitch" font—more often called a "monospace" font. Here is a similar font in a terminal:
 
