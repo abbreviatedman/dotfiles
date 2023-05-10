@@ -1,5 +1,5 @@
-#+title: Emacs From Scratch Configuration
-#+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle yes
+#+title:   Colin Jaffe's Literate Emacs Configuration
+#+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el
 
 * Colin Jaffe's Literate Config
 ** Introduction
