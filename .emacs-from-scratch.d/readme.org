@@ -185,6 +185,24 @@ I think you get the basics—as I did with learning and writing this section! Le
                      :which-key "Search current headings.")))
 #+end_src
 
+*** Or Maybe Redo Keybindings To Be More Readable?
+
+Check out this (useful!) keybinding.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (:states 'insert "<S-backspace>" #'just-one-space))
+#+end_src
+
+See the <S-backspace> mapping? Well, it took me a good while to find the right way to write shift-backspace in the same syntax as the rest of it, and in the process, I happened upon this syntax:
+
+ =[(shift backspace)]=
+
+ It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via =npm= with =npm i -g [package name]= on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version (so you'd write it down as =npm install --global [package name]=).
+
+ So! Maybe this is how these mappings should be written? =[(control d)]= instead of ="C-d"=? Maybe! Bears thinking about.
+
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
@@ -307,18 +325,9 @@ Also included is a nifty function that deletes everything but one space before t
              "<S-backspace>" #'just-one-space))
 #+end_src
 
-**** TODO Move this to keybindings
-
-See the <S-backspace> mapping? Well, before I found how to write shift-backspace in the usual syntax, I couldn't for the life of me figure it out, and I happened upon this syntax in my research:
-
- =[(shift backspace)]=
-
- It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing someting globally via =npm= with =npm i -g [package name]= on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version (so you'd write it down as =npm install --global [package name]=).
-
- So! Maybe this is how these mappings should be written? =[(control d)]= instead of ="C-d"=? Maybe! Bears thinking about.
-
-**** TODO add =C-K= and =C-u=
-**** TODO add commands to minibuffer editing
+**** TODOS
+***** TODO add =C-K= and =C-u=
+***** TODO add commands to minibuffer editing
 
 *** Visualizing Evil Commands
 
