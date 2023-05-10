@@ -289,7 +289,7 @@ Bringing back some Emacs commands to use in Insert State.
 
 The short-range, simple Emacs commands are often easier to use when you don't want to switch to Normal State for editing and then back to Insert State to immediately get back to writing. Faster to type =C-w= to delete the word you're currnetly typing and then replace it, rather than =ESC ciw=. Or, worse, a situation where your editing doesn't bring you back to insert mode in the right place, like when the word /before/ your current word should be deleted—now you're talking about =ESC bb daw A= using Vim, but simply =M-b C-w C-e= with Vanilla Emacs bindings.
 
-I'm    still a /big/ fan of modal editing, since you spend so much time straight up editing, but sometimes, particularly when writing prose, you don't want a minor edit to break your flow.
+I'm still a /big/ fan of modal editing, since you spend so much time straight up editing, but sometimes, particularly when writing prose, you don't want a minor edit to break your flow.
 
 [[./assets/funky-flow.gif]]
 
