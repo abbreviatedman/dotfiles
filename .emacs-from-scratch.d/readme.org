@@ -233,6 +233,7 @@ There are just a ton of variables here that finely set how Evil Mode is configur
     (global-subword-mode)
     (setq evil-want-integration t
           evil-want-keybinding nil
+          sentence-end-double-space nil
           evil-want-C-u-scroll t
           evil-want-C-i-jump t
           evil-undo-system 'undo-redo
