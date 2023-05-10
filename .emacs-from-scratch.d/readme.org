@@ -1024,29 +1024,36 @@ Here that is!
   (use-package vertico
     :init
     (vertico-mode)
+    (vertico-multiform-mode)
 
     :config
-    (setq vertico-cycle t)
+    (setq vertico-cycle t
+          vertico-multiform-categories '((t reverse))
+          vertico-multiform-commands '())
+
     (with-eval-after-load 'savehist
       (add-to-list 'savehist-additional-variables 'vertico-repeat-history))
     (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
 
     :straight (vertico :files (:defaults "extensions/*")
                        :includes (vertico-repeat))
 
     :general
     (crj-leader-keys
-              "'" '(vertico-repeat-select
-                    :which-key "Repeat previous vertico searches."))
+      "'" '(vertico-repeat-select
+            :which-key "Repeat previous vertico searches."))
 
-    :bind
-    (:map vertico-map
-          ("C-j" . vertico-next)
-          ("C-k" . vertico-previous)
-          ("C-S-n" . vertico-scroll-up)
-          ("C-S-p" . vertico-scroll-down)
-          ("C-S-j" . vertico-scroll-up)
-          ("C-S-k" . vertico-scroll-down)))
+    (:keymaps 'vertico-map
+              "C-k" #'vertico-next
+              "C-j" #'vertico-previous
+              "C-S-p" #'vertico-scroll-up
+              "C-S-n" #'vertico-scroll-down
+              "C-S-k" #'vertico-scroll-up
+              "C-S-j" #'vertico-scroll-down
+              "RET" #'vertico-directory-enter
+              "DEL" #'vertico-directory-delete-char
+              "M-DEL" #'vertico-directory-delete-word))
 #+end_src
 
 **** Minibuffer Search Data Sets
