@@ -127,7 +127,7 @@ In Vanilla Emacs' keybinding land, the focus is on often elaborate key "chords",
 
 For example, opening a file in Vanilla Emacs keybindings would be =C-x C-f=, which means to hold down the =Control= key, press =x=, then, still holding down =Control= (or re-pressing and holding it), press =f=. This can be a bit of a strain on your hand, although certainly less so if you follow best practices and swap =Control= and =Caps Lock=.
 
-In Evil-Mode-style keybindings, the same command might be someting like =SPC f o=, which means press the =spacebar=, then press the =f= key, then press the =o= key.
+In Evil-Mode-style keybindings, the same command might be something like =SPC f o=, which means press the =spacebar=, then press the =f= key, then press the =o= key.
 
 This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, =/= begins a text search (like =C-f= or =Command-f= in many apps), and =dd= deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is =i= (for =i=nsert).
 
@@ -287,7 +287,7 @@ TODO I will definitely want to go through and pick what I like and don't. For no
 
 Bringing back some Emacs commands to use in Insert State.
 
-The short-range, simple Emacs commands are often easier to use when you don't want to switch to Normal State for editing and then back to Insert State to immediately get back to writing. Faster to type =C-w= to delete the word you're currnetly typing and then replace it, rather than =ESC ciw=. Or, worse, a situation where your editing doesn't bring you back to insert mode in the right place, like when the word /before/ your current word should be deleted—now you're talking about =ESC bb daw A= using Vim, but simply =M-b C-w C-e= with Vanilla Emacs bindings.
+The short-range, simple Emacs commands are often easier to use when you don't want to switch to Normal State for editing and then back to Insert State to immediately get back to writing. Faster to type =C-w= to delete the word you're currently typing and then replace it, rather than =ESC ciw=. Or, worse, a situation where your editing doesn't bring you back to insert mode in the right place, like when the word /before/ your current word should be deleted—now you're talking about =ESC bb daw A= using Vim, but simply =M-b C-w C-e= with Vanilla Emacs bindings.
 
 I'm still a /big/ fan of modal editing, since you spend so much time straight up editing, but sometimes, particularly when writing prose, you don't want a minor edit to break your flow.
 
