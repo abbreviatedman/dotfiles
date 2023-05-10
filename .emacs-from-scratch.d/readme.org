@@ -283,6 +283,29 @@ TODO I will definitely want to go through and pick what I like and don't. For no
   (evil-collection-quickrun-setup))
 #+end_src
 
+*** Emacs In Vim In Emacs
+
+Bringing back some Emacs commands to use in Insert State.
+
+The short-range, simple Emacs commands are often easier to use when you don't want to switch to Normal State for editing and then back to Insert State to immediately get back to writing. Faster to type =C-w= to delete the word you're currnetly typing and then replace it, rather than =ESC ciw=. Or, worse, a situation where your editing doesn't bring you back to insert mode in the right place, like when the word /before/ your current word should be deleted—now you're talking about =ESC bb daw A= using Vim, but simply =M-b C-w C-e= with Vanilla Emacs bindings.
+
+I'm    still a /big/ fan of modal editing, since you spend so much time straight up editing, but sometimes, particularly when writing prose, you don't want a minor edit to break your flow.
+
+[[./assets/funky-flow.gif]]
+
+Also included is a nifty function that deletes everything but one space before the cursor, super useful if you've accidentally got a bunch of accidental whitespace. Very occasionally super useful.
+
+#+begin_src emacs-lisp
+  (use-package evil
+    :general
+    (:states 'insert
+             "C-n" #'next-line
+             "C-p" #'previous-line
+             "C-e" #'end-of-visual-line
+             "C-a" #'beginning-of-visual-line
+             "C-d" #'delete-char
+             "<S-backspace>" #'just-one-space))
+#+end_src
 *** Visualizing Evil Commands
 
 =evil-goggles= helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
