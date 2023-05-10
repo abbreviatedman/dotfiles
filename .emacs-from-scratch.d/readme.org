@@ -590,6 +590,14 @@ First, some functions to zoom and reset one buffer:
 From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the =buffer-list= and run the above functions in each.
 
 #+begin_src emacs-lisp
+  ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
+  ;; (defvar current-text-scale 0)
+  ;; (defun crj-match-new-buffer-to-current-text-scale ()
+  ;;   (interactive)
+  ;;   (text-scale-increase 0)
+  ;;   (text-scale-increase text-scale-mode-amount))
+  ;; (add-hook 'after-set-visited-file-name-hook #'crj-match-new-buffer-to-current-text-scale)
+
   (defun crj--zoom-in-all-buffers (arg)
     "Zooms in on all current buffers."
     (interactive "p")
@@ -612,7 +620,16 @@ From there, I can use those to zoom in on all current buffers. These functions s
         (crj--zoom-reset arg))))
 #+end_src
 
-What I haven't figured out yet is how to have that zoom level remain for new buffers. Could dive into that at some point!
+This package, =default-text-scale=, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
+
+#+begin_src emacs-lisp :tangle no
+  (use-package default-text-scale
+    :init (default-text-scale-mode))
+#+end_src
+
+But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts  I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
+
+All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. =defualt-text-scale= is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
 
 Next, we make some keybindings for them.
 
@@ -657,6 +674,7 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
 #+end_src
 
 **** TODO add ability to zoom to preset big size.
+**** TODO add to new-buffer-hook to adjust to current text scale?
 **** TODO add "i" and "o" (or switch those with j/k?) to zoom in by larger increments
 
 *** Scrolling
