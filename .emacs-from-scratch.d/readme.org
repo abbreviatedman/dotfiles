@@ -568,6 +568,54 @@ And a picture of what my setup actually looks like:
 
 **** TODO redo font size as calculated based on resolution
 
+**** Using Fixed Pitch In Some Buffers
+
+#+begin_src emacs-lisp
+  (defface crj--monospace
+    '((t
+       :family "Hack"
+       :foundry unspecified
+       :width normal
+       :height 1.0
+       :weight normal
+       :slant normal
+       :foreground "#505050"
+       :distantForeground unspecified
+       :background "#f8f8f8"
+       :underline nil
+       :overline nil
+       :strike-through nil
+       :box nil
+       :inverse nil
+       :stipple nil
+       :font "Hack"
+       :fontset unspecified
+       :extend nil))
+
+    "Face for monospace fonts.")
+
+  (defun crj--use-fixed-pitch ()
+    "Makes the current buffer use a fixed pitch.
+
+  Sometimes I really do want fixed-pitch for alignment, such as with terminals."
+    (interactive)
+    (set (make-local-variable 'buffer-face-mode-face) 'crj--monospace)
+    (buffer-face-mode t))
+
+  ;; Hooks for modes I want to use fixed pitch in.
+  (setq crj--fixed-pitch-mode-hooks
+        '(vterm-mode-hook
+          calendar-mode-hook
+          proced-mode-hook
+          cfw:calendar-mode-hook
+          minibuffer-setup-hook
+          mu4e-headers-mode-hook))
+
+  ;; Add the fixed-pitch function for each mode.
+  (dolist (hook crj--fixed-pitch-mode-hooks)
+    (add-hook hook #'crj--use-fixed-pitch))
+#+end_src
+
 
 *** Zooming Text
 
