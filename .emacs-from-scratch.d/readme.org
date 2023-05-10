@@ -801,6 +801,40 @@ And by setting line numbers to an absolute size, we also avoid having them incre
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
 
+** Dired
+
+Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll:
+
+1. Set it to group directories first.
+2 . Set it to omit unimportant details.
+3. Set it up with an extra command to hide dotfiles.
+4. Set it to re-use the same buffer for each directory.
+5. Add icons.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq dired-listing-switches "-al --group-directories-first")
+    (add-hook 'dired-mode-hook #'dired-omit-mode)
+    (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+    :commands (dired dired-jump))
+
+  (use-package dired-single
+    :general
+    (:keymaps 'dired-mode-map
+              [remap dired-find-file] #'dired-single-buffer
+              [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
+              [remap dired-up-directory] #'dired-single-up-directory))
+
+  (use-package all-the-icons-dired
+    :ghook #'all-the-icons-dired-mode-hook)
+
+  (use-package dired-hide-dotfiles
+    :general
+    (:keymaps 'dired-mode-map
+              "H" 'dired-hide-dotfiles-mode))
+#+end_src
+
 ** Under The Hood
 
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
@@ -2260,9 +2294,7 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 #+end_src
 
-** File Management
-
-** Dired
+** EFS/Dired
 
 Dired is a built-in file manager for Emacs that does some pretty amazing things!  Here are some key bindings you should try out:
 
@@ -2327,37 +2359,31 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 *** Configuration
 
 #+begin_src emacs-lisp
+  ;; (use-package emacs
+  ;;   :commands (dired dired-jump)
+  ;;   :bind (("C-x C-j" . dired-jump))
+  ;;   :custom ((dired-listing-switches "-ah --group-directories-first"))
+  ;;   :config
+  ;;   (evil-collection-define-key 'normal 'dired-mode-map
+  ;;     "h" 'dired-single-up-directory
+  ;;     "l" 'dired-single-buffer))
 
-  (use-package emacs
-    :ensure nil
-    :commands (dired dired-jump)
-    :bind (("C-x C-j" . dired-jump))
-    :custom ((dired-listing-switches "-agho --group-directories-first"))
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "h" 'dired-single-up-directory
-      "l" 'dired-single-buffer))
+  ;; (use-package dired-single
+  ;;   :commands (dired dired-jump))
 
-  (use-package dired-single
-    :commands (dired dired-jump))
+  ;; (use-package all-the-icons-dired
+  ;;   :hook (dired-mode . all-the-icons-dired-mode))
 
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
+  ;; (use-package dired-open
+  ;;   :commands (dired dired-jump)
+  ;;   :config
+  ;;   (setq dired-open-extensions '(("html" . "google-chrome-stable")
+  ;;                                 ("mkv" . "mpv"))))
 
-  (use-package dired-open
-    :commands (dired dired-jump)
-    :config
-    ;; Doesn't work as expected!
-    ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-    (setq dired-open-extensions '(("png" . "feh")
-                                  ("mkv" . "mpv"))))
-
-  (use-package dired-hide-dotfiles
-    :hook (dired-mode . dired-hide-dotfiles-mode)
-    :config
-    (evil-collection-define-key 'normal 'dired-mode-map
-      "H" 'dired-hide-dotfiles-mode))
-
+  ;; (use-package dired-hide-dotfiles
+  ;;   :config
+  ;;   (evil-collection-define-key 'normal 'dired-mode-map
+  ;;     "H" 'dired-hide-dotfiles-mode))
 #+end_src
 
 ** Applications
