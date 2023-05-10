@@ -1005,7 +1005,7 @@ Set Emacs to only include commands that are relevant to the current "major mode"
     (setq read-extended-command-predicate #'command-completion-default-include-p))
 #+end_src
 
-**** Minibuffer Interface
+**** Minibuffer Interface: Vertico
 
 A popular Emacs minibuffer interface is Vertico. It gives you a simple but powerful UI for accessing whatever you're looking to access, and it does it with a minimum of code, mostly focusing on extending the built-in Emacs interface. This makes it fast to use and, importantly, easy for the devs to debug.
 
