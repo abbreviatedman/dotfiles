@@ -1484,7 +1484,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 
 *** TODO include a 
 
-** Better Modeline
+** EFS/Better Modeline
 
 [[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
 
@@ -1498,7 +1498,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 #+end_src
 
 
-** Which Key
+** EFS/Which Key
 
 [[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix.  For example, if you press =C-c= (hold control and press the letter =c=), a panel will appear at the bottom of the frame displaying all of the bindings under that prefix and which command they run.  This is very useful for learning the possible key bindings in the mode of your current buffer.
 
@@ -1513,7 +1513,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 
 #+end_src
 
-** Ivy and Counsel
+** EFS/Ivy and Counsel
 
 [[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs.  It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs.  Counsel is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands.
 
@@ -1630,7 +1630,7 @@ Besides different keybindings, I've only added a couple extra configuraitons her
       ("C-h F" #'describe-face))
 #+end_src
 
-** Text Scaling
+** EFS/Text Scaling
 
 This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
 
@@ -1880,7 +1880,7 @@ This section contains the basic configuration for =org-mode= plus the configurat
 
 #+end_src
 
-** Configure Babel Languages
+** EFS/Configure Babel Languages
 
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
 
@@ -1896,7 +1896,7 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
 #+end_src
 
-** Structure Templates
+** EFS/Structure Templates
 
 Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure templates]] feature enables you to quickly insert code blocks into your Org files in combination with =org-tempo= by typing =<= followed by the template name like =el= or =py= and then press =TAB=.  For example, to insert an empty =emacs-lisp= block below, you can type =<el= and press =TAB= to expand into such a block.
 
@@ -1914,7 +1914,7 @@ You can add more =src= block templates below by copying one of the lines and cha
 
 #+end_src
 
-** Languages
+** EFS/Languages
 
 *** IDE Features with lsp-mode
 
@@ -2081,7 +2081,7 @@ You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =
 
 #+end_src
 
-** Company Mode
+** EFS/Company Mode
 
 [[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
 
@@ -2105,7 +2105,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-** Projectile
+** EFS/Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
 
@@ -2129,7 +2129,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-** Magit
+** EFS/Magit
 
 [[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
 
@@ -2148,7 +2148,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-** Rainbow Delimiters
+** EFS/Rainbow Delimiters
 
 [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
 
@@ -2159,9 +2159,9 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 #+end_src
 
-** Terminals
+** EFS/Terminals
 
-** term-mode
+** EFS/term-mode
 
 =term-mode= is a built-in terminal emulator in Emacs.  Because it is written in Emacs Lisp, you can start using it immediately with very little configuration.  If you are on Linux or macOS, =term-mode= is a great choice to get started because it supports fairly complex terminal applications (=htop=, =vim=, etc) and works pretty reliably.  However, because it is written in Emacs Lisp, it can be slower than other options like =vterm=.  The speed will only be an issue if you regularly run console apps with a lot of output.
 
@@ -2202,7 +2202,7 @@ The =eterm-256color= package enhances the output of =term-mode= to enable handli
 
 #+end_src
 
-** vterm
+** EFS/vterm
 
 [[https://github.com/akermu/emacs-libvterm/][vterm]] is an improved terminal emulator package which uses a compiled native module to interact with the underlying terminal applications.  This enables it to be much faster than =term-mode= and to also provide a more complete terminal emulation experience.
 
@@ -2219,7 +2219,7 @@ Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirem
 
 #+end_src
 
-** shell-mode
+** EFS/shell-mode
 
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Interactive-Shell.html#Interactive-Shell][shell-mode]] is a middle ground between =term-mode= and Eshell.  It is *not* a terminal emulator so more complex terminal programs will not run inside of it.  It does have much better integration with Emacs because all command input in this mode is handled by Emacs and then sent to the underlying shell once you press Enter.  This means that you can use =evil-mode='s editing motions on the command line, unlike in the terminal emulator modes above.
 
@@ -2240,7 +2240,7 @@ One advantage of =shell-mode= on Windows is that it's the only way to run =cmd.e
 
 #+end_src
 
-** Eshell
+** EFS/Eshell
 
 [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (=ls=, =rm=, =mv=, =grep=, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing =vim= to =find-file=).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
 
@@ -2386,9 +2386,9 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
   ;;     "H" 'dired-hide-dotfiles-mode))
 #+end_src
 
-** Applications
+** EFS/Applications
 
-** Some App
+** EFS/Some App
 
 This is an example of configuring another non-Emacs application using org-mode.  Not only do we write out the configuration at =.config/some-app/config=, we also compute the value that gets stored in this configuration from the Emacs Lisp block above it.
 
@@ -2407,7 +2407,7 @@ This is an example of configuring another non-Emacs application using org-mode. 
 
 #+end_src
 
-** Runtime Performance
+** EFS/Runtime Performance
 
 Dial the GC threshold back down so that garbage collection happens more frequently but in less time.
 
@@ -2418,7 +2418,7 @@ Dial the GC threshold back down so that garbage collection happens more frequent
 
 #+end_src
 
-** Utility Functions
+** EFS/Utility Functions
 Making my life easier!
 
 #+begin_src emacs-lisp
