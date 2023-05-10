@@ -67,7 +67,7 @@ Let's install =straight=.
   (load bootstrap-file nil 'nomessage))
 #+end_src
 
-And turn off the built-in package manager. (This needs to go in =early-init.el=, but I can tangle it to there from this document.)
+And turn off the built-in package manager. (This needs to go in =early-init.el=, but I can tangle it to there from this document with a header arg, which you can see if you're looking at this document as a raw =org-mode= file. If that sounds like a whole thing, well... it's also not  terribly important detail! But I included it anyway! Not sure why!)
 
 #+begin_src emacs-lisp :tangle early-init.el
 (setq package-enable-at-startup nil)
