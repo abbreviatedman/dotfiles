@@ -272,6 +272,7 @@ There are just a ton of variables here that finely set how Evil Mode is configur
 Some extra Evil Mode stuff.
 
 TODO I will definitely want to go through and pick what I like and don't. For now, I'm taking everything but =unimpaired=, but even that has some stuff I want from it.
+
 #+begin_src emacs-lisp
     (use-package evil-collection
       :after evil
