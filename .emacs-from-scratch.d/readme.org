@@ -533,7 +533,7 @@ Here are my font settings.
   (defvar crj--variable-pitch-coding-font "Input")
   (defvar crj--variable-pitch-font "IBM Plex Serif")
   (defvar crj--coding-font crj--variable-pitch-coding-font)
-  (defvar crj--default-font-size 120)
+  (defvar crj--default-font-size 110)
 
   (use-package emacs
     :config
