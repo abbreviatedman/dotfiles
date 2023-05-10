@@ -19,7 +19,7 @@ I'm basing this new config on the Emacs from Scratch repo, which is a lot more s
 
 So that's where we started and where we're going. Let's look at some code!
 
-**  Literate Config Setup
+** Literate Config Setup
 
 Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of prose. The document you're reading right now is an example of literate programming, often called a literate config when it's about configuring apps. All of the code blocks in this document are "tangled", which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented... there's always a /reason/ for a block of code to exist. The documentation can't fall behind the code—the documentation /is/ the code.
 
@@ -48,7 +48,7 @@ Thanks, Crafted!"
 
 Settings for extending Emacs.
 
-Emacs has a built in package manager but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration. =use-package=  and =straight= are a really helpful package combination that makes it a lot easier to automate the installation and configuration of everything else we use.
+Emacs has a built in package manager, but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration. =use-package= and =straight= are a really helpful package combination that makes it a lot easier to automate the installation and configuration of everything else we use.
 
 Let's install =straight=.
 
