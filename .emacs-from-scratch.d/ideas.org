@@ -1,0 +1,30 @@
+* Essays
+** Zoom
+- Could have our first custom functions
+- Walk through what it's like to create your own little app within.
+** Fonts
+- What it's like to care too much about little details.
+- Having value and design decisions.
+- Input font is about having the priority of equity over equality.
+* Configure
+- auto-save files to go somewhere else
+* To Add
+** Magit
+*** With YADM and Forge
+** Mu4e
+** Org Agenda
+** Flyspell
+** Corfu
+** Eglot
+** Copilot
+** ChatGPT
+** Projectile
+** Embark
+** Marginalia
+** Bindings For
+*** closing window with d
+*** promoting/demoting org headings with =<</>>=
+*** Searches
+**** project text
+**** project files
+**** directory
