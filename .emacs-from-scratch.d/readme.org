@@ -439,7 +439,7 @@ Shows you the difference between two different bits of text. Another very occasi
 
     :straight (evil-quick-diff
                :type git
-               :repo "rgrinberg/evil-quick-diff")
+               :repo "https://github.com/rgrinberg/evil-quick-diff")
 
     :commands (evil-quick-diff evil-quick-diff-cancel))
 #+end_src
