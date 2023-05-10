@@ -1043,7 +1043,7 @@ In Emacs, minibuffer menus can be used to search for:
 
 Other apps now have this equivalent—the one people know most developers know these days is the Comand Palette in VS Code, which offers very good menu completion, but there are similar examples in Slack and Discord and Vivaldi and many other apps. But in Emacs land, because you can search for practically anything you do, having /one/ interface for searching for what you want to do next is incredibly powerful, and one of the main unique selling points of Emacs.
 
-**** Some Basic Minibuffer Settings
+**** Some Basic Minibuffer SeachSettings
 
 Set Emacs to only include commands that are relevant to the current "major mode" (what you would call a file type outside of Emacs).
 
@@ -1053,7 +1053,7 @@ Set Emacs to only include commands that are relevant to the current "major mode"
     (setq read-extended-command-predicate #'command-completion-default-include-p))
 #+end_src
 
-**** Minibuffer Interface: Vertico
+**** Minibuffer Search Interface
 
 A popular Emacs minibuffer interface is Vertico. It gives you a simple but powerful UI for accessing whatever you're looking to access, and it does it with a minimum of code, mostly focusing on extending the built-in Emacs interface. This makes it fast to use and, importantly, easy for the devs to debug.
 
