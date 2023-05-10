@@ -230,6 +230,7 @@ There are just a ton of variables here that finely set how Evil Mode is configur
 #+begin_src emacs-lisp
   (use-package evil
     :init
+    (global-subword-mode)
     (setq evil-want-integration t
           evil-want-keybinding nil
           evil-want-C-u-scroll t
