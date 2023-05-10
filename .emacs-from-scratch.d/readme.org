@@ -109,7 +109,7 @@ We can use =general-create-definer= to define a pair of leader keys  that we'll 
     (defun crj-open-literate-config-file ()
       "Open the literate config file in the user directory."
       (interactive)
-      (find-file (expand-file-name "init.org" user-emacs-directory)))
+      (find-file (expand-file-name "readme.org" user-emacs-directory)))
 
     (general-create-definer crj-leader-keys
       :keymaps '(normal insert visual emacs)
