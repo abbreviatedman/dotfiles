@@ -1055,9 +1055,25 @@ Set Emacs to only include commands that are relevant to the current "major mode"
 
 **** Minibuffer Search Interface
 
-A popular Emacs minibuffer interface is Vertico. It gives you a simple but powerful UI for accessing whatever you're looking to access, and it does it with a minimum of code, mostly focusing on extending the built-in Emacs interface. This makes it fast to use and, importantly, easy for the devs to debug.
+Vertico and Marginalia togethr make an amazing interface for minibuffer search.
 
-It doesn't even take much code to set up! What we'll do is:
+***** Marginalia
+
+Marginalia gives you some more data in other columns in the list of results as you filter them. It's nice! Let's set it up!
+
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :general
+    (:keymaps 'minibuffer-local-map
+              "M-A" 'marginalia-cycle)
+
+    :custom
+    (marginalia-max-relative-age 0)
+    (marginalia-align 'right)
+
+    :init
+    (marginalia-mode))
+#+end_src
 
 - Install it.
 - Turn it on.
