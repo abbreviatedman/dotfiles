@@ -1075,14 +1075,23 @@ Marginalia gives you some more data in other columns in the list of results as y
     (marginalia-mode))
 #+end_src
 
+***** Vertico
+
+A popular Emacs minibuffer search interface is Vertico. It gives you a simple but powerful UI for accessing whatever you're looking to access, and it does it with a minimum of code, mostly focusing on extending the built-in Emacs interface. This makes it fast to use and, importantly, easy for the devs to debug.
+
+What we'll do is:
+
 - Install it.
 - Turn it on.
-- Set Emacs to remember Vertico's history.
+- Tun on the ability to toggle interface setup.
 - Set the results of searches to wrap from bottom to top.
+- Set "reverse" as the default interface setup.
+- Set Emacs to remember Vertico's history.
+- Fix some weirdness caused by the interplay of directories and completion.
 - Add the Vertico extension =vertico-repeat= and a keybinding to repeat previous searches.
-- Add keybindings for more Vim-like =j=/=k= scrolling as well as scrolling by page-lengths.
+- Add keybindings for more Vim-like =j=/=k= scrolling as well as scrolling by pages and going up a directory with a single delte.
 
-Here that is!
+Here that all is!
 
 #+begin_src emacs-lisp
   (use-package vertico
@@ -1092,12 +1101,12 @@ Here that is!
 
     :config
     (setq vertico-cycle t
-          vertico-multiform-categories '((t reverse))
-          vertico-multiform-commands '())
+          vertico-multiform-categories '((t reverse)))
 
+    (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
     (with-eval-after-load 'savehist
       (add-to-list 'savehist-additional-variables 'vertico-repeat-history))
-    (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+
     (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
 
     :straight (vertico :files (:defaults "extensions/*")
