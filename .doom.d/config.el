@@ -78,6 +78,21 @@
 ;; TODO Quokka Thing
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 
+(defun crafted--org-babel-tangle-config ()
+"Tangle code blocks from our init.org file on save.
+
+A nice little helper from Crafted Emacs.
+
+Thanks, Crafted!"
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "readme.org" "/home/abbreviatedman/.emacs-from-scratch.d"))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
 (defun crj/split-line-between-pairs ()
   (interactive)
   (newline 2)
