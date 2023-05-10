@@ -203,7 +203,7 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
     (:states 'insert [(shift backspace)] #'just-one-space))
 #+end_src
 
- It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via =npm= with =npm i -g [package name]= on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version (so you'd write it down as =npm install --global [package name]=).
+ It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via =npm= with =npm i -g [package name]= on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version—so with the previous example, you'd write the command in a document as =npm install --global [package name]=.
 
  So! Maybe this is how these mappings should be written? =[(control d)]= instead of ="C-d"=? Maybe! Bears thinking about, for sure.
 
