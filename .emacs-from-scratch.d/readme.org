@@ -553,6 +553,8 @@ And a picture of what my setup actually looks like:
 
 [[./assets/font-setup-screenshot.png]]
 
+**** TODO redo font size as calculated based on resolution
+
 
 *** Zooming Text
 
