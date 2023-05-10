@@ -79,13 +79,19 @@ Use =straight= to install =use-package=.
 (straight-use-package 'use-package)
 #+end_src
 
-Tell =use-package= to always install packages using =straight=.
+Tell =use-package= to install packages using =straight= whenever I declare a =use-package= block.
 
 #+begin_src emacs-lisp
 (use-package straight
   :custom
   (straight-use-package-by-default t))
 #+end_src
+
+Now every time I configure a package with =use-package=, =use-package= will use =straight= to install the package first.
+
+This means that if you or I copy this configuration to another machine and launch Emacs, it will install the necessary packages automatically and configure them the exact same way. This is now a portable document capable of replicating my setup anywhere. And explaining it!
+
+The only extra step necessary is that, because this file is actually an org document, you'll have to run Emacs, tangle this file, and then restart Emacs. But such is the price of being literate(ly configured).
 
 ** Keybindings
 
