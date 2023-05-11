@@ -971,6 +971,14 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 ** Under The Hood
 
+Alwyas confirm with a quick =y= or =n= instead of requiring a =yes= or =no= followed by =RET=.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (defalias 'yes-or-no-p 'y-or-n-p))
+#+end_src
+
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
 #+begin_src emacs-lisp
@@ -981,6 +989,7 @@ Set Emacs to remember recent files, as well as update buffers if the file change
 #+end_src
 
 A better Emacs kill command binding to kill the Emacs server as well.
+
 #+begin_src emacs-lisp
   (use-package emacs
     :general
@@ -1001,7 +1010,6 @@ Save backups of files, every 10 idle seconds, to a backups folder in our  main e
           backup-directory-alist
           `(("." . ,(concat user-emacs-directory "/backups")))))
 #+end_src
-
 
 Save minibuffer history.
 
