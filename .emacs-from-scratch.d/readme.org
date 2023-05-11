@@ -1153,6 +1153,8 @@ And that's not even all of them! Minibuffer searches are a /huge/ part of how yo
     (crj-leader-keys "/" '(consult-line :which-key "Search in current buffer.")))
 #+end_src
 
+***** TODO add bindings for Consult seraches for grep and project search and maybe others?
+
 **** Minibuffer Search Filtering
 
 The Orderless package is powerful and fascinating. It decides the data you're searching is filtered as you type, and you can even search in different ways in the same search.
