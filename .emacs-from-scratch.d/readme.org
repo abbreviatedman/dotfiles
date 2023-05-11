@@ -930,19 +930,20 @@ Modus Operandi is a fantastic theme for readability and accessiblity, and even t
   (use-package modus-themes
     :config
     (setq modus-themes-italic-constructs t
-          modus-themes-bold-constructs t
-          modus-themes-org-blocks 'gray-background
-          modus-themes-completions (quote
-                                    ((matches . (intense background underline bold))
-                                     (selection . (accented intense bold))))
+	  modus-themes-bold-constructs t
+	  modus-themes-org-blocks 'gray-background
+	  modus-themes-completions (quote
+				    ((matches . (intense background underline bold))
+				     (selection . (accented intense bold))))
 
-          modus-themes-headings '((0 . (variable-pitch  1.8))
-                                  (1 . (variable-pitch  1.8))
-                                   (2 . (variable-pitch  1.6))
-                                   (3 . (variable-pitch  1.4))
-                                   (4 . (variable-pitch  1.2)))
+	  modus-themes-headings '((0 . (variable-pitch  1.8))
+				  (1 . (variable-pitch  1.8))
+				   (2 . (variable-pitch  1.6))
+				   (3 . (variable-pitch  1.4))
+				   (4 . (variable-pitch  1.2)))
 
-          modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
+	  modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
+
     (load-theme 'modus-operandi-deuteranopia t))
 #+end_src
 
