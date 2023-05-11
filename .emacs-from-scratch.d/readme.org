@@ -985,7 +985,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 ** Under The Hood
 
-Alwyas confirm with a quick =y= or =n= instead of requiring a =yes= or =no= followed by =RET=.
+Always confirm with a quick =y= or =n= instead of requiring a =yes= or =no= followed by =RET=.
 
 #+begin_src emacs-lisp
   (use-package emacs
