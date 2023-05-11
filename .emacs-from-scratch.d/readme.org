@@ -980,6 +980,16 @@ Set Emacs to remember recent files, as well as update buffers if the file change
     (global-auto-revert-mode 1))
 #+end_src
 
+A better Emacs kill command binding to kill the Emacs server as well.
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
+    (crj-leader-keys
+      "q" '(:ignore t :which-key "quit")
+      "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
+#+end_src
+
 Save backups of files, every 10 idle seconds, to a backups folder in our  main emacs directory
 
 #+begin_src emacs-lisp
