@@ -266,6 +266,7 @@ There are just a ton of variables here that finely set how Evil Mode is configur
           evil-ex-interactive-search-highlight 'selected-window
           evil-kbd-macro-suppress-motion-error t
           evil-respect-visual-line-mode nil)
+        evil-ex-substitute-global t
 
     :config
     (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -849,6 +850,16 @@ And by setting line numbers to an absolute size, we also avoid having them incre
 #+end_src
 
 ** Dired
+
+    (use-package evil-org
+      :after org
+      :init
+      (add-hook 'org-mode-hook #'evil-org-mode)
+      (add-hook 'org-agenda-mode-hook #'evil-org-mode)
+      :config
+      (require 'evil-org-agenda)
+      (evil-org-agenda-set-keys))
+#+end_src
 
 Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll:
 
