@@ -1036,7 +1036,7 @@ Save minibuffer history.
 Increase the size of the garbage collector.
 
 #+begin_src emacs-lisp
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 100 1000 1000))
 #+end_src
 
 Measure startup time using an excellent bit of code taken from Emacs From Scratch.
