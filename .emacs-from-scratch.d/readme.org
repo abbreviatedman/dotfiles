@@ -1080,7 +1080,33 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
 ** Writing
 
-*** TODO add flyspell
+*** Spell-Check With Flyspell
+
+Flyspell is an /amazing/ built-into-Emacs spell-checker.
+
+=flyspell-correct= makes it even better with a quick command to correct the last word. You can correct your spelling /so/ easily without losing your flow in the slightest.
+
+#+begin_src emacs-lisp
+  (use-package flyspell
+    :demand t
+    :init
+    (defun crj--turn-on-flyspell ()
+      (flyspell-mode 1))
+
+    (add-hook 'text-mode-hook #'crj--turn-on-flyspell)
+    (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+    (setq ispell-program-name "hunspell")
+
+    :config
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic "en_US,en_CA,en_AU,en_GB,es_ES")
+    (ispell-change-dictionary "en_US,en_CA,en_AU,en_GB,es_ES" t))
+
+  (use-package flyspell-correct
+    :general (:states '(insert normal emacs)
+                      [remap flyspell-auto-correct-previous-word] #'flyspell-correct-wrapper
+                      "C-;" #'flyspell-correct-wrapper))
+#+end_src
 
 ** Coding
 
