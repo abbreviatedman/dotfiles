@@ -2491,17 +2491,6 @@ This is an example of configuring another non-Emacs application using org-mode. 
 
 #+end_src
 
-** EFS/Runtime Performance
-
-Dial the GC threshold back down so that garbage collection happens more frequently but in less time.
-
-#+begin_src emacs-lisp
-
-  ;; Make gc pauses faster by decreasing the threshold.
-  (setq gc-cons-threshold (* 2 1000 1000))
-
-#+end_src
-
 ** EFS/Utility Functions
 Making my life easier!
 
