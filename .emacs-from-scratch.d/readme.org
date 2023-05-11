@@ -377,7 +377,7 @@ This library is amazing for working with surrounding text. Changing double quote
 
 *** Jumping By Character Pairs In Evil
 
-I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ragnes. And when it isn't? You just press =;= to go to the next one.
+I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ranges. And when it isn't? You just press =;= to go to the next one.
 
 Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
 
@@ -441,7 +441,7 @@ Allows you to select some text in Visual State and then hit =*= or =#= to search
 #+end_src
 **** TODO add more evil text objects
 **** TODO add targets
-**** TODO add treesitter in Emacs 29
+**** TODO add Tree-sitter in Emacs 29
 
 *** Evil Motion For Diffing Text
 
@@ -1055,7 +1055,7 @@ Measure startup time using an excellent bit of code taken from Emacs From Scratc
 
 ** Color Theme
 
-Modus Operandi is a fantastic theme for readability and accessiblity, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
+Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
 
 #+begin_src emacs-lisp
   (use-package modus-themes
@@ -1165,7 +1165,7 @@ Don't remember what this one does.
     (add-hook 'emacs-lisp-mode-hook 'highlight-quoted-mode))
 #+end_src
 
-****** TODO check what higlight-quoted mode does
+****** TODO check what highlight-quoted mode does
 
 **** JavaScript
 
@@ -1210,9 +1210,9 @@ In Emacs, minibuffer menus can be used to search for:
 - an emoji to insert
 - and lots of other things I use every day
 
-Other apps now have this equivalent—the one people know most developers know these days is the Comand Palette in VS Code, which offers very good menu completion, but there are similar examples in Slack and Discord and Vivaldi and many other apps. But in Emacs land, because you can search for practically anything you do, having /one/ interface for searching for what you want to do next is incredibly powerful, and one of the main unique selling points of Emacs.
+Other apps now have this equivalent—the one people know most developers know these days is the Command Palette in VS Code, which offers very good menu completion, but there are similar examples in Slack and Discord and Vivaldi and many other apps. But in Emacs land, because you can search for practically anything you do, having /one/ interface for searching for what you want to do next is incredibly powerful, and one of the main unique selling points of Emacs.
 
-**** Some Basic Minibuffer SeachSettings
+**** Some Basic Minibuffer Search Settings
 
 Set Emacs to only include commands that are relevant to the current "major mode" (what you would call a file type outside of Emacs).
 
@@ -1224,7 +1224,7 @@ Set Emacs to only include commands that are relevant to the current "major mode"
 
 **** Minibuffer Search Interface
 
-Vertico and Marginalia togethr make an amazing interface for minibuffer search.
+Vertico and Marginalia together make an amazing interface for minibuffer search.
 
 ***** Marginalia
 
@@ -1258,7 +1258,7 @@ What we'll do is:
 - Set Emacs to remember Vertico's history.
 - Fix some weirdness caused by the interplay of directories and completion.
 - Add the Vertico extension =vertico-repeat= and a keybinding to repeat previous searches.
-- Add keybindings for more Vim-like =j=/=k= scrolling as well as scrolling by pages and going up a directory with a single delte.
+- Add keybindings for more Vim-like =j=/=k= scrolling as well as scrolling by pages and going up a directory with a single delete.
 
 Here that all is!
 
@@ -1322,13 +1322,13 @@ And that's not even all of them! Minibuffer searches are a /huge/ part of how yo
     (crj-leader-keys "/" '(consult-line :which-key "Search in current buffer.")))
 #+end_src
 
-***** TODO add bindings for Consult seraches for grep and project search and maybe others?
+***** TODO add bindings for Consult searches for grep and project search and maybe others?
 
 **** Minibuffer Search Filtering
 
 The Orderless package is powerful and fascinating. It decides the data you're searching is filtered as you type, and you can even search in different ways in the same search.
 
-Here's an example using the setup below. I can start typing the path of a file I want to open in a minibuffer search, then notice that ost of the results are in a directory I want to exclude. So I type in a =!= (a pretty universal developer symbol for "not" and the name of that directory, and those results are filtered out. Then I realize I want the path to begin with the home directory, excluding everything in the =/usr= and =/tmp= and such directories. So I type =^= (developer for "starts with") and =~= (the alias for the home directory). Finally, I want only JavaScript files, so I type =$= (developer for "ends with") and then type =js=, and boom!
+Here's an example using the setup below. I can start typing the path of a file I want to open in a minibuffer search, then notice that most of the results are in a directory I want to exclude. So I type in a =!= (a pretty universal developer symbol for "not" and the name of that directory, and those results are filtered out. Then I realize I want the path to begin with the home directory, excluding everything in the =/usr= and =/tmp= and such directories. So I type =^= (developer for "starts with") and =~= (the alias for the home directory). Finally, I want only JavaScript files, so I type =$= (developer for "ends with") and then type =js=, and boom!
 
 Once you're used to this speedy filtering process, it /greatly/ cuts down on the time spent searching for whatever it is you want to do.
 
@@ -1683,7 +1683,7 @@ Original description of Emacs From Scratch's equivalent section perfectly sums i
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 #+end_quote
 
-Besides different keybindings, I've only added a couple extra configuraitons here:
+Besides different keybindings, I've only added a couple extra configurations here:
 
 - =woman= is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - =helpful-at-point= is a great quick Emacs Lisp documentation lookup. With Evil, I can just press =K= on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
@@ -2171,7 +2171,7 @@ There are a number of other language servers for Python so if you find that =pyl
 
 #+end_src
 
-You can use the pyvenv package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
+You can use the =pyvenv= package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
 
 #+begin_src emacs-lisp
 
@@ -2427,7 +2427,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 **** Creating and extracting archives
 
-- =Z= - Compress or uncompress a file or folder to (=.tar.gz=)
+- =Z= - Compress or decompress a file or folder to (=.tar.gz=)
 - =c= - Compress selection to a specific file
 - =dired-compress-files-alist= - Bind compression commands to file extension
 
