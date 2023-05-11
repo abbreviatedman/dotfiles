@@ -1201,8 +1201,10 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
 
 #+end_src
 
+**** Lots of completion settings to look over!
+
 #+begin_src emacs-lisp
-					  ; snippet settings
+  ;; snippet settings
 
   ;; (defun crj--set-up-snippets ()
   ;;   (yas-global-mode)
@@ -1222,18 +1224,20 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
   ;;   (setq-local require-final-newline nil))
   ;; (add-hook! 'snippet-mode-hook 'no-final-newline-in-buffer)
 
-  ;; tide and LSP
-  ;; (defun setup-tide-mode ()
-  ;;   (interactive)
-  ;;   (tide-setup)
-  ;;   (flycheck-mode +1)
-  ;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  ;;   (tide-hl-identifier-mode +1))
+#+end_src
 
+****** TODO set up Emmet
+
+#+begin_src emacs-lisp
   ;; (map! :i [C-tab] nil)
   ;; (map! :i [C-tab] #'emmet-expand-line)
   ;; (map! :map emmet-mode-keymap "<tab>" nil)
 
+#+end_src
+
+This looks like something I'll want to implement too.
+
+#+begin_src emacs-lisp
   ;; (defun toggle-eldoc-mode ()
   ;;   (interactive)
   ;;   (if eldoc-mode
