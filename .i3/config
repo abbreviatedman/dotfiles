@@ -83,7 +83,7 @@ bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#0
 floating_modifier $mod
 
 # start Emacs terminal
-bindsym $mod+BackSpace exec emacsclient -s alt -cn -a "" -e "(vterm)"
+bindsym $mod+BackSpace exec emacsclient -s alt -cn -a "" -e "(multi-vterm)"
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
 # start work browser

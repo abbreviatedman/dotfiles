@@ -863,6 +863,18 @@ Let's set up a keybinding for applications, and then we can put these apps under
       "a" '(:ignore t :which-key "applications")))
 #+end_src
 
+*** Vterm
+
+Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
+
+Let's use a wrapper around it that allows multiple terminals.
+
+#+begin_src emacs-lisp
+  (use-package multi-vterm
+    :general
+    (crj-leader-keys
+      "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
+#+end_src
 *** Org Agenda
 
 Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
