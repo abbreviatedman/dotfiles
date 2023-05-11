@@ -826,7 +826,6 @@ And by setting line numbers to an absolute size, we also avoid having them incre
 
 #+begin_src emacs-lisp
   (use-package emacs
-  
     :init
     (setq crj--line-number-faces '(line-number
                                    line-number-current-line
@@ -1048,6 +1047,29 @@ Don't remember what this one does.
 #+end_src
 
 ****** TODO check what higlight-quoted mode does
+
+**** JavaScript
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq js-indent-level 2))
+
+  (use-package rjsx-mode
+    :init
+    (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
+    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . rjsx-mode))
+    (add-to-list 'auto-mode-alist '("\\.ts\\'" . rjsx-mode))
+
+    :config
+    (defun crj--rjsx-electric-gt-fragment-a (n)
+      (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
+        (insert ?> ?<)
+        (backward-char)))
+
+    (advice-add #'rjsx-electric-gt :before-while #'crj--rjsx-electric-gt-fragment-a))
+#+end_src
 
 ** Completion
 
@@ -1361,61 +1383,67 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 **** In-Buffer Completion
 
 #+begin_src emacs-lisp
-    (use-package corfu
-      :general
-      (:keymaps 'corfu-map
-       :states 'insert
-       "C-n" #'corfu-next
-       "C-p" #'corfu-previous
-       "<escape>" #'corfu-quit
-       "<return>" #'corfu-insert
-       "M-d" #'corfu-show-documentation
-       "M-l" #'corfu-show-location)
-      ;; :config
-      ;; (global-corfu-mode)
-  )
+  (use-package corfu
+    :general
+    (:keymaps 'corfu-map
+              :states 'insert
+              "C-n" #'corfu-next
+              "C-p" #'corfu-previous
+              "<escape>" #'corfu-quit
+              "TAB" #'corfu-insert
+              "M-d" #'corfu-show-documentation
+              "M-l" #'corfu-show-location)
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    (corfu-separator ?#)          ;; Orderless field separator
+    (corfu-quit-at-boundary 'separator)   ;; Never quit at completion boundary
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    (corfu-preview-current nil)    ;; Disable current candidate preview
+    (corfu-auto-prefix 1)
+    (corfu-preselect 'valid)      ;; Preselect the prompt
+    (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
-    (use-package corfu
+    ;; Enable Corfu only for certain modes.
+    :hook ((prog-mode . corfu-mode)
+           (shell-mode . corfu-mode)
+           (eshell-mode . corfu-mode))
 
-      ;; Optional customizations
-      :custom
-      (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-      (corfu-auto t)                 ;; Enable auto completion
-      (corfu-separator ?#)          ;; Orderless field separator
-      (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-      ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-      (corfu-preview-current nil)    ;; Disable current candidate preview
-      (corfu-preselect 'valid)      ;; Preselect the prompt
-      (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-      ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+    ;; Recommended: Enable Corfu globally.
+    ;; This is recommended since Dabbrev can be used globally (M-/).
+    ;; See also `corfu-exclude-modes'.
+    :init
+    (global-corfu-mode))
 
-      ;; Enable Corfu only for certain modes.
-      :hook ((prog-mode . corfu-mode)
-             (shell-mode . corfu-mode)
-             (eshell-mode . corfu-mode))
+  ;; A few more useful configurations...
+  (use-package emacs
+    :init
+    ;; TAB cycle if there are only few candidates
+    ;; (setq completion-cycle-threshold 3)
 
-      ;; Recommended: Enable Corfu globally.
-      ;; This is recommended since Dabbrev can be used globally (M-/).
-      ;; See also `corfu-exclude-modes'.
-      :init
-      (global-corfu-mode))
+    ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+    ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
 
-    ;; A few more useful configurations...
-    (use-package emacs
-      :init
-      ;; TAB cycle if there are only few candidates
-      ;; (setq completion-cycle-threshold 3)
-
-      ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
-      ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
-      ;; (setq read-extended-command-predicate
-      ;;       #'command-completion-default-include-p)
-
-      ;; Enable indentation+completion using the TAB key.
-      ;; `completion-at-point' is often bound to M-TAB.
-      (setq tab-always-indent 'complete))
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
 #+end_src
 
+***** Eglot
+
+#+begin_src emacs-lisp
+  (use-package eglot
+    :config
+    (setq completion-category-overrides '((eglot (styles orderless)))))
+
+  (use-package cape
+    :after eglot
+    :config
+    (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
+#+end_src
 
 *** Flymake
 
