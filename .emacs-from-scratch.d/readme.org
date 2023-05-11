@@ -26,21 +26,21 @@ Literate programming is an approach where, instead of putting comments in code t
 You can read more on this subject... and I'll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, it is automatically tangled to its matching code file. It's pretty sweet!
 
 #+begin_src emacs-lisp
-(defun crafted--org-babel-tangle-config ()
-"Tangle code blocks from our init.org file on save.
+  (defun crafted--org-babel-tangle-config ()
+    "Tangle code blocks from our init.org file on save.
 
-A nice little helper from Crafted Emacs.
+  A nice little helper from Crafted Emacs.
 
-Thanks, Crafted!"
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "readme.org" user-emacs-directory))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+  Thanks, Crafted!"
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "readme.org" user-emacs-directory))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
 #+end_src
 
 
