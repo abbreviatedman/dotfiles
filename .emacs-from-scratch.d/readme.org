@@ -850,7 +850,80 @@ And by setting line numbers to an absolute size, we also avoid having them incre
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
 
-** Dired
+** Applications
+
+This section is for parts of Emacs that are well-integrated applications.
+
+Let's set up a keybinding for applications, and then we can put these apps under it!
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "a" '(:ignore t :which-key "applications")))
+#+end_src
+
+*** Org Agenda
+
+Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
+
+We set up an agenda view, and then we set it as the easier-to-reach keybinding (=SPC aa=). The dashboard, which has a bunch of different potential views, is still available on =SPC aA=.
+
+#+begin_src emacs-lisp
+    (use-package emacs
+      :init
+      (defun crj-agenda () (interactive) (org-agenda t "g"))
+      (setq org-agenda-start-day nil
+            org-agenda-files '("~/org-stuff/inbox.org"
+                               "~/org-stuff/gcal-ics.org"
+                               "~/org-stuff/readme.org"
+                               "~/org-stuff/personal.org"
+                               "~/org-stuff/archive.org")
+
+            org-agenda-custom-commands '(("g" "Daily agenda and top priority tasks"
+                                          ((todo "WAIT"
+                                                 ((org-agenda-overriding-header "Tasks On Hold\n")
+                                                  (org-agenda-block-separator nil)))
+                                           (agenda ""
+                                                   ((org-agenda-span 1)
+                                                    (org-deadline-warning-days 0)
+                                                    (org-agenda-block-separator nil)
+                                                    (org-scheduled-past-days 0)
+                                                    (org-agenda-day-face-function (lambda (_) 'org-agenda-date))
+                                                    (org-agenda-format-date "%A %-e %B %Y")
+                                                    (org-agenda-overriding-header "\n Today's Agenda\n")))
+                                           (agenda ""
+                                                   ((org-agenda-start-on-weekday nil)
+                                                    (org-agenda-start-day "+1d")
+                                                    (org-agenda-span 3)
+                                                    (org-deadline-warning-days 0)
+                                                    (org-agenda-block-separator nil)
+                                                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                                                    (org-agenda-overriding-header "\n Next Three Days After\n")))
+                                           (agenda ""
+                                                   ((org-agenda-start-on-weekday nil)
+                                                    (org-agenda-tag-filter-preset '("-EVENT"))
+                                                    (org-agenda-start-day "+4d")
+                                                    (org-agenda-span 3)
+                                                    (org-deadline-warning-days 0)
+                                                    (org-agenda-block-separator nil)
+                                                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "EVENT"))
+                                                    (org-agenda-overriding-header "\n Further Calendar Events\n")))
+                                           (agenda ""
+                                                   ((org-agenda-time-grid nil)
+                                                    (org-agenda-start-on-weekday nil)
+                                                    (org-agenda-start-day "+4d")
+                                                    (org-agenda-span 14)
+                                                    (org-agenda-show-all-dates nil)
+                                                    (org-deadline-warning-days 0)
+                                                    (org-agenda-block-separator nil)
+                                                    (org-agenda-entry-types '(:deadline))
+                                                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                                                    (org-agenda-overriding-header "\n Upcoming Deadlines (+14d After)\n")))))))
+      :general
+      (crj-leader-keys
+        "aA" '(org-agenda :which-key "Org Agenda dashboard.")
+        "aa" '(crj-agenda :which-key "Custom Org Agenda view.")))
 
     (use-package evil-org
       :after org
@@ -861,6 +934,8 @@ And by setting line numbers to an absolute size, we also avoid having them incre
       (require 'evil-org-agenda)
       (evil-org-agenda-set-keys))
 #+end_src
+
+*** Dired
 
 Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll:
 
