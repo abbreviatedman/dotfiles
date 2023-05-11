@@ -46,7 +46,7 @@ You can read more on this subject... and I'll probably write more. But in the me
 
 ** Package System
 
-Settings for extending Emacs.
+Getting Emacs users' awesome libraries (called "packages") into Emacs.
 
 Emacs has a built in package manager, but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration. =use-package= and =straight= are a really helpful package combination that makes it a lot easier to automate the installation and configuration of everything else we use.
 
