@@ -1273,63 +1273,63 @@ This looks like something I'll want to implement too.
 These might be useful Corfu settings? check them out once I get Eglot going?
 
   #+begin_src emacs-lisp
-    ;; (use-package corfu
-    ;;   :config
-    ;;   (define-key corfu-map (kbd "M-g") #'corfu-quit)
-    ;;   (define-key corfu-map (kbd "C-n") #'corfu-next)
-    ;;   (define-key corfu-map (kbd "C-j") #'corfu-next)
-      ;; (define-key corfu-map (kbd "C-p") #'corfu-previous)
-      ;; (define-key corfu-map (kbd "C-k") #'corfu-previous)
-      ;; (define-key corfu-map (kbd "C-S-n") #'corfu-scroll-up)
-      ;; (define-key corfu-map (kbd "C-S-j") #'corfu-scroll-up)
-      ;; (define-key corfu-map (kbd "C-S-p") #'corfu-scroll-down)
-    ;;   (define-key corfu-map (kbd "C-S-k") #'corfu-scroll-down)
-    ;;   (define-key corfu-map (kbd "RET") nil)
-    ;;   (define-key corfu-map (kbd "RET") #'corfu-complete)
-    ;;   (define-key corfu-map (kbd "TAB") nil)
-    ;;   (define-key corfu-map (kbd "<tab>") nil)
-    ;;   (define-key corfu-map (kbd "<tab>") #'corfu-insert)
-    ;;   (define-key corfu-map (kbd "TAB") #'corfu-insert)
-      ;; (setq corfu-commit-predicate nil
-      ;; 	completion-category-overrides '((eglot (styles orderless)))
-    ;; 	corfu-auto t
-    ;; 	corfu-auto-prefix 1
-    ;; 	corfu-quit-no-match t
-    ;; 	corfu-cycle t))
+	    ;; (use-package corfu
+	    ;;   :config
+	    ;;   (define-key corfu-map (kbd "M-g") #'corfu-quit)
+	    ;;   (define-key corfu-map (kbd "C-n") #'corfu-next)
+	    ;;   (define-key corfu-map (kbd "C-j") #'corfu-next)
+	      ;; (define-key corfu-map (kbd "C-p") #'corfu-previous)
+	      ;; (define-key corfu-map (kbd "C-k") #'corfu-previous)
+	      ;; (define-key corfu-map (kbd "C-S-n") #'corfu-scroll-up)
+	      ;; (define-key corfu-map (kbd "C-S-j") #'corfu-scroll-up)
+	      ;; (define-key corfu-map (kbd "C-S-p") #'corfu-scroll-down)
+	    ;;   (define-key corfu-map (kbd "C-S-k") #'corfu-scroll-down)
+	    ;;   (define-key corfu-map (kbd "RET") nil)
+	    ;;   (define-key corfu-map (kbd "RET") #'corfu-complete)
+	    ;;   (define-key corfu-map (kbd "TAB") nil)
+	    ;;   (define-key corfu-map (kbd "<tab>") nil)
+	    ;;   (define-key corfu-map (kbd "<tab>") #'corfu-insert)
+	    ;;   (define-key corfu-map (kbd "TAB") #'corfu-insert)
+	      ;; (setq corfu-commit-predicate nil
+	      ;; 	completion-category-overrides '((eglot (styles orderless)))
+	    ;; 	corfu-auto t
+	    ;; 	corfu-auto-prefix 1
+	    ;; 	corfu-quit-no-match t
+	    ;; 	corfu-cycle t))
 
-    ;; (after! projectile
-    ;; 	(add-to-list 'projectile-project-root-files ".git"))
+	    ;; (after! projectile
+	    ;; 	(add-to-list 'projectile-project-root-files ".git"))
 
-    ;; ;; I don't need the "symbol class" info in my documentation.
-    ;; (after! marginalia
-    ;; 	(setf (alist-get 'variable marginalia-annotator-registry)
-    ;; 	      '(crj--custom-marginalia-annotate-variable builtin none))
-    ;; 	(setf (alist-get 'symbol marginalia-annotator-registry)
-    ;; 	      '(crj--custom-marginalia-annotate-symbol builtin none))
-    ;; 	(setf (alist-get 'function marginalia-annotator-registry)
-    ;; 	      '(crj--custom-marginalia-annotate-function none)))
+	    ;; ;; I don't need the "symbol class" info in my documentation.
+	    ;; (after! marginalia
+	    ;; 	(setf (alist-get 'variable marginalia-annotator-registry)
+	    ;; 	      '(crj--custom-marginalia-annotate-variable builtin none))
+	    ;; 	(setf (alist-get 'symbol marginalia-annotator-registry)
+	    ;; 	      '(crj--custom-marginalia-annotate-symbol builtin none))
+	    ;; 	(setf (alist-get 'function marginalia-annotator-registry)
+	    ;; 	      '(crj--custom-marginalia-annotate-function none)))
 
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (sql-mode . t)
-       (racket . t)
-       (python . t)
-       (ipython . t)
-       (bash . t)
-       (sh . t)
-       (js . t)
-       (javascript . t)
-       (sql . t)
-       (go . t)))
+	    ;; (org-babel-do-load-languages
+	     ;; 'org-babel-load-languages
+	     ;; '((emacs-lisp . t)))
+	       ;; (sql-mode . t)
+	       ;; (racket . t)
+	       ;; (python . t)
+	       ;; (ipython . t)
+	       ;; (bash . t)
+	       ;; (sh . t)
+	       ;; (js . t)
+	       ;; (javascript . t)
+	       ;; (sql . t)
+	       ;; (go . t)
 
 
-    ;; (map! :leader
-    ;;       :desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring)
+	    ;; (map! :leader
+	    ;;       :desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring)
 
-    ;; ;; (map! :i "C-SPC" #'complete-symbol)
+	    ;; ;; (map! :i "C-SPC" #'complete-symbol)
 
-    ;; (setq embark-prompter 'embark-completing-read-prompter)
+	    ;; (setq embark-prompter 'embark-completing-read-prompter)
   #+end_src
 **** In-Buffer Completion
 
@@ -1824,13 +1824,13 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
 #+begin_src emacs-lisp
 
-  (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (python . t)))
+  ;; (with-eval-after-load 'org
+    ;; (org-babel-do-load-languages
+     ;; 'org-babel-load-languages
+     ;; '((emacs-lisp . t)
+       ;; (python . t)))
 
-    (push '("conf-unix" . conf-unix) org-src-lang-modes))
+    ;; (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
 #+end_src
 
