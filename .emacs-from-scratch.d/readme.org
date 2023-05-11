@@ -250,45 +250,45 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using =describe-variable= to see what they do and what their possible values are!
 
 #+begin_src emacs-lisp
-  (use-package evil
-    :init
-    (global-subword-mode)
-    (setq evil-want-integration t
-          evil-want-keybinding nil
-          sentence-end-double-space nil
-          evil-want-C-u-scroll t
-          evil-want-C-i-jump t
-          evil-undo-system 'undo-redo
-          evil-want-fine-undo t
-          evil-mode-line-format 'nil
-          evil-symbol-word-search t
-          evil-visual-state-cursor 'hollow
-          evil-ex-interactive-search-highlight 'selected-window
-          evil-kbd-macro-suppress-motion-error t
-          evil-respect-visual-line-mode nil)
+(use-package evil
+  :init
+  (global-subword-mode)
+  (setq evil-want-integration t
         evil-ex-substitute-global t
+        evil-want-keybinding nil
+        sentence-end-double-space nil
+        evil-want-C-u-scroll t
+        evil-want-C-i-jump t
+        evil-undo-system 'undo-redo
+        evil-want-fine-undo t
+        evil-mode-line-format 'nil
+        evil-symbol-word-search t
+        evil-visual-state-cursor 'hollow
+        evil-ex-interactive-search-highlight 'selected-window
+        evil-kbd-macro-suppress-motion-error t
+        evil-respect-visual-line-mode nil)
 
-    :config
-    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-    (evil-mode 1)
-    (evil-select-search-module 'evil-search-module 'evil-search)
-    (evil-define-key '(normal visual) 'global
-      "j" #'evil-next-line
-      "gj" #'evil-next-visual-line
-      "k" #'evil-previous-line
-      "gk" #'evil-previous-visual-line
-      "$" #'evil-end-of-line
-      "g$" #'evil-end-of-visual-line)
-    (evil-define-key '(normal visual) org-mode-map
-      "gj" #'evil-next-visual-line
-      "gk" #'evil-previous-visual-line)
-    (dolist (mode '(custom-mode
-                    eshell-mode
-                    term-mode))
-      (add-to-list 'evil-emacs-state-modes mode))
+  :config
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (evil-mode 1)
+  (evil-select-search-module 'evil-search-module 'evil-search)
+  (evil-define-key '(normal visual) 'global
+    "j" #'evil-next-line
+    "gj" #'evil-next-visual-line
+    "k" #'evil-previous-line
+    "gk" #'evil-previous-visual-line
+    "$" #'evil-end-of-line
+    "g$" #'evil-end-of-visual-line)
+  (evil-define-key '(normal visual) org-mode-map
+    "gj" #'evil-next-visual-line
+    "gk" #'evil-previous-visual-line)
+  (dolist (mode '(custom-mode
+                  eshell-mode
+                  term-mode))
+    (add-to-list 'evil-emacs-state-modes mode))
 
-    :bind
-    ("C-M-u" . universal-argument))
+  :bind
+  ("C-M-u" . universal-argument))
 
   #+end_src
 
@@ -297,12 +297,12 @@ Some extra Evil Mode stuff.
 TODO I will definitely want to go through and pick what I like and don't. For now, I'm taking everything but =unimpaired=, but even that has some stuff I want from it.
 
 #+begin_src emacs-lisp
-    (use-package evil-collection
-      :after evil
-      :custom
-      (evil-collection-want-unimpaired-p nil)
-      :init
-      (evil-collection-init)
+(use-package evil-collection
+  :after evil
+  :custom
+  (evil-collection-want-unimpaired-p nil)
+  :init
+  (evil-collection-init)
   (evil-collection-quickrun-setup))
 #+end_src
 
