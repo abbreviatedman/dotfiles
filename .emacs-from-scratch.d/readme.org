@@ -972,15 +972,29 @@ Settings for... coding.
 
 Balance parentheses and switch to Smartparens for showing matching parens. (It's prettier.)
 
-#+begin_src emacs-lisp
-  (use-package smartparens
-    :init
-    (require 'smartparens-config)
-    (show-paren-mode -1)
-    (smartparens-global-mode)
-    (show-smartparens-global-mode)
+Also, experimentally, automatically insert and indent a newline when putting a newline between empty curlies.
 
-    :config (setq sp-show-pair-from-inside nil))
+#+begin_src emacs-lisp
+    (use-package smartparens
+      :init
+      (require 'smartparens-config)
+      (smartparens-global-mode)
+      (show-smartparens-global-mode)
+
+      :config
+      (setq sp-show-pair-from-inside nil
+            sp-highlight-pair-overlay nil))
+
+    (use-package emacs
+      :init
+      (defun crj--create-newline-and-enter-sexp (&rest _ignored)
+        "Open a new brace or bracket expression, with relevant newlines and indent. "
+        (newline)
+        (indent-according-to-mode)
+        (forward-line -1)
+        (indent-according-to-mode))
+
+      (sp-local-pair 'prog-mode "{" nil :post-handlers '((crj--create-newline-and-enter-sexp "RET"))))
 #+end_src
 
 *** Languages
