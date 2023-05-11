@@ -810,13 +810,14 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
     (defun crj--turn-off-line-numbers ()
       (display-line-numbers-mode 0))
 
-    (defvar crj--hooks-for-modes-without-line-numbers '(term-mode-hook
+    (defconst crj--hooks-for-modes-without-line-numbers '(term-mode-hook
+                                                        vterm-mode-hook
                                                         shell-mode-hook
                                                         treemacs-mode-hook
                                                         eshell-mode-hook))
 
-    (dolist (mode crj--hooks-for-modes-without-line-numbers)
-      (add-hook mode #'crj--turn-off-line-numbers)))
+    (dolist (hook crj--hooks-for-modes-without-line-numbers)
+      (add-hook hook #'crj--turn-off-line-numbers)))
 #+end_src
 
 This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
