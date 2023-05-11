@@ -894,6 +894,19 @@ Set Emacs to remember recent files, as well as update buffers if the file change
     (auto-revert-mode 1))
 #+end_src
 
+Save backups of files, every 10 idle seconds, to a backups folder in our  main emacs directory
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (auto-save-mode 1)
+    (setq auto-save-timeout 10
+          auto-save-no-message t
+          backup-directory-alist
+          `(("." . ,(concat user-emacs-directory "/backups")))))
+#+end_src
+
+
 Save minibuffer history.
 
 #+begin_src emacs-lisp
