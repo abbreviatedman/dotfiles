@@ -2303,23 +2303,6 @@ The =eterm-256color= package enhances the output of =term-mode= to enable handli
 
 #+end_src
 
-** EFS/vterm
-
-[[https://github.com/akermu/emacs-libvterm/][vterm]] is an improved terminal emulator package which uses a compiled native module to interact with the underlying terminal applications.  This enables it to be much faster than =term-mode= and to also provide a more complete terminal emulation experience.
-
-Make sure that you have the [[https://github.com/akermu/emacs-libvterm/#requirements][necessary dependencies]] installed before trying to use =vterm= because there is a module that will need to be compiled before you can use it successfully.
-
-#+begin_src emacs-lisp
-
-  (use-package vterm
-    :commands vterm
-    :config
-    (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")  ;; Set this to match your custom shell prompt
-    ;;(setq vterm-shell "zsh")                       ;; Set this to customize the shell to launch
-    (setq vterm-max-scrollback 10000))
-
-#+end_src
-
 ** EFS/shell-mode
 
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Interactive-Shell.html#Interactive-Shell][shell-mode]] is a middle ground between =term-mode= and Eshell.  It is *not* a terminal emulator so more complex terminal programs will not run inside of it.  It does have much better integration with Emacs because all command input in this mode is handled by Emacs and then sent to the underlying shell once you press Enter.  This means that you can use =evil-mode='s editing motions on the command line, unlike in the terminal emulator modes above.
