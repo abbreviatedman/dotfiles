@@ -871,6 +871,8 @@ Let's use a wrapper around it that allows multiple terminals.
 
 #+begin_src emacs-lisp
   (use-package multi-vterm
+    :init
+    (setq vterm-max-scrollback 100000)
     :general
     (crj-leader-keys
       "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
