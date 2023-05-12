@@ -499,6 +499,17 @@ Shows you the difference between two different bits of text. Another very occasi
     :commands (evil-quick-diff evil-quick-diff-cancel))
 #+end_src
 
+** Projects
+
+Grouping files together as a project is extremely helpful sometimes!
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "SPC" '(project-find-file :which-key "Find file within current project.")))
+#+end_src
+
 ** Look and Feel
 
 *** Basic UI Configuration
