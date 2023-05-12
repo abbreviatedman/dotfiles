@@ -12,15 +12,10 @@
 ** Magit
 *** With YADM and Forge
 ** Mu4e
-** Org Agenda
-** Flyspell
-** Corfu
-** Eglot
 ** Copilot
 ** ChatGPT
 ** Projectile
 ** Embark
-** Marginalia
 ** Bindings For
 *** closing window with d
 *** promoting/demoting org headings with =<</>>=
