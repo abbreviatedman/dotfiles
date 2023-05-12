@@ -949,6 +949,44 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
       (evil-org-agenda-set-keys))
 #+end_src
 
+*** Version Control With Magit
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :init
+    (defun crj-yadm-magit-status ()
+      (interactive (magit-status "/yadm::")))
+
+    (add-hook 'git-commit-mode-hook 'evil-insert-state)
+
+    :commands magit-status
+
+    :custom
+    (magit-display-buffer-function
+     #'magit-display-buffer-same-window-except-diff-v1)
+
+    :general
+    (crj-leader-keys
+      "g" '(:ignore t :which-key "git")
+      "gg" '(magit-status :which-key "Launch Magit.")
+      "gd" '(crj-yadm-magit-status :which-key "Launch Magit for YADM.")))
+
+  (use-package emacs
+    :init
+    (require 'tramp)
+    (add-to-list 'tramp-methods
+                 '("yadm"
+                   (tramp-login-program "yadm")
+                   (tramp-login-args (("enter")))
+                   (tramp-login-env (("SHELL") ("/bin/sh")))
+                   (tramp-remote-shell "/bin/sh")
+                   (tramp-remote-shell-args ("-c"))))
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+
+  (use-package forge
+    :after magit)
+#+end_src
+
 *** Dired
 
 Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll:
@@ -1529,6 +1567,11 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
 ***** Corfu
 
+Sets up:
+
+- in-buffer completion
+- cool icons for same
+
 #+begin_src emacs-lisp
   (use-package corfu
     :config
@@ -1560,6 +1603,14 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
     :init
     (global-corfu-mode))
+
+  (use-package kind-icon
+    :after corfu
+    :custom
+    (kind-icon-use-icons t)
+    (kind-icon-default-face 'corfu-default)
+    (kind-icon-blend-background nil)
+    (kind-icon-blend-frac 0.08))
 
   (use-package emacs
     :init
@@ -2261,25 +2312,6 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
   ;; (use-package counsel-projectile
   ;;   :after projectile
   ;;   :config (counsel-projectile-mode))
-
-#+end_src
-
-** EFS/Magit
-
-[[https://magit.vc/][Magit]] is the best Git interface I've ever used.  Common Git operations are easy to execute quickly using Magit's command panel system.
-
-#+begin_src emacs-lisp
-
-  (use-package magit
-    :commands magit-status
-    :custom
-    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-  ;; NOTE: Make sure to configure a GitHub token before using this package!
-  ;; - https://magit.vc/manual/forge/Token-Creation.html#Token-Creation
-  ;; - https://magit.vc/manual/ghub/Getting-Started.html#Getting-Started
-  (use-package forge
-    :after magit)
 
 #+end_src
 
