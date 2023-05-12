@@ -1227,6 +1227,38 @@ Configurations specific to certain languages.
 
 ***** TODO configure markdown
 
+**** HTML
+
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :init
+    (defun crj-web-mode-goto-matching-tag ()
+      (interactive)
+      (let ((opening-start (caar (web-mode-element-boundaries)))
+            (opening-end (cdar (web-mode-element-boundaries)))
+            (closing-start (cadr (web-mode-element-boundaries)))
+            (closing-end (cddr (web-mode-element-boundaries))))
+        (if (and (>= (point) opening-start)
+                 (<= (point) opening-end))
+            (web-mode-element-end)
+          (web-mode-element-beginning))))
+
+    :commands (web-mode)
+
+    :mode (("\\.html" . web-mode)
+           ("\\.htm" . web-mode)
+           ("\\.sgml\\'" . web-mode))
+
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-comment-style 2)
+    :general
+    (:keymaps 'web-mode-map
+              [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
+#+end_src
+
 **** Emacs Lisp
 
 ***** TODO configure elisp more
