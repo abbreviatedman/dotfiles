@@ -949,6 +949,42 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
       (evil-org-agenda-set-keys))
 #+end_src
 
+*** Version Control With Magit
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :init
+    (defun crj-yadm-magit-status ()
+      (interactive (magit-status "/yadm::")))
+
+    :commands magit-status
+
+    :custom
+    (magit-display-buffer-function
+     #'magit-display-buffer-same-window-except-diff-v1)
+
+    :general
+    (crj-leader-keys
+      "g" '(:ignore t :which-key "git")
+      "gg" '(magit-status :which-key "Launch Magit.")
+      "gd" '(crj-yadm-magit-status :which-key "Launch Magit for YADM.")))
+
+  (use-package emacs
+    :init
+    (require 'tramp)
+    (add-to-list 'tramp-methods
+                 '("yadm"
+                   (tramp-login-program "yadm")
+                   (tramp-login-args (("enter")))
+                   (tramp-login-env (("SHELL") ("/bin/sh")))
+                   (tramp-remote-shell "/bin/sh")
+                   (tramp-remote-shell-args ("-c"))))
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+
+  (use-package forge
+    :after magit)
+#+end_src
+
 *** Dired
 
 Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll:
