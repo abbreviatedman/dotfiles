@@ -2147,6 +2147,14 @@ This section contains the basic configuration for =org-mode= plus the configurat
 
 #+end_src
 
+*** Org Exporting
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq org-export-with-section-numbers nil))
+#+end_src
+
 ** EFS/Configure Babel Languages
 
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
