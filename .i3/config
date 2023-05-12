@@ -31,12 +31,10 @@ set $alt Mod1
 # writing terminals
 
 ## emacs-everywhere
-bindsym $mod+Shift+w exec emacsclient -s alt -cn -a "" --eval "(emacs-everywhere)"
+bindsym $mod+Shift+q exec emacsclient -s alt -cn -a "" --eval "(emacs-everywhere)"
 
 ## Simple writing terminal.
-# bindsym $mod+Shift+w exec emacsclient -s alt -cn -a "" ~/org-stuff/quick-note.md
-# Can do this once I have a server set up.
-bindsym $mod+w exec emacsclient -s alt -cn -a "" ~/org-stuff/quick-note.md
+bindsym $mod+q exec emacsclient -s alt -cn -a "" ~/org-stuff/quick-note.md
 
 ## Todos
 bindsym $mod+Shift+t exec  emacsclient -s alt -cn -a "" ~/org-stuff/readme.org
