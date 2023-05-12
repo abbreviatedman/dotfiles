@@ -446,12 +446,27 @@ Another efficient text editing library. This one exchanges two bits of text in a
 
 *** Evil Text Objects
 
+Text Objects are a powerful concept in Vim/Evil. Let's add our own!
+
+**** HTML Attribute Evil Text Object
+
 This package gives you an Evil text object for XML/HTML attributes. It's helpful!
 
 #+begin_src emacs-lisp
 (use-package exato
   :commands (evil-outer-xml-attr evil-inner-xml-attr))
 #+end_src
+
+**** Entire Buffer Evil Text Object
+
+A surprisingly useful Evil text object for the entire buffer.
+
+#+begin_src emacs-lisp
+  (use-package evil-textobj-entire
+    :straight (evil-textobj-entire
+               :host github
+               :repo "nscoder/evil-textobj-entire"))
+  #+end_src
 
 *** Evil Search From Visual Mode
 
