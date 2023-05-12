@@ -957,6 +957,8 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (defun crj-yadm-magit-status ()
       (interactive (magit-status "/yadm::")))
 
+    (add-hook 'git-commit-mode-hook 'evil-insert-state)
+
     :commands magit-status
 
     :custom
