@@ -904,6 +904,22 @@ Let's set up a keybinding for applications, and then we can put these apps under
       "a" '(:ignore t :which-key "applications")))
 #+end_src
 
+*** Internet Radio with Eradio
+
+I love this no-hassle don't-have-to-think-about-what-to-listen-to background music. I need need /need/ music to focus.
+
+#+begin_src emacs-lisp
+  (use-package eradio
+    :init
+    (setq eradio-channels '(("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
+                            ("LO FLY Radio" . "http://64.20.39.8:8421/listen.pls?sid=1&t=.pls")
+                            ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")
+                            ("SomaFM - Secret Agent" . "https://somafm.com/secretagent.pls")))
+    :general
+    (crj-leader-keys
+      "aM" '(eradio-play :which-key "Play internet radio.")
+      "am" '(eradio-stop :which-key "Stop playing internet radio.")))
+#+end_src
 *** Vterm
 
 Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
