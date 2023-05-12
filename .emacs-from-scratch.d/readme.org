@@ -101,23 +101,61 @@ Like many Vimmers, I eventually realized that the things I personally liked abou
 
 Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package=, =evil=, and =which-key=.
 
-We can use =general-create-definer= to define a pair of leader keys  that we'll call =crj-leader-keys= (=M-SPC= everywhere, and =SPC= alone in Normal Mode—see the very next section for what these terms mean), and then define commands that start with those leader keys using =crj-leader-keys= as a function.
+We can use =general-create-definer= to define a pair of leader keys. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
 
 #+begin_src emacs-lisp
   (use-package general
     :init
+    (general-create-definer crj-leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "M-SPC"))
+#+end_src
+
+This code defines a /function/ called ~crj-leader-keys~ that we can use from now on to define keybindings. The important thing here is that we can define upfront what ~crj-leader-keys~ does—what Evil States it's active in, and that it will activate with either spacebar in Evil Normal State, or Meta-spacebar (Alt- or Option-spacebar) when spacebar would otherwise do something else (like print an actual space).
+
+We can now very easily define another level of keybinding. We want ~SPC f~ to activate commands that have to do with files—thus the ~f~.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys "f" '(:ignore t :which-key "files")))
+#+end_src
+
+From now on, when you press the user presses the spacebar (or ~M-SPC~) and then ~f~, they'll have access to any commands that follow. And when we put ~which-key~ in there momentarily, when they press ~SPC~ they'll get a menu that will show them that ~f~ leads to commands labeled "files", and if they press ~f~ they'll see a list of letters they can press next and the commands that each will activate.
+
+Let's define a few commands that open specific commonly accessed files as examples, and then bind them to keys using this system.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq org-directory "~/org-stuff")
+
     (defun crj-open-literate-config-file ()
       "Open the literate config file in the user directory."
       (interactive)
       (find-file (expand-file-name "readme.org" user-emacs-directory)))
 
-    (general-create-definer crj-leader-keys
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "M-SPC")
+    (defun crj-open-task-list ()
+      "Open the master task list file."
+      (interactive)
+      (find-file (expand-file-name "readme.org" org-directory)))
 
-    (crj-leader-keys "fc" #'crj-open-literate-config-file))
+    (defun crj-open-quick-note-file ()
+      "Open the file used for quick notes."
+      (interactive)
+      (find-file (expand-file-name "quick-note.md" org-directory)))
+
+    :general
+    (crj-leader-keys
+      "fc" '(crj-open-literate-config-file :which-key "Open literate config file.")
+      "ft" '(crj-open-task-list :which-key "Open task list file.")
+      "fq" '(crj-open-quick-note-file :which-key "Open quick notes file.")))
 #+end_src
+
+Now it's not much code to add fairly complex keybindings, and once we get ~which-key~ installed, they'll be discoverable as well!
+
+Next we'll define a bunch more keybindings, as well as answer the question, /why leader keys at all?/
 
 *** General Emacs' Keybindings
 
@@ -141,8 +179,6 @@ The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as
   (use-package emacs
     :general
     (crj-leader-keys
-             "f" '(:ignore t
-                    :which-key "file")
              "fs" '(save-buffer
                     :which-key "Save current buffer.")))
 #+end_src
@@ -154,11 +190,9 @@ To see a good example of a menu with many commands in it, see the section on Hel
 You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
 
 #+begin_src emacs-lisp
-    (use-package emacs
-      :general
-      (:prefix "SPC" :keymaps 'normal
-              "." '(find-file
-                    :which-key "Open or create file.")))
+  (use-package emacs
+    :general
+    (crj-leader-keys "." '(find-file :which-key "Open or create file.")))
 #+end_src
 
 I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
@@ -167,22 +201,14 @@ I think you get the basics—as I did with learning and writing this section! Le
   (use-package emacs
     :general
     (crj-leader-keys
-              "," '(consult-buffer
-                    :which-key "Switch buffer or open recent file.")
-              "TAB" '(evil-switch-to-windows-last-buffer
-                      :which-key "Previous buffer.")
-              ";" '(execute-extended-command
-                    :which-key "Run interactive command.")
-              ":" '(eval-expression
-                    :which-key "Evaluate expression.")
-              "b" '(:ignore t
-                      :which-key "buffer")
-              "bd" '(crj--kill-or-bury-current-buffer
-                     :which-key "Kill buffer.")
-              "m" '(:ignore t
-                      :which-key "markup")
-              "m." '(consult-outline
-                     :which-key "Search current headings.")))
+      "," '(consult-buffer :which-key "Switch buffer or open recent file.")
+      "TAB" '(evil-switch-to-windows-last-buffer :which-key "Previous buffer.")
+      ";" '(execute-extended-command :which-key "Run interactive command.")
+      ":" '(eval-expression :which-key "Evaluate expression.")
+      "b" '(:ignore t :which-key "buffer")
+      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "m" '(:ignore t :which-key "markup")
+      "m." '(consult-outline :which-key "Search current headings.")))
 #+end_src
 
 *** Or Maybe Redo Keybindings To Be More Readable?
