@@ -1565,6 +1565,11 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
 ***** Corfu
 
+Sets up:
+
+- in-buffer completion
+- cool icons for same
+
 #+begin_src emacs-lisp
   (use-package corfu
     :config
@@ -1596,6 +1601,14 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
     :init
     (global-corfu-mode))
+
+  (use-package kind-icon
+    :after corfu
+    :custom
+    (kind-icon-use-icons t)
+    (kind-icon-default-face 'corfu-default)
+    (kind-icon-blend-background nil)
+    (kind-icon-blend-frac 0.08))
 
   (use-package emacs
     :init
