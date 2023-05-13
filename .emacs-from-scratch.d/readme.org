@@ -206,9 +206,7 @@ I think you get the basics—as I did with learning and writing this section! Le
       ";" '(execute-extended-command :which-key "Run interactive command.")
       ":" '(eval-expression :which-key "Evaluate expression.")
       "b" '(:ignore t :which-key "buffer")
-      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
-      "m" '(:ignore t :which-key "markup")
-      "m." '(consult-outline :which-key "Search current headings.")))
+      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")))
 #+end_src
 
 *** Or Maybe Redo Keybindings To Be More Readable?
@@ -276,60 +274,67 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using =describe-variable= to see what they do and what their possible values are!
 
 #+begin_src emacs-lisp
-(use-package evil
-  :init
-  (global-subword-mode)
-  (setq evil-want-integration t
-        evil-ex-substitute-global t
-        evil-want-keybinding nil
-        sentence-end-double-space nil
-        evil-want-C-u-scroll t
-        evil-want-C-i-jump t
-        evil-undo-system 'undo-redo
-        evil-want-fine-undo t
-        evil-mode-line-format 'nil
-        evil-symbol-word-search t
-        evil-visual-state-cursor 'hollow
-        evil-ex-interactive-search-highlight 'selected-window
-        evil-kbd-macro-suppress-motion-error t
-        evil-respect-visual-line-mode nil)
+  (use-package evil
+    :init
+    (global-subword-mode)
+    (setq evil-want-integration t
+          evil-ex-substitute-global t
+          evil-want-keybinding nil
+          sentence-end-double-space nil
+          evil-want-C-u-scroll t
+          evil-want-C-i-jump t
+          evil-want-Y-yank-to-eol t
+          evil-undo-system 'undo-redo
+          evil-want-fine-undo t
+          evil-mode-line-format 'nil
+          evil-symbol-word-search t
+          evil-visual-state-cursor 'hollow
+          evil-ex-interactive-search-highlight 'selected-window
+          evil-kbd-macro-suppress-motion-error t
+          evil-respect-visual-line-mode nil)
 
-  :config
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  (evil-mode 1)
-  (evil-select-search-module 'evil-search-module 'evil-search)
-  (evil-define-key '(normal visual) 'global
-    "j" #'evil-next-line
-    "gj" #'evil-next-visual-line
-    "k" #'evil-previous-line
-    "gk" #'evil-previous-visual-line
-    "$" #'evil-end-of-line
-    "g$" #'evil-end-of-visual-line)
-  (evil-define-key '(normal visual) org-mode-map
-    "gj" #'evil-next-visual-line
-    "gk" #'evil-previous-visual-line)
-  (dolist (mode '(custom-mode
-                  eshell-mode
-                  term-mode))
-    (add-to-list 'evil-emacs-state-modes mode))
+    :config
+    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+    (evil-mode 1)
+    (evil-select-search-module 'evil-search-module 'evil-search)
+    (evil-define-key '(normal visual) 'global
+      "j" #'evil-next-line
+      "gj" #'evil-next-visual-line
+      "k" #'evil-previous-line
+      "gk" #'evil-previous-visual-line
+      "$" #'evil-end-of-line
+      "g$" #'evil-end-of-visual-line)
+    (evil-define-key '(normal visual) org-mode-map
+      "gj" #'evil-next-visual-line
+      "gk" #'evil-previous-visual-line)
+    (dolist (mode '(custom-mode
+                    eshell-mode
+                    term-mode))
+      (add-to-list 'evil-emacs-state-modes mode))
 
-  :bind
-  ("C-M-u" . universal-argument))
+    :bind
+    ("C-M-u" . universal-argument))
 
   #+end_src
 
 Some extra Evil Mode stuff.
 
-TODO I will definitely want to go through and pick what I like and don't. For now, I'm taking everything but =unimpaired=, but even that has some stuff I want from it.
+Only reversing the "move line up/down" and "next/previous error" keybindings to be more mnemonic.
 
 #+begin_src emacs-lisp
-(use-package evil-collection
-  :after evil
-  :custom
-  (evil-collection-want-unimpaired-p nil)
-  :init
-  (evil-collection-init)
-  (evil-collection-quickrun-setup))
+  (use-package evil-collection
+    :after evil
+    :init
+    (evil-collection-init)
+    (evil-collection-quickrun-setup)
+
+    :general
+    (:keymaps 'evil-collection-unimpaired-mode-map
+     :states '(normal visual)
+     "[e" 'evil-collection-unimpaired-previous-error
+     "]e" 'evil-collection-unimpaired-next-error
+     "[l" 'evil-collection-unimpaired-move-text-up
+     "]l" 'evil-collection-unimpaired-move-text-down))
 #+end_src
 
 *** Emacs In Vim In Emacs
@@ -1007,14 +1012,21 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
         "aA" '(org-agenda :which-key "Org Agenda dashboard.")
         "aa" '(crj-agenda :which-key "Custom Org Agenda view.")))
 
-    (use-package evil-org
-      :after org
-      :init
-      (add-hook 'org-mode-hook #'evil-org-mode)
-      (add-hook 'org-agenda-mode-hook #'evil-org-mode)
-      :config
-      (require 'evil-org-agenda)
-      (evil-org-agenda-set-keys))
+  (use-package evil-org
+    :after org
+
+    :init
+    (add-hook 'org-mode-hook #'evil-org-mode)
+    (add-hook 'org-agenda-mode-hook #'evil-org-mode)
+
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))
+    (evil-org-agenda-set-keys)
+
+    :general
+    (:keymaps 'org-mode-map
+              "RET" #'evil-org-return))
 #+end_src
 
 *** Version Control With Magit
@@ -1928,14 +1940,88 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
 #+end_src
 
-** Org Mode
+** Markup Documents
+
+*** General Markup Keybindings
+
+The overarching menu.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "m" '(:ignore t :which-key "Markup Menu")))
+#+end_src
+
+Searching a markup outline.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "m." '(consult-outline :which-key "Search markup outline.")))
+#+end_src
+
+*** Org Mode
 
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
 
-*** TODO add << and >> bindings for =org-do-promote= and =org-do-demote=, respectively
-*** TODO change =M-h= and =M-l= to the above functions
+**** Keybindings
 
-*** Better Font Faces
+Let's make Org keybindings a bit better.
+
+***** Add Evil Bindings
+
+This library adds some basic Evil bindings.
+
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :after org
+    :init
+    (add-hook 'org-mode-hook #'evil-org-mode))
+#+end_src
+
+***** Custom Evil Binding
+
+***** Todos
+
+****** Todos menu
+
+#+begin_src emacs-lisp
+  (use-package org
+    :general
+    (crj-leader-keys
+      "mt" '(:ignore t :which-key "Todos Menu")))
+#+end_src
+
+****** General Bindings
+
+Some general todo bindings.
+
+#+begin_src emacs-lisp
+  (use-package org
+    :general
+    (crj-leader-keys
+      "mtt" '(org-todo :which-key "Change todo state.")))
+#+end_src
+
+******* TODO add bindings for:
+- deadlines and schedules
+
+***** Searching Org Documents
+
+The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
+
+#+begin_src emacs-lisp
+  (use-package org
+    :general
+    (crj-leader-keys
+      :keymaps 'org-mode-map
+      :states '(normal visual)
+      "m." '(consult-org-heading :which-key "Search current headings.")))
+#+end_src
+
+**** Org Mode Better Font Faces
 
 The =efs/org-font-setup= function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in =org-mode=.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
