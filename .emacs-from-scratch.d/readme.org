@@ -331,13 +331,21 @@ Only reversing the "move line up/down" and "next/previous error" keybindings to 
     (evil-collection-quickrun-setup)
 
     :general
-    (:keymaps 'evil-collection-unimpaired-mode-map
-     :states '(normal visual)
-     "[e" 'evil-collection-unimpaired-previous-error
-     "]e" 'evil-collection-unimpaired-next-error
-     "[l" 'evil-collection-unimpaired-move-text-up
-     "]l" 'evil-collection-unimpaired-move-text-down))
-#+end_src
+    (general-unbind '(normal visual motion) evil-collection-unimpaired-mode-map
+      "]l"
+      "[l"
+      "[m"
+      "]m"
+      "[e"
+      "]e")
+
+    (general-def '(normal visual motion) :prefix "["
+              "m" '(evil-collection-unimpaired-move-text-up :which-key "Move text up.")
+              "e" '(evil-collection-unimpaired-previous-error :which-key "Go to previous error."))
+    (general-def '(normal visual motion) :prefix "]"
+              "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
+              "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
+      #+end_src
 
 *** Emacs In Vim In Emacs
 
@@ -1023,7 +1031,7 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 
     :config
     (require 'evil-org-agenda)
-    (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))
+    (evil-org-set-key-theme '(textobjects insert navigation additional shift todo))
     (evil-org-agenda-set-keys)
 
     :general
