@@ -528,7 +528,7 @@ Grouping files together as a project is extremely helpful sometimes!
 
 *** Basic UI Configuration
 
-These are some sane defaults for getting rid of extra UI elements, like the menu bar and scroll bar.
+These are some sane defaults for the UI.
 
 #+begin_src emacs-lisp
   (use-package emacs
