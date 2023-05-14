@@ -47,9 +47,9 @@ You can read more on this subject... and I'll probably write more. But in the me
 
 Getting Emacs users' awesome libraries (called "packages") into Emacs.
 
-Emacs has a built in package manager, but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration. =use-package= and =straight= are a really helpful package combination that makes it a lot easier to automate the installation and configuration of everything else we use.
+Emacs has a built in package manager, but it doesn't make it easy to automatically install packages on a new system the first time you pull down your configuration. ~use-package~ and ~straight~ are a really helpful package combination that makes it a lot easier to automate the installation and configuration of everything else we use.
 
-Let's install =straight=.
+Let's install ~straight~.
 
 #+begin_src emacs-lisp
 (defvar bootstrap-version)
@@ -66,19 +66,19 @@ Let's install =straight=.
   (load bootstrap-file nil 'nomessage))
 #+end_src
 
-And turn off the built-in package manager. (This needs to go in =early-init.el=, but I can tangle it to there from this document with a header arg, which you can see if you're looking at this document as a raw =org-mode= file. If that sounds like a whole thing, well... it's also not terribly important detail! But I included it anyway! Not sure why!)
+And turn off the built-in package manager. (This needs to go in ~early-init.el~, but I can tangle it to there from this document with a header arg, which you can see if you're looking at this document as a raw ~org-mode~ file. If that sounds like a whole thing, well... it's also not terribly important detail! But I included it anyway! Not sure why!)
 
 #+begin_src emacs-lisp :tangle early-init.el
 (setq package-enable-at-startup nil)
 #+end_src
 
-Use =straight= to install =use-package=.
+Use ~straight~ to install ~use-package~.
 
 #+begin_src emacs-lisp
 (straight-use-package 'use-package)
 #+end_src
 
-Tell =use-package= to install packages using =straight= whenever I declare a =use-package= block.
+Tell ~use-package~ to install packages using ~straight~ whenever I declare a ~use-package~ block.
 
 #+begin_src emacs-lisp
 (use-package straight
@@ -86,7 +86,7 @@ Tell =use-package= to install packages using =straight= whenever I declare a =us
   (straight-use-package-by-default t))
 #+end_src
 
-Now every time I configure a package with =use-package=, =use-package= will use =straight= to install the package first.
+Now every time I configure a package with ~use-package~, ~use-package~ will use ~straight~ to install the package first.
 
 This means that if you or I copy this configuration to another machine and launch Emacs, it will install the necessary packages automatically and configure them the exact same way. This is now a portable document capable of replicating my setup anywhere. And explaining it!
 
@@ -98,9 +98,9 @@ Like many Vimmers, I eventually realized that the things I personally liked abou
 
 *** Installing And Using General
 
-Before we even get to the keybindings themselves, let's set up a good Vimmish system here. =general= is a great system for setting up keybindings. It integrates very well with =use-package=, =evil=, and =which-key=.
+Before we even get to the keybindings themselves, let's set up a good Vimmish system here. ~general~ is a great system for setting up keybindings. It integrates very well with ~use-package~, ~evil~, and ~which-key~.
 
-We can use =general-create-definer= to define a pair of leader keys. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
+We can use ~general-create-definer~ to define a pair of leader keys. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
 
 #+begin_src emacs-lisp
   (use-package general
@@ -162,17 +162,17 @@ Many of my keybindings are taken from Doom Emacs' well-thought-through keybindin
 
 In Vanilla Emacs' keybinding land, the focus is on often elaborate key "chords", where you use a series of modifier key-letter pairs, while in Vim/Evil, most commands use a "leader" key.
 
-For example, opening a file in Vanilla Emacs keybindings would be =C-x C-f=, which means to hold down the =Control= key, press =x=, then, still holding down =Control= (or re-pressing and holding it), press =f=. This can be a bit of a strain on your hand, although certainly less so if you follow best practices and swap =Control= and =Caps Lock=.
+For example, opening a file in Vanilla Emacs keybindings would be ~C-x C-f~, which means to hold down the ~Control~ key, press ~x~, then, still holding down ~Control~ (or re-pressing and holding it), press ~f~. This can be a bit of a strain on your hand, although certainly less so if you follow best practices and swap ~Control~ and ~Caps Lock~.
 
-In Evil-Mode-style keybindings, the same command might be something like =SPC f o=, which means press the =spacebar=, then press the =f= key, then press the =o= key.
+In Evil-Mode-style keybindings, the same command might be something like ~SPC f o~, which means press the ~spacebar~, then press the ~f~ key, then press the ~o~ key.
 
-This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, =/= begins a text search (like =C-f= or =Command-f= in many apps), and =dd= deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is =i= (for =i=nsert).
+This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, ~/~ begins a text search (like ~C-f~ or ~Command-f~ in many apps), and ~dd~ deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is ~i~ (for ~i~nsert).
 
-This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like =Control= and =Alt= and =Command= to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use =SPC f o= to =o= pen a =f= ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
+This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like ~Control~ and ~Alt~ and ~Command~ to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use ~SPC f o~ to ~o~ pen a ~f~ ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
 
 Let's see some examples!
 
-The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as just three quick presses.
+The following binds ~SPC f s~ to save a file. It's nice and mnemonic, as well as just three quick presses.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -182,11 +182,11 @@ The following binds =SPC f s= to save a file. It's nice and mnemonic, as well as
                     :which-key "Save current buffer.")))
 #+end_src
 
-The =:prefix "SPC"= tells =general= that this is a "leader key", a key that leads off a set of commands. =:keymaps normal= indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ="f"= one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The =:which-key= keyword in that and the following line, where we finally bind the =save-buffer= command, tells =which-key= (see the "Which Key" section below) how to label the menu and commands for discoverability.
+The ~:prefix "SPC"~ tells ~general~ that this is a "leader key", a key that leads off a set of commands. ~:keymaps normal~ indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ~"f"~ one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The ~:which-key~ keyword in that and the following line, where we finally bind the ~save-buffer~ command, tells ~which-key~ (see the "Which Key" section below) how to label the menu and commands for discoverability.
 
 To see a good example of a menu with many commands in it, see the section on Helpful commands.
 
-You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic =SPC .= for opening or creating a file. (And you can also launch =dired= with it!) This is such a common command that it's good not to bury it.
+You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's good not to bury it.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -228,15 +228,15 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
     (:states 'insert [(shift backspace)] #'just-one-space))
 #+end_src
 
- It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via =npm= with =npm i -g [package name]= on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version—so with the previous example, you'd write the command in a document as =npm install --global [package name]=.
+ It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via ~npm~ with ~npm i -g [package name]~ on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version—so with the previous example, you'd write the command in a document as ~npm install --global [package name]~.
 
- So! Maybe this is how these mappings should be written? =[(control d)]= instead of ="C-d"=? Maybe! Bears thinking about, for sure.
+ So! Maybe this is how these mappings should be written? ~[(control d)]~ instead of ~"C-d"~? Maybe! Bears thinking about, for sure.
 
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
 
-TODO Delete the =gj=/=j= bindings once I find the part of the Emacs For Scratch bindings where they're changing them.
+TODO Delete the ~gj~/~j~ bindings once I find the part of the Emacs For Scratch bindings where they're changing them.
 
 *** Transposing Characters
 
@@ -272,7 +272,7 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 
 *** Evil Mode Setup
 
-There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using =describe-variable= to see what they do and what their possible values are!
+There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using ~describe-variable~ to see what they do and what their possible values are!
 
 #+begin_src emacs-lisp
   (use-package evil
@@ -350,7 +350,7 @@ Only reversing the "move line up/down" and "next/previous error" keybindings to 
 
 Bringing back some Emacs commands to use in Insert State.
 
-The short-range, simple Emacs commands are often easier to use when you don't want to switch to Normal State for editing and then back to Insert State to immediately get back to writing. Faster to type =C-w= to delete the word you're currently typing and then replace it, rather than =ESC ciw=. Or, worse, a situation where your editing doesn't bring you back to insert mode in the right place, like when the word /before/ your current word should be deleted—now you're talking about =ESC bb daw A= using Vim, but simply =M-b C-w C-e= with Vanilla Emacs bindings.
+The short-range, simple Emacs commands are often easier to use when you don't want to switch to Normal State for editing and then back to Insert State to immediately get back to writing. Faster to type ~C-w~ to delete the word you're currently typing and then replace it, rather than ~ESC ciw~. Or, worse, a situation where your editing doesn't bring you back to insert mode in the right place, like when the word /before/ your current word should be deleted—now you're talking about ~ESC bb daw A~ using Vim, but simply ~M-b C-w C-e~ with Vanilla Emacs bindings.
 
 I'm still a /big/ fan of modal editing, since you spend so much time straight up editing, but sometimes, particularly when writing prose, you don't want a minor edit to break your flow.
 
@@ -371,12 +371,12 @@ Also included is a nifty function that deletes everything but one space before t
 #+end_src
 
 **** TODOS
-***** TODO add =C-K= and =C-u=
+***** TODO add ~C-K~ and ~C-u~
 ***** TODO add commands to minibuffer editing
 
 *** Visualizing Evil Commands
 
-=evil-goggles= helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
+~evil-goggles~ helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
 
 #+begin_src emacs-lisp
   (use-package evil-goggles
@@ -417,9 +417,9 @@ This library is amazing for working with surrounding text. Changing double quote
 
 *** Jumping By Character Pairs In Evil
 
-I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press =s= and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ranges. And when it isn't? You just press =;= to go to the next one.
+I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press ~s~ and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ranges. And when it isn't? You just press ~;~ to go to the next one.
 
-Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
+Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
 
 #+begin_src emacs-lisp
   (use-package evil-snipe
@@ -437,7 +437,7 @@ Basically, it's a supercharged version of Vim's =f= command. It's fantastic, and
 
 This is an invaluable command, especially since it's a motion I can combine with a text object.
 
-Being able to type =SPC r i )= to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
+Being able to type ~SPC r i )~ to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
 
 #+begin_src emacs-lisp
   (use-package evil-replace-with-register
@@ -484,7 +484,7 @@ A surprisingly useful Evil text object for the entire buffer.
 
 *** Evil Search From Visual Mode
 
-Allows you to select some text in Visual State and then hit =*= or =#= to search for that text. Very occasionally very useful!
+Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search for that text. Very occasionally very useful!
 
 #+begin_src emacs-lisp
   (use-package evil-visualstar
@@ -544,7 +544,7 @@ These are some sane defaults for getting rid of extra UI elements, like the menu
     (setq visible-bell t))
 #+end_src
 
-If you're just getting started in Emacs, the menu bar might be helpful so you can remove the =(menu-bar-mode -1)= line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the =describe= functions, =which-key=, and, when you et there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
+If you're just getting started in Emacs, the menu bar might be helpful so you can remove the ~(menu-bar-mode -1)~ line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the ~describe~ functions, ~which-key~, and, when you et there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
 
 *** Fonts
 
@@ -576,9 +576,9 @@ I am not a respected developer.
 
 I use Input for coding because when I head about a minority of developers using a variable pitch font for coding, I read up on it, and the few articles I read in defense of it were pretty convincing.
 
-See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and =!= and =:= and =/=,  characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
+See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~,  characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
 
-But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a =!= or an =n= or an =m=. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
+But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a ~!~ or an ~n~ or an ~m~. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
 
 Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/.
 
@@ -715,7 +715,7 @@ First, some functions to zoom and reset one buffer:
 	(text-scale-increase 0))
 #+end_src
 
-From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the =buffer-list= and run the above functions in each.
+From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the ~buffer-list~ and run the above functions in each.
 
 #+begin_src emacs-lisp
   ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
@@ -748,7 +748,7 @@ From there, I can use those to zoom in on all current buffers. These functions s
         (crj--zoom-reset arg))))
 #+end_src
 
-This package, =default-text-scale=, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
+This package, ~default-text-scale~, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
 
 #+begin_src emacs-lisp :tangle no
   (use-package default-text-scale
@@ -757,7 +757,7 @@ This package, =default-text-scale=, can handle things more robustly than the hom
 
 But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts  I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
 
-All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. =defualt-text-scale= is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
+All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. ~default-text-scale~ is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
 
 Next, we make some keybindings for them.
 
@@ -774,9 +774,9 @@ Next, we make some keybindings for them.
               "zB" '(crj--zoom-reset :which-key "Reset zoom.")))
 #+end_src
 
-And finally, there's a special type of Emacs interface I don't use often, a third-party package called Hydra, that's perfect for an activity like zooming text. Once you've decided to zoom, you're entering a kind of session where you'll be entering related commands. You'll be zooming in a couple times, then zooming out if you've gone too far. And at that point that can even repeat, if you change your mind as to what zoom level you actually want. What Hydra does is enter an interface perfect for this kind of situation.
+And finally, there's a special type of Emacs interface I don't use often, a third-party package called Hydra, that's perfect for an activity like zooming text. Once you've decided to zoom, you're entering a kind of session where you'll be entering related commands. You'll be zooming in a couple times, then zooming out if you've gone too far. And at that point that can even repeat, if you change your mind as to what zoom level you act~ally want. What Hydra does is enter an interface perfect for this kind of situation.
 
-With the below code, the user (almost definitely me!) can type =SPC z z=, at which point, instead of entering complex keybindings, they can type =j= to zoom in, =k= to zoom out (these are meaningful letters to Vim users), do that as much as they want, and then get back to what they were doing by pressing =escape= or any other key that's not part of this system.
+With the below code, the user (almost definitely me!) can type ~SPC z z~, at which point, instead of entering complex keybindings, they can type ~j~ to zoom in, ~k~ to zoom out (these are meaningful letters to Vim users), do that as much as they want, and then get back to what they were doing by pressing ~escape~ or any other key that's not part of this system.
 
 There are other, similar libraries (I've heard Transient is even better), but I highly recommend an interface like this. It's fantastic.
 
@@ -963,7 +963,7 @@ Let's use a wrapper around it that allows multiple terminals.
 
 Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
 
-We set up an agenda view, and then we set it as the easier-to-reach keybinding (=SPC aa=). The dashboard, which has a bunch of different potential views, is still available on =SPC aA=.
+We set up an agenda view, and then we set it as the easier-to-reach keybinding (~SPC aa~). The dashboard, which has a bunch of different potential views, is still available on ~SPC aA~.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1112,7 +1112,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 ** Under The Hood
 
-Always confirm with a quick =y= or =n= instead of requiring a =yes= or =no= followed by =RET=.
+Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ followed by ~RET~.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1211,7 +1211,7 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
 Flyspell is an /amazing/ built-into-Emacs spell-checker.
 
-=flyspell-correct= makes it even better with a quick command to correct the last word. You can correct your spelling /so/ easily without losing your flow in the slightest.
+~flyspell-correct~ makes it even better with a quick command to correct the last word. You can correct your spelling /so/ easily without losing your flow in the slightest.
 
 #+begin_src emacs-lisp
   (use-package flyspell
@@ -1496,8 +1496,8 @@ What we'll do is:
 - Set "reverse" as the default interface setup.
 - Set Emacs to remember Vertico's history.
 - Fix some weirdness caused by the interplay of directories and completion.
-- Add the Vertico extension =vertico-repeat= and a keybinding to repeat previous searches.
-- Add keybindings for more Vim-like =j=/=k= scrolling as well as scrolling by pages and going up a directory with a single delete.
+- Add the Vertico extension ~vertico-repeat~ and a keybinding to repeat previous searches.
+- Add keybindings for more Vim-like ~j~/~k~ scrolling as well as scrolling by pages and going up a directory with a single delete.
 
 Here that all is!
 
@@ -1539,7 +1539,7 @@ Here that all is!
 
 **** Minibuffer Search Data Sets
 
-=consult= is a library containing a set of functions that each search a different set of data. That sounds dry, but it's really not!
+~consult~ is a library containing a set of functions that each search a different set of data. That sounds dry, but it's really not!
 
 What it enables you to do is decide whether your search will be of:
 
@@ -1567,7 +1567,7 @@ And that's not even all of them! Minibuffer searches are a /huge/ part of how yo
 
 The Orderless package is powerful and fascinating. It decides the data you're searching is filtered as you type, and you can even search in different ways in the same search.
 
-Here's an example using the setup below. I can start typing the path of a file I want to open in a minibuffer search, then notice that most of the results are in a directory I want to exclude. So I type in a =!= (a pretty universal developer symbol for "not" and the name of that directory, and those results are filtered out. Then I realize I want the path to begin with the home directory, excluding everything in the =/usr= and =/tmp= and such directories. So I type =^= (developer for "starts with") and =~= (the alias for the home directory). Finally, I want only JavaScript files, so I type =$= (developer for "ends with") and then type =js=, and boom!
+Here's an example using the setup below. I can start typing the path of a file I want to open in a minibuffer search, then notice that most of the results are in a directory I want to exclude. So I type in a ~!~ (a pretty universal developer symbol for "not" and the name of that directory, and those results are filtered out. Then I realize I want the path to begin with the home directory, excluding everything in the ~/usr~ and ~/tmp~ and such directories. So I type ~^~ (developer for "starts with") and ~~~ (the alias for the home directory). Finally, I want only JavaScript files, so I type ~$~ (developer for "ends with") and then type ~js~, and boom!
 
 Once you're used to this speedy filtering process, it /greatly/ cuts down on the time spent searching for whatever it is you want to do.
 
@@ -1826,7 +1826,7 @@ Sets up:
       #+end_src
 ** Window Management
 
-Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on =C-w=, and I also want them on my leader keys.
+Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1852,7 +1852,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 
 ** EFS/Which Key
 
-[[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix.  For example, if you press =C-c= (hold control and press the letter =c=), a panel will appear at the bottom of the frame displaying all of the bindings under that prefix and which command they run.  This is very useful for learning the possible key bindings in the mode of your current buffer.
+[[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing any key binding in Emacs to offer you all possible completions for the prefix.  For example, if you press ~C-c~ (hold control and press the letter ~c~), a panel will appear at the bottom of the frame displaying all of the bindings under that prefix and which command they run.  This is very useful for learning the possible key bindings in the mode of your current buffer.
 
 #+begin_src emacs-lisp
 
@@ -1909,7 +1909,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 
 *** Improved Candidate Sorting with prescient.el
 
-prescient.el provides some helpful behavior for sorting Ivy completion candidates based on how recently or frequently you select them.  This can be especially helpful when using =M-x= to run commands that you don't have bound to a key but still need to access occasionally.
+prescient.el provides some helpful behavior for sorting Ivy completion candidates based on how recently or frequently you select them.  This can be especially helpful when using ~M-x~ to run commands that you don't have bound to a key but still need to access occasionally.
 
 This Prescient configuration is optimized for use in System Crafters videos and streams, check out the [[https://youtu.be/T9kygXveEz0][video on prescient.el]] for more details on how to configure it!
 
@@ -1931,13 +1931,13 @@ This Prescient configuration is optimized for use in System Crafters videos and 
 Original description of Emacs From Scratch's equivalent section perfectly sums it up, so I'll let it do so:
 
 #+begin_quote
-[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' =describe-= command buffers.  For example, if you use =describe-function=, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
+[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers.  For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 #+end_quote
 
 Besides different keybindings, I've only added a couple extra configurations here:
 
-- =woman= is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
-- =helpful-at-point= is a great quick Emacs Lisp documentation lookup. With Evil, I can just press =K= on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
+- ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
+- ~helpful-at-point~ is a great quick Emacs Lisp documentation lookup. With Evil, I can just press ~K~ on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
 - ~consult-minor-mode-menu~ lets you search minor modes, both active and not, and even toggle them! It's not really for getting information /about/ the modes, but you can probably Embark-act to those? I'll think about setting that up when I configure Embark!
 
 #+begin_src emacs-lisp
@@ -1985,7 +1985,7 @@ Besides different keybindings, I've only added a couple extra configurations her
 
 ** EFS/Text Scaling
 
-This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to =C-s t s= and, once activated, =j= and =k= increase and decrease the text scale.  You can press any other key (or =f= specifically) to exit the transient key map.
+This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to design a transient key binding for quickly adjusting the scale of the text on screen.  We define a hydra that is bound to ~C-s t s~ and, once activated, ~j~ and ~k~ increase and decrease the text scale.  You can press any other key (or ~f~ specifically) to exit the transient key map.
 
 #+begin_src emacs-lisp
 
@@ -2086,7 +2086,7 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 
 **** Org Mode Better Font Faces
 
-The =efs/org-font-setup= function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in =org-mode=.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
 #+begin_src emacs-lisp
   (defun my/buffer-face-mode-variable ()
@@ -2150,7 +2150,7 @@ The =efs/org-font-setup= function configures various text faces to tweak the siz
 
 **** Basic Config
 
-This section contains the basic configuration for =org-mode= plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
 
 #+begin_src emacs-lisp
   (defun efs/org-mode-setup ()
@@ -2296,7 +2296,7 @@ This section contains the basic configuration for =org-mode= plus the configurat
 
 ***** Nicer Heading Bullets
 
-[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in =org-mode= buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
 #+begin_src emacs-lisp
 
@@ -2317,7 +2317,7 @@ This section contains the basic configuration for =org-mode= plus the configurat
 
 ** EFS/Configure Babel Languages
 
-To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
+To execute or export code in ~org-mode~ code blocks, you'll need to set up ~org-babel-load-languages~ for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with ~org-babel~.
 
 #+begin_src emacs-lisp
 
@@ -2333,9 +2333,9 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
 ** EFS/Structure Templates
 
-Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure templates]] feature enables you to quickly insert code blocks into your Org files in combination with =org-tempo= by typing =<= followed by the template name like =el= or =py= and then press =TAB=.  For example, to insert an empty =emacs-lisp= block below, you can type =<el= and press =TAB= to expand into such a block.
+Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure templates]] feature enables you to quickly insert code blocks into your Org files in combination with ~org-tempo~ by typing ~<~ followed by the template name like ~el~ or ~py~ and then press ~TAB~.  For example, to insert an empty ~emacs-lisp~ block below, you can type ~<el~ and press ~TAB~ to expand into such a block.
 
-You can add more =src= block templates below by copying one of the lines and changing the two strings at the end, the first to be the template name and the second to contain the name of the language [[https://orgmode.org/worg/org-contrib/babel/languages.html][as it is known by Org Babel]].
+You can add more ~src~ block templates below by copying one of the lines and changing the two strings at the end, the first to be the template name and the second to contain the name of the language [[https://orgmode.org/worg/org-contrib/babel/languages.html][as it is known by Org Babel]].
 
 #+begin_src emacs-lisp
 
@@ -2355,11 +2355,11 @@ You can add more =src= block templates below by copying one of the lines and cha
 
 **** lsp-mode
 
-We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up =lsp-mode= for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
+We use the excellent [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]] to enable IDE-like functionality for many different programming languages via "language servers" that speak the [[https://microsoft.github.io/language-server-protocol/][Language Server Protocol]].  Before trying to set up ~lsp-mode~ for a particular language, check out the [[https://emacs-lsp.github.io/lsp-mode/page/languages/][documentation for your language]] so that you can learn which language servers are available and how to install them.
 
-The =lsp-keymap-prefix= setting enables you to define a prefix for where =lsp-mode='s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with =lsp-mode= in a buffer.
+The ~lsp-keymap-prefix~ setting enables you to define a prefix for where ~lsp-mode~'s default keybindings will be added.  I *highly recommend* using the prefix to find out what you can do with ~lsp-mode~ in a buffer.
 
-The =which-key= integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing =C-c l= in a =lsp-mode= buffer and trying different things that you find there.
+The ~which-key~ integration adds helpful descriptions of the various keys so you should be able to learn a lot just by pressing ~C-c l~ in a ~lsp-mode~ buffer and trying different things that you find there.
 
 #+begin_src emacs-lisp
 
@@ -2379,7 +2379,7 @@ The =which-key= integration adds helpful descriptions of the various keys so you
 
 **** lsp-ui
 
-[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of =lsp-mode= which make Emacs feel even more like an IDE.  Check out the screenshots on the =lsp-ui= homepage (linked at the beginning of this paragraph) to see examples of what it can do.
+[[https://emacs-lsp.github.io/lsp-ui/][lsp-ui]] is a set of UI enhancements built on top of ~lsp-mode~ which make Emacs feel even more like an IDE.  Check out the screenshots on the ~lsp-ui~ homepage (linked at the beginning of this paragraph) to see examples of what it can do.
 
 #+begin_src emacs-lisp
 
@@ -2394,11 +2394,11 @@ The =which-key= integration adds helpful descriptions of the various keys so you
 
 [[https://github.com/emacs-lsp/lsp-treemacs][lsp-treemacs]] provides nice tree views for different aspects of your code like symbols in a file, references of a symbol, or diagnostic messages (errors and warnings) that are found in your code.
 
-Try these commands with =M-x=:
+Try these commands with ~M-x~:
 
-- =lsp-treemacs-symbols= - Show a tree view of the symbols in the current file
-- =lsp-treemacs-references= - Show a tree view for the references of the symbol under the cursor
-- =lsp-treemacs-error-list= - Show a tree view for the diagnostic messages in the project
+- ~lsp-treemacs-symbols~ - Show a tree view of the symbols in the current file
+- ~lsp-treemacs-references~ - Show a tree view for the references of the symbol under the cursor
+- ~lsp-treemacs-error-list~ - Show a tree view for the diagnostic messages in the project
 
 This package is built on the [[https://github.com/Alexander-Miller/treemacs][treemacs]] package which might be of some interest to you if you like to have a file browser at the left side of your screen in your editor.
 
@@ -2411,12 +2411,12 @@ This package is built on the [[https://github.com/Alexander-Miller/treemacs][tre
 
 **** lsp-ivy
 
-[[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with =lsp-mode= to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
+[[https://github.com/emacs-lsp/lsp-ivy][lsp-ivy]] integrates Ivy with ~lsp-mode~ to make it easy to search for things by name in your code.  When you run these commands, a prompt will appear in the minibuffer allowing you to type part of the name of a symbol in your code.  Results will be populated in the minibuffer so that you can find what you're looking for and jump to that location in the code upon selecting the result.
 
-Try these commands with =M-x=:
+Try these commands with ~M-x~:
 
-- =lsp-ivy-workspace-symbol= - Search for a symbol name in the current project workspace
-- =lsp-ivy-global-workspace-symbol= - Search for a symbol name in all active project workspaces
+- ~lsp-ivy-workspace-symbol~ - Search for a symbol name in the current project workspace
+- ~lsp-ivy-global-workspace-symbol~ - Search for a symbol name in all active project workspaces
 
 #+begin_src emacs-lisp
 
@@ -2453,7 +2453,7 @@ Try these commands with =M-x=:
 
 *** TypeScript
 
-This is a basic configuration for the TypeScript language so that =.ts= files activate =typescript-mode= when opened.  We're also adding a hook to =typescript-mode-hook= to call =lsp-deferred= so that we activate =lsp-mode= to get LSP features every time we edit TypeScript code.
+This is a basic configuration for the TypeScript language so that ~.ts~ files activate ~typescript-mode~ when opened.  We're also adding a hook to ~typescript-mode-hook~ to call ~lsp-deferred~ so that we activate ~lsp-mode~ to get LSP features every time we edit TypeScript code.
 
 #+begin_src emacs-lisp
 
@@ -2465,7 +2465,7 @@ This is a basic configuration for the TypeScript language so that =.ts= files ac
 
 #+end_src
 
-*Important note!*  For =lsp-mode= to work with TypeScript (and JavaScript) you will need to install a language server on your machine.  If you have Node.js installed, the easiest way to do that is by running the following command:
+*Important note!*  For ~lsp-mode~ to work with TypeScript (and JavaScript) you will need to install a language server on your machine.  If you have Node.js installed, the easiest way to do that is by running the following command:
 
 #+begin_src shell :tangle no
 
@@ -2477,9 +2477,9 @@ This will install the [[https://github.com/theia-ide/typescript-language-server]
 
 *** Python
 
-We use =lsp-mode= and =dap-mode= to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the =pyls= configuration]] in the =lsp-mode= documentation for more details.
+We use ~lsp-mode~ and ~dap-mode~ to provide a more complete development environment for Python in Emacs.  Check out [[https://emacs-lsp.github.io/lsp-mode/page/lsp-pyls/][the ~pyls~ configuration]] in the ~lsp-mode~ documentation for more details.
 
-Make sure you have the =pyls= language server installed before trying =lsp-mode=!
+Make sure you have the ~pyls~ language server installed before trying ~lsp-mode~!
 
 #+begin_src sh :tangle no
 
@@ -2487,7 +2487,7 @@ Make sure you have the =pyls= language server installed before trying =lsp-mode=
 
 #+end_src
 
-There are a number of other language servers for Python so if you find that =pyls= doesn't work for you, consult the =lsp-mode= [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]] to try the others!
+There are a number of other language servers for Python so if you find that ~pyls~ doesn't work for you, consult the ~lsp-mode~ [[https://emacs-lsp.github.io/lsp-mode/page/languages/][language configuration documentation]] to try the others!
 
 #+begin_src emacs-lisp
 
@@ -2505,7 +2505,7 @@ There are a number of other language servers for Python so if you find that =pyl
 
 #+end_src
 
-You can use the =pyvenv= package to use =virtualenv= environments in Emacs.  The =pyvenv-activate= command should configure Emacs to cause =lsp-mode= and =dap-mode= to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
+You can use the ~pyvenv~ package to use ~virtualenv~ environments in Emacs.  The ~pyvenv-activate~ command should configure Emacs to cause ~lsp-mode~ and ~dap-mode~ to use the virtual environment when they are loaded, just select the path to your virtual environment before loading your project.
 
 #+begin_src emacs-lisp
 
@@ -2518,7 +2518,7 @@ You can use the =pyvenv= package to use =virtualenv= environments in Emacs.  The
 
 ** EFS/Company Mode
 
-[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than =completion-at-point= which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (=TAB= now completes the selection and initiates completion at the current location if needed).
+[[http://company-mode.github.io/][Company Mode]] provides a nicer in-buffer completion interface than ~completion-at-point~ which is more reminiscent of what you would expect from an IDE.  We add a simple configuration to make the keybindings a little more useful (~TAB~ now completes the selection and initiates completion at the current location if needed).
 
 We also use [[https://github.com/sebastiencs/company-box][company-box]] to further enhance the look of the completions with icons and better overall presentation.
 
@@ -2579,20 +2579,20 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
 
 ** EFS/term-mode
 
-=term-mode= is a built-in terminal emulator in Emacs.  Because it is written in Emacs Lisp, you can start using it immediately with very little configuration.  If you are on Linux or macOS, =term-mode= is a great choice to get started because it supports fairly complex terminal applications (=htop=, =vim=, etc) and works pretty reliably.  However, because it is written in Emacs Lisp, it can be slower than other options like =vterm=.  The speed will only be an issue if you regularly run console apps with a lot of output.
+~term-mode~ is a built-in terminal emulator in Emacs.  Because it is written in Emacs Lisp, you can start using it immediately with very little configuration.  If you are on Linux or macOS, ~term-mode~ is a great choice to get started because it supports fairly complex terminal applications (~htop~, ~vim~, etc) and works pretty reliably.  However, because it is written in Emacs Lisp, it can be slower than other options like ~vterm~.  The speed will only be an issue if you regularly run console apps with a lot of output.
 
-One important thing to understand is =line-mode= versus =char-mode=.  =line-mode= enables you to use normal Emacs keybindings while moving around in the terminal buffer while =char-mode= sends most of your keypresses to the underlying terminal.  While using =term-mode=, you will want to be in =char-mode= for any terminal applications that have their own keybindings.  If you're just in your usual shell, =line-mode= is sufficient and feels more integrated with Emacs.
+One important thing to understand is ~line-mode~ versus ~char-mode~.  ~line-mode~ enables you to use normal Emacs keybindings while moving around in the terminal buffer while ~char-mode~ sends most of your keypresses to the underlying terminal.  While using ~term-mode~, you will want to be in ~char-mode~ for any terminal applications that have their own keybindings.  If you're just in your usual shell, ~line-mode~ is sufficient and feels more integrated with Emacs.
 
-With =evil-collection= installed, you will automatically switch to =char-mode= when you enter Evil's insert mode (press =i=).  You will automatically be switched back to =line-mode= when you enter Evil's normal mode (press =ESC=).
+With ~evil-collection~ installed, you will automatically switch to ~char-mode~ when you enter Evil's insert mode (press ~i~).  You will automatically be switched back to ~line-mode~ when you enter Evil's normal mode (press ~ESC~).
 
-Run a terminal with =M-x term!=
+Run a terminal with ~M-x term!~
 
 *Useful key bindings:*
 
-- =C-c C-p= / =C-c C-n= - go back and forward in the buffer's prompts (also =[[= and =]]= with evil-mode)
-- =C-c C-k= - Enter char-mode
-- =C-c C-j= - Return to line-mode
-- If you have =evil-collection= installed, =term-mode= will enter char mode when you use Evil's Insert mode
+- ~C-c C-p~ / ~C-c C-n~ - go back and forward in the buffer's prompts (also ~[[~ and ~]]~ with evil-mode)
+- ~C-c C-k~ - Enter char-mode
+- ~C-c C-j~ - Return to line-mode
+- If you have ~evil-collection~ installed, ~term-mode~ will enter char mode when you use Evil's Insert mode
 
 #+begin_src emacs-lisp
 
@@ -2609,7 +2609,7 @@ Run a terminal with =M-x term!=
 
 *** Better term-mode colors
 
-The =eterm-256color= package enhances the output of =term-mode= to enable handling of a wider range of color codes so that many popular terminal applications look as you would expect them to.  Keep in mind that this package requires =ncurses= to be installed on your machine so that it has access to the =tic= program.  Most Linux distributions come with this program installed already so you may not have to do anything extra to use it.
+The ~eterm-256color~ package enhances the output of ~term-mode~ to enable handling of a wider range of color codes so that many popular terminal applications look as you would expect them to.  Keep in mind that this package requires ~ncurses~ to be installed on your machine so that it has access to the ~tic~ program.  Most Linux distributions come with this program installed already so you may not have to do anything extra to use it.
 
 #+begin_src emacs-lisp
 
@@ -2620,16 +2620,16 @@ The =eterm-256color= package enhances the output of =term-mode= to enable handli
 
 ** EFS/shell-mode
 
-[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Interactive-Shell.html#Interactive-Shell][shell-mode]] is a middle ground between =term-mode= and Eshell.  It is *not* a terminal emulator so more complex terminal programs will not run inside of it.  It does have much better integration with Emacs because all command input in this mode is handled by Emacs and then sent to the underlying shell once you press Enter.  This means that you can use =evil-mode='s editing motions on the command line, unlike in the terminal emulator modes above.
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Interactive-Shell.html#Interactive-Shell][shell-mode]] is a middle ground between ~term-mode~ and Eshell.  It is *not* a terminal emulator so more complex terminal programs will not run inside of it.  It does have much better integration with Emacs because all command input in this mode is handled by Emacs and then sent to the underlying shell once you press Enter.  This means that you can use ~evil-mode~'s editing motions on the command line, unlike in the terminal emulator modes above.
 
 *Useful key bindings:*
 
-- =C-c C-p= / =C-c C-n= - go back and forward in the buffer's prompts (also =[[= and =]]= with evil-mode)
-- =M-p= / =M-n= - go back and forward in the input history
-- =C-c C-u= - delete the current input string backwards up to the cursor
-- =counsel-shell-history= - A searchable history of commands typed into the shell
+- ~C-c C-p~ / ~C-c C-n~ - go back and forward in the buffer's prompts (also ~[[~ and ~]]~ with evil-mode)
+- ~M-p~ / ~M-n~ - go back and forward in the input history
+- ~C-c C-u~ - delete the current input string backwards up to the cursor
+- ~counsel-shell-history~ - A searchable history of commands typed into the shell
 
-One advantage of =shell-mode= on Windows is that it's the only way to run =cmd.exe=, PowerShell, Git Bash, etc from within Emacs.  Here's an example of how you would set up =shell-mode= to run PowerShell on Windows:
+One advantage of ~shell-mode~ on Windows is that it's the only way to run ~cmd.exe~, PowerShell, Git Bash, etc from within Emacs.  Here's an example of how you would set up ~shell-mode~ to run PowerShell on Windows:
 
 #+begin_src emacs-lisp
 
@@ -2641,16 +2641,16 @@ One advantage of =shell-mode= on Windows is that it's the only way to run =cmd.e
 
 ** EFS/Eshell
 
-[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (=ls=, =rm=, =mv=, =grep=, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing =vim= to =find-file=).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
+[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
 
 The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well.  However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
 
 *Useful key bindings:*
 
-- =C-c C-p= / =C-c C-n= - go back and forward in the buffer's prompts (also =[[= and =]]= with evil-mode)
-- =M-p= / =M-n= - go back and forward in the input history
-- =C-c C-u= - delete the current input string backwards up to the cursor
-- =counsel-esh-history= - A searchable history of commands typed into Eshell
+- ~C-c C-p~ / ~C-c C-n~ - go back and forward in the buffer's prompts (also ~[[~ and ~]]~ with evil-mode)
+- ~M-p~ / ~M-n~ - go back and forward in the input history
+- ~C-c C-u~ - delete the current input string backwards up to the cursor
+- ~counsel-esh-history~ - A searchable history of commands typed into Eshell
 
 We will be covering Eshell more in future videos highlighting other things you can do with it.
 
@@ -2702,58 +2702,58 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 **** Navigation
 
 *Emacs* / *Evil*
-- =n= / =j= - next line
-- =p= / =k= - previous line
-- =j= / =J= - jump to file in buffer
-- =RET= - select file or directory
-- =^= - go to parent directory
-- =S-RET= / =g O= - Open file in "other" window
-- =M-RET= - Show file in other window without focusing (previewing files)
-- =g o= (=dired-view-file=) - Open file but in a "preview" mode, close with =q=
-- =g= / =g r= Refresh the buffer with =revert-buffer= after changing configuration (and after filesystem changes!)
+- ~n~ / ~j~ - next line
+- ~p~ / ~k~ - previous line
+- ~j~ / ~J~ - jump to file in buffer
+- ~RET~ - select file or directory
+- ~^~ - go to parent directory
+- ~S-RET~ / ~g O~ - Open file in "other" window
+- ~M-RET~ - Show file in other window without focusing (previewing files)
+- ~g o~ (~dired-view-file~) - Open file but in a "preview" mode, close with ~q~
+- ~g~ / ~g r~ Refresh the buffer with ~revert-buffer~ after changing configuration (and after filesystem changes!)
 
 **** Marking files
 
-- =m= - Marks a file
-- =u= - Unmarks a file
-- =U= - Unmarks all files in buffer
-- =* t= / =t= - Inverts marked files in buffer
-- =% m= - Mark files in buffer using regular expression
-- =*= - Lots of other auto-marking functions
-- =k= / =K= - "Kill" marked items (refresh buffer with =g= / =g r= to get them back)
+- ~m~ - Marks a file
+- ~u~ - Unmarks a file
+- ~U~ - Unmarks all files in buffer
+- ~* t~ / ~t~ - Inverts marked files in buffer
+- ~% m~ - Mark files in buffer using regular expression
+- ~*~ - Lots of other auto-marking functions
+- ~k~ / ~K~ - "Kill" marked items (refresh buffer with ~g~ / ~g r~ to get them back)
 - Many operations can be done on a single file if there are no active marks!
 
 **** Copying and Renaming files
 
-- =C= - Copy marked files (or if no files are marked, the current file)
+- ~C~ - Copy marked files (or if no files are marked, the current file)
 - Copying single and multiple files
-- =U= - Unmark all files in buffer
-- =R= - Rename marked files, renaming multiple is a move!
-- =% R= - Rename based on regular expression: =^test= , =old-\&=
+- ~U~ - Unmark all files in buffer
+- ~R~ - Rename marked files, renaming multiple is a move!
+- ~% R~ - Rename based on regular expression: ~^test~ , ~old-\&~
 
-*Power command*: =C-x C-q= (=dired-toggle-read-only=) - Makes all file names in the buffer editable directly to rename them!  Press =Z Z= to confirm renaming or =Z Q= to abort.
+*Power command*: ~C-x C-q~ (~dired-toggle-read-only~) - Makes all file names in the buffer editable directly to rename them!  Press ~Z Z~ to confirm renaming or ~Z Q~ to abort.
 
 **** Deleting files
 
-- =D= - Delete marked file
-- =d= - Mark file for deletion
-- =x= - Execute deletion for marks
-- =delete-by-moving-to-trash= - Move to trash instead of deleting permanently
+- ~D~ - Delete marked file
+- ~d~ - Mark file for deletion
+- ~x~ - Execute deletion for marks
+- ~delete-by-moving-to-trash~ - Move to trash instead of deleting permanently
 
 **** Creating and extracting archives
 
-- =Z= - Compress or decompress a file or folder to (=.tar.gz=)
-- =c= - Compress selection to a specific file
-- =dired-compress-files-alist= - Bind compression commands to file extension
+- ~Z~ - Compress or decompress a file or folder to (~.tar.gz~)
+- ~c~ - Compress selection to a specific file
+- ~dired-compress-files-alist~ - Bind compression commands to file extension
 
 **** Other common operations
 
-- =T= - Touch (change timestamp)
-- =M= - Change file mode
-- =O= - Change file owner
-- =G= - Change file group
-- =S= - Create a symbolic link to this file
-- =L= - Load an Emacs Lisp file into Emacs
+- ~T~ - Touch (change timestamp)
+- ~M~ - Change file mode
+- ~O~ - Change file owner
+- ~G~ - Change file group
+- ~S~ - Create a symbolic link to this file
+- ~L~ - Load an Emacs Lisp file into Emacs
 
 *** Configuration
 
@@ -2789,7 +2789,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 
 ** EFS/Some App
 
-This is an example of configuring another non-Emacs application using org-mode.  Not only do we write out the configuration at =.config/some-app/config=, we also compute the value that gets stored in this configuration from the Emacs Lisp block above it.
+This is an example of configuring another non-Emacs application using org-mode.  Not only do we write out the configuration at ~.config/some-app/config~, we also compute the value that gets stored in this configuration from the Emacs Lisp block above it.
 
 #+NAME: the-value
 #+begin_src emacs-lisp :tangle no
@@ -2798,7 +2798,7 @@ This is an example of configuring another non-Emacs application using org-mode. 
 
 #+end_src
 
-*NOTE*: Set the =:tangle= parameter below to =.config/some-app/config= for this to work!
+*NOTE*: Set the ~:tangle~ parameter below to ~.config/some-app/config~ for this to work!
 
 #+begin_src conf :tangle no :noweb yes
 
