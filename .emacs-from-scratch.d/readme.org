@@ -34,7 +34,6 @@ You can read more on this subject... and I'll probably write more. But in the me
   Thanks, Crafted!"
     (when (string-equal (buffer-file-name)
                         (expand-file-name "readme.org" user-emacs-directory))
-      ;; Dynamic scoping to the rescue
       (let ((org-confirm-babel-evaluate nil))
         (org-babel-tangle))))
 
@@ -119,7 +118,7 @@ We can now very easily define another level of keybinding. We want ~SPC f~ to ac
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys "f" '(:ignore t :which-key "files")))
+    (crj-leader-keys "f" '(:ignore t :which-key "Files Menu")))
 #+end_src
 
 From now on, when you press the user presses the spacebar (or ~M-SPC~) and then ~f~, they'll have access to any commands that follow. And when we put ~which-key~ in there momentarily, when they press ~SPC~ they'll get a menu that will show them that ~f~ leads to commands labeled "files", and if they press ~f~ they'll see a list of letters they can press next and the commands that each will activate.
@@ -207,7 +206,7 @@ I think you get the basics—as I did with learning and writing this section! Le
       ";" '(execute-extended-command :which-key "Run interactive command.")
       ":" '(eval-expression :which-key "Evaluate expression.")
       "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")
-      "b" '(:ignore t :which-key "buffer")
+      "b" '(:ignore t :which-key "Buffers Menu")
       "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")))
 #+end_src
 
@@ -766,7 +765,7 @@ Next, we make some keybindings for them.
   (use-package emacs
     :general
     (crj-leader-keys
-              "z" '(:ignore t :which-key "zoom")
+              "z" '(:ignore t :which-key "Zooming Menu")
               "zj" '(crj--zoom-in-all-buffers :which-key "Zoom in globally.")
               "zk" '(crj--zoom-out-all-buffers :which-key "Zoom out globally.")
               "zb" '(crj--zoom-reset-all-buffers :which-key "Reset zoom globally.")
@@ -927,7 +926,7 @@ Let's set up a keybinding for applications, and then we can put these apps under
   (use-package emacs
     :general
     (crj-leader-keys
-      "a" '(:ignore t :which-key "applications")))
+      "a" '(:ignore t :which-key "Applications Menu")))
 #+end_src
 
 *** Internet Radio with Eradio
@@ -1057,7 +1056,7 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 
     :general
     (crj-leader-keys
-      "g" '(:ignore t :which-key "git")
+      "g" '(:ignore t :which-key "Git Menu")
       "gg" '(magit-status :which-key "Launch Magit.")
       "gd" '(crj-yadm-magit-status :which-key "Launch Magit for YADM.")))
 
@@ -1137,7 +1136,7 @@ A better Emacs kill command binding to kill the Emacs server as well.
     :general
     ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
     (crj-leader-keys
-      "q" '(:ignore t :which-key "quit")
+      "q" '(:ignore t :which-key "Quit Menu")
       "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
@@ -1821,7 +1820,7 @@ Sets up:
                        :which-key "Go to previous error."))
       (crj-leader-keys
                 "c" '(:ignore t
-                        :which-key "code")
+                        :which-key "Code Menu")
                 "cX" '(flymake-show-project-diagnostics
                        :which-key "Describe variable.")))
       #+end_src
@@ -1959,7 +1958,7 @@ Besides different keybindings, I've only added a couple extra configurations her
     :general
     (crj-leader-keys
               "h" '(:ignore t
-                            :which-key "help")
+                            :which-key "Help Menu")
               "hv" '(helpful-variable
                      :which-key "Describe variable.")
               "hf" '(helpful-callable
