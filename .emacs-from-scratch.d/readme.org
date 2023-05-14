@@ -1308,26 +1308,80 @@ Configurations specific to certain languages.
               [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
 #+end_src
 
-**** Emacs Lisp
+**** Lisps
 
-***** TODO configure elisp more
-***** Symex Manipulation
+The greatest languages.
+
+***** Keybindings
+
+Some general Lisp bindings.
+
+****** Menus
+
+The leader-key menu is obvious—I can do something like ~SPC lsf~ to "slurp" forwards (a common Lisp action) and ~SPC lsb~ to slurp backwards.
+
+The other two are a little weirder, but not if you're use to Evil-mode. Rather than the above, I could slurp forwards with ~] ls~ and backwards with ~[ ls~.
+
+They're not hugely different in terms of keypress efficiency, but they /are/ pretty different in terms of their grammar. With ~SPC lsf~, you're deciding /first/ to slurp ~SPC ls~ and /then/ telling Emacs which direction you want (~f~ or ~b~). With ~] ls~, it's the other way around, where you're deciding what direction you're going, then telling it what action to perform in that direction. It's the grammatical difference between, "I go there," and "There go I".
+
+For now, I'm implementing both systems,
+ #+begin_src emacs-lisp
+   (use-package emacs
+     :general
+     (crj-leader-keys
+       "l" '(:ignore t :which-key "Lisp Menu")
+       "ls" '(:ignore t :which-key "Lisp Slurp Menu")
+       "lb" '(:ignore t :which-key "Lisp Barf Menu"))
+     (:keymaps 'evil-collection-unimpaired-mode-map :states '(normal motion visual) :prefix "]"
+               "l" '(:ignore t :which-key "Symex Forward Manipulation Menu"))
+     (:keymaps 'evil-collection-unimpaired-mode-map :states '(normal motion visual) :prefix "["
+               "l" '(:ignore t :which-key "Symex Backward Manipulation Menu")))
+#+end_src
+
+****** Symex Manipulation
+
+- lots of good stuf
+- more good stuff
+- soooo much good stuff
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (:states '(normal motion visual) :prefix "]l"
+             "s" '(on-parens-forward-slurp :which-key "Slurp forwards.")
+             "b" '(on-parens-forward-barf :which-key "Barf forwards."))
+    (:states '(normal motion visual) :prefix "[l"
+             "s" '(on-parens-backward-slurp :which-key "Slurp backwards.")
+             "b" '(on-parens-backward-barf :which-key "Barf backwards."))
+    (crj-leader-keys
+      "lsf" '(on-parens-forward-slurp :which-key "Slurp forwards.")
+      "lsb" '(on-parens-backward-slurp :which-key "Slurp backwards.")
+      "lbf" '(on-parens-forward-barf :which-key "Barf forwards.")
+      "lbb" '(on-parens-backward-barf :which-key "Barf backwards.")))
+#+end_src
+
+******* TODO add more symex manipulation
+
+***** Emacs Lisp
+
+****** TODO configure elisp more
+****** Symex Manipulation
 
 #+begin_src emacs-lisp
 (use-package on-parens)
 #+end_src
 
-****** TODO configure keybindings
-****** TODO figure out evil keybindings for movement
+******* TODO configure keybindings
+******* TODO figure out evil keybindings for movement
 
-***** Emacs Lisp Evaluation
+****** Emacs Lisp Evaluation
 
 #+begin_src emacs-lisp
   (use-package quickrun)
 #+end_src
-****** TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
+******* TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
 
-***** Emacs Lisp Documentation Lookup
+****** Emacs Lisp Documentation Lookup
 
 Better go-to-definition function for Emacs Lisp.
  
@@ -1342,7 +1396,7 @@ Better go-to-definition function for Emacs Lisp.
                   "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
 
-***** Emacs Lisp Highlight Quoted Mode
+****** Emacs Lisp Highlight Quoted Mode
 Don't remember what this one does.
 
 #+begin_src emacs-lisp
@@ -1351,7 +1405,7 @@ Don't remember what this one does.
     (add-hook 'emacs-lisp-mode-hook 'highlight-quoted-mode))
 #+end_src
 
-****** TODO check what highlight-quoted mode does
+******* TODO check what highlight-quoted mode does
 
 **** JavaScript
 
