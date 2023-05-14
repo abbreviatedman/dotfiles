@@ -1087,27 +1087,30 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 5. Add icons.
 
 #+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (setq dired-listing-switches "-al --group-directories-first")
-    (add-hook 'dired-mode-hook #'dired-omit-mode)
-    (add-hook 'dired-mode-hook #'dired-hide-details-mode)
-    :commands (dired dired-jump))
+    (use-package emacs
+      :init
+      (setq dired-listing-switches "-al --group-directories-first"
+            dired-recursive-copies 'always
+            dired-recursive-deletes 'always)
 
-  (use-package dired-single
-    :general
-    (:keymaps 'dired-mode-map
-              [remap dired-find-file] #'dired-single-buffer
-              [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
-              [remap dired-up-directory] #'dired-single-up-directory))
+      (add-hook 'dired-mode-hook #'dired-omit-mode)
+      (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+      :commands (dired dired-jump))
 
-  (use-package all-the-icons-dired
-    :ghook #'all-the-icons-dired-mode-hook)
+    (use-package dired-single
+      :general
+      (:keymaps 'dired-mode-map
+                [remap dired-find-file] #'dired-single-buffer
+                [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
+                [remap dired-up-directory] #'dired-single-up-directory))
 
-  (use-package dired-hide-dotfiles
-    :general
-    (:keymaps 'dired-mode-map
-              "H" 'dired-hide-dotfiles-mode))
+    (use-package all-the-icons-dired
+      :ghook #'all-the-icons-dired-mode-hook)
+
+    (use-package dired-hide-dotfiles
+      :general
+      (:keymaps 'dired-mode-map
+                "H" 'dired-hide-dotfiles-mode))
 #+end_src
 
 ** Under The Hood
