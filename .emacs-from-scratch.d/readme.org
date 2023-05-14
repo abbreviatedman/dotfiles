@@ -3,7 +3,7 @@
 
 * Colin Jaffe's Literate Config
 ** Introduction
- 
+
 Emacs is a text editor. Well, most people use it predominantly as a text editor, but at its nerdy awkward heart it's actually a Lisp programming environment. Setting Emacs' preferences and extending it with third-party code is all done through Lisp code that the Emacs user writes.
 
 [[https://www.explainxkcd.com/wiki/index.php/297:_Lisp_Cycles][https://www.explainxkcd.com/wiki/images/e/eb/lisp_cycles.png]]
@@ -1749,7 +1749,6 @@ Sets up:
   A great error-navigation library.
   
   #+begin_src emacs-lisp
-
     (use-package flymake
       :hook (prog-mode . flymake-mode)
       :general
