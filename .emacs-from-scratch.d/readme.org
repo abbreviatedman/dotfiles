@@ -954,6 +954,7 @@ Let's use a wrapper around it that allows multiple terminals.
 #+begin_src emacs-lisp
   (use-package multi-vterm
     :init
+    (setq vterm-shell "/usr/sbin/zsh")
     (setq vterm-max-scrollback 100000)
     :general
     (crj-leader-keys
@@ -1125,6 +1126,17 @@ Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ foll
     (defalias 'yes-or-no-p 'y-or-n-p))
 #+end_src
 
+Manage your secrets.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq auth-sources '("~/.netrc")))
+
+  (use-package ssh-agency
+    :init
+    (setq ssh-agency-askpass t))
+#+end_src
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
 #+begin_src emacs-lisp
