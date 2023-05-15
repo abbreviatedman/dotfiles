@@ -1216,7 +1216,9 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
 Flyspell is an /amazing/ built-into-Emacs spell-checker.
 
-~flyspell-correct~ makes it even better with a quick command to correct the last word. You can correct your spelling /so/ easily without losing your flow in the slightest.
+~flyspell-correct~ makes it even better with a quick command to correct the last word. You can correct your spelling /so/ easily without losing your flow in the slightest bit.
+
+I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion without moving the cursor. Occasionally this is the wrong suggestion, in which case I can use the below ~C-:~ binding to choose from the full menu of options, including saving the word into my personal dictionary.
 
 #+begin_src emacs-lisp
   (use-package flyspell
@@ -1236,8 +1238,7 @@ Flyspell is an /amazing/ built-into-Emacs spell-checker.
 
   (use-package flyspell-correct
     :general (:states '(insert normal emacs)
-                      [remap flyspell-auto-correct-previous-word] #'flyspell-correct-wrapper
-                      "C-;" #'flyspell-correct-wrapper))
+                      "C-:" #'flyspell-correct-wrapper))
 #+end_src
 
 ** Coding
@@ -1343,10 +1344,6 @@ For now, I'm implementing both systems,
 #+end_src
 
 ****** Symex Manipulation
-
-- lots of good stuf
-- more good stuff
-- soooo much good stuff
 
 #+begin_src emacs-lisp
   (use-package emacs
