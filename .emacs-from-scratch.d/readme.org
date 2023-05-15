@@ -1081,36 +1081,38 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll:
 
 1. Set it to group directories first.
-2 . Set it to omit unimportant details.
-3. Set it up with an extra command to hide dotfiles.
+2. Skip double-checking if we want to copy or delete all of a directory's contents.
+3. Set it to omit unimportant details.
 4. Set it to re-use the same buffer for each directory.
 5. Add icons.
+6. Set it up with an extra command to hide dotfiles.
 
 #+begin_src emacs-lisp
-    (use-package emacs
-      :init
-      (setq dired-listing-switches "-al --group-directories-first"
-            dired-recursive-copies 'always
-            dired-recursive-deletes 'always)
+  (use-package emacs
+    :commands (dired dired-jump)
+  
+    :init
+    (setq dired-listing-switches "-al --group-directories-first"
+          dired-recursive-copies 'always
+          dired-recursive-deletes 'always)
 
-      (add-hook 'dired-mode-hook #'dired-omit-mode)
-      (add-hook 'dired-mode-hook #'dired-hide-details-mode)
-      :commands (dired dired-jump))
+    (add-hook 'dired-mode-hook #'dired-omit-mode)
+    (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 
-    (use-package dired-single
-      :general
-      (:keymaps 'dired-mode-map
-                [remap dired-find-file] #'dired-single-buffer
-                [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
-                [remap dired-up-directory] #'dired-single-up-directory))
+  (use-package dired-single
+    :general
+    (:keymaps 'dired-mode-map
+              [remap dired-find-file] #'dired-single-buffer
+              [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
+              [remap dired-up-directory] #'dired-single-up-directory))
 
-    (use-package all-the-icons-dired
-      :ghook #'all-the-icons-dired-mode-hook)
+  (use-package all-the-icons-dired
+    :ghook #'all-the-icons-dired-mode-hook)
 
-    (use-package dired-hide-dotfiles
-      :general
-      (:keymaps 'dired-mode-map
-                "H" 'dired-hide-dotfiles-mode))
+  (use-package dired-hide-dotfiles
+    :general
+    (:keymaps 'dired-mode-map
+              "H" 'dired-hide-dotfiles-mode))
 #+end_src
 
 ** Under The Hood
