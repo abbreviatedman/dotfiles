@@ -1126,17 +1126,6 @@ Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ foll
     (defalias 'yes-or-no-p 'y-or-n-p))
 #+end_src
 
-Manage your secrets.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (setq auth-sources '("~/.netrc")))
-
-  (use-package ssh-agency
-    :init
-    (setq ssh-agency-askpass t))
-#+end_src
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
 #+begin_src emacs-lisp
@@ -1169,14 +1158,6 @@ Save backups of files, every 10 idle seconds, to a backups folder in our  main e
           `(("." . ,(concat user-emacs-directory "/backups")))))
 #+end_src
 
-Save minibuffer history.
-
-#+begin_src emacs-lisp
-(use-package savehist
-  :init
-  (savehist-mode))
-#+end_src
-
 Increase the size of the garbage collector.
 
 #+begin_src emacs-lisp
@@ -1195,6 +1176,44 @@ Measure startup time using an excellent bit of code taken from Emacs From Scratc
            gcs-done))
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+#+end_src
+
+*** Minibuffers
+
+Save minibuffer history.
+
+#+begin_src emacs-lisp
+(use-package savehist
+  :init
+  (savehist-mode))
+#+end_src
+
+Allow minibuffers within minibuffers.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq enable-recursive-minibuffers t))
+#+end_src
+
+*** Secrets
+
+Oooh.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq auth-sources '("~/.netrc")))
+
+  (use-package ssh-agency
+    :init
+    (setq ssh-agency-askpass t))
+
+  (use-package password-store)
+
+  (use-package auth-source-pass
+    :init
+    (auth-source-pass-enable))
 #+end_src
 
 ** Color Theme
