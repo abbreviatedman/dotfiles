@@ -1116,6 +1116,17 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
               "H" 'dired-hide-dotfiles-mode))
 #+end_src
 
+*** Email with Mu4e
+
+#+begin_src emacs-lisp
+(setq smtpmail-smtp-user           "abbreviatedman@posteo.net"
+      smtpmail-default-smtp-server "posteo.de"
+      smtpmail-smtp-server         "posteo.de"
+      smtpmail-smtp-service        587
+      smtpmail-stream-type         'starttls
+      smtpmail-use-gnutls          t)
+#+end_src
+
 ** Under The Hood
 
 Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ followed by ~RET~.
