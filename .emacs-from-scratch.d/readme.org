@@ -1678,9 +1678,14 @@ Configurations specific to certain languages.
   (use-package markdown-mode
     :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
 
+    :hook (markdown-mode . variable-pitch-mode)
+
     :init
+    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode))
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
             (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size)))
+
+  (use-package edit-indirect)
 #+end_src
 
 **** HTML
