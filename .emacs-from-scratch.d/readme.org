@@ -1124,24 +1124,14 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 *** Email with Mu4e
 
 #+begin_src emacs-lisp
-;; (use-package mu4e
-;;   :after org
-;;   :straight ( :type git :host github :repo "djcb/mu"
-;; 		:build "./autogen.sh"
-;; 		;; :build nil
-;; 		;; :build (("./autogen.sh") ("make"))
-;; 		;; :pre-build "./autogen.sh"
-;; 		;; :build "make"
-;; 		:files (:defaults "build/mu4e/*.el"))
-;;   :config
-;;   <<mu4e-config>>
-;;   )
-;;   (use-package mu4e
-;;     :after org
-;;     :straight (:type git :host github :repo "djcb/mu"
-;;                      :build (("./autogen.sh") ("make"))
-;;                      :files (:defaults "mu4e/*.el"))
-;;     :custom (mu4e-mu-binary "~/.emacs.d/straight/repos/mu/mu/mu"))
+(use-package mu4e
+  :init
+  (setq mu4e-mu-binary "~/.emacs-from-scratch.d/straight/repos/mu/mu/mu")
+
+  :straight ( :host github :files ("build/mu4e/*.el") :repo "djcb/mu"
+                    :pre-build (("./autogen.sh")
+                                ("ninja" "-C" "build")))
+  :custom (mu4e-mu-binary (expand-file-name "mu/mu" (straight--repos-dir "mu"))))
 #+end_src
 
 ** Under The Hood
