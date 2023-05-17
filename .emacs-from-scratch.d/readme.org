@@ -1449,9 +1449,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 ;;   (setq mu4e-mu-binary "~/.emacs-from-scratch.d/straight/repos/mu/mu/mu")
 
 ;;   :straight ( :host github :files ("build/mu4e/*.el") :repo "djcb/mu"
-;;                     :pre-build (("./autogen.sh")
-;;                                 ("ninja" "-C" "build")))
-;;   :custom (mu4e-mu-binary (expand-file-name "mu/mu" (straight--repos-dir "mu"))))
+;;   :custom (mu4e-mu-binary (expand-file-name "mu/mu" (straight--repos-dir "mu")))))
 #+end_src
 
 ** Under The Hood
