@@ -106,7 +106,7 @@ bindsym $mod+$alt+s exec "slack"
 bindsym $mod+$alt+d exec "emacs"
 
 ## Alternate Emacs
-bindsym $mod+$alt+c exec with-emacs --dir ~/.emacs-from-scratch.d -R -P -- --daemon=alt && emacsclient -s alt -cn -a ""
+bindsym $mod+$alt+c exec with-emacs --dir ~/.emacs-from-scratch.d -R -P && emacsclient -s alt -cn -a ""
 
 # start Files
 bindsym $mod+$alt+n exec "nemo"
