@@ -1554,12 +1554,6 @@ Oooh.
     (auth-source-pass-enable))
 #+end_src
 
-*** Compilation
-
-#+begin_src emacs-lisp :tangle early-init.el
-  (setq native-comp-deferred-compilation-deny-list '("rainbow"))
-#+end_src
-
 ** Color Theme
 
 Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
@@ -1781,17 +1775,6 @@ Better go-to-definition function for Emacs Lisp.
         (:keymaps 'org-mode-map :states 'normal
                   "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
-
-****** Emacs Lisp Highlight Quoted Mode
-Don't remember what this one does.
-
-#+begin_src emacs-lisp
-  (use-package highlight-quoted
-    :init
-    (add-hook 'emacs-lisp-mode-hook 'highlight-quoted-mode))
-#+end_src
-
-******* TODO check what highlight-quoted mode does
 
 **** JavaScript
 
