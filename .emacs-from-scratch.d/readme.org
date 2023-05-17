@@ -26,30 +26,6 @@ So that's where we started and where we're going. Let's look at some code!
 (server-start)
 #+end_src
 
-** Literate Config Setup
-
-Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of prose. The document you're reading right now is an example of literate programming, often called a literate config when it's about configuring apps. All of the code blocks in this document are "tangled", which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented... there's always a /reason/ for a block of code to exist. The documentation can't fall behind the code—the documentation /is/ the code.
-
-You can read more on this subject... and I'll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, it is automatically tangled to its matching code file. It's pretty sweet!
-
-#+begin_src emacs-lisp
-  (defun crafted--org-babel-tangle-config ()
-    "Tangle code blocks from our init.org file on save.
-
-  A nice little helper from Crafted Emacs.
-
-  Thanks, Crafted!"
-    (when (string-equal (buffer-file-name)
-                        (expand-file-name "readme.org" user-emacs-directory))
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (add-hook 'after-save-hook #'crafted--org-babel-tangle-config)))
-#+end_src
-
-
 ** Package System
 
 Getting Emacs users' awesome libraries (called "packages") into Emacs.
@@ -205,7 +181,7 @@ I think you get the basics—as I did with learning and writing this section! Le
 
 #+begin_src emacs-lisp
   (use-package emacs
-    :general
+    :init
     (crj-leader-keys
       "," '(consult-buffer :which-key "Switch buffer or open recent file.")
       "<" '(consult-project-buffer :which-key "Switch to project-specific buffer.")
@@ -238,6 +214,312 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
  It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via ~npm~ with ~npm i -g [package name]~ on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version—so with the previous example, you'd write the command in a document as ~npm install --global [package name]~.
 
  So! Maybe this is how these mappings should be written? ~[(control d)]~ instead of ~"C-d"~? Maybe! Bears thinking about, for sure.
+
+** Markup Documents
+
+*** General Markup Keybindings
+
+The overarching menu.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "m" '(:ignore t :which-key "Markup Menu")))
+#+end_src
+
+Searching a markup outline.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "m." '(consult-outline :which-key "Search markup outline.")))
+#+end_src
+
+*** Org Mode
+
+[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+
+**** Install Newest Version
+
+Org is built into Emacs, but you probably want the newest version.
+
+#+begin_src emacs-lisp
+  (use-package org)
+#+end_src
+
+**** Keybindings
+
+Let's make Org keybindings a bit better.
+
+***** Todos
+
+****** Todos menu
+
+#+begin_src emacs-lisp
+  (use-package org
+    :general
+    (crj-leader-keys
+      "mt" '(:ignore t :which-key "Todos Menu")))
+#+end_src
+
+****** General Bindings
+
+Some general todo bindings.
+
+#+begin_src emacs-lisp
+  (use-package org
+    :general
+    (crj-leader-keys
+      "mtt" '(org-todo :which-key "Change todo state.")))
+#+end_src
+
+******* TODO add bindings for:
+- deadlines and schedules
+
+***** Searching Org Documents
+
+The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
+
+#+begin_src emacs-lisp
+  (use-package org
+    :general
+    (crj-leader-keys
+      :keymaps 'org-mode-map
+      :states '(normal visual)
+      "m." '(consult-org-heading :which-key "Search current headings.")))
+#+end_src
+
+**** Org Mode Better Font Faces
+
+The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+
+#+begin_src emacs-lisp
+  (defun my/buffer-face-mode-variable ()
+    "Set font to a variable width (proportional) fonts in current buffer"
+    (interactive)
+    (setq buffer-face-mode-face '(:family crj--variable-pitch-font
+                                  :height 120
+                                  :width normal))
+    (buffer-face-mode))
+
+    (defun my/set-general-faces-org ()
+      (my/buffer-face-mode-variable)
+      (setq line-spacing 0.1
+            org-pretty-entities t
+            org-startup-indented t
+            org-adapt-indentation nil)
+      (variable-pitch-mode +1)
+      (mapc
+       (lambda (face) ;; Other fonts that require it are set to fixed-pitch.
+         (set-face-attribute face nil :inherit 'fixed-pitch))
+       (list 'org-block
+             'org-table
+             'org-verbatim
+             'org-block-begin-line
+             'org-block-end-line
+             'org-meta-line
+             'org-date
+             'org-drawer
+             'org-property-value
+             'org-special-keyword
+             'org-document-info-keyword))
+      (mapc ;; This sets the fonts to a smaller size
+       (lambda (face)
+         (set-face-attribute face nil :height 0.8))
+       (list 'org-document-info-keyword
+             'org-block-begin-line
+             'org-block-end-line
+             'org-meta-line
+             'org-drawer
+             'org-property-value
+             )))
+
+      (defun efs/org-font-setup ()
+        ;; Replace list hyphen with dot
+        (font-lock-add-keywords 'org-mode
+                                '(("^ *\\([-]\\) "
+                                   (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+        ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+        (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
+        (set-face-attribute 'org-table nil    :font crj--coding-font)
+        (set-face-attribute 'org-formula nil  :font crj--coding-font)
+        (set-face-attribute 'org-code nil     :font crj--coding-font)
+        (set-face-attribute 'org-table nil    :font crj--coding-font)
+        (set-face-attribute 'org-verbatim nil :font crj--coding-font)
+        (set-face-attribute 'org-special-keyword nil :font crj--coding-font)
+        (set-face-attribute 'org-meta-line nil :font crj--coding-font)
+        (set-face-attribute 'org-checkbox nil  :font crj--coding-font))
+
+#+end_src
+
+**** Basic Config
+
+This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+
+#+begin_src emacs-lisp
+  (defun efs/org-mode-setup ()
+    (org-indent-mode)
+    ;; (variable-pitch-mode 1)
+    (visual-line-mode 1))
+
+  (use-package org
+    :hook
+    (org-mode . efs/org-mode-setup)
+    (org-mode . my/set-general-faces-org)
+    ;; :config (efs/org-font-setup)
+    :general
+    (:keymaps 'org-mode-map :states 'insert
+              "M-h" #'org-promote-subtree
+              "M-l" #'org-demote-subtree))
+
+  ;; (use-package org
+  ;;   :commands (org-capture org-agenda)
+  ;;   :hook (org-mode . efs/org-mode-setup)
+  ;;   :config
+  ;;   (setq org-ellipsis " ▾")
+
+  ;;   (setq org-agenda-start-with-log-mode t)
+  ;;   (setq org-log-done 'time)
+  ;;   (setq org-log-into-drawer t)
+
+  ;;   (setq org-agenda-files
+  ;;         '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
+  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
+  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
+
+  ;;   (require 'org-habit)
+  ;;   (add-to-list 'org-modules 'org-habit)
+  ;;   (setq org-habit-graph-column 60)
+
+  ;;   (setq org-todo-keywords
+  ;;         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+  ;;           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+
+  ;;   (setq org-refile-targets
+  ;;         '(("Archive.org" :maxlevel . 1)
+  ;;           ("Tasks.org" :maxlevel . 1)))
+
+  ;;   ;; Save Org buffers after refiling!
+  ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+  ;;   (setq org-tag-alist
+  ;;         '((:startgroup)
+  ;;                                         ; Put mutually exclusive tags here
+  ;;           (:endgroup)
+    ;;         ("@errand" . ?E)
+    ;;         ("@home" . ?H)
+    ;;         ("@work" . ?W)
+    ;;         ("agenda" . ?a)
+    ;;         ("planning" . ?p)
+    ;;         ("publish" . ?P)
+    ;;         ("batch" . ?b)
+    ;;         ("note" . ?n)
+    ;;         ("idea" . ?i)))
+
+    ;; ;; Configure custom agenda views
+    ;; (setq org-agenda-custom-commands
+    ;;       '(("d" "Dashboard"
+    ;;          ((agenda "" ((org-deadline-warning-days 7)))
+    ;;           (todo "NEXT"
+    ;;                 ((org-agenda-overriding-header "Next Tasks")))
+    ;;           (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+    ;;         ("n" "Next Tasks"
+    ;;          ((todo "NEXT"
+    ;;                 ((org-agenda-overriding-header "Next Tasks")))))
+
+    ;;         ("W" "Work Tasks" tags-todo "+work-email")
+
+    ;;         ;; Low-effort next actions
+    ;;         ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+    ;;          ((org-agenda-overriding-header "Low Effort Tasks")
+    ;;           (org-agenda-max-todos 20)
+    ;;           (org-agenda-files org-agenda-files)))
+
+    ;;         ("w" "Workflow Status"
+    ;;          ((todo "WAIT"
+    ;;                 ((org-agenda-overriding-header "Waiting on External")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "REVIEW"
+    ;;                 ((org-agenda-overriding-header "In Review")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "PLAN"
+    ;;                 ((org-agenda-overriding-header "In Planning")
+    ;;                  (org-agenda-todo-list-sublevels nil)
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "BACKLOG"
+    ;;                 ((org-agenda-overriding-header "Project Backlog")
+    ;;                  (org-agenda-todo-list-sublevels nil)
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "READY"
+    ;;                 ((org-agenda-overriding-header "Ready for Work")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "ACTIVE"
+    ;;                 ((org-agenda-overriding-header "Active Projects")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "COMPLETED"
+    ;;                 ((org-agenda-overriding-header "Completed Projects")
+    ;;                  (org-agenda-files org-agenda-files)))
+    ;;           (todo "CANC"
+    ;;                 ((org-agenda-overriding-header "Cancelled Projects")
+    ;;                  (org-agenda-files org-agenda-files)))))))
+
+    ;; (setq org-capture-templates
+    ;;       `(("t" "Tasks / Projects")
+    ;;         ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+    ;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+
+    ;;         ("j" "Journal Entries")
+    ;;         ("jj" "Journal" entry
+    ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+    ;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+    ;;          ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+    ;;          :clock-in :clock-resume
+    ;;          :empty-lines 1)
+    ;;         ("jm" "Meeting" entry
+    ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+    ;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+    ;;          :clock-in :clock-resume
+    ;;          :empty-lines 1)
+
+    ;;         ("w" "Workflows")
+    ;;         ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+    ;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+    ;;         ("m" "Metrics Capture")
+    ;;         ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+    ;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+
+    ;; (define-key global-map (kbd "C-c j")
+    ;;   (lambda () (interactive) (org-capture nil "jj")))
+
+    ;; (efs/org-font-setup)
+    ;; )
+
+#+end_src
+
+***** Nicer Heading Bullets
+
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+#+end_src
+
+**** Org Exporting
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    (setq org-export-with-section-numbers nil))
+#+end_src
 
 ** Evil Mode
 
@@ -284,10 +566,16 @@ There are just a ton of variables here that finely set how Evil Mode is configur
 #+begin_src emacs-lisp
   (use-package evil
     :init
+    (defun crj--escape-plus ()
+      (evil-ex-nohighlight))
+
+    (advice-add 'evil-force-normal-state :after #'crj--escape-plus)
+
     (global-subword-mode)
     (setq evil-want-integration t
-          evil-ex-substitute-global t
           evil-want-keybinding nil
+          evil-ex-search-persistent-highlight t
+          evil-ex-substitute-global t
           sentence-end-double-space nil
           evil-want-C-u-scroll t
           evil-want-C-i-jump t
@@ -322,7 +610,6 @@ There are just a ton of variables here that finely set how Evil Mode is configur
 
     :bind
     ("C-M-u" . universal-argument))
-
   #+end_src
 
 Some extra Evil Mode stuff.
@@ -352,6 +639,19 @@ Only reversing the "move line up/down" and "next/previous error" keybindings to 
               "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
               "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
       #+end_src
+      
+
+*** Evil Keybindings for Org Mode
+
+This library adds some basic Evil bindings.
+
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :after (evil org)
+    :init
+    (add-hook 'org-mode-hook #'evil-org-mode))
+#+end_src
+
 
 *** Emacs In Vim In Emacs
 
@@ -387,6 +687,8 @@ Also included is a nifty function that deletes everything but one space before t
 
 #+begin_src emacs-lisp
   (use-package evil-goggles
+    :after evil
+  
     :init
     (setq evil-goggles-duration 0.3
           evil-goggles-pulse nil
@@ -402,9 +704,11 @@ Also included is a nifty function that deletes everything but one space before t
 This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
 
 #+begin_src emacs-lisp
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
+  (use-package evil-surround
+    :after evil
+
+    :config
+    (global-evil-surround-mode 1))
 #+end_src
 
 **** TODO add Evil Embrace
@@ -414,12 +718,14 @@ This library is amazing for working with surrounding text. Changing double quote
   Vim-style commenting.
 
   #+begin_src emacs-lisp
-      (use-package evil-nerd-commenter
-        :config
-        :general
-        ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
-        (:keymaps 'normal :prefix "g"
-                  "c" '(evilnc-comment-operator :which-key "Comment operator.")))
+    (use-package evil-nerd-commenter
+      :after evil
+    
+      :config
+      :general
+      ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
+      (:keymaps 'normal :prefix "g"
+                "c" '(evilnc-comment-operator :which-key "Comment operator.")))
 #+end_src
 
 *** Jumping By Character Pairs In Evil
@@ -430,6 +736,8 @@ Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and
 
 #+begin_src emacs-lisp
   (use-package evil-snipe
+    :after evil
+  
     :init
     (evil-snipe-mode 1)
     (evil-snipe-override-mode 1)
@@ -448,6 +756,8 @@ Being able to type ~SPC r i )~ to say "replace what's in these parens with what 
 
 #+begin_src emacs-lisp
   (use-package evil-replace-with-register
+    :after evil
+  
     :general
     (crj-leader-keys
               "r" '(evil-replace-with-register
@@ -460,6 +770,8 @@ Another efficient text editing library. This one exchanges two bits of text in a
 
 #+begin_src emacs-lisp
   (use-package evil-exchange
+    :after evil
+  
     :general
     (:states '(normal visual)
              "gx" '(evil-exchange :which-key "Exchange text objects.")))
@@ -484,6 +796,8 @@ A surprisingly useful Evil text object for the entire buffer.
 
 #+begin_src emacs-lisp
   (use-package evil-textobj-entire
+    :after evil
+  
     :straight (evil-textobj-entire
                :host github
                :repo "nscoder/evil-textobj-entire"))
@@ -495,6 +809,8 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
 
 #+begin_src emacs-lisp
   (use-package evil-visualstar
+    :after evil
+  
     :commands (evil-visualstar/begin-search
                evil-visualstar/begin-search-forward
                evil-visualstar/begin-search-backward)
@@ -511,6 +827,8 @@ Shows you the difference between two different bits of text. Another very occasi
 
 #+begin_src emacs-lisp
   (use-package evil-quick-diff
+    :after evil
+
     :init (evil-quick-diff-install)
 
     :straight (evil-quick-diff
@@ -1030,7 +1348,7 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
       "aa" '(crj-agenda :which-key "Custom Org Agenda view.")))
 
   (use-package evil-org
-    :after org
+    :after (evil org)
 
     :init
     (add-hook 'org-mode-hook #'evil-org-mode)
@@ -1126,14 +1444,14 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 *** Email with Mu4e
 
 #+begin_src emacs-lisp
-(use-package mu4e
-  :init
-  (setq mu4e-mu-binary "~/.emacs-from-scratch.d/straight/repos/mu/mu/mu")
+;; (use-package mu4e
+;;   :init
+;;   (setq mu4e-mu-binary "~/.emacs-from-scratch.d/straight/repos/mu/mu/mu")
 
-  :straight ( :host github :files ("build/mu4e/*.el") :repo "djcb/mu"
-                    :pre-build (("./autogen.sh")
-                                ("ninja" "-C" "build")))
-  :custom (mu4e-mu-binary (expand-file-name "mu/mu" (straight--repos-dir "mu"))))
+;;   :straight ( :host github :files ("build/mu4e/*.el") :repo "djcb/mu"
+;;                     :pre-build (("./autogen.sh")
+;;                                 ("ninja" "-C" "build")))
+;;   :custom (mu4e-mu-binary (expand-file-name "mu/mu" (straight--repos-dir "mu"))))
 #+end_src
 
 ** Under The Hood
@@ -1236,6 +1554,12 @@ Oooh.
     (auth-source-pass-enable))
 #+end_src
 
+*** Compilation
+
+#+begin_src emacs-lisp :tangle early-init.el
+  (setq native-comp-deferred-compilation-deny-list '("rainbow"))
+#+end_src
+
 ** Color Theme
 
 Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
@@ -1298,31 +1622,41 @@ Settings for... coding.
 
 *** General
 
-Balance parentheses and switch to Smartparens for showing matching parens. (It's prettier.)
+**** Coding Block Delimiters
 
-Also, experimentally, automatically insert and indent a newline when putting a newline between empty curlies.
+Making all your parens and curlies and square brackets /pretty/.
+
+Auto-close parentheses, highlight the parens you're in, and switch to Smartparens for showing matching parens. (It's prettier.)
+
+Also, automatically insert and indent a newline when putting a newline between empty curlies.
 
 #+begin_src emacs-lisp
-    (use-package smartparens
-      :init
-      (require 'smartparens-config)
-      (smartparens-global-mode)
-      (show-smartparens-global-mode)
+  (use-package highlight-parentheses
+    :ghook 'prog-mode-hook)
 
-      :config
-      (setq sp-show-pair-from-inside nil
-            sp-highlight-pair-overlay nil))
+   (use-package rainbow-delimiters
+    :ghook 'prog-mode-hook)
 
-    (use-package emacs
-      :init
-      (defun crj--create-newline-and-enter-sexp (&rest _ignored)
-        "Open a new brace or bracket expression, with relevant newlines and indent. "
-        (newline)
-        (indent-according-to-mode)
-        (forward-line -1)
-        (indent-according-to-mode))
+   (use-package smartparens
+     :init
+     (require 'smartparens-config)
+     (smartparens-global-mode)
+     (show-smartparens-global-mode)
 
-      (sp-local-pair 'prog-mode "{" nil :post-handlers '((crj--create-newline-and-enter-sexp "RET"))))
+     :config
+     (setq sp-show-pair-from-inside nil
+           sp-highlight-pair-overlay nil))
+
+   (use-package emacs
+     :init
+     (defun crj--create-newline-and-enter-block (&rest _ignored)
+       "Open a new brace or bracket expression, with relevant newlines and indent. "
+       (newline)
+       (indent-according-to-mode)
+       (forward-line -1)
+       (indent-according-to-mode))
+
+     (sp-local-pair 'prog-mode "{" nil :post-handlers '((crj--create-newline-and-enter-block "RET"))))
 #+end_src
 
 *** Languages
@@ -1959,319 +2293,6 @@ Besides different keybindings, I've only added a couple extra configurations her
     ("C-h F" #'describe-face))
 #+end_src
 
-
-** Markup Documents
-
-*** General Markup Keybindings
-
-The overarching menu.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "m" '(:ignore t :which-key "Markup Menu")))
-#+end_src
-
-Searching a markup outline.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "m." '(consult-outline :which-key "Search markup outline.")))
-#+end_src
-
-*** Org Mode
-
-[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
-
-**** Keybindings
-
-Let's make Org keybindings a bit better.
-
-***** Add Evil Bindings
-
-This library adds some basic Evil bindings.
-
-#+begin_src emacs-lisp
-  (use-package evil-org
-    :after org
-    :init
-    (add-hook 'org-mode-hook #'evil-org-mode))
-#+end_src
-
-***** Custom Evil Binding
-
-***** Todos
-
-****** Todos menu
-
-#+begin_src emacs-lisp
-  (use-package org
-    :general
-    (crj-leader-keys
-      "mt" '(:ignore t :which-key "Todos Menu")))
-#+end_src
-
-****** General Bindings
-
-Some general todo bindings.
-
-#+begin_src emacs-lisp
-  (use-package org
-    :general
-    (crj-leader-keys
-      "mtt" '(org-todo :which-key "Change todo state.")))
-#+end_src
-
-******* TODO add bindings for:
-- deadlines and schedules
-
-***** Searching Org Documents
-
-The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
-
-#+begin_src emacs-lisp
-  (use-package org
-    :general
-    (crj-leader-keys
-      :keymaps 'org-mode-map
-      :states '(normal visual)
-      "m." '(consult-org-heading :which-key "Search current headings.")))
-#+end_src
-
-**** Org Mode Better Font Faces
-
-The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
-
-#+begin_src emacs-lisp
-  (defun my/buffer-face-mode-variable ()
-    "Set font to a variable width (proportional) fonts in current buffer"
-    (interactive)
-    (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                  :height 120
-                                  :width normal))
-    (buffer-face-mode))
-
-    (defun my/set-general-faces-org ()
-      (my/buffer-face-mode-variable)
-      (setq line-spacing 0.1
-            org-pretty-entities t
-            org-startup-indented t
-            org-adapt-indentation nil)
-      (variable-pitch-mode +1)
-      (mapc
-       (lambda (face) ;; Other fonts that require it are set to fixed-pitch.
-         (set-face-attribute face nil :inherit 'fixed-pitch))
-       (list 'org-block
-             'org-table
-             'org-verbatim
-             'org-block-begin-line
-             'org-block-end-line
-             'org-meta-line
-             'org-date
-             'org-drawer
-             'org-property-value
-             'org-special-keyword
-             'org-document-info-keyword))
-      (mapc ;; This sets the fonts to a smaller size
-       (lambda (face)
-         (set-face-attribute face nil :height 0.8))
-       (list 'org-document-info-keyword
-             'org-block-begin-line
-             'org-block-end-line
-             'org-meta-line
-             'org-drawer
-             'org-property-value
-             )))
-
-      (defun efs/org-font-setup ()
-        ;; Replace list hyphen with dot
-        (font-lock-add-keywords 'org-mode
-                                '(("^ *\\([-]\\) "
-                                   (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-        ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-        (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
-        (set-face-attribute 'org-table nil    :font crj--coding-font)
-        (set-face-attribute 'org-formula nil  :font crj--coding-font)
-        (set-face-attribute 'org-code nil     :font crj--coding-font)
-        (set-face-attribute 'org-table nil    :font crj--coding-font)
-        (set-face-attribute 'org-verbatim nil :font crj--coding-font)
-        (set-face-attribute 'org-special-keyword nil :font crj--coding-font)
-        (set-face-attribute 'org-meta-line nil :font crj--coding-font)
-        (set-face-attribute 'org-checkbox nil  :font crj--coding-font))
-
-#+end_src
-
-**** Basic Config
-
-This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
-
-#+begin_src emacs-lisp
-  (defun efs/org-mode-setup ()
-    (org-indent-mode)
-    ;; (variable-pitch-mode 1)
-    (visual-line-mode 1))
-
-  (use-package org
-    :hook
-    (org-mode . efs/org-mode-setup)
-    (org-mode . my/set-general-faces-org)
-    ;; :config (efs/org-font-setup)
-    :general
-    (:keymaps 'org-mode-map :states 'insert
-              "M-h" #'org-promote-subtree
-              "M-l" #'org-demote-subtree))
-
-  ;; (use-package org
-  ;;   :commands (org-capture org-agenda)
-  ;;   :hook (org-mode . efs/org-mode-setup)
-  ;;   :config
-  ;;   (setq org-ellipsis " ▾")
-
-  ;;   (setq org-agenda-start-with-log-mode t)
-  ;;   (setq org-log-done 'time)
-  ;;   (setq org-log-into-drawer t)
-
-  ;;   (setq org-agenda-files
-  ;;         '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
-  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
-  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
-
-  ;;   (require 'org-habit)
-  ;;   (add-to-list 'org-modules 'org-habit)
-  ;;   (setq org-habit-graph-column 60)
-
-  ;;   (setq org-todo-keywords
-  ;;         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-  ;;           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-  ;;   (setq org-refile-targets
-  ;;         '(("Archive.org" :maxlevel . 1)
-  ;;           ("Tasks.org" :maxlevel . 1)))
-
-  ;;   ;; Save Org buffers after refiling!
-  ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-  ;;   (setq org-tag-alist
-  ;;         '((:startgroup)
-  ;;                                         ; Put mutually exclusive tags here
-  ;;           (:endgroup)
-    ;;         ("@errand" . ?E)
-    ;;         ("@home" . ?H)
-    ;;         ("@work" . ?W)
-    ;;         ("agenda" . ?a)
-    ;;         ("planning" . ?p)
-    ;;         ("publish" . ?P)
-    ;;         ("batch" . ?b)
-    ;;         ("note" . ?n)
-    ;;         ("idea" . ?i)))
-
-    ;; ;; Configure custom agenda views
-    ;; (setq org-agenda-custom-commands
-    ;;       '(("d" "Dashboard"
-    ;;          ((agenda "" ((org-deadline-warning-days 7)))
-    ;;           (todo "NEXT"
-    ;;                 ((org-agenda-overriding-header "Next Tasks")))
-    ;;           (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-    ;;         ("n" "Next Tasks"
-    ;;          ((todo "NEXT"
-    ;;                 ((org-agenda-overriding-header "Next Tasks")))))
-
-    ;;         ("W" "Work Tasks" tags-todo "+work-email")
-
-    ;;         ;; Low-effort next actions
-    ;;         ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-    ;;          ((org-agenda-overriding-header "Low Effort Tasks")
-    ;;           (org-agenda-max-todos 20)
-    ;;           (org-agenda-files org-agenda-files)))
-
-    ;;         ("w" "Workflow Status"
-    ;;          ((todo "WAIT"
-    ;;                 ((org-agenda-overriding-header "Waiting on External")
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "REVIEW"
-    ;;                 ((org-agenda-overriding-header "In Review")
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "PLAN"
-    ;;                 ((org-agenda-overriding-header "In Planning")
-    ;;                  (org-agenda-todo-list-sublevels nil)
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "BACKLOG"
-    ;;                 ((org-agenda-overriding-header "Project Backlog")
-    ;;                  (org-agenda-todo-list-sublevels nil)
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "READY"
-    ;;                 ((org-agenda-overriding-header "Ready for Work")
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "ACTIVE"
-    ;;                 ((org-agenda-overriding-header "Active Projects")
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "COMPLETED"
-    ;;                 ((org-agenda-overriding-header "Completed Projects")
-    ;;                  (org-agenda-files org-agenda-files)))
-    ;;           (todo "CANC"
-    ;;                 ((org-agenda-overriding-header "Cancelled Projects")
-    ;;                  (org-agenda-files org-agenda-files)))))))
-
-    ;; (setq org-capture-templates
-    ;;       `(("t" "Tasks / Projects")
-    ;;         ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
-    ;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-
-    ;;         ("j" "Journal Entries")
-    ;;         ("jj" "Journal" entry
-    ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-    ;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-    ;;          ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-    ;;          :clock-in :clock-resume
-    ;;          :empty-lines 1)
-    ;;         ("jm" "Meeting" entry
-    ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-    ;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-    ;;          :clock-in :clock-resume
-    ;;          :empty-lines 1)
-
-    ;;         ("w" "Workflows")
-    ;;         ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-    ;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
-
-    ;;         ("m" "Metrics Capture")
-    ;;         ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-    ;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
-
-    ;; (define-key global-map (kbd "C-c j")
-    ;;   (lambda () (interactive) (org-capture nil "jj")))
-
-    ;; (efs/org-font-setup)
-    ;; )
-
-#+end_src
-
-***** Nicer Heading Bullets
-
-[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
-
-#+begin_src emacs-lisp
-
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-#+end_src
-
-**** Org Exporting
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (setq org-export-with-section-numbers nil))
-#+end_src
-
 ** EFS/Configure Babel Languages
 
 To execute or export code in ~org-mode~ code blocks, you'll need to set up ~org-babel-load-languages~ for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with ~org-babel~.
@@ -2334,17 +2355,6 @@ You can add more ~src~ block templates below by copying one of the lines and cha
 
 #+end_src
 
-** EFS/Rainbow Delimiters
-
-[[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] is useful in programming modes because it colorizes nested parentheses and brackets according to their nesting depth.  This makes it a lot easier to visually match parentheses in Emacs Lisp code without having to count them yourself.
-
-#+begin_src emacs-lisp
-
-  (use-package rainbow-delimiters
-    :hook (prog-mode . rainbow-delimiters-mode))
-
-#+end_src
-
 ** EFS/Eshell
 
 [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
@@ -2383,18 +2393,13 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
           eshell-hist-ignoredups t
           eshell-scroll-to-bottom-on-input t))
 
-  (use-package eshell-git-prompt
-    :after eshell)
-
   (use-package eshell
     :hook (eshell-first-time-mode . efs/configure-eshell)
     :config
 
     (with-eval-after-load 'esh-opt
       (setq eshell-destroy-buffer-when-process-dies t)
-      (setq eshell-visual-commands '("htop" "zsh" "vim")))
-
-    (eshell-git-prompt-use-theme 'powerline))
+      (setq eshell-visual-commands '("htop" "zsh" "vim"))))
 
 
 #+end_src
