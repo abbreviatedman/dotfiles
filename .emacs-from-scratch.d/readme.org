@@ -1681,9 +1681,11 @@ Configurations specific to certain languages.
     :hook (markdown-mode . variable-pitch-mode)
 
     :init
-    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode))
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-            (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size)))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
+
+    :config
+    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
 
   (use-package edit-indirect)
 #+end_src
