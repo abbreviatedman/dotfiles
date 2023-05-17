@@ -300,8 +300,8 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
     (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                  :height 120
-                                  :width normal))
+                                          :height crj--default-font-size
+                                          :width normal))
     (buffer-face-mode))
 
     (defun my/set-general-faces-org ()
