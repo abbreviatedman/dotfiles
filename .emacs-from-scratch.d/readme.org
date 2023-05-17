@@ -1418,6 +1418,8 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 
   (use-package forge
     :after magit)
+
+  (use-package sqlite3)
 #+end_src
 
 *** Dired
