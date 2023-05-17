@@ -1655,6 +1655,14 @@ Also, automatically insert and indent a newline when putting a newline between e
 Configurations specific to certain languages.
 
 **** Markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
+
+    :init
+    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
+            (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size)))
+#+end_src
 
 ***** TODO configure markdown
 
