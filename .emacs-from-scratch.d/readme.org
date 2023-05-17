@@ -1664,8 +1664,6 @@ Configurations specific to certain languages.
             (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size)))
 #+end_src
 
-***** TODO configure markdown
-
 **** HTML
 
 #+begin_src emacs-lisp
