@@ -19,6 +19,24 @@ I'm basing this new config on the Emacs from Scratch repo, which is a lot more s
 
 So that's where we started and where we're going. Let's look at some code!
 
+** Literate Config Setup
+
+Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of prose. The document you’re reading right now is an example of literate programming, often called a literate config when it’s about configuring apps. All of the code blocks in this document are “tangled”, which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented… there’s always a reason for a block of code to exist. The documentation can’t fall behind the code—the documentation is the code.
+
+You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, it is automatically tangled to its matching code file. It’s pretty sweet!
+
+#+begin_src emacs-lisp
+;; Automatically tangle our Emacs.org config file when we save it
+(defun efs/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "readme.org" user-emacs-directory))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+#+end_src
+
 ** Start The Emacs Server
 
 #+begin_src emacs-lisp
@@ -1444,12 +1462,11 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 *** Email with Mu4e
 
 #+begin_src emacs-lisp
-;; (use-package mu4e
-;;   :init
-;;   (setq mu4e-mu-binary "~/.emacs-from-scratch.d/straight/repos/mu/mu/mu")
-
-;;   :straight ( :host github :files ("build/mu4e/*.el") :repo "djcb/mu"
-;;   :custom (mu4e-mu-binary (expand-file-name "mu/mu" (straight--repos-dir "mu")))))
+  (use-package emacs
+    :init
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+    (require 'mu4e)
+    (message "hi"))
 #+end_src
 
 ** Under The Hood
