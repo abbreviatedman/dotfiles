@@ -1508,10 +1508,13 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ followed by ~RET~.
 
+And never confirm to open a symlinked file under source control, which you do a /lot/ when exploring Emacs packages.
+
 #+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (defalias 'yes-or-no-p 'y-or-n-p))
+    (use-package emacs
+      :init
+      (defalias 'yes-or-no-p 'y-or-n-p)
+      (setq vc-follow-symlinks t))
 #+end_src
 
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
