@@ -571,25 +571,27 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
     (defun crj-evil-transpose-chars ()
       "Transpose characters as one vim-style action.
 
-  Wraps the function `transpose-chars' so that it's more in the style of Evil
-  Mode/Vim. (See info node `(evil)Overview')
+    Wraps the function `transpose-chars' so that it's more in the style of Evil
+    Mode/Vim. (See info node `(evil)Overview')
 
-  - Acts on the current character and the one to the right, which is more in line
-  with Vim's Normal Mode style.
-  - Adds the entire process as one action, adding undo/repeat ability.
+    - Acts on the current character and the one to the right, which is more in line
+    with Vim's Normal Mode style.
+    - Adds the entire process as one action, adding undo/repeat ability.
 
-  This differs greatly from the more Emacs-like `transpose-chars', which allows
-  you to drag a character forward as far as you want, using a count, but this
-  author found that he preferred the atomicity of Normal Mode.
+    This differs greatly from the more Emacs-like `transpose-chars', which allows
+    you to drag a character forward as far as you want, using a count, but this
+    author found that he preferred the atomicity of Normal Mode.
 
-  See `transpose-chars' for more info on the original function."
+    See `transpose-chars' for more info on the original function."
       (interactive)
       (evil-with-undo
         (forward-char)
         (transpose-chars 1)
         (backward-char 2)))
 
-    (crj-leader-keys "x" '(crj-evil-transpose-chars :which-key "Transpose characters.")))
+    :general
+    (:keymaps 'normal :prefix "g"
+              "b" '(crj-evil-transpose-chars :which-key "Transpose characters.")))
 
 #+end_src
 
