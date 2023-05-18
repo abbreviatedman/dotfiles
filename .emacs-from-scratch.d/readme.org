@@ -546,9 +546,13 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 **** Org Exporting
 
 #+begin_src emacs-lisp
-  (use-package emacs
+  (use-package org
     :init
-    (setq org-export-with-section-numbers nil))
+    (setq org-export-with-section-numbers nil
+          org-export-with-toc nil
+          org-export-with-date nil
+          org-export-with-entities nil
+          org-export-headline-levels 6))
 #+end_src
 
 ** Evil Mode
