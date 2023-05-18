@@ -9,8 +9,8 @@
 * Configure
 - auto-save files to go somewhere else
 * To Add
-** Magit
-*** With YADM and Forge
+** Forge
+** Pomodoro (or more general timer)
 ** Mu4e
 ** Copilot
 ** ChatGPT
@@ -18,8 +18,6 @@
 ** Embark
 ** Bindings For
 *** closing window with d
-*** promoting/demoting org headings with =<</>>=
 *** Searches
 **** project text
-**** project files
 **** directory
