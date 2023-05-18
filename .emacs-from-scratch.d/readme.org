@@ -892,6 +892,28 @@ Shows you the difference between two different bits of text. Another very occasi
     :commands (evil-quick-diff evil-quick-diff-cancel))
 #+end_src
 
+*** Number Incrementing and Decrementing
+
+#+begin_src emacs-lisp
+  (use-package evil-numbers
+    :general
+    (:keymaps 'normal :prefix "g"
+                  "=" '(evil-numbers/inc-at-pt :which-key "Increment operator.")
+                  "-" '(evil-numbers/dec-at-pt :which-key "Decrement operator."))
+    (:keymaps 'visual :prefix "g"
+                  "=" '(evil-numbers/inc-at-pt-incremental :which-key "Increment operator.")
+                  "-" '(evil-numbers/dec-at-pt-incremental :which-key "Decrement operator.")))
+  ;; (evil-define-key '(normal visual) 'global (kbd "C-c +")
+  ;;                  'evil-numbers/inc-at-pt)
+  ;; (evil-define-key '(normal visual) 'global (kbd "C-c -")
+  ;;                  'evil-numbers/dec-at-pt)
+  ;; (evil-define-key '(normal visual) 'global (kbd "C-c C-+")
+  ;;                  'evil-numbers/inc-at-pt-incremental)
+  ;; (evil-define-key '(normal visual) 'global (kbd "C-c C--")
+  ;;                  'evil-numbers/dec-at-pt-incremental)
+
+#+end_src
+
 ** Projects
 
 Grouping files together as a project is extremely helpful sometimes!
