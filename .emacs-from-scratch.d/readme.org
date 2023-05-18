@@ -233,6 +233,18 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
 
  So! Maybe this is how these mappings should be written? ~[(control d)]~ instead of ~"C-d"~? Maybe! Bears thinking about, for sure.
 
+*** Which Key
+
+Which key shows you a constantly updating list of what keys you can press next and what commands or menus they'll activate. It's helpful when you can't remember a shortcut, or even just when you want to explore what commands are under a certain menu.
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :defer 0
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 2))
+#+end_src
+
 ** Markup Documents
 
 *** General Markup Keybindings
