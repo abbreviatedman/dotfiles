@@ -593,6 +593,24 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 
 #+end_src
 
+A title-case operator!
+
+#+begin_src emacs-lisp
+  (use-package evil
+    :init
+    (evil-define-operator evil-title-case (beg end type)
+      "Convert text to title case."
+      (if (eq type 'block)
+          (evil-apply-on-block #'evil-titlecase beg end nil)
+        (upcase-initials-region beg end)))
+
+    :general
+    (:keymaps 'normal :prefix "g"
+                  "t" '(evil-title-case :which-key "Title-case operator.")))
+
+
+#+end_src
+
 *** Evil Mode Setup
 
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using ~describe-variable~ to see what they do and what their possible values are!
