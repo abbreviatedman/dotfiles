@@ -597,7 +597,7 @@ A title-case operator!
 
 #+begin_src emacs-lisp
   (use-package evil
-    :init
+    :config
     (evil-define-operator evil-title-case (beg end type)
       "Convert text to title case."
       (if (eq type 'block)
