@@ -1906,6 +1906,8 @@ Better go-to-definition function for Emacs Lisp.
           js2-strict-missing-semi-warning nil))
 
   (use-package rjsx-mode
+    :gfhook #'turn-off-flyspell
+
     :init
     (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
     (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
