@@ -1916,11 +1916,22 @@ Better go-to-definition function for Emacs Lisp.
 
     :config
     (defun crj--rjsx-electric-gt-fragment-a (n)
+      "Inserts matching JSX fragment.
+
+      Credit: someone on the internet?"
+
       (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
         (insert ?> ?<)
         (backward-char)))
 
-    (advice-add #'rjsx-electric-gt :before-while #'crj--rjsx-electric-gt-fragment-a))
+    (defun crj--auto-close-jsx-fragments (n)
+      (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
+        (insert ?> ?<)
+        (backward-char)))
+
+    (advice-add #'rjsx-electric-gt :before-while #'crj--auto-close-jsx-fragments))
+#+end_src
+
 #+end_src
 
 ** Completion
