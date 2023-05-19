@@ -1899,6 +1899,13 @@ Better go-to-definition function for Emacs Lisp.
 
 **** JavaScript
 
+Basic configuration for JS and JSX.
+
+Only two things aren't easy to figure out here:
+
+1. ~rjsx-mode~ and ~flyspell-mode~ are /not/ friends, so we turn ~flyspell-mode~ off in JS files. See [[this bug][https://github.com/felipeochoa/rjsx-mode/issues/68]].
+2. The advice added to the ~rjsx-electric-gt~ function helps ~rjsx-mode~ to auto-close React JSX fragments. You can find [[the original code here][https://github.com/felipeochoa/rjsx-mode/issues/112#issuecomment-773660200]].
+
 #+begin_src emacs-lisp
   (use-package emacs
     :init
