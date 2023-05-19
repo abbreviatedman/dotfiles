@@ -1902,7 +1902,8 @@ Better go-to-definition function for Emacs Lisp.
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    (setq js-indent-level 2))
+    (setq js-indent-level 2
+          js2-strict-missing-semi-warning nil))
 
   (use-package rjsx-mode
     :init
