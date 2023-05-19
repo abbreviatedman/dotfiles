@@ -44,6 +44,14 @@ You can read more on this subject… and I’ll probably write more. But in the 
 (server-start)
 #+end_src
 
+** Start With Messages
+
+I usually want to see the startup log first, and I'm tired of manually switching to it.
+
+#+begin_src emacs-lisp
+(switch-to-buffer "*Messages*")
+#+end_src
+
 ** Package System
 
 Getting Emacs users' awesome libraries (called "packages") into Emacs.
