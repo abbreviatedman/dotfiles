@@ -1611,6 +1611,10 @@ Oooh.
 
 ** Color Theme
 
+*** Themes
+
+**** Modus Themes
+
 Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
 
 #+begin_src emacs-lisp
@@ -1631,7 +1635,31 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
 
-    (load-theme 'modus-operandi-deuteranopia t))
+    ;; (mapc #'disable-theme custom-enabled-themes)
+    ;; (load-theme 'modus-operandi-deuteranopia :no-confirm)
+    )
+#+end_src
+
+**** Ef Themes
+
+The Ef Themes are by the same prolific and brilliant author as the Modus Themes, Protesilaos Stavrou (who is kind enough to go by "Prot"). Their focus is on vividness over accessibility—they still support a high level of accessibility, just not the /highest/ level that Modus works with.
+
+I'll still be using Modus Operandi Deuteronomy when presenting code, but I'm going to try some Ef Themes when working on my own and see how I feel about them!
+
+#+begin_src emacs-lisp
+    (use-package ef-themes
+      :init
+      (setq ef-themes-region '(intense)
+            ef-themes-headings '((0 . (variable-pitch  1.8))
+                                    (1 . (variable-pitch  1.8))
+                                    (2 . (variable-pitch  1.6))
+                                    (3 . (variable-pitch  1.4))
+                                    (4 . (variable-pitch  1.2))))
+
+      :config
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme 'ef-light :no-confirm))
+#+end_src
 #+end_src
 
 ** Writing
