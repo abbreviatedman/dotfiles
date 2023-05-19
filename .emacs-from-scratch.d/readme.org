@@ -1939,6 +1939,23 @@ Only two things aren't easy to figure out here:
     (advice-add #'rjsx-electric-gt :before-while #'crj--auto-close-jsx-fragments))
 #+end_src
 
+**** Using Prettier To Format Buffers
+
+#+begin_src emacs-lisp
+  (use-package prettier
+    :init
+    (defun crj-prettify-js-org-src-block ()
+      "Run prettier on source block at point."
+      (interactive)
+      (org-edit-src-code)
+      (prettier-prettify)
+      (org-edit-src-exit))
+
+    :general
+    (crj-leader-keys
+      "bf" '(prettier-prettify :which-key "Format buffer."))
+    (crj-leader-keys
+      "mf" '(crj-prettify-js-org-src-block :which-key "Format markdown block.")))
 #+end_src
 
 ** Completion
