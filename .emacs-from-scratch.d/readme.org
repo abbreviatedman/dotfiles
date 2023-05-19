@@ -1660,6 +1660,22 @@ I'll still be using Modus Operandi Deuteronomy when presenting code, but I'm goi
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme 'ef-light :no-confirm))
 #+end_src
+
+*** Syntax Coloring
+
+**** Highlight Numbers And Quoted Symbols
+
+Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
+
+#+begin_src emacs-lisp
+  (use-package highlight-numbers
+    :init
+    (add-hook 'prog-mode-hook #'highlight-numbers-mode))
+
+    (use-package highlight-quoted
+      :init
+      (add-hook 'prog-mode-hook #'highlight-quoted-mode))
+
 #+end_src
 
 ** Writing
