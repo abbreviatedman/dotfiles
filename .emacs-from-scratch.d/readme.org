@@ -1643,9 +1643,8 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
 
-    ;; (mapc #'disable-theme custom-enabled-themes)
-    ;; (load-theme 'modus-operandi-deuteranopia :no-confirm)
-    )
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme 'modus-operandi-deuteranopia :no-confirm))
 #+end_src
 
 **** Ef Themes
@@ -1665,8 +1664,9 @@ I'll still be using Modus Operandi Deuteronomy when presenting code, but I'm goi
                                     (4 . (variable-pitch  1.2))))
 
       :config
-      (mapc #'disable-theme custom-enabled-themes)
-      (load-theme 'ef-light :no-confirm))
+      ;; (mapc #'disable-theme custom-enabled-themes)
+      ;; (load-theme 'ef-light :no-confirm)
+      )
 #+end_src
 
 *** Syntax Coloring
