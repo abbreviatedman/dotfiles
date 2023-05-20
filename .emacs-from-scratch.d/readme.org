@@ -1733,7 +1733,10 @@ Also, automatically insert and indent a newline when putting a newline between e
 
 #+begin_src emacs-lisp
   (use-package highlight-parentheses
-    :ghook 'prog-mode-hook)
+    :ghook 'prog-mode-hook
+    :custom
+    (highlight-parentheses-colors nil)
+    (highlight-parentheses-attributes '((:underline (:style wave)))))
 
   (use-package rainbow-delimiters
     :ghook 'prog-mode-hook)
