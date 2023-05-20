@@ -1735,7 +1735,7 @@ Also, automatically insert and indent a newline when putting a newline between e
   (use-package highlight-parentheses
     :ghook 'prog-mode-hook)
 
-   (use-package rainbow-delimiters
+  (use-package rainbow-delimiters
     :ghook 'prog-mode-hook)
 
    (use-package smartparens
