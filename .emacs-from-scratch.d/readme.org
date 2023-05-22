@@ -1332,6 +1332,14 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
       "aM" '(eradio-play :which-key "Play internet radio.")
       "am" '(eradio-stop :which-key "Stop playing internet radio.")))
 #+end_src
+
+*** RSS with Elfeed
+
+#+begin_src emacs-lisp
+  (use-package elfeed
+  :commands elfeed)
+#+end_src
+
 *** Vterm
 
 Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
