@@ -1749,27 +1749,8 @@ Also, automatically insert and indent a newline when putting a newline between e
   (use-package rainbow-delimiters
     :ghook 'prog-mode-hook)
 
-   (use-package smartparens
-     :init
-     (require 'smartparens-config)
-     (smartparens-global-mode)
-     (show-smartparens-global-mode)
 
-     :config
-     (setq sp-show-pair-from-inside nil
-           sp-highlight-pair-overlay nil))
 
-   (use-package emacs
-     :init
-     (defun crj--create-newline-and-enter-block (&rest _ignored)
-       "Open a new brace or bracket expression, with relevant newlines and indent. "
-       (interactive)
-       (newline)
-       (indent-according-to-mode)
-       (forward-line -1)
-       (indent-according-to-mode))
-
-     (sp-local-pair 'prog-mode "{" nil :post-handlers '((crj--create-newline-and-enter-block "RET"))))
 #+end_src
 
 *** Languages
