@@ -1733,24 +1733,50 @@ Settings for... coding.
 
 **** Coding Block Delimiters
 
-Making all your parens and curlies and square brackets /pretty/.
+Sometimes simply called "parens" or "brackets", delimiters are a big part of coding. This is particularly true in Lisp languages, but even the indentation-for-delimiting-code-blocks Python benefits from handling them well.
 
-Auto-close parentheses, highlight the parens you're in, and switch to Smartparens for showing matching parens. (It's prettier.)
+Whatever you call delimiters, let's make all these easy-to-mess-up character pairs easier to work with!
 
-Also, automatically insert and indent a newline when putting a newline between empty curlies.
+***** Auto-Close Delimiter Pairs
+
+Use Emacs' built-in library for auto-closing your brackets, ~electric-pair-mode~. Auto-closing means that when you type an open-parens (or curly or square bracket), your editor adds a closing parens afterwards, keeping your cursor in the middle. The idea is to avoid ending up with unbalanced brackets.
+
+Many experienced developers say auto-closing your brackets is counter-productive. Perhaps I'll give skipping it another go sometime, but every time I do, I miss it.
+
+That said, I felt the same about using buffers as the main way to interact with text, but once I stopped relying on inefficient means like tabs, I saw how much better it was. And there are tons of other examples like that. So perhaps I'll someday see the light on this? We'll see!
 
 #+begin_src emacs-lisp
-  (use-package highlight-parentheses
-    :ghook 'prog-mode-hook
-    :custom
-    (highlight-parentheses-colors nil)
-    (highlight-parentheses-attributes '((:underline (:style wave)))))
+  (use-package emacs
+    :init
+    (electric-pair-mode))
+  #+end_src
+  
+***** Highlighting Surrounding Delimiters
 
-  (use-package rainbow-delimiters
-    :ghook 'prog-mode-hook)
+This next library highlights the delimiters of the block the cursor is currently in, providing a nice quick visual aid as to where you're /at/.
 
+By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle guide to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
+  #+begin_src emacs-lisp
+    (use-package highlight-parentheses
+      :ghook 'prog-mode-hook
+      :custom
+      (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-5 t)))
+      (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-5 t)))))
+    #+end_src
 
+    #+begin_src emacs-lisp
+    (use-package rainbow-delimiters
+      :after modus-themes
+
+      :ghook 'prog-mode-hook
+
+      :config
+      (dotimes (num 8)
+        (set-face-attribute
+         (intern (concat "rainbow-delimiters-depth-" (number-to-string (1+ num)) "-face"))
+         nil
+         :foreground (modus-themes-get-color-value (intern (concat "fg-heading-" (number-to-string (1+ num)))) t))))
 #+end_src
 
 *** Languages
