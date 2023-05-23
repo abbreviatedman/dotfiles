@@ -89,7 +89,8 @@ bindsym $mod+Shift+Return exec "google-chrome-stable"
 # start personal browser
 bindsym $mod+$alt+Return exec "vivaldi-stable"
 # start emacs browser
-bindsym $mod+Return exec emacsclient --socket-name=alt -cn -a "" -e '(eww-browse-url "" t)'
+bindsym $mod+Return exec emacsclient --socket-name=alt -cn -a "" -e '(switch-to-buffer "*Messages*")'
+
 # start alt browser 1
 bindsym $mod+$alt+g exec "chromium"
 # start alt browser 2
