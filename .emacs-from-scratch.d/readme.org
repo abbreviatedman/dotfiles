@@ -39,6 +39,8 @@ You can read more on this subject… and I’ll probably write more. But in the 
 
 ** Start The Emacs Server
 
+Running an Emacs server means that every single Emacs frame (or "window" in OS parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
+
 #+begin_src emacs-lisp
 (setq server-name "alt")
 (server-start)
