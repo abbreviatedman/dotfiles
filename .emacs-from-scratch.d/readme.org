@@ -1755,7 +1755,7 @@ That said, I felt the same about using buffers as the main way to interact with 
 
 This next library highlights the delimiters of the block the cursor is currently in, providing a nice quick visual aid as to where you're /at/.
 
-By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle guide to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
+By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle visual indication as to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
   #+begin_src emacs-lisp
     (use-package highlight-parentheses
@@ -1764,6 +1764,14 @@ By default, it helps you see the blocks from your cursor to four delimiters outw
       (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-5 t)))
       (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-5 t)))))
     #+end_src
+    
+***** Using Different Colors For Different Depths Delimiters
+
+Rainbow Delimiters uses a different color for each depth of delimiter, regardless of where your cursor is. So, in mine, the outer delimiter is a kind of dark blue-ish purple, the next delimiter pair inwards is a pinkish purple, the next a lighter blue, the next a blue-ish green, he next an orange-red, the next an intense red, and it keeps going like that in complementary cycles.
+
+The color choices aren't mine, but, rather, taken from the great Modus Themes, and specifically from their headings. The code below sets ~rainbow-delimiters-depth-n~ to the color of my current Modus theme's ~fg-heading-n~ (the foreground color of the heading), where ~n~ is each number from 1-8.
+
+The code above and below were fun coding challenges for me as I learn a bit more Lisp. There's some good learnings to be taken from how they work, from the use of ~`~ and ~,~ for evaluating code in a list to the way the ~dotimes~ loop works to the use of ~intern~ to convert a string to a Lisp symbol. Maybe you'll take something from them too!
 
     #+begin_src emacs-lisp
     (use-package rainbow-delimiters
