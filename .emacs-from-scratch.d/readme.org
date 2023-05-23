@@ -26,15 +26,15 @@ Literate programming is an approach where, instead of putting comments in code t
 You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, it is automatically tangled to its matching code file. It’s pretty sweet!
 
 #+begin_src emacs-lisp
-;; Automatically tangle our Emacs.org config file when we save it
-(defun efs/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "readme.org" user-emacs-directory))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+  (defun efs/org-babel-tangle-config ()
+    "Automatically tangle our Emacs.org config file when we save it"
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "readme.org" user-emacs-directory))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 #+end_src
 
 ** Start The Emacs Server
@@ -42,6 +42,14 @@ You can read more on this subject… and I’ll probably write more. But in the 
 #+begin_src emacs-lisp
 (setq server-name "alt")
 (server-start)
+#+end_src
+
+** Start With Messages
+
+I usually want to see the startup log first, and I'm tired of manually switching to it.
+
+#+begin_src emacs-lisp
+(switch-to-buffer "*Messages*")
 #+end_src
 
 ** Package System
@@ -1346,6 +1354,14 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
       "aM" '(eradio-play :which-key "Play internet radio.")
       "am" '(eradio-stop :which-key "Stop playing internet radio.")))
 #+end_src
+
+*** RSS with Elfeed
+
+#+begin_src emacs-lisp
+  (use-package elfeed
+  :commands elfeed)
+#+end_src
+
 *** Vterm
 
 Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
@@ -1633,6 +1649,10 @@ Oooh.
 
 ** Color Theme
 
+*** Themes
+
+**** Modus Themes
+
 Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
 
 #+begin_src emacs-lisp
@@ -1653,7 +1673,47 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
 
-    (load-theme 'modus-operandi-deuteranopia t))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme 'modus-operandi-deuteranopia :no-confirm))
+#+end_src
+
+**** Ef Themes
+
+The Ef Themes are by the same prolific and brilliant author as the Modus Themes, Protesilaos Stavrou (who is kind enough to go by "Prot"). Their focus is on vividness over accessibility—they still support a high level of accessibility, just not the /highest/ level that Modus works with.
+
+I'll still be using Modus Operandi Deuteronomy when presenting code, but I'm going to try some Ef Themes when working on my own and see how I feel about them!
+
+#+begin_src emacs-lisp
+    (use-package ef-themes
+      :init
+      (setq ef-themes-region '(intense)
+            ef-themes-headings '((0 . (variable-pitch  1.8))
+                                    (1 . (variable-pitch  1.8))
+                                    (2 . (variable-pitch  1.6))
+                                    (3 . (variable-pitch  1.4))
+                                    (4 . (variable-pitch  1.2))))
+
+      :config
+      ;; (mapc #'disable-theme custom-enabled-themes)
+      ;; (load-theme 'ef-light :no-confirm)
+      )
+#+end_src
+
+*** Syntax Coloring
+
+**** Highlight Numbers And Quoted Symbols
+
+Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
+
+#+begin_src emacs-lisp
+  (use-package highlight-numbers
+    :init
+    (add-hook 'prog-mode-hook #'highlight-numbers-mode))
+
+    (use-package highlight-quoted
+      :init
+      (add-hook 'prog-mode-hook #'highlight-quoted-mode))
+
 #+end_src
 
 ** Writing
@@ -1695,40 +1755,58 @@ Settings for... coding.
 
 **** Coding Block Delimiters
 
-Making all your parens and curlies and square brackets /pretty/.
+Sometimes simply called "parens" or "brackets", delimiters are a big part of coding. This is particularly true in Lisp languages, but even the indentation-for-delimiting-code-blocks Python benefits from handling them well.
 
-Auto-close parentheses, highlight the parens you're in, and switch to Smartparens for showing matching parens. (It's prettier.)
+Whatever you call delimiters, let's make all these easy-to-mess-up character pairs easier to work with!
 
-Also, automatically insert and indent a newline when putting a newline between empty curlies.
+***** Auto-Close Delimiter Pairs
+
+Use Emacs' built-in library for auto-closing your brackets, ~electric-pair-mode~. Auto-closing means that when you type an open-parens (or curly or square bracket), your editor adds a closing parens afterwards, keeping your cursor in the middle. The idea is to avoid ending up with unbalanced brackets.
+
+Many experienced developers say auto-closing your brackets is counter-productive. Perhaps I'll give skipping it another go sometime, but every time I do, I miss it.
+
+That said, I felt the same about using buffers as the main way to interact with text, but once I stopped relying on inefficient means like tabs, I saw how much better it was. And there are tons of other examples like that. So perhaps I'll someday see the light on this? We'll see!
 
 #+begin_src emacs-lisp
-  (use-package highlight-parentheses
-    :ghook 'prog-mode-hook)
+  (use-package emacs
+    :init
+    (electric-pair-mode))
+  #+end_src
+  
+***** Highlighting Surrounding Delimiters
 
-   (use-package rainbow-delimiters
-    :ghook 'prog-mode-hook)
+This next library highlights the delimiters of the block the cursor is currently in, providing a nice quick visual aid as to where you're /at/.
 
-   (use-package smartparens
-     :init
-     (require 'smartparens-config)
-     (smartparens-global-mode)
-     (show-smartparens-global-mode)
+By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle visual indication as to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
-     :config
-     (setq sp-show-pair-from-inside nil
-           sp-highlight-pair-overlay nil))
+  #+begin_src emacs-lisp
+    (use-package highlight-parentheses
+      :ghook 'prog-mode-hook
+      :custom
+      (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
+      (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
+    #+end_src
+    
+***** Using Different Colors For Different Depths Delimiters
 
-   (use-package emacs
-     :init
-     (defun crj--create-newline-and-enter-block (&rest _ignored)
-       "Open a new brace or bracket expression, with relevant newlines and indent. "
-       (interactive)
-       (newline)
-       (indent-according-to-mode)
-       (forward-line -1)
-       (indent-according-to-mode))
+Rainbow Delimiters uses a different color for each depth of delimiter, regardless of where your cursor is. So, in mine, the outer delimiter is a kind of dark blue-ish purple, the next delimiter pair inwards is a pinkish purple, the next a lighter blue, the next a blue-ish green, he next an orange-red, the next an intense red, and it keeps going like that in complementary cycles.
 
-     (sp-local-pair 'prog-mode "{" nil :post-handlers '((crj--create-newline-and-enter-block "RET"))))
+The color choices aren't mine, but, rather, taken from the great Modus Themes, and specifically from their headings. The code below sets ~rainbow-delimiters-depth-n~ to the color of my current Modus theme's ~fg-heading-n~ (the foreground color of the heading), where ~n~ is each number from 1-8.
+
+The code above and below were fun coding challenges for me as I learn a bit more Lisp. There's some good learnings to be taken from how they work, from the use of ~`~ and ~,~ for evaluating code in a list to the way the ~dotimes~ loop works to the use of ~intern~ to convert a string to a Lisp symbol. Maybe you'll take something from them too!
+
+    #+begin_src emacs-lisp
+    (use-package rainbow-delimiters
+      :after modus-themes
+
+      :ghook 'prog-mode-hook
+
+      :config
+      (dotimes (num 8)
+        (set-face-attribute
+         (intern (concat "rainbow-delimiters-depth-" (number-to-string (1+ num)) "-face"))
+         nil
+         :foreground (modus-themes-get-color-value (intern (concat "fg-heading-" (number-to-string (1+ num)))) t))))
 #+end_src
 
 *** Languages
@@ -1869,12 +1947,22 @@ Better go-to-definition function for Emacs Lisp.
 
 **** JavaScript
 
+Basic configuration for JS and JSX.
+
+Only two things aren't easy to figure out here:
+
+1. ~rjsx-mode~ and ~flyspell-mode~ are /not/ friends, so we turn ~flyspell-mode~ off in JS files. See [[this bug][https://github.com/felipeochoa/rjsx-mode/issues/68]].
+2. The advice added to the ~rjsx-electric-gt~ function helps ~rjsx-mode~ to auto-close React JSX fragments. You can find [[the original code here][https://github.com/felipeochoa/rjsx-mode/issues/112#issuecomment-773660200]].
+
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    (setq js-indent-level 2))
+    (setq js-indent-level 2
+          js2-strict-missing-semi-warning nil))
 
   (use-package rjsx-mode
+    :gfhook #'turn-off-flyspell
+
     :init
     (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
     (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode))
@@ -1883,11 +1971,39 @@ Better go-to-definition function for Emacs Lisp.
 
     :config
     (defun crj--rjsx-electric-gt-fragment-a (n)
+      "Inserts matching JSX fragment.
+
+      Credit: someone on the internet?"
+
       (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
         (insert ?> ?<)
         (backward-char)))
 
-    (advice-add #'rjsx-electric-gt :before-while #'crj--rjsx-electric-gt-fragment-a))
+    (defun crj--auto-close-jsx-fragments (n)
+      (if (or (/= n 1) (not (and (eq (char-before) ?<) (eq (char-after) ?/)))) 't
+        (insert ?> ?<)
+        (backward-char)))
+
+    (advice-add #'rjsx-electric-gt :before-while #'crj--auto-close-jsx-fragments))
+#+end_src
+
+**** Using Prettier To Format Buffers
+
+#+begin_src emacs-lisp
+  (use-package prettier
+    :init
+    (defun crj-prettify-js-org-src-block ()
+      "Run prettier on source block at point."
+      (interactive)
+      (org-edit-src-code)
+      (prettier-prettify)
+      (org-edit-src-exit))
+
+    :general
+    (crj-leader-keys
+      "bf" '(prettier-prettify :which-key "Format buffer."))
+    (crj-leader-keys
+      "mf" '(crj-prettify-js-org-src-block :which-key "Format markdown block.")))
 #+end_src
 
 ** Completion
