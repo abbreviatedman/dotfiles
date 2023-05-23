@@ -911,15 +911,6 @@ Shows you the difference between two different bits of text. Another very occasi
     (:keymaps 'visual :prefix "g"
                   "=" '(evil-numbers/inc-at-pt-incremental :which-key "Increment operator.")
                   "-" '(evil-numbers/dec-at-pt-incremental :which-key "Decrement operator.")))
-  ;; (evil-define-key '(normal visual) 'global (kbd "C-c +")
-  ;;                  'evil-numbers/inc-at-pt)
-  ;; (evil-define-key '(normal visual) 'global (kbd "C-c -")
-  ;;                  'evil-numbers/dec-at-pt)
-  ;; (evil-define-key '(normal visual) 'global (kbd "C-c C-+")
-  ;;                  'evil-numbers/inc-at-pt-incremental)
-  ;; (evil-define-key '(normal visual) 'global (kbd "C-c C--")
-  ;;                  'evil-numbers/dec-at-pt-incremental)
-
 #+end_src
 
 ** Projects
