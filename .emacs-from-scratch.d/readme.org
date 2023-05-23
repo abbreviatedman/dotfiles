@@ -1761,8 +1761,8 @@ By default, it helps you see the blocks from your cursor to four delimiters outw
     (use-package highlight-parentheses
       :ghook 'prog-mode-hook
       :custom
-      (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-5 t)))
-      (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-5 t)))))
+      (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
+      (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
     #+end_src
     
 ***** Using Different Colors For Different Depths Delimiters
