@@ -1845,6 +1845,10 @@ Much of the below is just about getting Markdown to get the look I describe in t
 
 **** HTML
 
+The ugly-but-fully-featured markup language.
+
+The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labored over—which probably means that someone else has already added that feature, but it was fun to code it. What it does is make the Evil ~%~ command, which bounces between matching delimiters, do the same for opening and closing tags. It leverages some great ~web-mode~ commands and variables.
+
 #+begin_src emacs-lisp
   (use-package web-mode
     :init
