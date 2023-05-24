@@ -8,6 +8,8 @@
 - Input font is about having the priority of equity over equality.
 ** General
 - why Evil/Emacs, keybindings as one path to here
+** Symex
+- "symex" vs. "sexp"
 * Configure
 - auto-save files to go somewhere else
 * To Add
