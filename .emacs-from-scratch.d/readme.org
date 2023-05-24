@@ -1916,7 +1916,7 @@ For now, I'm implementing both systems,
 #+begin_src emacs-lisp
   (use-package on-parens)
 
-  (use-package emacs
+  (use-package on-parens
     :general
     (:states '(normal motion visual) :prefix "]l"
              "s" '(on-parens-forward-slurp :which-key "Slurp forwards.")
