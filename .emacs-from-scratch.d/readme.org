@@ -1962,6 +1962,8 @@ Better go-to-definition function for Emacs Lisp.
                   "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
 
+****** TODO configure elisp more
+
 **** JavaScript
 
 Basic configuration for JS and JSX.
@@ -2499,6 +2501,8 @@ Besides different keybindings, I've only added a couple extra configurations her
     ("C-h g" #'customize-group)
     ("C-h F" #'describe-face))
 #+end_src
+
+*** TODO set help commands on the help map
 
 ** EFS/Configure Babel Languages
 
