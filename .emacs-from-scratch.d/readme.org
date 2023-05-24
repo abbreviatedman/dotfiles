@@ -413,7 +413,7 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
     :hook
     (org-mode . efs/org-mode-setup)
     (org-mode . my/set-general-faces-org)
-    ;; :config (efs/org-font-setup)
+
     :general
     (:keymaps 'org-mode-map :states 'insert
               "M-h" #'org-promote-subtree
