@@ -1740,6 +1740,7 @@ I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion w
 
     (add-hook 'text-mode-hook #'crj--turn-on-flyspell)
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+    (add-hook 'git-commit-mode-hook #'crj--turn-on-flyspell)
     (setq ispell-program-name "hunspell")
 
     :config
