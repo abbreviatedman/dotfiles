@@ -6,6 +6,8 @@
 - What it's like to care too much about little details.
 - Having value and design decisions.
 - Input font is about having the priority of equity over equality.
+** General
+- why Evil/Emacs, keybindings as one path to here
 * Configure
 - auto-save files to go somewhere else
 * To Add
@@ -14,10 +16,11 @@
 ** Mu4e
 ** Copilot
 ** ChatGPT
-** Projectile
 ** Embark
 ** Bindings For
 *** closing window with d
+*** close window and buffer
+*** save buffer then close
 *** Searches
 **** project text
 **** directory
