@@ -710,16 +710,25 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
               "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
       #+end_src
       
-
 *** Evil Keybindings for Org Mode
 
-This library adds some basic Evil bindings.
+This library adds some basic Evil bindings. In addition to the "key themes"" you'll find in [[https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org][the Evil Org keythemes documentation]], I've included their awesome ~RET~ function, which continues list items and other such.
 
 #+begin_src emacs-lisp
   (use-package evil-org
     :after (evil org)
+
     :init
-    (add-hook 'org-mode-hook #'evil-org-mode))
+    (add-hook 'org-mode-hook #'evil-org-mode)
+    (setq org-return-follows-link t
+          evil-org-use-additional-insert t)
+
+    :config
+    (evil-org-set-key-theme '(textobjects navigation todo additional))
+
+    :general
+    (:keymaps 'org-mode-map :states 'insert
+              "RET" #'evil-org-return))
 #+end_src
 
 
