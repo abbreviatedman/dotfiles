@@ -1381,10 +1381,12 @@ Let's use a wrapper around it that allows multiple terminals.
     :init
     (setq vterm-shell "/usr/sbin/zsh")
     (setq vterm-max-scrollback 100000)
+
     :general
     (crj-leader-keys
       "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
 #+end_src
+
 *** Org Agenda
 
 Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
