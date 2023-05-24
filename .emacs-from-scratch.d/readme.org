@@ -408,6 +408,8 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
     (visual-line-mode 1))
 
   (use-package org
+    :init
+    (setq org-link-descriptive nil)
     :hook
     (org-mode . efs/org-mode-setup)
     (org-mode . my/set-general-faces-org)
