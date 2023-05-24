@@ -680,9 +680,11 @@ There are just a ton of variables here that finely set how Evil Mode is configur
     ("C-M-u" . universal-argument))
   #+end_src
 
-Some extra Evil Mode stuff.
+**** Evil Collection
 
-Only reversing the "move line up/down" and "next/previous error" keybindings to be more mnemonic.
+This library provides Evil Mode bindings for non-standard buffers, e.g. Magit.
+
+I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more mnemonic to me. ~[m~ and ~]m~ move text up and down by lines, while ~[e~ and ~]e~ should navigate to errors. ~[l~ and ~]l~ I will set later to some Lisp manipulation commands.
 
 #+begin_src emacs-lisp
   (use-package evil-collection
