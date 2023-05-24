@@ -1815,9 +1815,17 @@ The code above and below were fun coding challenges for me as I learn a bit more
 #+end_src
 
 *** Languages
+
 Configurations specific to certain languages.
 
 **** Markdown
+
+The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
+
+Much of the below is just about getting Markdown to get the look I describe in the ~Fonts~ section. Eventually I need to universalize that code—maybe even getting a minor mode together.
+
+~edit-indirect~ is a Markdown Mode package that allows you to edit an embedded code block in a dedicated code-oriented buffer, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
+
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
