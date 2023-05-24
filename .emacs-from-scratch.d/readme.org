@@ -2491,7 +2491,9 @@ Besides different keybindings, I've only added a couple extra configurations her
               "hg" '(customize-group
                      :which-key "Search for customize group.")
               "hm" '(consult-minor-mode-menu
-                     :which-key "Search through minor modes."))
+                     :which-key "Search through minor modes.")
+              "hM" '(describe-mode
+                     :which-key "Describe currently active modes."))
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
     ([remap describe-variable] #'helpful-variable)
