@@ -1,6 +1,5 @@
 #+title:   Colin Jaffe's Literate Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
-
 * Colin Jaffe's Literate Config
 ** Introduction
 
@@ -15,31 +14,33 @@ This is my code so far.
 I'm basing this new config on the Emacs from Scratch repo, which is a lot more sparse. I'm currently changing this config considerably by:
 
 1. Paring down the config I copied over from EFS.
-2. Going to be going through Doom Emacs' vast built-in modules, taking the code I want.
+2. Going through Doom Emacs' vast built-in modules, taking the code I want.
 
 So that's where we started and where we're going. Let's look at some code!
 
 ** Literate Config Setup
 
-Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of prose. The document you’re reading right now is an example of literate programming, often called a literate config when it’s about configuring apps. All of the code blocks in this document are “tangled”, which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented… there’s always a reason for a block of code to exist. The documentation can’t fall behind the code—the documentation is the code.
+Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of commentary. The document you’re reading right now is an example of literate programming, often called a literate config when its purpose is configuring apps. All of the code blocks in this document are “tangled”, which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented… there’s always a reason for a block of code to exist. The documentation can’t fall behind the code—the documentation /is/ the code.
 
-You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, it is automatically tangled to its matching code file. It’s pretty sweet!
+You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, its code is automatically tangled to the appropriate code files. It’s pretty sweet!
 
 #+begin_src emacs-lisp
-  (defun efs/org-babel-tangle-config ()
-    "Automatically tangle our Emacs.org config file when we save it"
+  (defun efs--org-babel-tangle-config ()
+    "Automatically tangle our Emacs.org config file when we save it. Credit to Emacs From Scratch for this one!"
     (when (string-equal (buffer-file-name)
                         (expand-file-name "readme.org" user-emacs-directory))
 
       (let ((org-confirm-babel-evaluate nil))
         (org-babel-tangle))))
 
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs--org-babel-tangle-config)))
 #+end_src
 
 ** Start The Emacs Server
 
-Running an Emacs server means that every single Emacs frame (or "window" in OS parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
+Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
+
+The "alt" server name is a relic of a time when I ran this configuration as a secondary Emacs config alongside my main configuration, while I was still getting it into a workable condition. I will be going back to a single-server configuration soon enough and dropping the need for naming my servers.
 
 #+begin_src emacs-lisp
 (setq server-name "alt")
