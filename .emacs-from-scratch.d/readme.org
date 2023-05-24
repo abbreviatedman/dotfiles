@@ -1833,6 +1833,7 @@ Much of the below is just about getting Markdown to get the look I describe in t
     :hook (markdown-mode . variable-pitch-mode)
 
     :init
+    (setq markdown-indent-on-enter 'indent-and-new-item)
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
       (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
 
