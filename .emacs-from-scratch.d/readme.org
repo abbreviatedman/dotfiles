@@ -1453,18 +1453,13 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     :after (evil org)
 
     :init
-    (add-hook 'org-mode-hook #'evil-org-mode)
     (add-hook 'org-agenda-mode-hook #'evil-org-mode)
 
     :config
     (require 'evil-org-agenda)
-    (evil-org-set-key-theme '(textobjects insert navigation additional shift todo))
-    (evil-org-agenda-set-keys)
-
-    :general
-    (:keymaps 'org-mode-map
-              "RET" #'evil-org-return))
+    (evil-org-agenda-set-keys))
 #+end_src
+
 
 *** Version Control With Magit
 
