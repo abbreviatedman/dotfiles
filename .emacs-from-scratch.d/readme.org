@@ -4,18 +4,18 @@
 * Colin Jaffe's Literate Config
 ** Introduction
 
-Emacs is a text editor. Well, most people use it predominantly as a text editor, but at its nerdy awkward heart it's actually a Lisp programming environment. Setting Emacs' preferences and extending it with third-party code is all done through Lisp code that the Emacs user writes.
+Emacs is a text editor. Or... is it?
+
+Well, most people use it predominantly as a text editor, but at its nerdy awkward heart it's actually a Lisp programming environment. Setting Emacs' preferences and extending it with third-party code is all done through Lisp code that the Emacs user writes.
 
 [[https://www.explainxkcd.com/wiki/index.php/297:_Lisp_Cycles][https://www.explainxkcd.com/wiki/images/e/eb/lisp_cycles.png]]
 
 This is my code so far.
 
-I've been using a popular third-party config (and config system) called Doom Emacs for a long time now, but it's grown /rather/ creaky, between their code, my code, and Emacs' code. I don't know what's going on under the hood an unfortunate amount of the time because of this three-way scrum. So I'm declaring configuration bankruptcy and starting over. (Though I'm not ready for this to be my main config yet. Still dooming it up for /work/ work until I can get this version up to speed.)
-
 I'm basing this new config on the Emacs from Scratch repo, which is a lot more sparse. I'm currently changing this config considerably by:
 
 1. Paring down the config I copied over from EFS.
-2. Going to be going through Doom's vast built-in modules, taking the code I want.
+2. Going to be going through Doom Emacs' vast built-in modules, taking the code I want.
 
 So that's where we started and where we're going. Let's look at some code!
 
