@@ -330,7 +330,7 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
     (crj-leader-keys
       :keymaps 'org-mode-map
       :states '(normal visual)
-      "m." '(consult-org-heading :which-key "Search current headings.")))
+      "m/" '(consult-org-heading :which-key "Search current headings.")))
 #+end_src
 
 **** Org Mode Better Font Faces
