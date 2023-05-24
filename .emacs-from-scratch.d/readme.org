@@ -1914,6 +1914,8 @@ For now, I'm implementing both systems,
 ****** Symex Manipulation
 
 #+begin_src emacs-lisp
+  (use-package on-parens)
+
   (use-package emacs
     :general
     (:states '(normal motion visual) :prefix "]l"
@@ -1934,11 +1936,6 @@ For now, I'm implementing both systems,
 ***** Emacs Lisp
 
 ****** TODO configure elisp more
-****** Symex Manipulation
-
-#+begin_src emacs-lisp
-(use-package on-parens)
-#+end_src
 
 ******* TODO configure keybindings
 ******* TODO figure out evil keybindings for movement
