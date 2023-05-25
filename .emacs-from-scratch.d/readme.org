@@ -1425,13 +1425,17 @@ Let's use a wrapper around it that allows multiple terminals.
 #+begin_src emacs-lisp
   (use-package multi-vterm
     :init
-    (setq vterm-shell "/usr/sbin/zsh")
-    (setq vterm-max-scrollback 100000)
+    (setq vterm-shell "/usr/sbin/zsh"
+          vterm-always-compile-module t
+          vterm-max-scrollback 100000)
 
     :general
     (crj-leader-keys
       "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
 #+end_src
+
+**** TODO configure Vterm Copy mode
+**** TODO configure pass-through keys
 
 *** Org Agenda
 
