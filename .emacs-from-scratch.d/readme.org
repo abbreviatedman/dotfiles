@@ -1413,7 +1413,11 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
     :commands elfeed
 
     :init
-    (setq elfeed-feeds '("https://planet.emacslife.com/atom.xml")))
+    (setq elfeed-feeds '("https://planet.emacslife.com/atom.xml"))
+
+    :general
+    (crj-leader-keys
+      "ar" '(elfeed :which-key "Launch RSS reader.")))
 #+end_src
 
 *** Vterm
