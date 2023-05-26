@@ -1408,6 +1408,8 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
 
 *** RSS with Elfeed
 
+RSS might be a great technology? I'm only just getting into it with this package!
+
 #+begin_src emacs-lisp
   (use-package elfeed
     :commands elfeed
