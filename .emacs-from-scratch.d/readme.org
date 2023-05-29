@@ -2008,9 +2008,29 @@ For now, I'm implementing both systems,
 
 ******* Emacs Lisp Evaluation
 
+First, a menu for evaluating code.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys "e" '(:ignore t :which-key "Evaluation menu.")))
+#+end_src
+
+Now, let's add keybindings for evaluating the current function, symex, and buffer.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "ef" '(eval-defun :which-key "Evaluate current function.")
+      "es" '(eval-last-sexp :which-key "Evaluate last symex.")
+      "eb" '(eval-buffer :which-key "Evaluate current buffer.")))
+#+end_src
+
 #+begin_src emacs-lisp
   (use-package quickrun)
 #+end_src
+
 ******** TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
 
 ******* Emacs Lisp Documentation Lookup
