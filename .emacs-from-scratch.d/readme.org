@@ -1636,10 +1636,19 @@ And never confirm to open a symlinked file under source control, which you do a 
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
 #+begin_src emacs-lisp
+    (use-package emacs
+      :init
+      (recentf-mode 1)
+      (global-auto-revert-mode 1)
+      (setq global-auto-revert-non-file-buffers t))
+#+end_src
+
+Also remember our place in files.
+
+#+begin_src emacs-lisp
   (use-package emacs
     :init
-    (recentf-mode 1)
-    (global-auto-revert-mode 1))
+    (save-place-mode 1))
 #+end_src
 
 A better Emacs kill command binding to kill the Emacs server as well.
