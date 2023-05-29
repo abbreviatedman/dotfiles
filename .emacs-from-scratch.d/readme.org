@@ -711,7 +711,7 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
               "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
               "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
       #+end_src
-      
+
 *** Evil Keybindings for Org Mode
 
 This library adds some basic Evil bindings. In addition to the "key themes"" you'll find in [[https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org][the Evil Org keythemes documentation]], I've included their awesome ~RET~ function, which continues list items and other such.
@@ -769,7 +769,7 @@ Also included is a nifty function that deletes everything but one space before t
 #+begin_src emacs-lisp
   (use-package evil-goggles
     :after evil
-  
+
     :init
     (setq evil-goggles-duration 0.3
           evil-goggles-pulse nil
@@ -801,7 +801,7 @@ This library is amazing for working with surrounding text. Changing double quote
   #+begin_src emacs-lisp
     (use-package evil-nerd-commenter
       :after evil
-    
+
       :config
       :general
       ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
@@ -818,7 +818,7 @@ Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and
 #+begin_src emacs-lisp
   (use-package evil-snipe
     :after evil
-  
+
     :init
     (evil-snipe-mode 1)
     (evil-snipe-override-mode 1)
@@ -838,7 +838,7 @@ Being able to type ~SPC r i )~ to say "replace what's in these parens with what 
 #+begin_src emacs-lisp
   (use-package evil-replace-with-register
     :after evil
-  
+
     :general
     (crj-leader-keys
               "r" '(evil-replace-with-register
@@ -852,7 +852,7 @@ Another efficient text editing library. This one exchanges two bits of text in a
 #+begin_src emacs-lisp
   (use-package evil-exchange
     :after evil
-  
+
     :general
     (:states '(normal visual)
              "gx" '(evil-exchange :which-key "Exchange text objects.")))
@@ -878,7 +878,7 @@ A surprisingly useful Evil text object for the entire buffer.
 #+begin_src emacs-lisp
   (use-package evil-textobj-entire
     :after evil
-  
+
     :straight (evil-textobj-entire
                :host github
                :repo "nscoder/evil-textobj-entire"))
@@ -891,7 +891,7 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
 #+begin_src emacs-lisp
   (use-package evil-visualstar
     :after evil
-  
+
     :commands (evil-visualstar/begin-search
                evil-visualstar/begin-search-forward
                evil-visualstar/begin-search-backward)
@@ -1572,7 +1572,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 #+begin_src emacs-lisp
   (use-package emacs
     :commands (dired dired-jump)
-  
+
     :init
     (setq dired-listing-switches "-al --group-directories-first"
           dired-recursive-copies 'always
@@ -1844,7 +1844,7 @@ That said, I felt the same about using buffers as the main way to interact with 
     :init
     (electric-pair-mode))
   #+end_src
-  
+
 ****** Highlighting Surrounding Delimiters
 
 This next library highlights the delimiters of the block the cursor is currently in, providing a nice quick visual aid as to where you're /at/.
@@ -1858,7 +1858,7 @@ By default, it helps you see the blocks from your cursor to four delimiters outw
       (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
       (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
     #+end_src
-    
+
 ****** Using Different Colors For Different Depths Delimiters
 
 Rainbow Delimiters uses a different color for each depth of delimiter, regardless of where your cursor is. So, in mine, the outer delimiter is a kind of dark blue-ish purple, the next delimiter pair inwards is a pinkish purple, the next a lighter blue, the next a blue-ish green, he next an orange-red, the next an intense red, and it keeps going like that in complementary cycles.
@@ -2015,7 +2015,7 @@ For now, I'm implementing both systems,
 ******* Emacs Lisp Documentation Lookup
 
 Better go-to-definition function for Emacs Lisp.
- 
+
 #+begin_src emacs-lisp
       (use-package elisp-def
         :init
@@ -2094,9 +2094,9 @@ Only two things aren't easy to figure out here:
 
 Because so much in Emacs is driven by text, good completion is the difference between hard-to-use and effortless.
 
-*** Minibuffer Completion 
+*** Minibuffer Completion
 
-Minibuffer completion is a different beast than in-buffer completion, which is what most people mean when they talk about completion in other apps. The minibuffer is a kind of menu you get in Emacs, and it usually serves as a place to search for something. 
+Minibuffer completion is a different beast than in-buffer completion, which is what most people mean when they talk about completion in other apps. The minibuffer is a kind of menu you get in Emacs, and it usually serves as a place to search for something.
 
 In Emacs, minibuffer menus can be used to search for:
 
@@ -2469,7 +2469,7 @@ Sets up:
 *** Flymake
 
   A great error-navigation library.
-  
+
   #+begin_src emacs-lisp
     (use-package flymake
       :hook (prog-mode . flymake-mode)
@@ -2494,8 +2494,6 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
     :general
     (crj-leader-keys "w" '(:keymap evil-window-map :which-key "window")))
 #+end_src
-
-*** TODO include a 
 
 ** EFS/Better Modeline
 
