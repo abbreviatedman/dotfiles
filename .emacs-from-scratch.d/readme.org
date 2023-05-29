@@ -2511,6 +2511,8 @@ GitHub Copilot provides AI-driven suggestions as to what you might want to inser
 
 I also find it helpful to have a separate set of tab bindings for accepting Copilot suggestions, so I can use the normal tab bindings for standard completion.
 
+Note that this feature only works if you have a GitHub Copilot account. If you have one, you can login using the ~copilot-login~ command.
+
 #+begin_src emacs-lisp
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
