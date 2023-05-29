@@ -2544,6 +2544,12 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
   (use-package emacs
     :general
     (crj-leader-keys "w" '(:keymap evil-window-map :which-key "window")))
+
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "wd" '(evil-window-delete :which-key "Close window.")
+      "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
 #+end_src
 
 ** EFS/Better Modeline
