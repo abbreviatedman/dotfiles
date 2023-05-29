@@ -2420,9 +2420,9 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
 	    ;; (setq embark-prompter 'embark-completing-read-prompter)
   #+end_src
-**** In-Buffer Completion
+*** In-Buffer Completion
 
-***** Corfu
+**** Corfu
 
 Sets up:
 
@@ -2474,7 +2474,7 @@ Sets up:
     (setq tab-always-indent 'complete))
 #+end_src
 
-***** Eglot
+**** Eglot
 
 #+begin_src emacs-lisp
   (use-package eglot
