@@ -237,6 +237,7 @@ And adding some buffer commands.
     :general
     (crj-leader-keys
       "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "bz" '(bury-buffer :which-key "Bury buffer.")
       "br" '(revert-buffer :which-key "Revert buffer.")
       "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
 #+end_src
