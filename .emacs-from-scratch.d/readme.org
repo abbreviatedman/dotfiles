@@ -1778,9 +1778,18 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 
 #+end_src
 
-** Writing
+** Text Editing
+*** General Text Editing
 
-*** Spell-Check With Flyspell
+#+begin_src emacs-lisp
+  (use-package ws-butler
+    :config
+    (ws-butler-global-mode))
+#+end_src
+
+*** Writing
+
+**** Spell-Check With Flyspell
 
 Flyspell is an /amazing/ built-into-Emacs spell-checker.
 
