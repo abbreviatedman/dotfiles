@@ -226,7 +226,8 @@ Creating a buffers menu.
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    "b" '(:ignore t :which-key "Buffers Menu"))
+    (crj-leader-keys
+      "b" '(:ignore t :which-key "Buffers Menu")))
 #+end_src
 
 And adding some buffer commands.
@@ -234,9 +235,10 @@ And adding some buffer commands.
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
-    "br" '(revert-buffer :which-key "Revert buffer.")
-    "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window."))
+    (crj-leader-keys
+      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "br" '(revert-buffer :which-key "Revert buffer.")
+      "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
 #+end_src
 
 *** Or Maybe Redo Keybindings To Be More Readable?
