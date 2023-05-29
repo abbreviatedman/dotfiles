@@ -1,5 +1,6 @@
 #+title:   Colin Jaffe's Literate Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
+
 * Colin Jaffe's Literate Config
 ** Introduction
 
