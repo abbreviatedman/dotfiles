@@ -2487,13 +2487,39 @@ Sets up:
 
   (use-package cape
     :after eglot
+
     :config
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
 #+end_src
 
+**** Copilot
+
+GitHub Copilot provides AI-driven suggestions as to what you might want to insert next. This is absurdly powerful, but it's not always right. So we want to be able to accept or reject suggestions, do it granularly, and to see the suggestions in a separate window.
+
+I also find it helpful to have a separate set of tab bindings for accepting Copilot suggestions, so I can use the normal tab bindings for standard completion.
+
+#+begin_src emacs-lisp
+  (use-package copilot
+    :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+
+    :init (global-copilot-mode 1)
+
+    :general
+    (:keymaps 'copilot-mode-map
+              "M-RET" #'copilot-accept-completion
+              "M-<tab>" #'copilot-next-completion
+              "M-<iso-lefttab>" #'copilot-previous-completion
+              "M-o" #'copilot-panel-complete
+              "M-w" #'copilot-accept-completion-by-word
+              "M-l" #'copilot-accept-completion-by-line
+              "M-p" #'copilot-accept-completion-by-paragraph))
+#+end_src
+
+
+
 *** Flymake
 
-  A great error-navigation library.
+  A great error-navigation library
 
   #+begin_src emacs-lisp
     (use-package flymake
