@@ -209,19 +209,20 @@ You don't always have to have commands in a deep hierarchy of sections. Here is 
 I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
 
 #+begin_src emacs-lisp
-    (use-package emacs
-      :init
-      (crj-leader-keys
-        "," '(consult-buffer :which-key "Switch buffer or open recent file.")
-        "<" '(consult-project-buffer :which-key "Switch to project-specific buffer.")
-        "TAB" '(evil-switch-to-windows-last-buffer :which-key "Previous buffer.")
-        ";" '(execute-extended-command :which-key "Run interactive command.")
-        ":" '(eval-expression :which-key "Evaluate expression.")
-        "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")
-        "b" '(:ignore t :which-key "Buffers Menu")
-        "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
-        "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
-        "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
+  (use-package emacs
+    :init
+    (crj-leader-keys
+      "," '(consult-buffer :which-key "Switch buffer or open recent file.")
+      "<" '(consult-project-buffer :which-key "Switch to project-specific buffer.")
+      "TAB" '(evil-switch-to-windows-last-buffer :which-key "Previous buffer.")
+      ";" '(execute-extended-command :which-key "Run interactive command.")
+      ":" '(eval-expression :which-key "Evaluate expression.")
+      "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")
+      "b" '(:ignore t :which-key "Buffers Menu")
+      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "br" '(revert-buffer :which-key "Kill buffer and close window.")
+      "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
+      "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
 #+end_src
 
 *** Or Maybe Redo Keybindings To Be More Readable?
