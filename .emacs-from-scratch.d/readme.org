@@ -2437,6 +2437,10 @@ Sets up:
     (:keymaps 'corfu-map :states 'insert
               "C-n" #'corfu-next
               "C-p" #'corfu-previous
+              "C-S-n" #'corfu-scroll-up
+              "C-S-p" #'corfu-scroll-down
+              "C-S-j" #'corfu-scroll-up
+              "C-S-k" #'corfu-scroll-down
               "M-g" #'corfu-quit
               "TAB" #'corfu-next
               [tab] #'corfu-next
