@@ -1865,11 +1865,21 @@ Many experienced developers say auto-closing your brackets is counter-productive
 
 That said, I felt the same about using buffers as the main way to interact with text, but once I stopped relying on inefficient means like tabs, I saw how much better it was. And there are tons of other examples like that. So perhaps I'll someday see the light on this? We'll see!
 
+Also, for some reason, electric pair mode /occasionally/ tries to auto-close an angle bracket (~<~) in Org Mode, which I never want—angle brackets are the start of shortcuts for source blocks in Org Mode, and I don't want them auto-closed. So I've added a predicate to disable that auto-closing in Org Mode.
+
 #+begin_src emacs-lisp
   (use-package emacs
     :init
+    (defconst crj--electric-pair-char-and-mode-block-list '((org-mode . ?<)))
+
+    (defun crj--should-avoid-auto-pairing-p (char)
+      (and (assoc major-mode crj--electric-pair-char-and-mode-block-list)
+           (eq char (cdr (assoc major-mode crj--electric-pair-char-and-mode-block-list)))))
+
+    (setq electric-pair-inhibit-predicate #'crj--should-avoid-auto-pairing-p)
+
     (electric-pair-mode))
-  #+end_src
+#+end_src
 
 ****** Highlighting Surrounding Delimiters
 
