@@ -1473,10 +1473,10 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (defun crj-agenda () (interactive) (org-agenda t "g"))
     (setq org-agenda-start-day nil
           org-agenda-files '("~/org-stuff/inbox.org"
-                             "~/org-stuff/gcal-ics.org"
                              "~/org-stuff/readme.org"
                              "~/org-stuff/personal.org"
-                             "~/org-stuff/archive.org")
+                             "~/org-stuff/archive.org"
+                             "~/org-stuff/gcal/anniecannons.org")
 
           org-agenda-custom-commands '(("g" "Daily agenda and top priority tasks"
                                         ((todo "WAIT"
@@ -1534,6 +1534,27 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (evil-org-agenda-set-keys))
 #+end_src
 
+**** Google Calendar Integration
+
+Although I'm exploring ways to cut out Google entirely from my life, my work uses Google Calendar, so I need to be able to see it. This is a way to do that.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org-gcal
+    :straight (:host github :repo "kidd/org-gcal.el")
+
+    :init
+    (setq org-gcal-client-id (auth-source-pass-get
+                              'secret
+                              "cal/org-gcal/ac/client-id")
+
+          org-gcal-client-secret (auth-source-pass-get
+                                  'secret
+                                  "cal/org-gcal/ac/client-secret")
+
+          org-gcal-fetch-file-alist '(("colin@anniecannons.com"
+                                       .
+                                       "~/org-stuff/gcal/anniecannons.org"))))
+#+end_src
 
 *** Version Control With Magit
 
@@ -1720,19 +1741,20 @@ Allow minibuffers within minibuffers.
 Oooh.
 
 #+begin_src emacs-lisp
-  (use-package emacs
-    :init
-    (setq auth-sources '("~/.netrc")))
+    (use-package emacs
+      :init
+      (setq auth-sources '("~/.netrc")
+            plstore-cache-passphrase-for-symmetric-encryption t))
 
-  (use-package ssh-agency
-    :init
-    (setq ssh-agency-askpass t))
+    (use-package ssh-agency
+      :init
+      (setq ssh-agency-askpass t))
 
-  (use-package password-store)
+    (use-package password-store)
 
-  (use-package auth-source-pass
-    :init
-    (auth-source-pass-enable))
+    (use-package auth-source-pass
+      :init
+      (auth-source-pass-enable))
 #+end_src
 
 ** Color Theme
