@@ -2513,6 +2513,16 @@ Sets up:
     (setq tab-always-indent 'complete))
 #+end_src
 
+And an extra package for completing Org blocks.
+
+#+begin_src emacs-lisp
+  (use-package org-block-capf
+    :straight (:host github :repo "xenodium/org-block-capf")
+
+    :init
+    (add-hook 'org-mode-hook #'org-block-capf-add-to-completion-at-point-functions))
+#+end_src
+
 **** Eglot
 
 #+begin_src emacs-lisp
