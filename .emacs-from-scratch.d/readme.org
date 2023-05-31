@@ -1657,6 +1657,15 @@ And never confirm to open a symlinked file under source control, which you do a 
       (setq vc-follow-symlinks t))
 #+end_src
 
+Set Emacs to remember text copied to the system clipboard.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq save-interprogram-paste-before-kill t))
+
+#+end_src
+
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
 #+begin_src emacs-lisp
