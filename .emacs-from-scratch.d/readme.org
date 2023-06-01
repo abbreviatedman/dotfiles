@@ -1793,7 +1793,8 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
 
     (mapc #'disable-theme custom-enabled-themes)
-    (load-theme 'modus-operandi-deuteranopia :no-confirm))
+    (load-theme 'modus-operandi-deuteranopia :no-confirm)
+    )
 #+end_src
 
 **** Ef Themes
@@ -1829,9 +1830,9 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
     :init
     (add-hook 'prog-mode-hook #'highlight-numbers-mode))
 
-    (use-package highlight-quoted
-      :init
-      (add-hook 'prog-mode-hook #'highlight-quoted-mode))
+  (use-package highlight-quoted
+    :init
+    (add-hook 'prog-mode-hook #'highlight-quoted-mode))
 
 #+end_src
 
@@ -1926,7 +1927,7 @@ By default, it helps you see the blocks from your cursor to four delimiters outw
       (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
     #+end_src
 
-****** Using Different Colors For Different Depths Delimiters
+****** Using Different Colors For Different Depths With Rainbow Delimiters
 
 Rainbow Delimiters uses a different color for each depth of delimiter, regardless of where your cursor is. So, in mine, the outer delimiter is a kind of dark blue-ish purple, the next delimiter pair inwards is a pinkish purple, the next a lighter blue, the next a blue-ish green, he next an orange-red, the next an intense red, and it keeps going like that in complementary cycles.
 
