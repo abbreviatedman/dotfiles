@@ -2614,6 +2614,50 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
                 "cX" '(flymake-show-project-diagnostics
                        :which-key "Describe variable.")))
       #+end_src
+
+** AI
+
+It's the robots!
+
+*** First, a simple function to get my password.
+
+#+begin_src emacs-lisp :lexical no
+  (defun crj--get-open-ai-api-key ()
+    (auth-source-pass-get 'secret "ai/openai/key"))
+#+end_src
+
+*** Simple queries in buffers with gptel
+
+Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or opening a dedicated buffer with ~gptel~ command. Requires an OpenAI API key.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package gptel
+    :init
+    (setq gptel-api-key (crj--get-open-ai-api-key)))
+#+end_src
+
+
+*** A Terminal-Like Interaction With chatgpt-shell
+
+This one opens a dedicated shell buffer for ChatGPT interactions.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package shell-maker
+    :straight (:host github
+                     :repo "xenodium/chatgpt-shell"
+                     :files ("shell-maker.el")))
+
+  (use-package chatgpt-shell
+    :requires shell-maker
+
+    :straight (:host github
+                     :repo "xenodium/chatgpt-shell"
+                     :files ("chatgpt-shell.el"))
+
+    :custom
+    ((chatgpt-shell-openai-key (crj--get-open-ai-api-key))))
+#+end_src
+
 ** Window Management
 
 Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
