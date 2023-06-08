@@ -1,5 +1,6 @@
 #+title:   Colin Jaffe's Literate Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
+
 * Colin Jaffe's Literate Config
 ** Introduction
 
@@ -209,19 +210,36 @@ You don't always have to have commands in a deep hierarchy of sections. Here is 
 I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
 
 #+begin_src emacs-lisp
-    (use-package emacs
-      :init
-      (crj-leader-keys
-        "," '(consult-buffer :which-key "Switch buffer or open recent file.")
-        "<" '(consult-project-buffer :which-key "Switch to project-specific buffer.")
-        "TAB" '(evil-switch-to-windows-last-buffer :which-key "Previous buffer.")
-        ";" '(execute-extended-command :which-key "Run interactive command.")
-        ":" '(eval-expression :which-key "Evaluate expression.")
-        "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")
-        "b" '(:ignore t :which-key "Buffers Menu")
-        "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
-        "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
-        "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
+  (use-package emacs
+    :init
+    (crj-leader-keys
+      "," '(consult-buffer :which-key "Switch buffer or open recent file.")
+      "<" '(consult-project-buffer :which-key "Switch to project-specific buffer.")
+      "TAB" '(evil-switch-to-windows-last-buffer :which-key "Previous buffer.")
+      ";" '(execute-extended-command :which-key "Run interactive command.")
+      ":" '(eval-expression :which-key "Evaluate expression.")
+      "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")))
+#+end_src
+
+Creating a buffers menu.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "b" '(:ignore t :which-key "Buffers Menu")))
+#+end_src
+
+And adding some buffer commands.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "bz" '(bury-buffer :which-key "Bury buffer.")
+      "br" '(revert-buffer :which-key "Revert buffer.")
+      "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
 #+end_src
 
 *** Or Maybe Redo Keybindings To Be More Readable?
@@ -710,7 +728,7 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
               "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
               "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
       #+end_src
-      
+
 *** Evil Keybindings for Org Mode
 
 This library adds some basic Evil bindings. In addition to the "key themes"" you'll find in [[https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org][the Evil Org keythemes documentation]], I've included their awesome ~RET~ function, which continues list items and other such.
@@ -768,7 +786,7 @@ Also included is a nifty function that deletes everything but one space before t
 #+begin_src emacs-lisp
   (use-package evil-goggles
     :after evil
-  
+
     :init
     (setq evil-goggles-duration 0.3
           evil-goggles-pulse nil
@@ -800,7 +818,7 @@ This library is amazing for working with surrounding text. Changing double quote
   #+begin_src emacs-lisp
     (use-package evil-nerd-commenter
       :after evil
-    
+
       :config
       :general
       ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
@@ -817,7 +835,7 @@ Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and
 #+begin_src emacs-lisp
   (use-package evil-snipe
     :after evil
-  
+
     :init
     (evil-snipe-mode 1)
     (evil-snipe-override-mode 1)
@@ -837,7 +855,7 @@ Being able to type ~SPC r i )~ to say "replace what's in these parens with what 
 #+begin_src emacs-lisp
   (use-package evil-replace-with-register
     :after evil
-  
+
     :general
     (crj-leader-keys
               "r" '(evil-replace-with-register
@@ -851,7 +869,7 @@ Another efficient text editing library. This one exchanges two bits of text in a
 #+begin_src emacs-lisp
   (use-package evil-exchange
     :after evil
-  
+
     :general
     (:states '(normal visual)
              "gx" '(evil-exchange :which-key "Exchange text objects.")))
@@ -877,7 +895,7 @@ A surprisingly useful Evil text object for the entire buffer.
 #+begin_src emacs-lisp
   (use-package evil-textobj-entire
     :after evil
-  
+
     :straight (evil-textobj-entire
                :host github
                :repo "nscoder/evil-textobj-entire"))
@@ -890,7 +908,7 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
 #+begin_src emacs-lisp
   (use-package evil-visualstar
     :after evil
-  
+
     :commands (evil-visualstar/begin-search
                evil-visualstar/begin-search-forward
                evil-visualstar/begin-search-backward)
@@ -1455,10 +1473,10 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (defun crj-agenda () (interactive) (org-agenda t "g"))
     (setq org-agenda-start-day nil
           org-agenda-files '("~/org-stuff/inbox.org"
-                             "~/org-stuff/gcal-ics.org"
                              "~/org-stuff/readme.org"
                              "~/org-stuff/personal.org"
-                             "~/org-stuff/archive.org")
+                             "~/org-stuff/archive.org"
+                             "~/org-stuff/gcal/anniecannons.org")
 
           org-agenda-custom-commands '(("g" "Daily agenda and top priority tasks"
                                         ((todo "WAIT"
@@ -1516,6 +1534,27 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (evil-org-agenda-set-keys))
 #+end_src
 
+**** Google Calendar Integration
+
+Although I'm exploring ways to cut out Google entirely from my life, my work uses Google Calendar, so I need to be able to see it. This is a way to do that.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org-gcal
+    :straight (:host github :repo "kidd/org-gcal.el")
+
+    :init
+    (setq org-gcal-client-id (auth-source-pass-get
+                              'secret
+                              "cal/org-gcal/ac/client-id")
+
+          org-gcal-client-secret (auth-source-pass-get
+                                  'secret
+                                  "cal/org-gcal/ac/client-secret")
+
+          org-gcal-fetch-file-alist '(("colin@anniecannons.com"
+                                       .
+                                       "~/org-stuff/gcal/anniecannons.org"))))
+#+end_src
 
 *** Version Control With Magit
 
@@ -1571,7 +1610,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 #+begin_src emacs-lisp
   (use-package emacs
     :commands (dired dired-jump)
-  
+
     :init
     (setq dired-listing-switches "-al --group-directories-first"
           dired-recursive-copies 'always
@@ -1618,13 +1657,31 @@ And never confirm to open a symlinked file under source control, which you do a 
       (setq vc-follow-symlinks t))
 #+end_src
 
+Set Emacs to remember text copied to the system clipboard.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq save-interprogram-paste-before-kill t))
+
+#+end_src
+
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
+
+#+begin_src emacs-lisp
+    (use-package emacs
+      :init
+      (recentf-mode 1)
+      (global-auto-revert-mode 1)
+      (setq global-auto-revert-non-file-buffers t))
+#+end_src
+
+Also remember our place in files.
 
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    (recentf-mode 1)
-    (global-auto-revert-mode 1))
+    (save-place-mode 1))
 #+end_src
 
 A better Emacs kill command binding to kill the Emacs server as well.
@@ -1695,7 +1752,8 @@ Oooh.
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    (setq auth-sources '("~/.netrc")))
+    (setq auth-sources '("~/.netrc")
+          plstore-cache-passphrase-for-symmetric-encryption t))
 
   (use-package ssh-agency
     :init
@@ -1735,7 +1793,8 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
 
     (mapc #'disable-theme custom-enabled-themes)
-    (load-theme 'modus-operandi-deuteranopia :no-confirm))
+    (load-theme 'modus-operandi-deuteranopia :no-confirm)
+    )
 #+end_src
 
 **** Ef Themes
@@ -1771,15 +1830,43 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
     :init
     (add-hook 'prog-mode-hook #'highlight-numbers-mode))
 
-    (use-package highlight-quoted
-      :init
-      (add-hook 'prog-mode-hook #'highlight-quoted-mode))
+  (use-package highlight-quoted
+    :init
+    (add-hook 'prog-mode-hook #'highlight-quoted-mode))
 
 #+end_src
 
-** Writing
+** Text Editing
+*** General Text Editing
 
-*** Spell-Check With Flyspell
+**** Whitespace Removal
+
+This package removes whitespace from the ends of lines.
+
+Conveniently, it only does it on lines you've edited. This way, if you're working with version control, you don't have a huge diff every time you save a file.
+
+#+begin_src emacs-lisp
+  (use-package ws-butler
+    :config
+    (ws-butler-global-mode))
+#+end_src
+
+**** Text Editing With Avy
+
+#+begin_src emacs-lisp :lexical no
+  (use-package avy
+    :init
+    (setq avy-timeout-seconds 1)
+
+    :general
+    (crj-leader-keys "la" '(avy-goto-char-timer :which-key "avy-goto-char-timer")))
+
+
+#+end_src
+
+*** Writing
+
+**** Spell-Check With Flyspell
 
 Flyspell is an /amazing/ built-into-Emacs spell-checker.
 
@@ -1809,19 +1896,19 @@ I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion w
                       "C-:" #'flyspell-correct-wrapper))
 #+end_src
 
-** Coding
+*** Coding
 
 Settings for... coding.
 
-*** General
+**** General
 
-**** Coding Block Delimiters
+***** Coding Block Delimiters
 
 Sometimes simply called "parens" or "brackets", delimiters are a big part of coding. This is particularly true in Lisp languages, but even the indentation-for-delimiting-code-blocks Python benefits from handling them well.
 
 Whatever you call delimiters, let's make all these easy-to-mess-up character pairs easier to work with!
 
-***** Auto-Close Delimiter Pairs
+****** Auto-Close Delimiter Pairs
 
 Use Emacs' built-in library for auto-closing your brackets, ~electric-pair-mode~. Auto-closing means that when you type an open-parens (or curly or square bracket), your editor adds a closing parens afterwards, keeping your cursor in the middle. The idea is to avoid ending up with unbalanced brackets.
 
@@ -1829,13 +1916,23 @@ Many experienced developers say auto-closing your brackets is counter-productive
 
 That said, I felt the same about using buffers as the main way to interact with text, but once I stopped relying on inefficient means like tabs, I saw how much better it was. And there are tons of other examples like that. So perhaps I'll someday see the light on this? We'll see!
 
+Also, for some reason, electric pair mode /occasionally/ tries to auto-close an angle bracket (~<~) in Org Mode, which I never want—angle brackets are the start of shortcuts for source blocks in Org Mode, and I don't want them auto-closed. So I've added a predicate to disable that auto-closing in Org Mode.
+
 #+begin_src emacs-lisp
   (use-package emacs
     :init
+    (defconst crj--electric-pair-char-and-mode-block-list '((org-mode . ?<)))
+
+    (defun crj--should-avoid-auto-pairing-p (char)
+      (and (assoc major-mode crj--electric-pair-char-and-mode-block-list)
+           (eq char (cdr (assoc major-mode crj--electric-pair-char-and-mode-block-list)))))
+
+    (setq electric-pair-inhibit-predicate #'crj--should-avoid-auto-pairing-p)
+
     (electric-pair-mode))
-  #+end_src
-  
-***** Highlighting Surrounding Delimiters
+#+end_src
+
+****** Highlighting Surrounding Delimiters
 
 This next library highlights the delimiters of the block the cursor is currently in, providing a nice quick visual aid as to where you're /at/.
 
@@ -1848,8 +1945,8 @@ By default, it helps you see the blocks from your cursor to four delimiters outw
       (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
       (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
     #+end_src
-    
-***** Using Different Colors For Different Depths Delimiters
+
+****** Using Different Colors For Different Depths With Rainbow Delimiters
 
 Rainbow Delimiters uses a different color for each depth of delimiter, regardless of where your cursor is. So, in mine, the outer delimiter is a kind of dark blue-ish purple, the next delimiter pair inwards is a pinkish purple, the next a lighter blue, the next a blue-ish green, he next an orange-red, the next an intense red, and it keeps going like that in complementary cycles.
 
@@ -1871,11 +1968,11 @@ The code above and below were fun coding challenges for me as I learn a bit more
          :foreground (modus-themes-get-color-value (intern (concat "fg-heading-" (number-to-string (1+ num)))) t))))
 #+end_src
 
-*** Languages
+**** Languages
 
 Configurations specific to certain languages.
 
-**** Markdown
+***** Markdown
 
 The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
 
@@ -1900,7 +1997,7 @@ Much of the below is just about getting Markdown to get the look I describe in t
   (use-package edit-indirect)
 #+end_src
 
-**** HTML
+***** HTML
 
 The ugly-but-fully-featured markup language.
 
@@ -1936,17 +2033,17 @@ The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labore
               [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
 #+end_src
 
-***** TODO add a ~cond~ to make sure the above function also checks if it's in the closing tag, for proper robustness.
+****** TODO add a ~cond~ to make sure the above function also checks if it's in the closing tag, for proper robustness.
 
-**** Lisps
+***** Lisps
 
 The greatest languages.
 
-***** Keybindings
+****** Keybindings
 
 Some general Lisp bindings.
 
-****** Menus
+******* Menus
 
 The leader-key menu is obvious—I can do something like ~SPC lsf~ to "slurp" forwards (a common Lisp action) and ~SPC lsb~ to slurp backwards.
 
@@ -1968,7 +2065,7 @@ For now, I'm implementing both systems,
                "l" '(:ignore t :which-key "Symex Backward Manipulation Menu")))
 #+end_src
 
-****** Symex Manipulation
+******* Symex Manipulation
 
 #+begin_src emacs-lisp
   (use-package on-parens
@@ -1986,26 +2083,46 @@ For now, I'm implementing both systems,
       "lbb" '(on-parens-backward-barf :which-key "Barf backwards.")))
 #+end_src
 
-******* TODO add more symex manipulation
+******** TODO add more symex manipulation
 
-***** Emacs Lisp
+****** Emacs Lisp
 
-****** TODO configure elisp more
+******* TODO configure elisp more
 
-******* TODO configure keybindings
-******* TODO figure out evil keybindings for movement
+******** TODO configure keybindings
+******** TODO figure out evil keybindings for movement
 
-****** Emacs Lisp Evaluation
+******* Emacs Lisp Evaluation
+
+First, a menu for evaluating code.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys "e" '(:ignore t :which-key "Evaluation menu.")))
+#+end_src
+
+Now, let's add keybindings for evaluating the current function, symex, and buffer.
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "ef" '(eval-defun :which-key "Evaluate current function.")
+      "es" '(eval-last-sexp :which-key "Evaluate last symex.")
+      "eb" '(eval-buffer :which-key "Evaluate current buffer.")))
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package quickrun)
 #+end_src
-******* TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
 
-****** Emacs Lisp Documentation Lookup
+******** TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
+
+******* Emacs Lisp Documentation Lookup
 
 Better go-to-definition function for Emacs Lisp.
- 
+
 #+begin_src emacs-lisp
       (use-package elisp-def
         :init
@@ -2017,9 +2134,9 @@ Better go-to-definition function for Emacs Lisp.
                   "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
 
-****** TODO configure elisp more
+******* TODO configure elisp more
 
-**** JavaScript
+***** JavaScript
 
 Basic configuration for JS and JSX.
 
@@ -2061,7 +2178,7 @@ Only two things aren't easy to figure out here:
     (advice-add #'rjsx-electric-gt :before-while #'crj--auto-close-jsx-fragments))
 #+end_src
 
-**** Using Prettier To Format Buffers
+***** Using Prettier To Format Buffers
 
 #+begin_src emacs-lisp
   (use-package prettier
@@ -2084,9 +2201,9 @@ Only two things aren't easy to figure out here:
 
 Because so much in Emacs is driven by text, good completion is the difference between hard-to-use and effortless.
 
-*** Minibuffer Completion 
+*** Minibuffer Completion
 
-Minibuffer completion is a different beast than in-buffer completion, which is what most people mean when they talk about completion in other apps. The minibuffer is a kind of menu you get in Emacs, and it usually serves as a place to search for something. 
+Minibuffer completion is a different beast than in-buffer completion, which is what most people mean when they talk about completion in other apps. The minibuffer is a kind of menu you get in Emacs, and it usually serves as a place to search for something.
 
 In Emacs, minibuffer menus can be used to search for:
 
@@ -2389,9 +2506,9 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
 	    ;; (setq embark-prompter 'embark-completing-read-prompter)
   #+end_src
-**** In-Buffer Completion
+*** In-Buffer Completion
 
-***** Corfu
+**** Corfu
 
 Sets up:
 
@@ -2406,6 +2523,10 @@ Sets up:
     (:keymaps 'corfu-map :states 'insert
               "C-n" #'corfu-next
               "C-p" #'corfu-previous
+              "C-S-n" #'corfu-scroll-up
+              "C-S-p" #'corfu-scroll-down
+              "C-S-j" #'corfu-scroll-up
+              "C-S-k" #'corfu-scroll-down
               "M-g" #'corfu-quit
               "TAB" #'corfu-next
               [tab] #'corfu-next
@@ -2443,7 +2564,17 @@ Sets up:
     (setq tab-always-indent 'complete))
 #+end_src
 
-***** Eglot
+And an extra package for completing Org blocks.
+
+#+begin_src emacs-lisp
+  (use-package org-block-capf
+    :straight (:host github :repo "xenodium/org-block-capf")
+
+    :init
+    (add-hook 'org-mode-hook #'org-block-capf-add-to-completion-at-point-functions))
+#+end_src
+
+**** Eglot
 
 #+begin_src emacs-lisp
   (use-package eglot
@@ -2452,14 +2583,42 @@ Sets up:
 
   (use-package cape
     :after eglot
+
     :config
     (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
 #+end_src
 
+**** Copilot
+
+GitHub Copilot provides AI-driven suggestions as to what you might want to insert next. This is absurdly powerful, but it's not always right. So we want to be able to accept or reject suggestions, do it granularly, and to see the suggestions in a separate window.
+
+I also find it helpful to have a separate set of tab bindings for accepting Copilot suggestions, so I can use the normal tab bindings for standard completion.
+
+Note that this feature only works if you have a GitHub Copilot account. If you have one, you can login using the ~copilot-login~ command.
+
+#+begin_src emacs-lisp
+  (use-package copilot
+    :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+
+    :init (global-copilot-mode 1)
+
+    :general
+    (:keymaps 'copilot-mode-map
+              "M-RET" #'copilot-accept-completion
+              "M-<tab>" #'copilot-next-completion
+              "M-<iso-lefttab>" #'copilot-previous-completion
+              "M-o" #'copilot-panel-complete
+              "M-w" #'copilot-accept-completion-by-word
+              "M-l" #'copilot-accept-completion-by-line
+              "M-p" #'copilot-accept-completion-by-paragraph))
+#+end_src
+
+
+
 *** Flymake
 
-  A great error-navigation library.
-  
+  A great error-navigation library
+
   #+begin_src emacs-lisp
     (use-package flymake
       :hook (prog-mode . flymake-mode)
@@ -2475,6 +2634,50 @@ Sets up:
                 "cX" '(flymake-show-project-diagnostics
                        :which-key "Describe variable.")))
       #+end_src
+
+** AI
+
+It's the robots!
+
+*** First, a simple function to get my password.
+
+#+begin_src emacs-lisp :lexical no
+  (defun crj--get-open-ai-api-key ()
+    (auth-source-pass-get 'secret "ai/openai/key"))
+#+end_src
+
+*** Simple queries in buffers with gptel
+
+Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or opening a dedicated buffer with ~gptel~ command. Requires an OpenAI API key.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package gptel
+    :init
+    (setq gptel-api-key (crj--get-open-ai-api-key)))
+#+end_src
+
+
+*** A Terminal-Like Interaction With chatgpt-shell
+
+This one opens a dedicated shell buffer for ChatGPT interactions.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package shell-maker
+    :straight (:host github
+                     :repo "xenodium/chatgpt-shell"
+                     :files ("shell-maker.el")))
+
+  (use-package chatgpt-shell
+    :requires shell-maker
+
+    :straight (:host github
+                     :repo "xenodium/chatgpt-shell"
+                     :files ("chatgpt-shell.el"))
+
+    :custom
+    ((chatgpt-shell-openai-key (crj--get-open-ai-api-key))))
+#+end_src
+
 ** Window Management
 
 Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
@@ -2483,9 +2686,13 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
   (use-package emacs
     :general
     (crj-leader-keys "w" '(:keymap evil-window-map :which-key "window")))
-#+end_src
 
-*** TODO include a 
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "wd" '(evil-window-delete :which-key "Close window.")
+      "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
+#+end_src
 
 ** EFS/Better Modeline
 
