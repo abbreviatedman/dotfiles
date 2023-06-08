@@ -1750,20 +1750,20 @@ Allow minibuffers within minibuffers.
 Oooh.
 
 #+begin_src emacs-lisp
-    (use-package emacs
-      :init
-      (setq auth-sources '("~/.netrc")
-            plstore-cache-passphrase-for-symmetric-encryption t))
+  (use-package emacs
+    :init
+    (setq auth-sources '("~/.netrc")
+          plstore-cache-passphrase-for-symmetric-encryption t))
 
-    (use-package ssh-agency
-      :init
-      (setq ssh-agency-askpass t))
+  (use-package ssh-agency
+    :init
+    (setq ssh-agency-askpass t))
 
-    (use-package password-store)
+  (use-package password-store)
 
-    (use-package auth-source-pass
-      :init
-      (auth-source-pass-enable))
+  (use-package auth-source-pass
+    :init
+    (auth-source-pass-enable))
 #+end_src
 
 ** Color Theme
