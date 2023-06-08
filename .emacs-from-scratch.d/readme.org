@@ -1839,6 +1839,12 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 ** Text Editing
 *** General Text Editing
 
+**** Whitespace Removal
+
+This package removes whitespace from the ends of lines.
+
+Conveniently, it only does it on lines you've edited. This way, if you're working with version control, you don't have a huge diff every time you save a file.
+
 #+begin_src emacs-lisp
   (use-package ws-butler
     :config
