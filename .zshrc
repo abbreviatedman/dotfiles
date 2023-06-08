@@ -96,7 +96,7 @@ MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR='neovim'
+export EDITOR='emacsclient --socket-name=alt -cn -a ""'
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=$EDITOR
 
