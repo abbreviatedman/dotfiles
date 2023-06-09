@@ -2610,10 +2610,9 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 #+begin_src emacs-lisp
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
-
-    :init (global-copilot-mode 1)
-
     :general
+    (crj-leader-keys "t" '(:ignore t :which-key "Toggle menu."))
+    (crj-leader-keys "tc" '(global-copilot-mode :which-key "Toggle copilot."))
     (:keymaps 'copilot-mode-map
               "M-RET" #'copilot-accept-completion
               "M-<tab>" #'copilot-next-completion
