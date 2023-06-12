@@ -2656,6 +2656,23 @@ It's the robots!
     (auth-source-pass-get 'secret "ai/openai/key"))
 #+end_src
 
+*** AI Chat
+
+
+#+begin_src emacs-lisp :lexical no
+  (use-package websocket)
+
+  (use-package async-await)
+
+  (use-package aichat
+    :after '(websocket async-await)
+
+    :straight (:host github :repo "xhcoding/emacs-aichat")
+
+    :init
+    (setq aichat-bingai-cookies-file "~/.bing-chat-cookies-file.json"))
+#+end_src
+
 *** Simple queries in buffers with gptel
 
 Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or opening a dedicated buffer with ~gptel~ command. Requires an OpenAI API key.
