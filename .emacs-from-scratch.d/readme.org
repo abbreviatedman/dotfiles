@@ -2610,10 +2610,9 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 #+begin_src emacs-lisp
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
-
-    :init (global-copilot-mode 1)
-
     :general
+    (crj-leader-keys "t" '(:ignore t :which-key "Toggle menu."))
+    (crj-leader-keys "tc" '(global-copilot-mode :which-key "Toggle copilot."))
     (:keymaps 'copilot-mode-map
               "M-RET" #'copilot-accept-completion
               "M-<tab>" #'copilot-next-completion
@@ -2655,6 +2654,23 @@ It's the robots!
 #+begin_src emacs-lisp :lexical no
   (defun crj--get-open-ai-api-key ()
     (auth-source-pass-get 'secret "ai/openai/key"))
+#+end_src
+
+*** AI Chat
+
+
+#+begin_src emacs-lisp :lexical no
+  (use-package websocket)
+
+  (use-package async-await)
+
+  (use-package aichat
+    :after '(websocket async-await)
+
+    :straight (:host github :repo "xhcoding/emacs-aichat")
+
+    :init
+    (setq aichat-bingai-cookies-file "~/.bing-chat-cookies-file.json"))
 #+end_src
 
 *** Simple queries in buffers with gptel
