@@ -2689,7 +2689,7 @@ It's the robots!
   (use-package emacs
     :init
     (setq aichat-bingai-cookies-file "~/org-stuff/.bing-chat-cookies-file.json"
-          aichat-bingai-chat-file "~/org-stuff/aichat.md")
+          aichat-bingai-chat-file "~/org-stuff/bing-chat.md")
 
     (defun crj-send-heading-to-bing-chat ()
       "Send the current heading to Bing chat.
