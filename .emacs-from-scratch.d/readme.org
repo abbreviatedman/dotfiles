@@ -1589,6 +1589,30 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
       "gg" '(magit-status :which-key "Launch Magit.")
       "gd" '(crj-yadm-magit-status :which-key "Launch Magit for YADM.")))
 
+#+end_src
+
+**** Magit Forge For Git Server Integration
+
+This integrates Magit with Git servers like GitHub and GitLab.
+
+Forge stores its data in a SQLite database, so we need to install that first.
+
+This requires some Git configuration and storage of your credentials. See [[https://magit.vc/manual/forge/Getting-Started.html#Getting-Started][the Forge documentation]] for more details.
+
+#+begin_src emacs-lisp
+  (use-package sqlite3)
+
+  (use-package forge
+    :after magit)
+#+end_src
+
+**** YADM Integration
+
+Yet Another Dotfiles Manager has been super helpful to managing my system configurations. It's a wrapper around Git that makes it easy to manage your dotfiles in a Git repo, and then use that repo to manage your dotfiles on a new machine.
+
+Let's integrate it with Magit!
+
+#+begin_src emacs-lisp :lexical no
   (use-package emacs
     :init
     (require 'tramp)
@@ -1600,11 +1624,6 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
                    (tramp-remote-shell "/bin/sh")
                    (tramp-remote-shell-args ("-c"))))
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
-
-  (use-package forge
-    :after magit)
-
-  (use-package sqlite3)
 #+end_src
 
 *** Dired
@@ -1763,7 +1782,7 @@ Oooh.
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    (setq auth-sources '("~/.netrc")
+    (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
           plstore-cache-passphrase-for-symmetric-encryption t))
 
   (use-package ssh-agency
@@ -2708,6 +2727,7 @@ It's the robots!
           (aichat-bingai-chat query)))
 
       (forward-line)
+
       (setq markdown-hide-markup nil))
 
     (defun crj-open-bing-chat-file ()
