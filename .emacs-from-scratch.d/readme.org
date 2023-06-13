@@ -1592,10 +1592,8 @@ Let's set up a menu for Version Control.
 #+begin_src emacs-lisp
   (use-package magit
     :init
-    (defun crj-yadm-magit-status ()
-      (interactive (magit-status "/yadm::")))
-
     (add-hook 'git-commit-mode-hook 'evil-insert-state)
+    (setq evil-collection-magit-want-horizontal-movement t)
 
     :commands magit-status
 
@@ -1605,8 +1603,7 @@ Let's set up a menu for Version Control.
 
     :general
     (crj-leader-keys
-      "gg" '(magit-status :which-key "Launch Magit.")
-      "gd" '(crj-yadm-magit-status :which-key "Launch Magit for YADM.")))
+      "gg" '(magit-status :which-key "Launch Magit.")))
 
 #+end_src
 
@@ -1642,7 +1639,15 @@ Let's integrate it with Magit!
                    (tramp-login-env (("SHELL") ("/bin/sh")))
                    (tramp-remote-shell "/bin/sh")
                    (tramp-remote-shell-args ("-c"))))
-    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash")))
+
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+
+    (defun crj-yadm-magit-status ()
+      (interactive (magit-status "/yadm::")))
+
+    :general
+    (crj-leader-keys
+      "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
 #+end_src
 
 *** Dired
