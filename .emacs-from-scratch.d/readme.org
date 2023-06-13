@@ -2705,9 +2705,9 @@ It's the robots!
         (backward-word)
         (let ((query (buffer-substring (point) (line-end-position))))
           (kill-whole-line -1)
-          (forward-line 2)
           (aichat-bingai-chat query)))
 
+      (forward-line)
       (setq markdown-hide-markup nil))
 
     (defun crj-open-bing-chat-file ()
