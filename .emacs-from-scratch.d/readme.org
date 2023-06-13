@@ -1569,6 +1569,26 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
 
 *** Version Control With Magit
 
+I could write a lot about Magit here.
+
+I should write a lot about Magit here!
+
+Not today though.
+
+
+**** Version Control Menu
+
+Let's set up a menu for Version Control.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "g" '(:ignore t :which-key "Git Menu")))
+#+end_src
+
+**** Basic Magit Setup
+
 #+begin_src emacs-lisp
   (use-package magit
     :init
@@ -1585,7 +1605,6 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
 
     :general
     (crj-leader-keys
-      "g" '(:ignore t :which-key "Git Menu")
       "gg" '(magit-status :which-key "Launch Magit.")
       "gd" '(crj-yadm-magit-status :which-key "Launch Magit for YADM.")))
 
