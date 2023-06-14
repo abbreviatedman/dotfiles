@@ -1394,7 +1394,7 @@ And by setting line numbers to an absolute size, we also avoid having them incre
                                    line-number-major-tick
                                    line-number-minor-tick))
 
-    (defun crj--make-line-number-face-monospace (&rest args)
+    (defun crj-make-line-number-face-monospace (&rest args)
       "Makes line numbers monospace and fixes them in size."
       (interactive)
       (dolist (face crj--line-number-faces)
@@ -1405,7 +1405,7 @@ And by setting line numbers to an absolute size, we also avoid having them incre
 #+end_src
 
 #+begin_src emacs-lisp
-  (defun crj--reset-line-number-height ()
+  (defun crj-reset-line-number-height ()
     (interactive)
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
@@ -3107,7 +3107,7 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 Making my life easier!
 
 #+begin_src emacs-lisp
-  (defun crj--cycle-setting (setting potential-values)
+  (defun crj-cycle-setting (setting potential-values)
     "Cycle SETTING through POTENTIAL-VALUES.
 
   SETTING is a quoted symbol.
