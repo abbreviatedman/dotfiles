@@ -1550,9 +1550,7 @@ There are a /lot/ of moving parts with ~org-gcal~, those parts are continuously 
 I hope to document a clear and simple way to set this up in the future (perhaps I could practice in a VM?), but for now: this is what I've got.
 
 #+begin_src emacs-lisp :lexical no
-  (use-package org-gcal
-    :straight (:host github :repo "kidd/org-gcal.el")
-
+  (use-package emacs
     :init
     (setq org-gcal-client-id (auth-source-pass-get
                               'secret
@@ -1565,6 +1563,9 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
           org-gcal-fetch-file-alist '(("colin@anniecannons.com"
                                        .
                                        "~/org-stuff/gcal/anniecannons.org"))))
+
+  (use-package org-gcal
+    :straight (:host github :repo "kidd/org-gcal.el"))
 #+end_src
 
 *** Version Control With Magit
