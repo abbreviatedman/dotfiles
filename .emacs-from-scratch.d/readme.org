@@ -1549,6 +1549,16 @@ There are a /lot/ of moving parts with ~org-gcal~, those parts are continuously 
 
 I hope to document a clear and simple way to set this up in the future (perhaps I could practice in a VM?), but for now: this is what I've got.
 
+**** Google Calendar Menu
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys "acg" '(:ignore t :which-key "Google Calendar Menu")))
+#+end_src
+
+**** Google Calendar Setup
+
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
     :init
