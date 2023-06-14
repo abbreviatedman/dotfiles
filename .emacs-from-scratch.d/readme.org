@@ -3126,8 +3126,10 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 Making my life easier!
 
 #+begin_src emacs-lisp
-  (defun crj-cycle-setting (setting potential-values)
-    "Cycle SETTING through POTENTIAL-VALUES.
+  (use-package emacs
+    :init
+    (defun crj-cycle-setting (setting potential-values)
+      "Cycle SETTING through POTENTIAL-VALUES.
 
       SETTING is a quoted symbol.
 
@@ -3136,11 +3138,11 @@ Making my life easier!
   This is a very useful helper function for use when cycling a setting through potential values.
 
   See `crj-cycle-line-numbers' for an example usage."
-    (let* ((i (cl-position (eval setting) potential-values))
-           (next-i (1+ i))
-           (new-value (if (eq next-i (length potential-values))
-                          (car potential-values)
-                        (nth next-i potential-values))))
+      (let* ((i (cl-position (eval setting) potential-values))
+             (next-i (1+ i))
+             (new-value (if (eq next-i (length potential-values))
+                            (car potential-values)
+                          (nth next-i potential-values))))
 
-      (set setting new-value)))
+        (set setting new-value))))
 #+end_src
