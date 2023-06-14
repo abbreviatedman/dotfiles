@@ -1423,8 +1423,7 @@ When displaying code to others, it's often good to make the line numbers absolut
 **** TODO make line numbers increase in size at a lower rate. This command could be useful:
 
 #+begin_src emacs-lisp
-  (defun crj-reset-line-number-height ()
-    (interactive)
+  (defun crj--reset-line-number-height ()
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
 
