@@ -1534,6 +1534,19 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (evil-org-agenda-set-keys))
 #+end_src
 
+
+*** Calendar
+
+So you can wish everyone would leave you alone, but /within Emacs/.
+
+**** A Calendar Menu
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys "ac" '(:ignore t :which-key "Calendar Menu")))
+#+end_src
+
 **** Google Calendar Integration
 
 Although I'm exploring ways to cut out Google entirely from my life, my work uses Google Calendar, so I need to be able to see it. This is a way to do that.
@@ -1575,7 +1588,11 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
                                        "~/org-stuff/gcal/anniecannons.org"))))
 
   (use-package org-gcal
-    :straight (:host github :repo "kidd/org-gcal.el"))
+    :straight (:host github :repo "kidd/org-gcal.el")
+
+    :general
+    (crj-leader-keys
+      "acgf" '(org-gcal-fetch :which-key "Fetch Gcal events.")))
 #+end_src
 
 *** Version Control With Magit
