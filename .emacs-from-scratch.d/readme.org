@@ -1404,6 +1404,25 @@ And by setting line numbers to an absolute size, we also avoid having them incre
     (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
 #+end_src
 
+**** Cycle Line Numbers
+
+When displaying code to others, it's often good to make the line numbers absolute. And hiding them can be nice sometimes, though if I'm doing that often, I should consider whether there are more modes I should turn line numbers off for.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (defun crj-cycle-line-numbers ()
+      (interactive)
+      (crj-cycle-setting 'display-line-numbers '(relative t nil)))
+
+    :general
+    (crj-leader-keys
+      "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
+#+end_src
+
+**** TODO make line numbers increase in size at a lower rate.
+**** TODO is this command useful? Try using it when line numbers weirdly reset. Or figure out why that happens!
+
 #+begin_src emacs-lisp
   (defun crj-reset-line-number-height ()
     (interactive)
@@ -3110,14 +3129,9 @@ Making my life easier!
   (defun crj-cycle-setting (setting potential-values)
     "Cycle SETTING through POTENTIAL-VALUES.
 
-  SETTING is a quoted symbol.
+      SETTING is a quoted symbol.
 
-  POTENTIAL-VALUES is a list of values to cycle through."
-    (let ((i (cl-position (eval setting) potential-values)))
-      (set setting (if (eq (1+ i) (length potential-values))
-                       (car potential-values)
-                     (nth (1+ i) potential-values)))))
-#+end_src
+      POTENTIAL-VALUES is a list of values to cycle through.
 
   This is a very useful helper function for use when cycling a setting through potential values.
 
