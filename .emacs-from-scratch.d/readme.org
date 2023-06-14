@@ -1401,7 +1401,7 @@ And by setting line numbers to an absolute size, we also avoid having them incre
           (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
       args)
 
-    (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
+    (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
 #+end_src
 
 **** Cycle Line Numbers
