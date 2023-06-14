@@ -1352,9 +1352,11 @@ This package makes scrolling big distances easier to follow by flashing the new 
 
 *** Line Numbers
 
-Sets up line numbers to be (almost) everywhere.
+**** Basic Line Number Settings
 
-Use relative line numbers to make line-wise work easy with Evil Mode.
+Sets up line numbers to be (almost) everywhere, just not in some terminal modes.
+
+I like to use relative line numbers, since they make line-wise work easier when using Evil Mode. Which I do.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1378,11 +1380,11 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
       (add-hook hook #'crj--turn-off-line-numbers)))
 #+end_src
 
+**** Make Line Numbers Use Fixed Pitch
+
 This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
 
 And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
-
-**** TODO do that thing
 
 #+begin_src emacs-lisp
   (use-package emacs
