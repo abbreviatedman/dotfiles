@@ -230,13 +230,27 @@ Creating a buffers menu.
       "b" '(:ignore t :which-key "Buffers Menu")))
 #+end_src
 
-And adding some buffer commands.
+And adding some buffer commands, including a custom one.
 
 #+begin_src emacs-lisp
   (use-package emacs
+    :init
+    (defconst crj--immortal-buffer-names '("*scratch*"
+                                           "#emacs"
+                                           "*Messages*"
+                                           shell-command-buffer-name shell-command-buffer-name-async))
+
+    (defun crj-kill-or-bury-current-buffer ()
+      "Kill the current buffer.
+
+  Unless it's a buffer we should always keep alive, in which case we just bury it in the buffer list."
+      (interactive)
+      (if (member (buffer-name (current-buffer)) crj--immortal-buffer-names)
+          (bury-buffer)
+        (kill-buffer (current-buffer))))
     :general
     (crj-leader-keys
-      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "bd" '(crj-kill-or-bury-current-buffer :which-key "Kill buffer.")
       "bz" '(bury-buffer :which-key "Bury buffer.")
       "br" '(revert-buffer :which-key "Revert buffer.")
       "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
@@ -3103,18 +3117,14 @@ Making my life easier!
                      (nth (1+ i) potential-values)))))
 #+end_src
 
-#+begin_src emacs-lisp
-  (defvar crj--immortal-buffer-names '("*scratch*"
-                                      "#emacs"
-                                      "*Messages*"
-                                      shell-command-buffer-name shell-command-buffer-name-async))
+  This is a very useful helper function for use when cycling a setting through potential values.
 
-  (defun crj--kill-or-bury-current-buffer ()
-    "Kill the current buffer.
+  See `crj-cycle-line-numbers' for an example usage."
+    (let* ((i (cl-position (eval setting) potential-values))
+           (next-i (1+ i))
+           (new-value (if (eq next-i (length potential-values))
+                          (car potential-values)
+                        (nth next-i potential-values))))
 
-  Unless it's a buffer we should always keep alive, in which case we just bury it in the buffer list."
-    (interactive)
-    (if (member (buffer-name (current-buffer)) crj--immortal-buffer-names)
-        (bury-buffer)
-      (kill-buffer (current-buffer))))
+      (set setting new-value)))
 #+end_src
