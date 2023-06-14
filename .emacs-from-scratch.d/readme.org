@@ -2820,6 +2820,9 @@ It's the robots!
       (find-file aichat-bingai-chat-file))
 
     :general
+    (:keymaps 'markdown-mode-map
+              "C-c C-c s" '(crj-send-heading-to-bing-chat :which-key "Send heading as Bing query."))
+
     (crj-leader-keys
       "aibs" '(crj-send-heading-to-bing-chat :which-key "Send heading as Bing query.")
       "aibf" '(crj-open-bing-chat-file :which-key "Open Bing chat file.")))
