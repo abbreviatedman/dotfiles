@@ -230,13 +230,27 @@ Creating a buffers menu.
       "b" '(:ignore t :which-key "Buffers Menu")))
 #+end_src
 
-And adding some buffer commands.
+And adding some buffer commands, including a custom one.
 
 #+begin_src emacs-lisp
   (use-package emacs
+    :init
+    (defconst crj--immortal-buffer-names '("*scratch*"
+                                           "#emacs"
+                                           "*Messages*"
+                                           shell-command-buffer-name shell-command-buffer-name-async))
+
+    (defun crj-kill-or-bury-current-buffer ()
+      "Kill the current buffer.
+
+  Unless it's a buffer we should always keep alive, in which case we just bury it in the buffer list."
+      (interactive)
+      (if (member (buffer-name (current-buffer)) crj--immortal-buffer-names)
+          (bury-buffer)
+        (kill-buffer (current-buffer))))
     :general
     (crj-leader-keys
-      "bd" '(crj--kill-or-bury-current-buffer :which-key "Kill buffer.")
+      "bd" '(crj-kill-or-bury-current-buffer :which-key "Kill buffer.")
       "bz" '(bury-buffer :which-key "Bury buffer.")
       "br" '(revert-buffer :which-key "Revert buffer.")
       "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
@@ -1338,9 +1352,11 @@ This package makes scrolling big distances easier to follow by flashing the new 
 
 *** Line Numbers
 
-Sets up line numbers to be (almost) everywhere.
+**** Basic Line Number Settings
 
-Use relative line numbers to make line-wise work easy with Evil Mode.
+Sets up line numbers to be (almost) everywhere, just not in some terminal modes.
+
+I like to use relative line numbers, since they make line-wise work easier when using Evil Mode. Which I do.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1364,11 +1380,11 @@ Use relative line numbers to make line-wise work easy with Evil Mode.
       (add-hook hook #'crj--turn-off-line-numbers)))
 #+end_src
 
+**** Make Line Numbers Use Fixed Pitch
+
 This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
 
 And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
-
-**** TODO do that thing
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1378,19 +1394,36 @@ And by setting line numbers to an absolute size, we also avoid having them incre
                                    line-number-major-tick
                                    line-number-minor-tick))
 
-    (defun crj--make-line-number-face-monospace (&rest args)
+    (defun crj-make-line-number-face-monospace (&rest args)
       "Makes line numbers monospace and fixes them in size."
       (interactive)
       (dolist (face crj--line-number-faces)
           (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
       args)
 
-    (add-hook 'emacs-startup-hook #'crj--make-line-number-face-monospace))
+    (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
 #+end_src
+
+**** Cycle Line Numbers
+
+When displaying code to others, it's often good to make the line numbers absolute. And hiding them can be nice sometimes, though if I'm doing that often, I should consider whether there are more modes I should turn line numbers off for.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (defun crj-cycle-line-numbers ()
+      (interactive)
+      (crj-cycle-setting 'display-line-numbers '(relative t nil)))
+
+    :general
+    (crj-leader-keys
+      "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
+#+end_src
+
+**** TODO make line numbers increase in size at a lower rate. This command could be useful:
 
 #+begin_src emacs-lisp
   (defun crj--reset-line-number-height ()
-    (interactive)
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
 
@@ -2789,6 +2822,9 @@ It's the robots!
       (find-file aichat-bingai-chat-file))
 
     :general
+    (:keymaps 'markdown-mode-map
+              "C-c C-c s" '(crj-send-heading-to-bing-chat :which-key "Send heading as Bing query."))
+
     (crj-leader-keys
       "aibs" '(crj-send-heading-to-bing-chat :which-key "Send heading as Bing query.")
       "aibf" '(crj-open-bing-chat-file :which-key "Open Bing chat file.")))
@@ -3093,30 +3129,23 @@ Dired is a built-in file manager for Emacs that does some pretty amazing things!
 Making my life easier!
 
 #+begin_src emacs-lisp
-  (defun crj--cycle-setting (setting potential-values)
-    "Cycle SETTING through POTENTIAL-VALUES.
+  (use-package emacs
+    :init
+    (defun crj-cycle-setting (setting potential-values)
+      "Cycle SETTING through POTENTIAL-VALUES.
 
-  SETTING is a quoted symbol.
+      SETTING is a quoted symbol.
 
-  POTENTIAL-VALUES is a list of values to cycle through."
-    (let ((i (cl-position (eval setting) potential-values)))
-      (set setting (if (eq (1+ i) (length potential-values))
-                       (car potential-values)
-                     (nth (1+ i) potential-values)))))
-#+end_src
+      POTENTIAL-VALUES is a list of values to cycle through.
 
-#+begin_src emacs-lisp
-  (defvar crj--immortal-buffer-names '("*scratch*"
-                                      "#emacs"
-                                      "*Messages*"
-                                      shell-command-buffer-name shell-command-buffer-name-async))
+  This is a very useful helper function for use when cycling a setting through potential values.
 
-  (defun crj--kill-or-bury-current-buffer ()
-    "Kill the current buffer.
+  See `crj-cycle-line-numbers' for an example usage."
+      (let* ((i (cl-position (eval setting) potential-values))
+             (next-i (1+ i))
+             (new-value (if (eq next-i (length potential-values))
+                            (car potential-values)
+                          (nth next-i potential-values))))
 
-  Unless it's a buffer we should always keep alive, in which case we just bury it in the buffer list."
-    (interactive)
-    (if (member (buffer-name (current-buffer)) crj--immortal-buffer-names)
-        (bury-buffer)
-      (kill-buffer (current-buffer))))
+        (set setting new-value))))
 #+end_src
