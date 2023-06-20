@@ -3149,3 +3149,9 @@ Making my life easier!
 
         (set setting new-value))))
 #+end_src
+
+** Org Export to GFM
+
+#+begin_src emacs-lisp :lexical no
+  (use-package ox-gfm)
+#+end_src
