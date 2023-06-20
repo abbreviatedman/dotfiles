@@ -1650,6 +1650,8 @@ Let's set up a menu for Version Control.
 
 **** Basic Magit Setup
 
+Only some minor settings changes from the basic setup.
+
 #+begin_src emacs-lisp
   (use-package magit
     :init
