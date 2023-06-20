@@ -655,9 +655,7 @@ A title-case operator!
 
     :general
     (:keymaps 'normal :prefix "g"
-                  "s" '(evil-title-case :which-key "Title-case operator.")))
-
-
+                  "C-h" '(evil-title-case :which-key "Title-case operator.")))
 #+end_src
 
 *** Evil Mode Setup
