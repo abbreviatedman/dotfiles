@@ -2253,6 +2253,12 @@ Better go-to-definition function for Emacs Lisp.
 
 ******* TODO configure elisp more
 
+***** CSV
+
+#+begin_src emacs-lisp :lexical no
+  (use-package csv-mode)
+#+end_src
+
 ***** JavaScript
 
 Basic configuration for JS and JSX.
