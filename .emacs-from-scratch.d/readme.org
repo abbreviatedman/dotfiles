@@ -1974,7 +1974,8 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
     (setq avy-timeout-seconds 0.5)
 
     :general
-    (:keymaps '(evil-normal-state-map evil-motion-state-map) "/" 'avy-goto-char-timer))
+    (:keymaps '(evil-normal-state-map evil-motion-state-map) "/" 'avy-goto-char-timer)
+    (:keymaps '(evil-normal-state-map evil-motion-state-map) "?" 'avy-goto-char-timer))
 #+end_src
 
 *** Writing
