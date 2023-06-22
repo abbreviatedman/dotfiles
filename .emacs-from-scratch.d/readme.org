@@ -1978,7 +1978,8 @@ I find =avy-goto-char-timer= more useful generally for short-range cursor moveme
     :general
     (:keymaps '(evil-normal-state-map evil-motion-state-map) "/" #'avy-goto-char-timer)
     (:keymaps '(evil-normal-state-map evil-motion-state-map) "?" #'avy-goto-char-timer)
-    (:states 'motion "\\" #'evil-ex-search-forward))
+    (:states 'motion "\\" #'evil-ex-search-forward)
+    (:states 'motion "M-\\" #'evil-ex-search-backward))
 #+end_src
 
 *** Writing
