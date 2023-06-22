@@ -1966,17 +1966,20 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
     (ws-butler-global-mode))
 #+end_src
 
-**** Text Editing With Avy
+**** Search With Avy Instead of Evil-Ex-Search
+
+I find =avy-goto-char-timer= more useful generally for short-range cursor movements, and =consult-line= is generally more useful for me for long-ranges searches (especially with =orderless=), but I'll still fire up an =evil-ex-search= now and again.
 
 #+begin_src emacs-lisp :lexical no
   (use-package avy
     :init
-    (setq avy-timeout-seconds 1)
+    (setq avy-timeout-seconds 0.5)
 
     :general
-    (crj-leader-keys "la" '(avy-goto-char-timer :which-key "avy-goto-char-timer")))
-
-
+    (:keymaps '(evil-normal-state-map evil-motion-state-map) "/" #'avy-goto-char-timer)
+    (:keymaps '(evil-normal-state-map evil-motion-state-map) "?" #'avy-goto-char-timer)
+    (:states 'motion "\\" #'evil-ex-search-forward)
+    (:states 'motion "M-\\" #'evil-ex-search-backward))
 #+end_src
 
 *** Writing
