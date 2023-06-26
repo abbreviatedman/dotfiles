@@ -1105,16 +1105,26 @@ Here are my font settings.
   (defvar crj--variable-pitch-coding-font "Input")
   (defvar crj--variable-pitch-font "IBM Plex Serif")
   (defvar crj--coding-font crj--variable-pitch-coding-font)
+  (defvar crj--emoji-font "Noto Color Emoji")
   (defvar crj--default-font-size 110)
 
   (use-package emacs
     :config
+    (when (member "Noto Color Emoji" (font-family-list))
+      (set-fontset-font
+       "fontset-default" 'unicode
+       (font-spec :family "Noto Color Emoji")
+       nil
+       'prepend))
+
     (set-face-attribute 'default nil
                         :font crj--coding-font
                         :height crj--default-font-size)
+
     (set-face-attribute 'fixed-pitch nil
                         :font crj--coding-font
                         :height 1.0)
+
     (set-face-attribute 'variable-pitch nil
                         :font crj--variable-pitch-font
                         :height 1.0
@@ -1168,7 +1178,8 @@ And a picture of what my setup actually looks like:
           proced-mode-hook
           cfw:calendar-mode-hook
           minibuffer-setup-hook
-          mu4e-headers-mode-hook))
+          mu4e-headers-mode-hook
+          magit-log-mode-hook))
 
   ;; Add the fixed-pitch function for each mode.
   (dolist (hook crj--fixed-pitch-mode-hooks)
