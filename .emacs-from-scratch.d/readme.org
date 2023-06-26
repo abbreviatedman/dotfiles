@@ -602,6 +602,32 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
           org-export-headline-levels 6))
 #+end_src
 
+**** Org Code Evaluation
+
+Literate programming for fun and profit. Or... at least, for fun.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package ob-racket
+    :straight (:host github :repo "DEADB17/ob-racket"))
+
+  (use-package emacs
+    :init
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       ;; (sql-mode . t)
+       (racket . t)
+       ;; (python . t)
+       ;; (ipython . t)
+       ;; (bash . t)
+       ;; (sh . t)
+       ;; (js . t)
+       ;; (javascript . t)
+       ;; (sql . t)
+       ;; (go . t)
+       )))
+#+end_src
+
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
@@ -2235,13 +2261,18 @@ First, a menu for evaluating code.
 
 Now, let's add keybindings for evaluating the current function, symex, and buffer.
 
+There are some better tools for this when I've got the time to implement them, but for now, I'm just using Racket's evaluation in Racket Mode.
+
 #+begin_src emacs-lisp
   (use-package emacs
     :general
     (crj-leader-keys
       "ef" '(eval-defun :which-key "Evaluate current function.")
       "es" '(eval-last-sexp :which-key "Evaluate last symex.")
-      "eb" '(eval-buffer :which-key "Evaluate current buffer.")))
+      "eb" '(eval-buffer :which-key "Evaluate current buffer."))
+
+    (:keymaps 'racket-mode-map :states '(insert emacs)
+              "C-x C-e" '(racket-eval-last-sexp :which-key "Evaluate last symex.")))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2266,6 +2297,17 @@ Better go-to-definition function for Emacs Lisp.
 #+end_src
 
 ******* TODO configure elisp more
+
+****** Racket
+
+#+begin_src emacs-lisp :lexical no
+  (use-package racket-mode
+    :gfhook racket-xp-mode)
+
+  (use-package geiser)
+
+  (use-package geiser-racket)
+#+end_src
 
 ***** CSV
 
