@@ -680,8 +680,8 @@ A title-case operator!
         (upcase-initials-region beg end)))
 
     :general
-    (:keymaps 'normal :prefix "g"
-                  "C-h" '(evil-title-case :which-key "Title-case operator.")))
+    (:keymaps 'motion :prefix "g"
+                  "H" '(evil-title-case :which-key "Title-case operator.")))
 #+end_src
 
 *** Evil Mode Setup
@@ -718,16 +718,14 @@ There are just a ton of variables here that finely set how Evil Mode is configur
     (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
     (evil-mode 1)
     (evil-select-search-module 'evil-search-module 'evil-search)
-    (evil-define-key '(normal visual) 'global
+    (evil-define-key 'motion 'global
       "j" #'evil-next-line
       "gj" #'evil-next-visual-line
       "k" #'evil-previous-line
       "gk" #'evil-previous-visual-line
       "$" #'evil-end-of-line
       "g$" #'evil-end-of-visual-line)
-    (evil-define-key '(normal visual) org-mode-map
-      "gj" #'evil-next-visual-line
-      "gk" #'evil-previous-visual-line)
+
     (dolist (mode '(custom-mode
                     eshell-mode
                     term-mode))
@@ -781,13 +779,17 @@ This library adds some basic Evil bindings. In addition to the "key themes"" you
           evil-org-use-additional-insert t)
 
     :config
-    (evil-org-set-key-theme '(textobjects navigation todo additional))
+    (evil-org-set-key-theme '(textobjects todo additional))
 
     :general
     (:keymaps 'org-mode-map :states 'insert
-              "RET" #'evil-org-return))
+              "RET" #'evil-org-return)
+    (:keymaps 'org-mode-map :states '(motion normal visual)
+              "gl" #'org-down-element
+              "gh" #'org-up-element
+              "gk" #'org-backward-element
+              "gj" #'org-forward-element))
 #+end_src
-
 
 *** Emacs In Vim In Emacs
 
