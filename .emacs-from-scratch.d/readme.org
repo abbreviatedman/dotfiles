@@ -2022,10 +2022,9 @@ Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me
     (setq avy-timeout-seconds 0.5)
 
     :general
-    (:keymaps '(evil-normal-state-map evil-motion-state-map) "/" #'avy-goto-char-timer)
-    (:keymaps '(evil-normal-state-map evil-motion-state-map) "?" #'avy-goto-char-timer)
-    (:states 'motion "\\" #'evil-ex-search-forward)
-    (:states 'motion "M-\\" #'evil-ex-search-backward))
+    (:keymaps '(evil-normal-state-map evil-motion-state-map)
+              "/" #'avy-goto-char-timer
+              "?" #'evil-ex-search-forward))
 #+end_src
 
 *** Writing
