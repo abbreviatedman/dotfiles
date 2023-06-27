@@ -2014,7 +2014,7 @@ What I'm trying now is:
 3. =evil-ex-search= for long-range hops.
 4. =consult-line= for a more focused search.
 
-Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me.
+Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me in time.
 
 #+begin_src emacs-lisp :lexical no
   (use-package avy
