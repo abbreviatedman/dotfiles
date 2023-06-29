@@ -1990,6 +1990,35 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 
 #+end_src
 
+** Projects
+
+Although having such great ability to switch files and buffers obviates the need for so many other ways to navigate (like tabs or file trees), it's still nice to narrow that down to the concept of a project.
+
+Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' built-in =project.el= library.
+
+*** Project Menu
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys "p" '(:ignore t :which-key "project Menu")))
+#+end_src
+
+*** Project Keybindings
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "pp" '(project-switch-project :which-key "Switch to new project.")
+      "pk" '(project-kill-buffers :which-key "Kill all current project buffers.")
+      "p," '(project-switch-to-buffer :which-key "Switch buffers in current project.")
+      "pd" '(project-dired :which-key "Run dired in current project root.")
+      "p." '(project-find-file :which-key "Find file in current project.")
+      "p$" '(project-async-shell-command :which-key "Run command in current project root.")
+      "pr" '(project-forget-project :which-key "Forget project.")))
+#+end_src
+
 ** Text Editing
 *** General Text Editing
 
