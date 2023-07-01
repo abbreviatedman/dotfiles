@@ -51,8 +51,8 @@ assign [class="Firefox"] "6"
 # assign [class="code-oss"] "6"
 # assign [class="Simplenote"] "8"
 # assign [class="Google-chrome"] "9"
+assign [title=".*zoom.*"] "10"
 # assign [class="Google-chrome-unstable"] "9"
-assign [class="zoom"] "10"
 # assign [class="Slack"] "11"
 # assign [class="discord"] "11"
 # assign [class="pulse-sms"] "11"
@@ -335,8 +335,9 @@ bindsym $mod+Ctrl+Tab move workspace to output left
 # bindsym $mod+Ctrl+k move workspace to output up
 # bindsym $mod+Ctrl+l move workspace to output right
 
-# kill zoom popup windows
-for_window [title="zoom" class="zoom"] floating enable
+# make zoom popup windows flaot without focus
+for_window [title=".*zoom.*"] floating enable
+no_focus [title=".*zoom.*"]
 
 # but also make breakout rooms popup
 for_window [title="Breakout Rooms"] floating enable; exec "i3-center"
