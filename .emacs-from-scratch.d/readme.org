@@ -2907,10 +2907,10 @@ It's the robots!
         (forward-word)
         (backward-word)
         (let ((query (buffer-substring (point) (line-end-position))))
-          (kill-whole-line -1)
+          ;; (kill-whole-line -1)
           (aichat-bingai-chat query)))
 
-      (forward-line)
+      ;; (forward-line)
 
       (setq markdown-hide-markup nil))
 
