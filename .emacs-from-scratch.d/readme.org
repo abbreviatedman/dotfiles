@@ -2338,12 +2338,15 @@ Better go-to-definition function for Emacs Lisp.
 ****** Racket
 
 #+begin_src emacs-lisp :lexical no
-  (use-package racket-mode
-    :gfhook racket-xp-mode)
-
   (use-package geiser)
 
   (use-package geiser-racket)
+
+  (use-package racket-mode
+    :mode "\\.rkt\\'"
+
+    :gfhook #'racket-xp-mode)
+
 #+end_src
 
 ***** CSV
