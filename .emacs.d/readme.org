@@ -41,19 +41,17 @@ You can read more on this subject… and I’ll probably write more. But in the 
 
 Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
 
-The "alt" server name is a relic of a time when I ran this configuration as a secondary Emacs config alongside my main configuration, while I was still getting it into a workable condition. I will be going back to a single-server configuration soon enough and dropping the need for naming my servers.
-
 #+begin_src emacs-lisp
-(setq server-name "alt")
 (server-start)
 #+end_src
 
 ** Start With Messages
 
-I usually want to see the startup log first, and I'm tired of manually switching to it.
+I usually want to see the startup log first, and I'm tired of manually switching to it. I also usually want to see the newest messages.
 
 #+begin_src emacs-lisp
-(switch-to-buffer "*Messages*")
+  (switch-to-buffer "*Messages*")
+  (end-of-buffer)
 #+end_src
 
 ** Package System

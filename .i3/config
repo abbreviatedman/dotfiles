@@ -19,7 +19,7 @@ exec --no-startup-id syncthing -no-browser
 
 # Startup Programs
 exec "zoom"
-# exec emacsclient --socket-name=alt -cn -a "" -e "(+eshell/here)"
+# exec emacsclient -cn -a "" -e "(+eshell/here)"
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
@@ -31,13 +31,13 @@ set $alt Mod1
 # writing terminals
 
 ## emacs-everywhere
-bindsym $mod+Shift+q exec emacsclient --socket-name=alt -cn -a "" --eval "(emacs-everywhere)"
+bindsym $mod+Shift+q exec emacsclient -cn -a "" --eval "(emacs-everywhere)"
 
 ## Simple writing terminal.
-bindsym $mod+q exec emacsclient --socket-name=alt -cn -a "" ~/org-stuff/quick-note.md
+bindsym $mod+q exec emacsclient -cn -a "" ~/org-stuff/quick-note.md
 
 ## Todos
-bindsym $mod+Shift+t exec  emacsclient --socket-name=alt -cn -a "" ~/org-stuff/readme.org
+bindsym $mod+Shift+t exec  emacsclient -cn -a "" ~/org-stuff/readme.org
 
 bindsym $mod+Shift+c exec org-capture
 
@@ -81,7 +81,7 @@ bindsym $mod+$alt+Ctrl+h exec highlight-pointer -r 40 -o 10 -c "#ff0000" -p  "#0
 floating_modifier $mod
 
 # start Emacs terminal
-bindsym $mod+BackSpace exec emacsclient --socket-name=alt -cn -a "" -e "(multi-vterm)"
+bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(multi-vterm)"
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
 # start work browser
@@ -89,7 +89,7 @@ bindsym $mod+Shift+Return exec "google-chrome-stable"
 # start personal browser
 bindsym $mod+$alt+Return exec "vivaldi-stable"
 # start emacs browser
-bindsym $mod+Return exec emacsclient --socket-name=alt -cn -a "" -e '(switch-to-buffer "*Messages*")'
+bindsym $mod+Return exec emacsclient -cn -a "" -e '(switch-to-buffer "*Messages*") (end-of-buffer)'
 
 # start alt browser 1
 bindsym $mod+$alt+g exec "chromium"
@@ -596,7 +596,7 @@ mode "$mode_gaps_outer" {
 
 # if I want to go back to working on my own way to quickly edit text in Emacs a la emacs-everywhere, this function was helpful
 # add window id to notification
-# bindsym $mod+Shift+Ctrl+w exec emacsclient --socket-name=alt --eval "(crj/emacs-everywhere-for-i3wm)"
+# bindsym $mod+Shift+Ctrl+w exec emacsclient --eval "(crj/emacs-everywhere-for-i3wm)"
 
 #  keybindings for changing display setups
 
