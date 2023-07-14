@@ -41,19 +41,17 @@ You can read more on this subject… and I’ll probably write more. But in the 
 
 Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
 
-The "alt" server name is a relic of a time when I ran this configuration as a secondary Emacs config alongside my main configuration, while I was still getting it into a workable condition. I will be going back to a single-server configuration soon enough and dropping the need for naming my servers.
-
 #+begin_src emacs-lisp
-(setq server-name "alt")
 (server-start)
 #+end_src
 
 ** Start With Messages
 
-I usually want to see the startup log first, and I'm tired of manually switching to it.
+I usually want to see the startup log first, and I'm tired of manually switching to it. I also usually want to see the newest messages.
 
 #+begin_src emacs-lisp
-(switch-to-buffer "*Messages*")
+  (switch-to-buffer "*Messages*")
+  (end-of-buffer)
 #+end_src
 
 ** Package System
@@ -375,7 +373,7 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
     (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                          :height 1.0
+                                          :height crj--default-font-size
                                           :width normal))
     (buffer-face-mode))
 
@@ -1435,9 +1433,7 @@ And by setting line numbers to an absolute size, we also avoid having them incre
       "Makes line numbers monospace and fixes them in size."
       (interactive)
       (dolist (face crj--line-number-faces)
-        (set-face-attribute face nil
-                            :family crj--fixed-pitch-font
-                            :height 1.0))
+          (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
       args)
 
     (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
@@ -1702,8 +1698,6 @@ Only some minor settings changes from the basic setup.
     :custom
     (magit-display-buffer-function
      #'magit-display-buffer-same-window-except-diff-v1)
-
-    (magit-no-confirm nil)
 
     :general
     (crj-leader-keys
@@ -2010,17 +2004,6 @@ Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' b
     (crj-leader-keys "p" '(:ignore t :which-key "project Menu")))
 #+end_src
 
-*** Project Customizations
-
-Only one so far is to automatically run =project-find-file= upon switching to a new project.
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :init
-    (setq project-switch-commands 'project-find-file))
-
-#+end_src
-
 *** Project Keybindings
 
 #+begin_src emacs-lisp :lexical no
@@ -2037,31 +2020,9 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 #+end_src
 
 ** Text Editing
-
 *** General Text Editing
 
-**** Whitespace
-
-***** Tabs Vs. Spaces
-
-We'll go with spaces!
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :init
-    (indent-tabs-mode -1))
-#+end_src
-
-***** TODO
-#+begin_src emacs-lisp :lexical no
-  (setq indentation-to-check-out '(indent-tabs-mode
-                                   tab-width
-                                   markdown-list-indent-width
-                                   evil-shift-width
-                                   css-indent-offset))
-#+end_src
-
-***** Whitespace Removal
+**** Whitespace Removal
 
 This package removes whitespace from the ends of lines.
 
@@ -2078,12 +2039,11 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
 What I'm trying now is:
 
 1. =evil-snipe= for short-range hops.
-2. =evil-ex-search= for long-range hops.
-3. =consult-line= if I want to use =orderless= filtering or do something with the list of results.
+2. =avy-goto-char-timer= for medium-range hops.
+3. =evil-ex-search= for long-range hops.
+4. =consult-line= for a more focused search.
 
-Do I need 3 searches? /Probably not/. I'll figure out what workflow works for me in time.
-
-But I'm also going to try Avy every once in a while, see if I like it. So... maybe I need 4.
+Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me in time.
 
 #+begin_src emacs-lisp :lexical no
   (use-package avy
@@ -2092,8 +2052,8 @@ But I'm also going to try Avy every once in a while, see if I like it. So... may
 
     :general
     (:keymaps '(evil-normal-state-map evil-motion-state-map)
-              "?" #'avy-goto-char-timer
-              "/" #'evil-ex-search-forward))
+              "/" #'avy-goto-char-timer
+              "?" #'evil-ex-search-forward))
 #+end_src
 
 *** Writing
@@ -2219,9 +2179,11 @@ Much of the below is just about getting Markdown to get the look I describe in t
     :hook (markdown-mode . variable-pitch-mode)
 
     :init
-    (setq markdown-indent-on-enter 'indent-and-new-item)
+    (setq markdown-indent-on-enter 'indent-and-new-item
+          markdown-list-indent-width 2)
+
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
 
     :config
     (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
@@ -2265,7 +2227,7 @@ The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labore
               [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
 #+end_src
 
-****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
+****** TODO add a ~cond~ to make sure the above function also checks if it's in the closing tag, for proper robustness.
 
 ***** Lisps
 
