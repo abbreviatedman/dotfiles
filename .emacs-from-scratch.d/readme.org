@@ -2010,6 +2010,17 @@ Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' b
     (crj-leader-keys "p" '(:ignore t :which-key "project Menu")))
 #+end_src
 
+*** Project Customizations
+
+Only one so far is to automatically run =project-find-file= upon switching to a new project.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq project-switch-commands 'project-find-file))
+
+#+end_src
+
 *** Project Keybindings
 
 #+begin_src emacs-lisp :lexical no
