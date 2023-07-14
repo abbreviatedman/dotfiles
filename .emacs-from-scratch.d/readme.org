@@ -2037,9 +2037,31 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 #+end_src
 
 ** Text Editing
+
 *** General Text Editing
 
-**** Whitespace Removal
+**** Whitespace
+
+***** Tabs Vs. Spaces
+
+We'll go with spaces!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (indent-tabs-mode -1))
+#+end_src
+
+***** TODO
+#+begin_src emacs-lisp :lexical no
+  (setq indentation-to-check-out '(indent-tabs-mode
+                                   tab-width
+                                   markdown-list-indent-width
+                                   evil-shift-width
+                                   css-indent-offset))
+#+end_src
+
+***** Whitespace Removal
 
 This package removes whitespace from the ends of lines.
 
