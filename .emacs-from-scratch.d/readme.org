@@ -2078,11 +2078,12 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
 What I'm trying now is:
 
 1. =evil-snipe= for short-range hops.
-2. =avy-goto-char-timer= for medium-range hops.
-3. =evil-ex-search= for long-range hops.
-4. =consult-line= for a more focused search.
+2. =evil-ex-search= for long-range hops.
+3. =consult-line= if I want to use =orderless= filtering or do something with the list of results.
 
-Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me in time.
+Do I need 3 searches? /Probably not/. I'll figure out what workflow works for me in time.
+
+But I'm also going to try Avy every once in a while, see if I like it. So... maybe I need 4.
 
 #+begin_src emacs-lisp :lexical no
   (use-package avy
@@ -2091,8 +2092,8 @@ Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me
 
     :general
     (:keymaps '(evil-normal-state-map evil-motion-state-map)
-              "/" #'avy-goto-char-timer
-              "?" #'evil-ex-search-forward))
+              "?" #'avy-goto-char-timer
+              "/" #'evil-ex-search-forward))
 #+end_src
 
 *** Writing
