@@ -375,7 +375,7 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
     (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                          :height crj--default-font-size
+                                          :height 1.0
                                           :width normal))
     (buffer-face-mode))
 
@@ -1435,7 +1435,9 @@ And by setting line numbers to an absolute size, we also avoid having them incre
       "Makes line numbers monospace and fixes them in size."
       (interactive)
       (dolist (face crj--line-number-faces)
-          (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
+        (set-face-attribute face nil
+                            :family crj--fixed-pitch-font
+                            :height 1.0))
       args)
 
     (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
@@ -2183,7 +2185,7 @@ Much of the below is just about getting Markdown to get the look I describe in t
     :init
     (setq markdown-indent-on-enter 'indent-and-new-item)
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-      (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
 
     :config
     (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
