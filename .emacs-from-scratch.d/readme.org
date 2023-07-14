@@ -2265,7 +2265,7 @@ The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labore
               [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
 #+end_src
 
-****** TODO add a ~cond~ to make sure the above function also checks if it's in the closing tag, for proper robustness.
+****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
 
 ***** Lisps
 
