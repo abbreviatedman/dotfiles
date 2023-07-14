@@ -1703,6 +1703,8 @@ Only some minor settings changes from the basic setup.
     (magit-display-buffer-function
      #'magit-display-buffer-same-window-except-diff-v1)
 
+    (magit-no-confirm nil)
+
     :general
     (crj-leader-keys
       "gg" '(magit-status :which-key "Launch Git interface.")
