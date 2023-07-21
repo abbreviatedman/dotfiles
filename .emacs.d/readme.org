@@ -281,11 +281,25 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
 Which key shows you a constantly updating list of what keys you can press next and what commands or menus they'll activate. It's helpful when you can't remember a shortcut, or even just when you want to explore what commands are under a certain menu.
 
 #+begin_src emacs-lisp
-(use-package which-key
-  :defer 0
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 2))
+  (use-package which-key
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 2
+          which-key-separator "→"
+          which-key-show-operator-state-maps t
+          which-key-sort-order #'which-key-prefix-then-key-order
+          which-key-show-prefix nil
+          which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL")))
+#+end_src
+
+**** A Which-Key Menu
+
+This is as good a place as any to show how to make a menu with which-key!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package which-key
+    :general
+    (crj-leader-keys "t" '(:ignore t :which-key "Toggle menu.")))
 #+end_src
 
 ** Markup Documents
@@ -2819,7 +2833,6 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
     :general
-    (crj-leader-keys "t" '(:ignore t :which-key "Toggle menu."))
     (crj-leader-keys "tc" '(global-copilot-mode :which-key "Toggle copilot."))
     (:keymaps 'copilot-mode-map
               "M-RET" #'copilot-accept-completion
