@@ -1913,6 +1913,16 @@ Allow minibuffers within minibuffers.
     (setq enable-recursive-minibuffers t))
 #+end_src
 
+Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq echo-keystrokes 3))
+#+end_src
+
+**** TODO possibly make this toggleable to nil for presenting code
+
 *** Secrets
 
 Oooh.
