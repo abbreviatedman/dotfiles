@@ -41,8 +41,9 @@ bindsym $mod+Shift+t exec  emacsclient -cn -a "" ~/org-stuff/readme.org
 
 bindsym $mod+Shift+c exec org-capture
 
-# Add compose key manually. : (
-bindsym $mod+Shift+x exec "xmodmap ~/.Xmodmap"
+# Set keyboard options.
+bindsym $mod+Ctrl+Shift+x exec setxkbmap -option compose:sclk
+bindsym $mod+Ctrl+Shift+c exec setxkbmap -option ctrl:nocaps && xcape
 
 # Move specific apps to specific workspaces.
 assign [class="Firefox"] "6"
