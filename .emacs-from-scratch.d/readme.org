@@ -1913,11 +1913,12 @@ Oooh.
   (use-package emacs
     :init
     (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
-          plstore-cache-passphrase-for-symmetric-encryption t))
+          plstore-cache-passphrase-for-symmetric-encryption t)
+    (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
 
   (use-package ssh-agency
     :init
-    (setq ssh-agency-askpass t))
+    (setq ssh-agency-askpass nil))
 
   (use-package password-store)
 
@@ -2059,6 +2060,16 @@ We'll go with spaces!
                                    markdown-list-indent-width
                                    evil-shift-width
                                    css-indent-offset))
+#+end_src
+
+***** Column Length
+
+The default 70 is too low a number. I like 100, though this is arbitrary and /probably/ should be according to some accepted standard.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq-default fill-column 100))
 #+end_src
 
 ***** Whitespace Removal
@@ -2435,6 +2446,18 @@ Only two things aren't easy to figure out here:
     (advice-add #'rjsx-electric-gt :before-while #'crj--auto-close-jsx-fragments))
 #+end_src
 
+***** TypeScript
+
+#+begin_src emacs-lisp :lexical no
+  (use-package typescript-mode
+    :init
+    (setq typescript-indent-level 2)
+    :mode
+    (("\\.ts\\'" . tsx-ts-mode)
+     ("\\.tsx\\'" . tsx-ts-mode)))
+
+#+end_src
+
 ***** Using Prettier To Format Buffers
 
 #+begin_src emacs-lisp
@@ -2457,6 +2480,18 @@ Only two things aren't easy to figure out here:
 ** Completion
 
 Because so much in Emacs is driven by text, good completion is the difference between hard-to-use and effortless.
+
+*** A Completion Menu
+
+Let's make a nice completion menu to work with.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "c" '(:ignore t
+  		  :which-key "Completion Menu")))
+#+end_src
 
 *** Minibuffer Completion
 
@@ -2835,8 +2870,15 @@ And an extra package for completing Org blocks.
 
 #+begin_src emacs-lisp
   (use-package eglot
+    :init
+    (add-to-list 'eglot-server-programs
+               '((typescript-mode) "typescript-language-server" "--stdio"))
     :config
-    (setq completion-category-overrides '((eglot (styles orderless)))))
+    (setq completion-category-overrides '((eglot (styles orderless))))
+
+    :general
+    (crj-leader-keys
+      "cc" '(eglot :which-key "Run eglot in project root.")))
 
   (use-package cape
     :after eglot
@@ -2880,15 +2922,13 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
       :hook (prog-mode . flymake-mode)
       :general
       (:keymaps 'normal
-                "]e" '(flymake-goto-next-error
-                       :which-key "Go to next error.")
-                "[e" '(flymake-goto-prev-error
-                       :which-key "Go to previous error."))
+    	    "]e" '(flymake-goto-next-error
+    		   :which-key "Go to next error.")
+    	    "[e" '(flymake-goto-prev-error
+    		   :which-key "Go to previous error."))
       (crj-leader-keys
-                "c" '(:ignore t
-                        :which-key "Code Menu")
-                "cX" '(flymake-show-project-diagnostics
-                       :which-key "Describe variable.")))
+        "cX" '(flymake-show-project-diagnostics
+    	   :which-key "Describe variable.")))
       #+end_src
 
 ** AI

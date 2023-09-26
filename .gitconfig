@@ -1,21 +1,25 @@
 [user]
 	name = Colin Jaffe
-	email = balloonasaurus@gmail.com
+	email = colin.jaffe@gmail.com
 [diff]
 	tool = vimdiff
 [core]
 	excludesFile = ~/.gitignore-global
 	ignorecase = false
-	editor = nvim
+	editor = code -w
 [interactive]
 	singleKey = true
 [init]
 	defaultBranch = main
 [pull]
 	rebase = false
+[push]
+	followTags = true
 [gitlab]
 	user = abbreviatedman
 [include]
 	path = ~/.private.gitconfig
 [github]
 	user = abbreviatedman
+[branch]
+	default = main
