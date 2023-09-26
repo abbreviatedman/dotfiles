@@ -1711,6 +1711,21 @@ Only some minor settings changes from the basic setup.
 
 #+end_src
 
+**** Magit Error Workaround
+
+This is an annoying thing where I'm getting an error that ~seq-keep~ is not defined. There's an issue on GitHub for it, and I'll see if it still persists when I next update Emacs.
+
+In the meantime, the workaround is to define ~seq-keep~ ourselves.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (defun seq-keep (function sequence)
+      "Apply FUNCTION to SEQUENCE and return the list of all the non-nil results."
+      (delq nil (seq-map function sequence))))
+#+end_src
+
+
 **** Magit Forge For Git Server Integration
 
 This integrates Magit with Git servers like GitHub and GitLab.
