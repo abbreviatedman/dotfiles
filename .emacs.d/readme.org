@@ -878,26 +878,6 @@ This library is amazing for working with surrounding text. Changing double quote
                 "c" '(evilnc-comment-operator :which-key "Comment operator.")))
 #+end_src
 
-*** Jumping By Character Pairs In Evil
-
-I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press ~s~ and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ranges. And when it isn't? You just press ~;~ to go to the next one.
-
-Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
-
-#+begin_src emacs-lisp
-  (use-package evil-snipe
-    :after evil
-
-    :init
-    (evil-snipe-mode 1)
-    (evil-snipe-override-mode 1)
-    :config
-    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-    (setq evil-snipe-scope 'buffer
-          evil-snipe-smart-case t
-          evil-snipe-char-fold t))
-#+end_src
-
 *** Replace With Clipboard In Evil
 
 This is an invaluable command, especially since it's a motion I can combine with a text object.
@@ -1543,6 +1523,16 @@ Let's use a wrapper around it that allows multiple terminals.
 **** TODO configure Vterm Copy mode
 **** TODO configure pass-through keys
 
+*** Browser Integration
+
+#+begin_src emacs-lisp :lexical no
+  (use-package atomic-chrome
+    :init
+    (setq atomic-chrome-buffer-open-style 'frame)
+    (atomic-chrome-start-server)
+    (evil-collection-atomic-chrome-setup))
+#+end_src
+
 *** Org Agenda
 
 Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
@@ -2058,19 +2048,46 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
     (ws-butler-global-mode))
 #+end_src
 
-**** Searching The Visible Buffer
+**** Searching In Buffer
 
 What I'm trying now is:
 
 1. =evil-snipe= for short-range hops.
-2. =avy-goto-char-timer= for medium-range hops.
-3. =evil-ex-search= for long-range hops.
-4. =consult-line= for a more focused search.
++2. =avy-goto-char-timer= for medium-range hops.+ (turns out I don't like Avy for in-buffer searches, but it might still be useful in the future for its more advanced features)
+2. =evil-ex-search= for long-range hops.
+3. =consult-line= for a more focused search.
 
-Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me in time.
+Do I need +4+3 searches? /Probably not/. (I didn't!)
+
+I'll figure out what workflow works for me in time.
+
+***** Jumping By Character Pairs With Evil Snipe
+
+I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great way to navigate over medium distances in an editor. You simply press ~s~ and then type in the two characters you want to jump to. Two characters is usually enough to identify where you want the cursor to be, at least over medium ranges. And when it isn't? You just press ~;~ to go to the next one.
+
+Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
+
+#+begin_src emacs-lisp
+  (use-package evil-snipe
+    :after evil
+
+    :init
+    (evil-snipe-mode 1)
+    (evil-snipe-override-mode 1)
+    :config
+    (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+    (setq evil-snipe-scope 'buffer
+          evil-snipe-smart-case t
+          evil-snipe-char-fold t))
+#+end_src
+
+***** Avy
+
+Avy config will be kept around for now, but I'm disabling it. Consider it "archived".
 
 #+begin_src emacs-lisp :lexical no
   (use-package avy
+    :disabled
     :init
     (setq avy-timeout-seconds 0.5)
 
@@ -2079,6 +2096,10 @@ Do I need 4 searches? /Probably not/. I'll figure out what workflow works for me
               "/" #'avy-goto-char-timer
               "?" #'evil-ex-search-forward))
 #+end_src
+
+***** Evil Ex-Search and Consult
+
+are configured elsewhere!
 
 *** Writing
 
