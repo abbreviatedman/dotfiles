@@ -387,7 +387,7 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
     (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                          :height crj--default-font-size
+                                          :height 1.0
                                           :width normal))
     (buffer-face-mode))
 
@@ -1427,7 +1427,9 @@ And by setting line numbers to an absolute size, we also avoid having them incre
       "Makes line numbers monospace and fixes them in size."
       (interactive)
       (dolist (face crj--line-number-faces)
-          (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
+        (set-face-attribute face nil
+                            :family crj--fixed-pitch-font
+                            :height 1.0))
       args)
 
     (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
@@ -1703,6 +1705,8 @@ Only some minor settings changes from the basic setup.
     (magit-display-buffer-function
      #'magit-display-buffer-same-window-except-diff-v1)
 
+    (magit-no-confirm nil)
+
     :general
     (crj-leader-keys
       "gg" '(magit-status :which-key "Launch Git interface.")
@@ -1936,11 +1940,12 @@ Oooh.
   (use-package emacs
     :init
     (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
-          plstore-cache-passphrase-for-symmetric-encryption t))
+          plstore-cache-passphrase-for-symmetric-encryption t)
+    (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
 
   (use-package ssh-agency
     :init
-    (setq ssh-agency-askpass t))
+    (setq ssh-agency-askpass nil))
 
   (use-package password-store)
 
@@ -2033,6 +2038,17 @@ Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' b
     (crj-leader-keys "p" '(:ignore t :which-key "project Menu")))
 #+end_src
 
+*** Project Customizations
+
+Only one so far is to automatically run =project-find-file= upon switching to a new project.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq project-switch-commands 'project-find-file))
+
+#+end_src
+
 *** Project Keybindings
 
 #+begin_src emacs-lisp :lexical no
@@ -2049,9 +2065,41 @@ Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' b
 #+end_src
 
 ** Text Editing
+
 *** General Text Editing
 
-**** Whitespace Removal
+**** Whitespace
+
+***** Tabs Vs. Spaces
+
+We'll go with spaces!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (indent-tabs-mode -1))
+#+end_src
+
+***** TODO
+#+begin_src emacs-lisp :lexical no
+  (setq indentation-to-check-out '(indent-tabs-mode
+                                   tab-width
+                                   markdown-list-indent-width
+                                   evil-shift-width
+                                   css-indent-offset))
+#+end_src
+
+***** Column Length
+
+The default 70 is too low a number. I like 100, though this is arbitrary and /probably/ should be according to some accepted standard.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq-default fill-column 100))
+#+end_src
+
+***** Whitespace Removal
 
 This package removes whitespace from the ends of lines.
 
@@ -2154,6 +2202,17 @@ Settings for... coding.
 
 **** General
 
+***** A Code Menu
+
+I don't use this very much yet. But I should!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (crj-leader-keys
+      "c" '(:ignore t :which-key "Code Menu")))
+#+end_src
+
 ***** Coding Block Delimiters
 
 Sometimes simply called "parens" or "brackets", delimiters are a big part of coding. This is particularly true in Lisp languages, but even the indentation-for-delimiting-code-blocks Python benefits from handling them well.
@@ -2243,7 +2302,7 @@ Much of the below is just about getting Markdown to get the look I describe in t
           markdown-list-indent-width 2)
 
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-      (set-face-attribute face nil :family crj--fixed-pitch-font :height crj--default-font-size))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
 
     :config
     (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
@@ -2287,7 +2346,7 @@ The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labore
               [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
 #+end_src
 
-****** TODO add a ~cond~ to make sure the above function also checks if it's in the closing tag, for proper robustness.
+****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
 
 ***** Lisps
 
@@ -2455,6 +2514,18 @@ Only two things aren't easy to figure out here:
         (backward-char)))
 
     (advice-add #'rjsx-electric-gt :before-while #'crj--auto-close-jsx-fragments))
+#+end_src
+
+***** TypeScript
+
+#+begin_src emacs-lisp :lexical no
+  (use-package typescript-mode
+    :init
+    (setq typescript-indent-level 2)
+    :mode
+    (("\\.ts\\'" . tsx-ts-mode)
+     ("\\.tsx\\'" . tsx-ts-mode)))
+
 #+end_src
 
 ***** Using Prettier To Format Buffers
@@ -2857,8 +2928,15 @@ And an extra package for completing Org blocks.
 
 #+begin_src emacs-lisp
   (use-package eglot
+    :init
+    (add-to-list 'eglot-server-programs
+               '((typescript-mode) "typescript-language-server" "--stdio"))
     :config
-    (setq completion-category-overrides '((eglot (styles orderless)))))
+    (setq completion-category-overrides '((eglot (styles orderless))))
+
+    :general
+    (crj-leader-keys
+      "cc" '(eglot :which-key "Run eglot in project root.")))
 
   (use-package cape
     :after eglot
@@ -2882,7 +2960,6 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
     (crj-leader-keys
       "tc" '(global-copilot-mode :which-key "Toggle copilot globally.")
       "tC" '(copilot-mode :which-key "Toggle copilot for current buffer."))
-
     (:keymaps 'copilot-mode-map
               "M-RET" #'copilot-accept-completion
               "M-<tab>" #'copilot-next-completion
@@ -2904,15 +2981,12 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
       :hook (prog-mode . flymake-mode)
       :general
       (:keymaps 'normal
-                "]e" '(flymake-goto-next-error
-                       :which-key "Go to next error.")
-                "[e" '(flymake-goto-prev-error
-                       :which-key "Go to previous error."))
+    	    "]e" '(flymake-goto-next-error
+    		   :which-key "Go to next error.")
+    	    "[e" '(flymake-goto-prev-error
+    		   :which-key "Go to previous error."))
       (crj-leader-keys
-                "c" '(:ignore t
-                        :which-key "Code Menu")
-                "cX" '(flymake-show-project-diagnostics
-                       :which-key "Describe variable.")))
+        "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
       #+end_src
 
 ** AI
