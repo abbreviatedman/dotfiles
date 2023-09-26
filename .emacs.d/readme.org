@@ -1216,24 +1216,24 @@ There are some edge cases here, though, so I'll probably be returning to it.
 First, some functions to zoom and reset one buffer:
 
 #+begin_src emacs-lisp
-      (defun crj--zoom-in (arg)
+  (defun crj-zoom-in (arg)
     "Incease text size in current buffer.
 
   ARG is a count—increase the count to zoom in more."
-	(interactive "p")
-	(text-scale-increase arg))
+    (interactive "p")
+    (text-scale-increase arg))
 
-      (defun crj--zoom-out (arg)
+  (defun crj-zoom-out (arg)
     "Decrease text size in current buffer.
 
   ARG is a count—increase the count to zoom out more."
-	(interactive "p")
-	(text-scale-increase (* arg -1)))
+    (interactive "p")
+    (text-scale-increase (* arg -1)))
 
-      (defun crj--zoom-reset (arg)
-  "Reset current buffer's text size."
-	(interactive "p")
-	(text-scale-increase 0))
+  (defun crj-zoom-reset ()
+    "Reset current buffer's text size to default."
+    (interactive)
+    (text-scale-increase 0))
 #+end_src
 
 From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the ~buffer-list~ and run the above functions in each.
@@ -1247,26 +1247,26 @@ From there, I can use those to zoom in on all current buffers. These functions s
   ;;   (text-scale-increase text-scale-mode-amount))
   ;; (add-hook 'after-set-visited-file-name-hook #'crj-match-new-buffer-to-current-text-scale)
 
-  (defun crj--zoom-in-all-buffers (arg)
+  (defun crj-zoom-in-all-buffers (arg)
     "Zooms in on all current buffers."
     (interactive "p")
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
-        (crj--zoom-in arg))))
+        (crj-zoom-in arg))))
 
-  (defun crj--zoom-out-all-buffers (arg)
+  (defun crj-zoom-out-all-buffers (arg)
     "Zooms out on all current buffers."
     (interactive "p")
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
-        (crj--zoom-out arg))))
+        (crj-zoom-out arg))))
 
-  (defun crj--zoom-reset-all-buffers (arg)
-    "Resets zoom for all current buffers."
-    (interactive "p")
+  (defun crj-zoom-reset-all-buffers ()
+    "Resets zoom for all current buffers to default level."
+    (interactive)
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
-        (crj--zoom-reset arg))))
+        (crj-zoom-reset))))
 #+end_src
 
 This package, ~default-text-scale~, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
@@ -1287,12 +1287,12 @@ Next, we make some keybindings for them.
     :general
     (crj-leader-keys
               "z" '(:ignore t :which-key "Zooming Menu")
-              "zj" '(crj--zoom-in-all-buffers :which-key "Zoom in globally.")
-              "zk" '(crj--zoom-out-all-buffers :which-key "Zoom out globally.")
-              "zb" '(crj--zoom-reset-all-buffers :which-key "Reset zoom globally.")
-              "zJ" '(crj--zoom-in :which-key "Zoom in.")
-              "zK" '(crj--zoom-out :which-key "Zoom out.")
-              "zB" '(crj--zoom-reset :which-key "Reset zoom.")))
+              "zj" '(crj-zoom-in-all-buffers :which-key "Zoom in globally.")
+              "zk" '(crj-zoom-out-all-buffers :which-key "Zoom out globally.")
+              "zb" '(crj-zoom-reset-all-buffers :which-key "Reset zoom globally.")
+              "zJ" '(crj-zoom-in :which-key "Zoom in.")
+              "zK" '(crj-zoom-out :which-key "Zoom out.")
+              "zB" '(crj-zoom-reset :which-key "Reset zoom.")))
 #+end_src
 
 And finally, there's a special type of Emacs interface I don't use often, a third-party package called Hydra, that's perfect for an activity like zooming text. Once you've decided to zoom, you're entering a kind of session where you'll be entering related commands. You'll be zooming in a couple times, then zooming out if you've gone too far. And at that point that can even repeat, if you change your mind as to what zoom level you act~ally want. What Hydra does is enter an interface perfect for this kind of situation.
