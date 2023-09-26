@@ -51,7 +51,7 @@ I usually want to see the startup log first, and I'm tired of manually switching
 
 #+begin_src emacs-lisp
   (switch-to-buffer "*Messages*")
-  (end-of-buffer)
+  (goto-char (point-max))
 #+end_src
 
 ** Package System
