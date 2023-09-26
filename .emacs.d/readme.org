@@ -1306,20 +1306,20 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
 #+begin_src emacs-lisp
   (use-package hydra
     :config
-    (defhydra crj--hydra/text-zoom (:hint nil :color red)
+    (defhydra crj-hydra/text-zoom (:hint nil :color red)
       "
-	Global zoom: _j_:zoom in, _k_:zoom out, _b_:reset
-	Buffer zoom: _J_:zoom in, _K_:zoom out, _B_:reset
+  	Global zoom: _j_:zoom in, _k_:zoom out, _b_:reset
+  	Buffer zoom: _J_:zoom in, _K_:zoom out, _B_:reset
   "
-      ("J" crj--zoom-in)
-      ("K" crj--zoom-out)
-      ("B" crj--zoom-reset)
-      ("j" crj--zoom-in-all-buffers)
-      ("k" crj--zoom-out-all-buffers)
-      ("b" crj--zoom-reset-all-buffers))
+      ("J" crj-zoom-in)
+      ("K" crj-zoom-out)
+      ("B" crj-zoom-reset)
+      ("j" crj-zoom-in-all-buffers)
+      ("k" crj-zoom-out-all-buffers)
+      ("b" crj-zoom-reset-all-buffers))
     :general
     (crj-leader-keys
-	      "zz" '(crj--hydra/text-zoom/body :which-key "Zoom hydra interface.")))
+      "zz" '(crj-hydra/text-zoom/body :which-key "Zoom hydra interface.")))
 #+end_src
 
 **** TODO add ability to zoom to preset big size.
