@@ -384,7 +384,7 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
 
 #+begin_src emacs-lisp
   (defun my/buffer-face-mode-variable ()
-    "Set font to a variable width (proportional) fonts in current buffer"
+    "Set font to a variable width (proportional) fonts in current buffer."
     (interactive)
     (setq buffer-face-mode-face '(:family crj--variable-pitch-font
                                           :height 1.0
@@ -1182,7 +1182,7 @@ And a picture of what my setup actually looks like:
     "Face for monospace fonts.")
 
   (defun crj--use-fixed-pitch ()
-    "Makes the current buffer use a fixed pitch.
+    "Make the current buffer use a fixed pitch.
 
   Sometimes I really do want fixed-pitch for alignment, such as with terminals."
     (interactive)
