@@ -1543,6 +1543,16 @@ Let's use a wrapper around it that allows multiple terminals.
 **** TODO configure Vterm Copy mode
 **** TODO configure pass-through keys
 
+*** Browser Integration
+
+#+begin_src emacs-lisp :lexical no
+  (use-package atomic-chrome
+    :init
+    (setq atomic-chrome-buffer-open-style 'frame)
+    (atomic-chrome-start-server)
+    (evil-collection-atomic-chrome-setup))
+#+end_src
+
 *** Org Agenda
 
 Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
