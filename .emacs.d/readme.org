@@ -1529,10 +1529,14 @@ Let's use a wrapper around it that allows multiple terminals.
 
 #+begin_src emacs-lisp :lexical no
   (use-package atomic-chrome
+    :after evil
+
     :init
     (setq atomic-chrome-buffer-open-style 'frame)
-    (atomic-chrome-start-server)
-    (evil-collection-atomic-chrome-setup))
+
+    :config
+    (evil-collection-atomic-chrome-setup)
+    (atomic-chrome-start-server))
 #+end_src
 
 *** Org Agenda
@@ -2928,11 +2932,12 @@ And an extra package for completing Org blocks.
 
 #+begin_src emacs-lisp
   (use-package eglot
-    :init
-    (add-to-list 'eglot-server-programs
-               '((typescript-mode) "typescript-language-server" "--stdio"))
     :config
     (setq completion-category-overrides '((eglot (styles orderless))))
+    (add-to-list 'eglot-server-programs
+                 '((typescript-mode)
+                   "typescript-language-server"
+                   "--stdio"))
 
     :general
     (crj-leader-keys
