@@ -3,10 +3,10 @@ exec --no-startup-id "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate 
 
 # Keyboard configs.
 # Still figuring this out, not universal across my systems yet.
-# exec_always --no-startup-id xcape
-# exec_always --no-startup-id xset r rate 1000
-# exec_always --no-startup-id setxkbmap -option compose:sclk
-# exec_always --no-startup-id setxkbmap -option ctrl:swapcaps
+exec_always --no-startup-id xcape
+exec_always --no-startup-id xset r rate 1000
+exec_always --no-startup-id setxkbmap -option compose:sclk
+exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
 # battery warning
 # warns at 30% and half that (15)
