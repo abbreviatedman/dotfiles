@@ -1700,7 +1700,11 @@ Only some minor settings changes from the basic setup.
 #+begin_src emacs-lisp
   (use-package magit
     :init
-    (add-hook 'git-commit-mode-hook 'evil-insert-state)
+    (defun crj--set-up-git-commit-buffer ()
+      (evil-insert-state)
+      (copilot-mode -1))
+
+    (add-hook 'git-commit-mode-hook 'crj--set-up-git-commit-buffer)
     (setq evil-collection-magit-want-horizontal-movement t)
 
     :commands magit-status
