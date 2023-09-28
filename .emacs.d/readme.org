@@ -1723,8 +1723,8 @@ Only some minor settings changes from the basic setup.
     (crj-leader-keys
       "gg" '(magit-status :which-key "Launch Git interface.")
       "gm" '(magit-dispatch :which-key "Show Git HUD.")
-      "gb" '(magit-branch-or-checkout :which-key "Switch or create Git branch.")))
-
+      "gb" '(magit-branch-or-checkout :which-key "Switch or create Git branch.")
+      "gc" '(magit-clone :which-key "Git clone.")))
 #+end_src
 
 **** Magit Error Workaround
