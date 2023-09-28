@@ -1668,6 +1668,10 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
   (use-package org-gcal
     :straight (:host github :repo "kidd/org-gcal.el")
 
+    :init
+    (require 'epa-file)
+    (setq epg-pinentry-mode 'loopback)
+
     :general
     (crj-leader-keys
       "acgf" '(org-gcal-fetch :which-key "Fetch Gcal events.")))
@@ -1949,6 +1953,7 @@ Oooh.
     :init
     (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
           plstore-cache-passphrase-for-symmetric-encryption t)
+
     (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
 
   (use-package ssh-agency
