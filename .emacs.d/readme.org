@@ -197,7 +197,7 @@ The ~:prefix "SPC"~ tells ~general~ that this is a "leader key", a key that lead
 
 To see a good example of a menu with many commands in it, see the section on Helpful commands.
 
-You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's good not to bury it.
+You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's good not to bury it in a menu.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1741,6 +1741,56 @@ In the meantime, the workaround is to define ~seq-keep~ ourselves.
       (delq nil (seq-map function sequence))))
 #+end_src
 
+**** Magit As A Simple Cloud Save Feature
+
+Here, we'll adapt  Git for use not for its usual powerful version control abilities, but simply for saving to a remote repository. We're using Git, one of the most powerful and deep and flexible pieces of software ever created, as a dropbox.
+
+Somewhere Linus Torvalds is crying, but, when you aren't really working on a serious project, this can be useful!
+
+***** Our  Cloud Save Function
+
+#+begin_src emacs-lisp :lexical no
+  (defun crj-git-cloud-save ()
+    "Adds, commits, and pushes without any further input from the user.
+
+  Basically a way to use Git as an overpowered cloud save.
+
+  Does 3 things:
+
+  1. Adds all tracked files to the staging area.
+  2. Creates a commit based on the project's root directory.
+  3. Pushes the current branch to the push remote.
+
+  Adapted from this SO answer: https://emacs.stackexchange.com/questions/21597/using-magit-for-the-most-basic-add-commit-push/64991#64991.
+
+  Only changes made were:
+
+  1. Removing the command to save all open buffers. We /could/ save the visited buffer only, though even that should likely be a discrete operation.
+  2. Removing user input from the commit message altogether. It now composes a commit message using the current projectile project name.
+  3. Disabling the pop-up git status window. (It still shows in the minibuffer, as well as the buffer `shell-command-buffer-name'.)"
+
+    (interactive)
+    (magit-stage-modified)
+    (let
+        ((display-buffer-alist
+          '(shell-command-buffer-name '(#'display-buffer-no-window))))
+      (shell-command
+       (format "git commit -m \"Update %s.\""
+               (project-root (project-current t))))
+      (shell-command "git push")))
+#+end_src
+
+***** Some Shortcuts For This Workflow
+
+Both the cloud save function above, as well as a simple git pull.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "gp" '(crj-git-cloud-save :which-key "Add/commit/push tracked files to the remote.")
+      "gf" '(magit-pull :which-key "Pull from the remote.")))
+#+end_src
 
 **** Magit Forge For Git Server Integration
 
