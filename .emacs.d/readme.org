@@ -2419,47 +2419,110 @@ The greatest languages.
 
 Some general Lisp bindings.
 
-******* Menus
+******* Improving Evil For Symexes
 
-The leader-key menu is obvious—I can do something like ~SPC lsf~ to "slurp" forwards (a common Lisp action) and ~SPC lsb~ to slurp backwards.
+First off, what is a "symex"? Well, I'm not going to explain what a symbolic expression is here, but you'll see the shortening "sexp" thrown around a lot in Lisp circles, and it's just /awful/. It's a terrible, terrible name.
 
-The other two are a little weirder, but not if you're use to Evil-mode. Rather than the above, I could slurp forwards with ~] ls~ and backwards with ~[ ls~.
+"Symex" is a far better term, coined by a friend of the maker of the [[https://github.com/drym-org/symex.el][Symex package]]. I'll be using that term from now on, and if it never catches on, well, at least /I'm/ not using a terrible name for them.
 
-They're not hugely different in terms of keypress efficiency, but they /are/ pretty different in terms of their grammar. With ~SPC lsf~, you're deciding /first/ to slurp ~SPC ls~ and /then/ telling Emacs which direction you want (~f~ or ~b~). With ~] ls~, it's the other way around, where you're deciding what direction you're going, then telling it what action to perform in that direction. It's the grammatical difference between, "I go there," and "There go I".
+Anyway! I'm trying to find a way to navigate and manipulate symexes here, while keeping all of Evil's grammar.
 
-For now, I'm implementing both systems,
- #+begin_src emacs-lisp
-   (use-package emacs
-     :general
-     (crj-leader-keys
-       "l" '(:ignore t :which-key "Lisp Menu")
-       "ls" '(:ignore t :which-key "Lisp Slurp Menu")
-       "lb" '(:ignore t :which-key "Lisp Barf Menu"))
-     (:keymaps 'evil-collection-unimpaired-mode-map :states '(normal motion visual) :prefix "]"
-               "l" '(:ignore t :which-key "Symex Forward Manipulation Menu"))
-     (:keymaps 'evil-collection-unimpaired-mode-map :states '(normal motion visual) :prefix "["
-               "l" '(:ignore t :which-key "Symex Backward Manipulation Menu")))
-#+end_src
+We'll see how I do.
 
-******* Symex Manipulation
+Changes I'm going for:
 
-#+begin_src emacs-lisp
-  (use-package on-parens
+******** Move By Symbols
+
+Set ~W~/~B~ movements ignore the many many delimiters Lisps use, so that we're not stopping on parens. If I want to go to a parens, ~f(~ is way clearer. I want to go by programming symbols!
+
+This is part of the [[https://github.com/emacs-evil/evil-cleverparens][evil-cleverparens]] package.
+
+******** Move Up And Down Trees
+
+The Symex library gets away from Evil a little too much for me, but it has an /excellent/ way of moving up and down trees. See [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] to see it in action!
+
+This is what I'm thinking:
+
+- ~+~ and ~-~ to move up and down trees
+- ~M-h~ and ~M-l~ to move to the top and bottom of trees (already provbided by ~evil-cleverparens~)
+- ~(~ and ~)~ to move up or down branches
+- ~{~ and ~}~ to move to the start or end of a branch
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-cleverparens
     :init
-    (general-def '(normal motion visual) :prefix "]l"
-             "s" '(on-parens-forward-slurp :which-key "Slurp forwards.")
-             "b" '(on-parens-forward-barf :which-key "Barf forwards."))
-    (general-def '(normal motion visual) :prefix "[l"
-             "s" '(on-parens-backward-slurp :which-key "Slurp backwards.")
-             "b" '(on-parens-backward-barf :which-key "Barf backwards."))
+    (setq evil-cleverparens-use-s-and-S nil)
+    :ghook '(emacs-lisp-mode-hook racket-mode-hook)
+
+    :general
+    (general-def '(motion normal visual operator)
+      (evil-cleverparens-mode-map
+       paredit-mode-map
+       symex-mode-map)
+      "g<" 'evil-shift-left
+      "g>" 'evil-shift-right
+      "{" nil
+      "}" nil
+      "(" nil
+      ")" nil
+      "H" nil
+      "L" nil
+      "[" nil
+      "]" nil))
+
+  (use-package symex
+    :custom
+    (symex-modal-backend 'evil)
+    (symex-highlight-p nil)
+
+    :config
+    (symex-initialize)
+
+    :general
     (crj-leader-keys
-      "lsf" '(on-parens-forward-slurp :which-key "Slurp forwards.")
-      "lsb" '(on-parens-backward-slurp :which-key "Slurp backwards.")
-      "lbf" '(on-parens-forward-barf :which-key "Barf forwards.")
-      "lbb" '(on-parens-backward-barf :which-key "Barf backwards.")))
+      "l" '(symex-mode-interface :which-key "Symex Menu"))
+
+    (:states 'normal :keymaps '(emacs-lisp-mode-map
+  			      racket-mode-map
+  			      scheme-mode-map)
+
+  	   "+" 'symex-go-up
+  	   "-" 'symex-go-down
+  	   "{" 'symex-go-backward
+  	   "}" 'symex-go-forward
+  	   "(" 'symex-goto-first
+  	   ")" 'symex-goto-last))
 #+end_src
 
-******** TODO add more symex manipulation
+******** Keep Parens Balanced
+
+For example, if I delete a line with Evil's ~dd~, I usually don't want to delete the closing parens that is needed by an earlier line.
+
+~evil-cleverparens~ will do this for us.
+
+It's a weird thing, though. You spend a while adapting Evil for using with a Lisp, and you get away from using ~dd~ anyway. It's worth a try seeing if balancing the parens automatically brings it back as a tool, but... I don't know if I like using a distinctly Evil command, and giving it different behavior in Lisp contexts.
+
+I think it feels better to simply be more precise with my commands in such contexts.
+
+So I'm still not positive I want it, but I'm giving it a try!
+
+******** Manipulate Symexes
+
+Probably going to use ~evil-cleverparens~ for this, though there may be better ones out there.
+
+In particular, I like:
+
+- ~evil-cp-drag-forward~ and its backwards version, for moving symbols around. These are set to ~M-j~ and ~M-k~ by ~evil-cleverparens~.
+- ~evil-cp->~ and ~evil-cp-<~ for a symex to increase/decrease its scope ("barfing" and "slurping"), though they work most intuitively for me on the opening and closing delimiters. These are set to ~<~ and ~>~ by ~evil-cleverparens~, and I'm resetting manual indentation to ~g>~ and ~g<~ in Lisp modes.
+- ~evil-cp-insert-at-beginning-of-form~ and the end version, for inserting/appending symbols in forms. These are set automatically to ~M-i~ and ~M-a~.
+
+******** Add More Text Objects
+
+This is something that a more advanced solution could give you (maybe Treesitter?)), but for now, ~evil-cleverparens~ gives you the following text objects to manipulate:
+
+- ~f~ for a form (aka symex)
+- ~c~ for a comment (and maybe I can extend this to other languages, or find a solution for those? I do know Doom Emacs has this text object, and I miss it sometimes!)
+- ~d~ for a defun (aka a top-level symex, like a function)
 
 ****** Emacs Lisp
 
