@@ -3580,3 +3580,57 @@ Making my life easier!
 #+begin_src emacs-lisp :lexical no
   (use-package ox-gfm)
 #+end_src
+
+** TODO Config Changes
+
+*** mu4e
+
+*** proced
+
+*** Better window management
+
+**** after window split, swap windows
+
+**** windows wrap around
+
+~windmove-wrap-around~
+
+*** setup bookmark
+
+*** permanent undo tree (vundo?)
+
+*** emacs-nm
+
+*** parrot (rotate symbol at point)
+
+*** targets
+
+*** add pulsar pulse command
+
+*** kill line on insert
+
+*** get full emacs movements in minibuffer
+
+*** keycast
+
+*** search online
+
+*** open file at point
+
+*** org character marker toggle
+
+*** ibuffer filters
+
+*** kill all terms
+
+*** jest mode
+
+*** timers
+
+*** evil show ex digraphs
+
+*** ace link
+
+*** create wttrin library
+
+*** switch to mags buffer cmd
