@@ -2449,49 +2449,6 @@ This is what I'm thinking:
 - ~{~ and ~}~ to move to the start or end of a branch
 
 #+begin_src emacs-lisp :lexical no
-  (use-package evil-cleverparens
-    :init
-    (setq evil-cleverparens-use-s-and-S nil)
-    :ghook '(emacs-lisp-mode-hook racket-mode-hook)
-
-    :general
-    (general-def '(motion normal visual operator)
-      (evil-cleverparens-mode-map
-       paredit-mode-map
-       symex-mode-map)
-      "g<" 'evil-shift-left
-      "g>" 'evil-shift-right
-      "{" nil
-      "}" nil
-      "(" nil
-      ")" nil
-      "H" nil
-      "L" nil
-      "[" nil
-      "]" nil))
-
-  (use-package symex
-    :custom
-    (symex-modal-backend 'evil)
-    (symex-highlight-p nil)
-
-    :config
-    (symex-initialize)
-
-    :general
-    (crj-leader-keys
-      "l" '(symex-mode-interface :which-key "Symex Menu"))
-
-    (:states 'normal :keymaps '(emacs-lisp-mode-map
-  			      racket-mode-map
-  			      scheme-mode-map)
-
-  	   "+" 'symex-go-up
-  	   "-" 'symex-go-down
-  	   "{" 'symex-go-backward
-  	   "}" 'symex-go-forward
-  	   "(" 'symex-goto-first
-  	   ")" 'symex-goto-last))
 #+end_src
 
 ******** Keep Parens Balanced
@@ -2513,8 +2470,27 @@ Probably going to use ~evil-cleverparens~ for this, though there may be better o
 In particular, I like:
 
 - ~evil-cp-drag-forward~ and its backwards version, for moving symbols around. These are set to ~M-j~ and ~M-k~ by ~evil-cleverparens~.
-- ~evil-cp->~ and ~evil-cp-<~ for a symex to increase/decrease its scope ("barfing" and "slurping"), though they work most intuitively for me on the opening and closing delimiters. These are set to ~<~ and ~>~ by ~evil-cleverparens~, and I'm resetting manual indentation to ~g>~ and ~g<~ in Lisp modes.
+- ~evil-cp->~ and ~evil-cp-<~ for a symex to increase/decrease its scope ("barfing" and "slurping"), though they work most intuitively for me on the opening and closing delimiters. These are set to ~<~ and ~>~ by ~evil-cleverparens~, and I'm resetting manual indentation to ~g>~ and ~g<~ in Lisp modes—I don't manually indent in Lisp modes much anyway.
 - ~evil-cp-insert-at-beginning-of-form~ and the end version, for inserting/appending symbols in forms. These are set automatically to ~M-i~ and ~M-a~.
+- Quoting and unquoting via Symex commands (/not/ wrapping in quotes, but the special Lisp concept of quoting/unquoting). Unfortunately, these commands require point to be at the start of the symbol, or the start of the quote/unquote if it already has it.
+
+******** Commands That Could Be Done Structurally
+
+  I may at some point experiment with the following, all of which can be seen in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]]
+
+  - raising
+  - splitting
+  - merging
+
+    These motions don't have easy ways to do them with Evil.
+
+    For raise, I can probably do it with Evil Replace: I can yank the inner form, then go to the outer form, then run evil-replace. Not /too/ bad.
+
+    Merging is relatively easy with Evil, just hunting the opening and closing parens and using ~x~ to delete them... but possibly a command would be nice for this, so that I'm working structurally.
+
+    For splitting, I could... hmm... go to the place to split them (which you have to do with Symex's commands anyway), then enter insert state, type in the closing and opening parens, and exit back to normal state. And delete the extra parens if you have auto-pairing on.
+
+    All of those are /okay/ solutions, but if I find myself doing them more often, it may make sense to use more structural commands on them.
 
 ******** Add More Text Objects
 
@@ -2523,6 +2499,89 @@ This is something that a more advanced solution could give you (maybe Treesitter
 - ~f~ for a form (aka symex)
 - ~c~ for a comment (and maybe I can extend this to other languages, or find a solution for those? I do know Doom Emacs has this text object, and I miss it sometimes!)
 - ~d~ for a defun (aka a top-level symex, like a function)
+
+******** And, Finally, The Code That Does All That
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-cleverparens
+    :init
+    (setq evil-cleverparens-use-s-and-S nil)
+    :ghook '(emacs-lisp-mode-hook racket-mode-hook)
+
+    :general
+    (general-def
+      (evil-cleverparens-mode-map
+       paredit-mode-map
+       symex-mode-map)
+      "{" nil
+      "}" nil
+      "(" nil
+      ")" nil
+      "H" nil
+      "L" nil
+      "[" nil
+      "]" nil)
+
+    (general-def
+      (evil-cleverparens-mode-map)
+      "g<" 'evil-shift-left
+      "g>" 'evil-shift-right))
+
+  (use-package symex
+    :custom
+    (symex-modal-backend 'evil symex-highlight-p nil)
+
+    :config
+    (symex-initialize)
+
+    :general
+    (crj-leader-keys
+      "\"" '(symex-cycle-quote :which-key "Cycle symex quoting.")
+      "`" (symex-cycle-unquote :which-key "Cycle symex unquoting."))
+
+    (:states 'normal :keymaps '(emacs-lisp-mode-map
+                                racket-mode-map
+                                scheme-mode-map)
+
+             "+" 'symex-go-up
+             "-" 'symex-go-down
+             "{" 'symex-go-backward
+             "}" 'symex-go-forward
+             "(" 'symex-goto-first
+             ")" 'symex-goto-last))
+
+
+#+end_src
+
+******** So Where To Next On This?
+
+Well, I've added some nice commands that are particular to Lisp that aren't easy to do in standard Evil, but it's still not very /Evil/. None of these are motions, and I've only added one text object I couldn't easily get elsewhere (the defun).
+
+Basically, my choice appears to be:
+
+- add some one-off shortcut commands, like the cycling quoting and the slurping/barfing. But these aren't integrated into the Evil editing language in any meaningful way.
+- embrace a separate editing state to switch to for Evil, such as going full Symex, or the more popular [[https://github.com/noctuid/lispyville][Lispyville package]]. Again, not very Evil-y.
+
+  I've chosen the first one, but what I /want/ to exist is this third option:
+
+  - Evil motions and text objects for dealing with Lisp.
+
+I'm really surprised and annoyed this doesn't exist, and I really want it to.
+
+******** How An Evil Lisp Language /Should/ Work
+
+I'm unlikely to have time ever to implement this, but here are some ideas:
+
+*Motions*
+
+- quote/unquote—this should probably be similar to the popular [[https://github.com/emacs-evil/evil-surround][Evil Surround package]], where we could change the quote on a symbol or form, or delete it. (It's possible this could simply be configured with Evil Surround.)
+- traversing trees and branches as Symex does
+- insert-at-start-of and append-at-end-of, but for forms
+- change-rest, yank-rest, and delete-rest (like Evil's ~C~, ~D~, and ~Y~), but for forms
+- emit/capture ("slurp" and "barf")
+- merging
+
+  More later...
 
 ****** Emacs Lisp
 
