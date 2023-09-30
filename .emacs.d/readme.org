@@ -2529,7 +2529,8 @@ This is something that a more advanced solution could give you (maybe Treesitter
 
   (use-package symex
     :custom
-    (symex-modal-backend 'evil symex-highlight-p nil)
+    (symex-modal-backend 'evil)
+    (symex-highlight-p nil)
 
     :config
     (symex-initialize)
