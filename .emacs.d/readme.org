@@ -2581,6 +2581,26 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 - change-rest, yank-rest, and delete-rest (like Evil's ~C~, ~D~, and ~Y~), but for forms
 - emit/capture ("slurp" and "barf")
 - merging
+- transposing
+- exchanging (possibly with evil-exchange)
+- replacing (possibly with evil-replace)
+
+*text objects*
+
+- symbols
+- lists
+- defuns
+
+*additional ideas*
+
+- just like most text objects, a text object used without a motion should /default/  to traveling to the next such text object
+- all motions should take counts
+- we /could/ implement not just (i)n and (a)round but (o)uter
+- and possibly (n)ext and (p)revious, as [[https://github.com/noctuid/targets.el][targets.el]] does.
+
+*examples*
+
+-
 
   More later...
 
@@ -3777,6 +3797,10 @@ Making my life easier!
 *** mu4e
 
 *** proced
+
+*** Emacs as $EDITOR
+
+And ~e~ in any terminal should open file in Emacs buffer.
 
 *** Better window management
 
