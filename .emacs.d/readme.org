@@ -2538,7 +2538,7 @@ This is something that a more advanced solution could give you (maybe Treesitter
     :general
     (crj-leader-keys
       "\"" '(symex-cycle-quote :which-key "Cycle symex quoting.")
-      "`" (symex-cycle-unquote :which-key "Cycle symex unquoting."))
+      "`" '(symex-cycle-unquote :which-key "Cycle symex unquoting."))
 
     (:states 'normal :keymaps '(emacs-lisp-mode-map
                                 racket-mode-map
