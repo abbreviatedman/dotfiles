@@ -907,6 +907,16 @@ Another efficient text editing library. This one exchanges two bits of text in a
              "gx" '(evil-exchange :which-key "Exchange text objects.")))
 #+end_src
 
+*** Evil Jump-To-Matching For Opening And Closing Delimiters
+
+Normally, Evil jumps between brackets with ~%~. Here's one library for opening that up to things like ~if~ and ~else~ and HTML opening/closing tags and anything else you can imagine/configure.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-matchit
+    :init
+    (global-evil-matchit-mode 1))
+#+end_src
+
 *** Evil Text Objects
 
 Text Objects are a powerful concept in Vim/Evil. Let's add our own!
@@ -2404,9 +2414,11 @@ The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labore
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2)
     (setq web-mode-comment-style 2)
-    :general
-    (:keymaps 'web-mode-map
-              [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
+    ;; temporarily disabling, trying matchit
+    ;; :general
+    ;; (:keymaps 'web-mode-map
+    ;;           [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
+    )
 #+end_src
 
 ****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
