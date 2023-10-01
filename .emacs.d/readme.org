@@ -2535,7 +2535,8 @@ This is something that a more advanced solution could give you (maybe Treesitter
       "]" nil)
 
     (general-def
-      (evil-cleverparens-mode-map)
+      'normal
+      evil-cleverparens-mode-map
       "g<" 'evil-shift-left
       "g>" 'evil-shift-right))
 
