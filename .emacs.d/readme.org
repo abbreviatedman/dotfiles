@@ -865,7 +865,7 @@ This library is amazing for working with surrounding text. Changing double quote
 
 *** Evil-Style Commenting
 
-  Vim-style commenting.
+Really really great way to handle comments.
 
   #+begin_src emacs-lisp
     (use-package evil-nerd-commenter
@@ -875,7 +875,14 @@ This library is amazing for working with surrounding text. Changing double quote
       :general
       ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
       (:keymaps 'normal :prefix "g"
-                "c" '(evilnc-comment-operator :which-key "Comment operator.")))
+                "c" '(evilnc-comment-operator :which-key "Toggle comment.")
+                "C" '(evilnc-copy-and-comment-operator :which-key "Copy and comment.")
+                "K" '(evilnc-comment-box :which-key "Create comment box."))
+
+      (general-def 'normal evil-inner-text-objects-map
+        "c" #'evilnc-inner-comment)
+      (general-def 'normal evil-outer-text-objects-map
+        "c" #'evilnc-outer-comment))
 #+end_src
 
 *** Replace With Clipboard In Evil
@@ -2526,7 +2533,6 @@ In particular, I like:
 This is something that a more advanced solution could give you (maybe Treesitter?)), but for now, ~evil-cleverparens~ gives you the following text objects to manipulate:
 
 - ~f~ for a form (aka symex)
-- ~c~ for a comment (and maybe I can extend this to other languages, or find a solution for those? I do know Doom Emacs has this text object, and I miss it sometimes!)
 - ~d~ for a defun (aka a top-level symex, like a function)
 
 ******** And, Finally, The Code That Does All That
