@@ -2652,9 +2652,9 @@ There are some better tools for this when I've got the time to implement them, b
   (use-package emacs
     :general
     (crj-leader-keys
-      "ef" '(eval-defun :which-key "Evaluate current function.")
-      "es" '(eval-last-sexp :which-key "Evaluate last symex.")
-      "eb" '(eval-buffer :which-key "Evaluate current buffer."))
+      "ed" '(eval-defun :which-key "Evaluate current function.")
+      "ef" '(eval-last-sexp :which-key "Evaluate last symex.")
+      "ee" '(eval-buffer :which-key "Evaluate current buffer."))
 
     (:keymaps 'racket-mode-map :states '(insert emacs)
               "C-x C-e" '(racket-eval-last-sexp :which-key "Evaluate last symex.")))
