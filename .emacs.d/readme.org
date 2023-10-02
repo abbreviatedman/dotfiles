@@ -2554,7 +2554,27 @@ This is something that a more advanced solution could give you (maybe Treesitter
 ******** And some code to test it on
 
 #+begin_src emacs-lisp :lexical no
-  (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
+  ;; (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
+
+  ;; (defconst my-message "hello")
+  ;; (defconst failure-message "not equal")
+
+  ;; (defun lisp-playground-test-fun ()
+  ;;   "Just a test function to play with some code."
+  ;;   (interactive)
+  ;;   (if (string-equal "hello" my-message)
+  ;;     (message "they're equal")
+  ;;   (message failure-message)))
+
+  ;; (defun should-have-sharp-quote ()
+  ;;   "Just testing."
+  ;;   (interactive)
+  ;;   (message "this should have a sharp quote"))
+
+  ;; (crj-leader-keys
+  ;;   "l" #'lisp-playground-test-fun
+  ;;   "k" 'should-have-sharp-quote
+  ;;   "bm" (lambda () (interactive) (message "test lambda")))
 #+end_src
 
 ******** So Where To Next On This?
