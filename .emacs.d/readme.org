@@ -2522,10 +2522,12 @@ This is something that a more advanced solution could give you (maybe Treesitter
              :keymaps crj--lisp-mode-maps
              "+" #'on-parens-down-sexp
              "-" #'on-parens-up-sexp
-             "{" #'on-parens-backward-sexp-in-supersexp
-             "}" #'on-parens-forward-sexp-in-supersexp
+             "H" #'on-parens-backward-sexp-in-supersexp
+             "L" #'on-parens-forward-sexp-in-supersexp
              "(" #'on-parens-backward-sexp
              ")" #'on-parens-forward-sexp
+             "{" #'on-parens-backward-sexp-end
+             "}" #'on-parens-forward-sexp-end
              "|" #'on-parens-split-supersexp
              "&" #'on-parens-join-neighbor-sexp
              "<" #'on-parens-backward-slurp
