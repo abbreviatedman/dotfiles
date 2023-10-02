@@ -937,6 +937,16 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
   :commands (evil-outer-xml-attr evil-inner-xml-attr))
 #+end_src
 
+**** Evil Argument Text Object
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-args
+    :general
+    (general-def evil-inner-text-objects-map
+  	    "a" 'evil-inner-arg)
+    (general-def evil-outer-text-objects-map
+  	    "a" 'evil-outer-arg))
+#+end_src
 **** Entire Buffer Evil Text Object
 
 A surprisingly useful Evil text object for the entire buffer.
