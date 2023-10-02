@@ -964,6 +964,19 @@ I'm pretty sure I'm going to find a use for this!
     (evil-textobj-between-a-key "t")
     (evil-textobj-between-i-key "t"))
 #+end_src
+
+**** Evil Text Object For A Line
+
+This is a weird one, since Evil is /designed/ to work with lines—it's one of its central ways to work, to the point where repeating an operator like ~d~ or ~c~ or many third-party operators defaults to acting on the line.
+
+Making it an official text object with an inner variant does, however, allow you to work on the /text/ of the line without any indentation or trailing whitespace.
+
+And if you want the indentation or trailing whitespace, you can work with the outer variant. Or, again, just the standard work-on-a-line-by-default version of any command!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-textobj-line)
+#+end_src
+
 *** Evil Search From Visual Mode
 
 Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search for that text. Very occasionally very useful!
