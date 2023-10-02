@@ -3313,9 +3313,9 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 
 #+begin_src emacs-lisp
   (use-package all-the-icons)
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 15)))
+  ;; (use-package doom-modeline
+  ;;   :init (doom-modeline-mode 1)
+  ;;   :custom ((doom-modeline-height 15)))
 #+end_src
 
 ** Improving Help Commands
