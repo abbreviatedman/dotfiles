@@ -1480,6 +1480,15 @@ Let's visualize our indentation!
     (highlight-indent-guides-method 'bitmap))
 #+end_src
 
+*** Folding
+
+#+begin_src emacs-lisp :lexical no
+  (use-package vimish-fold)
+  (use-package evil-vimish-fold
+    :init
+    (global-evil-vimish-fold-mode))
+#+end_src
+
 ** Applications
 
 This section is for parts of Emacs that are well-integrated applications.
