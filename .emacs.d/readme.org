@@ -2511,56 +2511,29 @@ This is something that a more advanced solution could give you (maybe Treesitter
 ******** And, Finally, The Code That Does All That
 
 #+begin_src emacs-lisp :lexical no
-  (use-package evil-cleverparens
-    :init
-    (setq evil-cleverparens-use-s-and-S nil)
-    :ghook '(emacs-lisp-mode-hook racket-mode-hook)
-
+  (use-package on-parens
     :general
-    (general-def
-      (evil-cleverparens-mode-map
-       paredit-mode-map
-       symex-mode-map)
-      "{" nil
-      "}" nil
-      "(" nil
-      ")" nil
-      "H" nil
-      "L" nil
-      "[" nil
-      "]" nil)
+    (:states 'normal
+             :keymaps crj--lisp-mode-maps
+             "g<" #'evil-shift-left
+             "g>" #'evil-shift-right)
 
-    (general-def
-      'normal
-      evil-cleverparens-mode-map
-      "g<" 'evil-shift-left
-      "g>" 'evil-shift-right))
-
-  (use-package symex
-    :custom
-    (symex-modal-backend 'evil)
-    (symex-highlight-p nil)
-
-    :config
-    (symex-initialize)
-
-    :general
-    (crj-leader-keys
-      "\"" '(symex-cycle-quote :which-key "Cycle symex quoting.")
-      "`" '(symex-cycle-unquote :which-key "Cycle symex unquoting."))
-
-    (:states 'normal :keymaps '(emacs-lisp-mode-map
-                                racket-mode-map
-                                scheme-mode-map)
-
-             "+" 'symex-go-up
-             "-" 'symex-go-down
-             "{" 'symex-go-backward
-             "}" 'symex-go-forward
-             "(" 'symex-goto-first
-             ")" 'symex-goto-last))
-
-
+    (:states '(normal motion operator)
+             :keymaps crj--lisp-mode-maps
+             "+" #'on-parens-down-sexp
+             "-" #'on-parens-up-sexp
+             "{" #'on-parens-backward-sexp-in-supersexp
+             "}" #'on-parens-forward-sexp-in-supersexp
+             "(" #'on-parens-backward-sexp
+             ")" #'on-parens-forward-sexp
+             "|" #'on-parens-split-supersexp
+             "&" #'on-parens-join-neighbor-sexp
+             "<" #'on-parens-backward-slurp
+             ">" #'on-parens-forward-slurp
+             "M-<" #'on-parens-backward-barf
+             "M->" #'on-parens-forward-barf
+             "M-[" (lambda (count) (interactive "p") (transpose-sexps (- count)))
+             "M-]" #'transpose-sexps))
 #+end_src
 
 ******** So Where To Next On This?
