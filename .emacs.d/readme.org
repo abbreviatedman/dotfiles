@@ -2536,6 +2536,12 @@ This is something that a more advanced solution could give you (maybe Treesitter
              "M-]" #'transpose-sexps))
 #+end_src
 
+******** And some code to test it on
+
+#+begin_src emacs-lisp :lexical no
+  (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
+#+end_src
+
 ******** So Where To Next On This?
 
 Well, I've added some nice commands that are particular to Lisp that aren't easy to do in standard Evil, but it's still not very /Evil/. None of these are motions, and I've only added one text object I couldn't easily get elsewhere (the defun).
