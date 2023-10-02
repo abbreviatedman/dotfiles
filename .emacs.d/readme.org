@@ -2542,9 +2542,7 @@ This is something that a more advanced solution could give you (maybe Treesitter
              "<" #'on-parens-backward-slurp
              ">" #'on-parens-forward-slurp
              "M-<" #'on-parens-backward-barf
-             "M->" #'on-parens-forward-barf
-             "M-[" (lambda (count) (interactive "p") (transpose-sexps (- count)))
-             "M-]" #'transpose-sexps))
+             "M->" #'on-parens-forward-barf))
 #+end_src
 
 ******** And some code to test it on
