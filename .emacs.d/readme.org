@@ -985,6 +985,17 @@ Shows you the difference between two different bits of text. Another very occasi
     :commands (evil-quick-diff evil-quick-diff-cancel))
 #+end_src
 
+*** Evil Evaluating
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-extra-operator
+    :general
+    (crj-leader-keys
+      "e" #'evil-operator-eval
+      "E" #'evil-operator-eval-replace
+      "C" #'evil-operator-clone))
+#+end_src
+
 *** Number Incrementing and Decrementing
 
 #+begin_src emacs-lisp
