@@ -950,6 +950,20 @@ A surprisingly useful Evil text object for the entire buffer.
                :repo "nscoder/evil-textobj-entire"))
   #+end_src
 
+**** Between Characters Text Object
+
+I'm pretty sure I'm going to find a use for this!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-textobj-between
+    :straight (:host github
+                     :repo "tarao/evil-plugins"
+                     :files ("evil-textobj-between.el"))
+
+    :custom
+    (evil-textobj-between-a-key "t")
+    (evil-textobj-between-i-key "t"))
+#+end_src
 *** Evil Search From Visual Mode
 
 Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search for that text. Very occasionally very useful!
