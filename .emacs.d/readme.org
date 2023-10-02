@@ -2417,6 +2417,16 @@ The greatest languages.
 
 Some general Lisp bindings.
 
+******* Lisp Modes
+
+These are useful lists for mass configuration.
+
+#+begin_src emacs-lisp :lexical no
+  (defconst crj--lisp-modes '(emacs-lisp-mode racket-mode scheme-mode))
+  (defconst crj--lisp-mode-hooks '(emacs-lisp-mode-hook racket-mode-hook scheme-mode-hook))
+  (defconst crj--lisp-mode-maps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map))
+#+end_src
+
 ******* Improving Evil For Symexes
 
 First off, what is a "symex"? Well, I'm not going to explain what a symbolic expression is here, but you'll see the shortening "sexp" thrown around a lot in Lisp circles, and it's just /awful/. It's a terrible, terrible name.
