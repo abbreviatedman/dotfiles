@@ -1468,6 +1468,18 @@ When displaying code to others, it's often good to make the line numbers absolut
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
 
+*** Indentation
+
+Let's visualize our indentation!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package highlight-indent-guides
+    :ghook 'prog-mode-hook
+
+    :custom
+    (highlight-indent-guides-method 'bitmap))
+#+end_src
+
 ** Applications
 
 This section is for parts of Emacs that are well-integrated applications.
