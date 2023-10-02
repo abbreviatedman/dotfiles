@@ -2551,12 +2551,15 @@ This is something that a more advanced solution could give you (maybe Treesitter
       "W" #'evil-cp-forward-symbol-begin
       "E" #'evil-cp-forward-symbol-end
       "B" #'evil-cp-backward-symbol-begin
-      "gE" #'evil-cp-backward-symbol-end))
+      "gE" #'evil-cp-backward-symbol-end)
+
+    (general-def 'normal (evil-inner-text-objects-map evil-outer-text-objects-map)
+      "f" #'evil-cp-inner-form
+      "d" #'evil-cp-inner-defun))
 
   (use-package on-parens
     :general
     (:states 'normal
-             :keymaps crj--lisp-mode-maps
              "g<" #'evil-shift-left
              "g>" #'evil-shift-right)
 
