@@ -662,27 +662,81 @@ Literate programming for fun and profit. Or... at least, for fun.
 
 The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
 
-Much of the below is just about getting Markdown to get the look I describe in the ~Fonts~ section. Eventually I need to universalize that code—maybe even getting a minor mode together.
+Now heavily customized!
 
-~edit-indirect~ is a Markdown Mode package that allows you to edit an embedded code block in a dedicated code-oriented buffer, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
+Let's see if we can hit these quickly. We:
+
+- set ~gfm-mode~ to be the main mode we use for Markdown files.
+- set Variable Pitch mode to run in Markdown buffers
+- set a bunch of markdown-mode's configuration variables you can check out yourself
+- make sure our fonts scale appropriately
+- add a command to add a new heading, similar to org mode's approach (should definitely be refactored at some point)
+- set my favorite JS mode to run for JS code blocks: RJSX Mode
+- allow promotion, demotion, and movement in insert state
+- Add ~edit-indirect~, a package that allows you to edit an embedded code block in a dedicated code-oriented buffer in Markdown buffers, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
+- Add some Evil keybindings with Evil Markdown Mode.
+
+And we're done at a mere 58 lines of code! (Though... again, I can probably simplify my little custom add-a-heading function.)
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
 
-    :hook (markdown-mode . variable-pitch-mode)
+    :gfhook #'variable-pitch-mode
 
     :init
     (setq markdown-indent-on-enter 'indent-and-new-item
-          markdown-list-indent-width 2)
+          markdown-list-indent-width 2
+          markdown-fontify-code-blocks-natively t
+          markdown-asymmetric-header t)
 
     (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
       (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
 
+    (defun crj-add-markdown-header ()
+      "Add a markdown header after the current one, at the same level."
+      (interactive)
+      (let ((level (crj--get-markdown-level)))
+        (when (thing-at-point-looking-at markdown-regex-header)
+          (forward-char))
+        (if (re-search-forward markdown-regex-header nil t)
+            (forward-line -1)
+          (goto-char (point-max)))
+        (markdown-insert-header level nil nil))
+      (when (featurep 'evil)
+        (evil-insert-state)))
+
+    (defun crj--get-markdown-level ()
+      "Helper function to get the current markdown heading level.
+
+  Used by `crj-add-markdown-header'"
+      (save-excursion
+        (unless (thing-at-point-looking-at markdown-regex-header)
+          (re-search-backward markdown-regex-header nil t))
+        (markdown-outline-level)))
+
     :config
-    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
+    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode))
+
+    :general
+    (general-def 'insert markdown-mode-map
+      "M-l" #'markdown-demote
+      "M-h" #'markdown-promote
+      "M-k" #'markdown-move-up
+      "M-j" #'markdown-move-down)
+
+    (general-def '(insert normal) markdown-mode-map
+      "C-<return>" #'crj-add-markdown-header))
 
   (use-package edit-indirect)
+
+  (use-package evil-markdown
+    :straight (:host github
+                       :repo "Somelauw/evil-markdown")
+
+    :after markdown-mode
+
+    :ghook ('(markdown-mode-hook gfm-mode-hook)))
 #+end_src
 
 *** HTML
@@ -3730,61 +3784,13 @@ Making my life easier!
 
 *** timers
 
-*** Markdown Settings
-
-#+begin_src emacs-lisp :lexical no :tangle no
-  (defun crj/kill-and-stop-editing ()
-    (interactive)
-    (crj/kill-all-text-in-buffer)
-    (evil-force-normal-state))
-
-  (use-package! markdown-mode
-    :config
-    (setq markdown-fontify-code-blocks-natively t
-          markdown-list-indent-width 2
-          markdown-indent-on-enter 'indent-and-new-item
-          markdown-header-scaling t
-          markdown-header-scaling-values '(2.5
-                                           2.0
-                                           2.0
-                                           1.5
-                                           1.0
-                                           1.0))
-
-    (define-key markdown-mode-command-map (kbd "d") #'crj/kill-and-stop-editing)
-    (define-key markdown-mode-map (kbd "C-c d") #'crj/kill-and-stop-editing)
-    (define-key markdown-mode-command-map (kbd "C-d") #'crj/kill-and-stop-editing)
-    (add-hook 'markdown-mode-hook #'variable-pitch-mode)
-    (evil-define-key
-      'normal markdown-mode-map
-      "gj" #'evil-next-visual-line
-      "gk" #'evil-previous-visual-line)
-    (evil-define-key 'insert markdown-mode-map
-      (kbd "TAB") #'markdown-demote
-      (kbd "<backtab>") #'markdown-promote
-      (kbd "M-b") #'backward-word)
-    (define-key markdown-mode-style-map (kbd "b") #'backward-word)
-
-    (map!
-     (:prefix "["
-      :n "[" #'markdown-backward-same-level)
-     (:prefix "]"
-      :n "]" #'markdown-forward-same-level)))
-
-  (use-package! evil-markdown
-    :after markdown-mode
-    :config
-    (evil-define-key 'insert evil-markdown-mode-map (kbd "M-b") nil)
-    (evil-define-key 'normal evil-markdown-mode-map
-      "gj" #'evil-next-visual-line
-      "gk" #'evil-previous-visual-line))
-#+end_src
+*** Add markup mode add-heading-above command
 
 *** switch to msgs buffer cmd
 
 *** targets
 
-*** kill line on insert
+*** kill rest of line in insert state
 
 *** get full emacs movements in minibuffer
 
