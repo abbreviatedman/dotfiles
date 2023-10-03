@@ -1639,6 +1639,21 @@ When displaying code to others, it's often good to make the line numbers absolut
 
 *** Indentation
 
+**** Spaces Over Tabs
+
+The eternal struggle.
+
+(I'm referring of course to both the struggle between the two sides and the struggle between the user and Emacs.)
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq-default indent-tabs-mode nil)
+    (setq standard-indent 2))
+#+end_src
+
+**** Visualize Indentation Level
+
 Let's visualize our indentation!
 
 #+begin_src emacs-lisp :lexical no
