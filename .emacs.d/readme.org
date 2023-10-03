@@ -1655,6 +1655,7 @@ Let's visualize our indentation!
   (use-package vimish-fold)
   (use-package evil-vimish-fold
     :init
+    (setq evil-vimish-fold-target-modes '(prog-mode text-mode))
     (global-evil-vimish-fold-mode))
 #+end_src
 
