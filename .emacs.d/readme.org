@@ -640,6 +640,74 @@ Literate programming for fun and profit. Or... at least, for fun.
        )))
 #+end_src
 
+*** Markdown
+
+The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
+
+Much of the below is just about getting Markdown to get the look I describe in the ~Fonts~ section. Eventually I need to universalize that code—maybe even getting a minor mode together.
+
+~edit-indirect~ is a Markdown Mode package that allows you to edit an embedded code block in a dedicated code-oriented buffer, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
+
+    :hook (markdown-mode . variable-pitch-mode)
+
+    :init
+    (setq markdown-indent-on-enter 'indent-and-new-item
+          markdown-list-indent-width 2)
+
+    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
+
+    :config
+    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
+
+  (use-package edit-indirect)
+#+end_src
+
+*** HTML
+
+The ugly-but-fully-featured markup language.
+
+The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labored over—which probably means that someone else has already added that feature, but it was fun to code it. What it does is make the Evil ~%~ command, which bounces between matching delimiters, do the same for opening and closing tags. It leverages some great ~web-mode~ commands and variables.
+
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :init
+    (defun crj-web-mode-goto-matching-tag ()
+      (interactive)
+      (let ((opening-start (caar (web-mode-element-boundaries)))
+            (opening-end (cdar (web-mode-element-boundaries)))
+            (closing-start (cadr (web-mode-element-boundaries)))
+            (closing-end (cddr (web-mode-element-boundaries))))
+        (if (and (>= (point) opening-start)
+                 (<= (point) opening-end))
+            (web-mode-element-end)
+          (web-mode-element-beginning))))
+
+    :commands (web-mode)
+
+    :mode (("\\.html" . web-mode)
+           ("\\.htm" . web-mode)
+           ("\\.sgml\\'" . web-mode))
+
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-comment-style 2)
+    ;; temporarily disabling, trying matchit
+    ;; :general
+    ;; (:keymaps 'web-mode-map
+    ;;           [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
+    )
+#+end_src
+
+****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
+
+
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
@@ -947,6 +1015,7 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
     (general-def evil-outer-text-objects-map
   	    "a" 'evil-outer-arg))
 #+end_src
+
 **** Entire Buffer Evil Text Object
 
 A surprisingly useful Evil text object for the entire buffer.
@@ -2443,73 +2512,6 @@ The code above and below were fun coding challenges for me as I learn a bit more
 **** Languages
 
 Configurations specific to certain languages.
-
-***** Markdown
-
-The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
-
-Much of the below is just about getting Markdown to get the look I describe in the ~Fonts~ section. Eventually I need to universalize that code—maybe even getting a minor mode together.
-
-~edit-indirect~ is a Markdown Mode package that allows you to edit an embedded code block in a dedicated code-oriented buffer, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
-
-#+begin_src emacs-lisp
-  (use-package markdown-mode
-    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
-
-    :hook (markdown-mode . variable-pitch-mode)
-
-    :init
-    (setq markdown-indent-on-enter 'indent-and-new-item
-          markdown-list-indent-width 2)
-
-    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
-
-    :config
-    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode)))
-
-  (use-package edit-indirect)
-#+end_src
-
-***** HTML
-
-The ugly-but-fully-featured markup language.
-
-The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labored over—which probably means that someone else has already added that feature, but it was fun to code it. What it does is make the Evil ~%~ command, which bounces between matching delimiters, do the same for opening and closing tags. It leverages some great ~web-mode~ commands and variables.
-
-#+begin_src emacs-lisp
-  (use-package web-mode
-    :init
-    (defun crj-web-mode-goto-matching-tag ()
-      (interactive)
-      (let ((opening-start (caar (web-mode-element-boundaries)))
-            (opening-end (cdar (web-mode-element-boundaries)))
-            (closing-start (cadr (web-mode-element-boundaries)))
-            (closing-end (cddr (web-mode-element-boundaries))))
-        (if (and (>= (point) opening-start)
-                 (<= (point) opening-end))
-            (web-mode-element-end)
-          (web-mode-element-beginning))))
-
-    :commands (web-mode)
-
-    :mode (("\\.html" . web-mode)
-           ("\\.htm" . web-mode)
-           ("\\.sgml\\'" . web-mode))
-
-    :config
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq web-mode-comment-style 2)
-    ;; temporarily disabling, trying matchit
-    ;; :general
-    ;; (:keymaps 'web-mode-map
-    ;;           [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
-    )
-#+end_src
-
-****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
 
 ***** Lisps
 
