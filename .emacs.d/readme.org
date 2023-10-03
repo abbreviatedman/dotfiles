@@ -690,9 +690,6 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
           markdown-fontify-code-blocks-natively t
           markdown-asymmetric-header t)
 
-    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
-
     (defun crj-add-markdown-header ()
       "Add a markdown header after the current one, at the same level."
       (interactive)
@@ -2245,9 +2242,11 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
           modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
 
+    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
+
     (mapc #'disable-theme custom-enabled-themes)
-    (load-theme 'modus-operandi-deuteranopia :no-confirm)
-    )
+    (load-theme 'modus-operandi-deuteranopia :no-confirm))
 #+end_src
 
 **** Ef Themes
@@ -2801,38 +2800,6 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 ******** TODO configure keybindings
 ******** TODO figure out evil keybindings for movement
-
-******* Emacs Lisp Evaluation
-
-First, a menu for evaluating code.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys "e" '(:ignore t :which-key "Evaluation menu.")))
-#+end_src
-
-Now, let's add keybindings for evaluating the current function, symex, and buffer.
-
-There are some better tools for this when I've got the time to implement them, but for now, I'm just using Racket's evaluation in Racket Mode.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "ed" '(eval-defun :which-key "Evaluate current function.")
-      "ef" '(eval-last-sexp :which-key "Evaluate last symex.")
-      "ee" '(eval-buffer :which-key "Evaluate current buffer."))
-
-    (:keymaps 'racket-mode-map :states '(insert emacs)
-              "C-x C-e" '(racket-eval-last-sexp :which-key "Evaluate last symex.")))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package quickrun)
-#+end_src
-
-******** TODO figure out how to quickrun a region—see how doom package emacs-lisp module does it
 
 ******* Emacs Lisp Documentation Lookup
 
