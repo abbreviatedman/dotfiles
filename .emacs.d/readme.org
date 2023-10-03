@@ -671,22 +671,8 @@ Much of the below is just about getting Markdown to get the look I describe in t
 
 The ugly-but-fully-featured markup language.
 
-The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labored over—which probably means that someone else has already added that feature, but it was fun to code it. What it does is make the Evil ~%~ command, which bounces between matching delimiters, do the same for opening and closing tags. It leverages some great ~web-mode~ commands and variables.
-
 #+begin_src emacs-lisp
   (use-package web-mode
-    :init
-    (defun crj-web-mode-goto-matching-tag ()
-      (interactive)
-      (let ((opening-start (caar (web-mode-element-boundaries)))
-            (opening-end (cdar (web-mode-element-boundaries)))
-            (closing-start (cadr (web-mode-element-boundaries)))
-            (closing-end (cddr (web-mode-element-boundaries))))
-        (if (and (>= (point) opening-start)
-                 (<= (point) opening-end))
-            (web-mode-element-end)
-          (web-mode-element-beginning))))
-
     :commands (web-mode)
 
     :mode (("\\.html" . web-mode)
@@ -694,19 +680,11 @@ The ~crj-web-mode-goto-matching-tag~ function is a custom function that I labore
            ("\\.sgml\\'" . web-mode))
 
     :config
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq web-mode-comment-style 2)
-    ;; temporarily disabling, trying matchit
-    ;; :general
-    ;; (:keymaps 'web-mode-map
-    ;;           [remap evil-jump-item] #'crj-web-mode-goto-matching-tag))
-    )
+    (setq web-mode-markup-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-comment-style 2))
 #+end_src
-
-****** TODO add a ~cond~ to make sure the above function delegates to `evil-jump-item` when it's not in a tag, and also checks if it's in the closing tag, for proper robustness
-
 
 ** Evil Mode
 
