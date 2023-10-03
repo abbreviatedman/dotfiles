@@ -602,6 +602,24 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
 #+end_src
 
+**** Org Refiling
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org
+    :init
+    (setq org-refile-use-outline-path t
+          org-refile-targets
+          '((org-agenda-files . (:maxlevel . 6))))
+
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+    (defun crj-refile-in-current-buffer ()
+      (interactive)
+      (let ((org-refile-use-outline-path t)
+            (org-refile-targets '((nil . (:maxlevel . 6)))))
+        (org-refile))))
+#+end_src
+
 **** Org Exporting
 
 #+begin_src emacs-lisp
