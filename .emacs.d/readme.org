@@ -945,10 +945,6 @@ Also included is a nifty function that deletes everything but one space before t
              "<S-backspace>" #'just-one-space))
 #+end_src
 
-**** TODOS
-***** TODO add ~C-K~ and ~C-u~
-***** TODO add commands to minibuffer editing
-
 *** Visualizing Evil Commands
 
 ~evil-goggles~ helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
