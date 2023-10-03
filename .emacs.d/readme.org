@@ -2246,6 +2246,16 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
     (ws-butler-global-mode))
 #+end_src
 
+**** Undoing
+
+Vundo (Visualize Undo) takes Emac's very powerful and /very/ unintuitive undo system and gives you a nice navigable tree for it.
+
+There are alternatives, but Vundo integrates nicely with Evil through the Evil Collection package, and also avoids changing anything about the actual undo system you use. Simple packages is better packages.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package vundo)
+#+end_src
+
 **** Searching In Buffer
 
 What I'm trying now is:
@@ -3705,8 +3715,6 @@ Making my life easier!
 ** Config Changes Todo
 
 *** timers
-
-*** permanent undo tree (vundo?)
 
 *** Markdown Settings
 
