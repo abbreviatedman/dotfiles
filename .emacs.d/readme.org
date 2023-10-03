@@ -1001,7 +1001,6 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
     :init
     (global-evil-visualstar-mode))
 #+end_src
-**** TODO add more evil text objects
 **** TODO add targets
 **** TODO add Tree-sitter in Emacs 29
 
@@ -2247,6 +2246,23 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
 #+end_src
 
 **** Undoing
+
+***** Saving Undo History
+
+Losing undos if you quit your editor is kind of a pain. Saving your undo history is just a great great idea.
+
+Undo Fu Session is my solution here—it's meant to work with the Undo Fu package, but works just fine with vanilla Emacs' undo system.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package undo-fu-session
+    :init
+    (undo-fu-session-global-mode)
+
+    :custom
+    (undo-fu-session-file-limit 100000))
+#+end_src
+
+***** Visualizing Undo History
 
 Vundo (Visualize Undo) takes Emac's very powerful and /very/ unintuitive undo system and gives you a nice navigable tree for it.
 
