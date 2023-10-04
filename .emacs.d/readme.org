@@ -982,17 +982,27 @@ I'm still a /big/ fan of modal editing, since you spend so much time straight up
 
 [[./assets/funky-flow.gif]]
 
-Also included is a nifty function that deletes everything but one space before the cursor, super useful if you've accidentally got a bunch of accidental whitespace. Very occasionally super useful.
+Also included is some readline commands that aren't in actual Emacs, like ~kill-line~ and ~backwards-kill-sentence~ and (sometimes excluded) ~backward-kill-word~.
+
+Also included is a nifty function that deletes everything but one space before the cursor, super useful if you've got a bunch of accidental whitespace. Okay, it's only very /occasionally/ super useful, but I use it every couple of weeks and it's great.
 
 #+begin_src emacs-lisp
   (use-package evil
     :general
+    (general-def global-map
+      "C-u" #'backward-kill-sentence
+      "C-w" #'backward-kill-word)
+
     (:states 'insert
              "C-n" #'next-line
              "C-p" #'previous-line
              "C-e" #'end-of-visual-line
              "C-a" #'beginning-of-visual-line
              "C-d" #'delete-char
+             "C-S-k" #'evil-insert-digraph
+             "C-k" #'kill-line
+             "C-u" #'backward-kill-sentence
+             "C-w" #'backward-kill-word
              "<S-backspace>" #'just-one-space))
 #+end_src
 
