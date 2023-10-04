@@ -324,6 +324,21 @@ Searching a markup outline.
       "m." '(consult-outline :which-key "Search markup outline.")))
 #+end_src
 
+*** Emmet Abbreviations
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emmet-mode
+    :ghook
+    'sgml-mode-hook
+    'css-mode-hook
+    'html-mode-hook
+    'web-mode-hook
+
+    :init
+    (setq emmet-move-cursor-between-quotes t
+          emmet-self-closing-tag-style " /"))
+#+end_src
+
 *** Org Mode
 
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
