@@ -3898,10 +3898,6 @@ I'd like to clean it up, and... maybe make Evil states more visible? Probably do
 
 *** targets
 
-*** kill rest of line in insert state
-
-*** get full emacs movements in minibuffer
-
 *** evil show ex digraphs
 
 *** ace link
