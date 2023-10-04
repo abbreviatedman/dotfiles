@@ -3346,8 +3346,12 @@ And an extra package for completing Org blocks.
 
 #+begin_src emacs-lisp
   (use-package eglot
-    :config
+    :init
     (setq completion-category-overrides '((eglot (styles orderless))))
+    (add-hook 'rjsx-mode-hook #'eglot-ensure)
+    (add-hook 'typescript-mode-hook #'eglot-ensure)
+
+    :config
     (add-to-list 'eglot-server-programs
                  '((typescript-mode)
                    "typescript-language-server"
