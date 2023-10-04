@@ -3145,6 +3145,51 @@ Here that all is!
               "M-DEL" #'vertico-directory-delete-word))
 #+end_src
 
+***** Embark
+
+#+begin_src emacs-lisp :lexical no
+  (use-package embark
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ;; ("C-;" . embark-dwim)        ;; good alternative: M-.
+     ("C->" . crj-embark-act-noquit)
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command)
+    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+
+    (defun crj-embark-act-noquit ()
+      "Run action but don't quit the minibuffer afterwards."
+      (interactive)
+      (let ((embark-quit-after-action nil))
+        (embark-act)))
+
+    :config
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none))))
+
+    (defvar-keymap embark-help-actions
+      :doc "Keymap for actions for help searches."
+      :parent embark-general-map)
+
+    (add-to-list 'embark-keymap-alist '(help . embark-help-actions))
+
+    :general
+    (general-def (embark-become-help-map embark-symbol-map)
+      "x" #'execute-extended-command)
+    (general-def (embark-command-map embark-function-map)
+      "h" #'helpful-command)
+    (general-def (embark-become-file+buffer-map)
+      "d" #'delete-file))
+
+  (use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
 **** Minibuffer Search Data Sets
 
 ~consult~ is a library containing a set of functions that each search a different set of data. That sounds dry, but it's really not!
@@ -3892,8 +3937,6 @@ I'd like to clean it up, and... maybe make Evil states more visible? Probably do
 ** Config Changes Todos
 
 *** timers
-
-*** embark
 
 *** Add markup mode add-heading-above command
 
