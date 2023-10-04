@@ -328,7 +328,7 @@ Searching a markup outline.
 
 These abbreviations are a great tool for HTML, to the point where they're built into many editors now. But not Emacs, so they're a package.
 
-If you don't know at least the simple Emmet abbreviations, and you write HTML, man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
+If you don't know at least the simple Emmet abbreviations, and you write HTML... man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
 
 #+begin_src emacs-lisp :lexical no
   (use-package emmet-mode
@@ -1108,9 +1108,9 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
   (use-package evil-args
     :general
     (general-def evil-inner-text-objects-map
-  	    "a" 'evil-inner-arg)
+            "a" 'evil-inner-arg)
     (general-def evil-outer-text-objects-map
-  	    "a" 'evil-outer-arg))
+            "a" 'evil-outer-arg))
 #+end_src
 
 **** Entire Buffer Evil Text Object
@@ -2221,7 +2221,7 @@ Measure startup time using an excellent bit of code taken from Emacs From Scratc
 
 *** Minibuffers
 
-Save minibuffer history.
+**** Save Minibuffer History
 
 #+begin_src emacs-lisp
 (use-package savehist
@@ -2229,13 +2229,15 @@ Save minibuffer history.
   (savehist-mode))
 #+end_src
 
-Allow minibuffers within minibuffers.
+**** Allow Minibuffers Within Minibuffers
 
 #+begin_src emacs-lisp
   (use-package emacs
     :init
     (setq enable-recursive-minibuffers t))
 #+end_src
+
+**** Don't Show Keyboard Shortcuts Immediately
 
 Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
 
@@ -2244,8 +2246,6 @@ Set the current keyboard shortcut I'm typing to only show up after 3 seconds of 
     :init
     (setq echo-keystrokes 3))
 #+end_src
-
-**** TODO possibly make this toggleable to nil for presenting code
 
 *** Secrets
 
@@ -2636,16 +2636,6 @@ The greatest languages.
 
 Some general Lisp bindings.
 
-******* Lisp Modes
-
-These are useful lists for mass configuration.
-
-#+begin_src emacs-lisp :lexical no
-  (defconst crj--lisp-modes '(emacs-lisp-mode racket-mode scheme-mode))
-  (defconst crj--lisp-mode-hooks '(emacs-lisp-mode-hook racket-mode-hook scheme-mode-hook))
-  (defconst crj--lisp-mode-maps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map))
-#+end_src
-
 ******* Improving Evil For Symexes
 
 First off, what is a "symex"? Well, I'm not going to explain what a symbolic expression is here, but you'll see the shortening "sexp" thrown around a lot in Lisp circles, and it's just /awful/. It's a terrible, terrible name.
@@ -2697,7 +2687,7 @@ Probably going to use ~evil-cleverparens~ for this, though there may be better o
 In particular, I like:
 
 - ~evil-cp-drag-forward~ and its backwards version, for moving symbols around. These are set to ~M-j~ and ~M-k~ by ~evil-cleverparens~.
-- ~evil-cp->~ and ~evil-cp-<~ for a symex to increase/decrease its scope ("barfing" and "slurping"), though they work most intuitively for me on the opening and closing delimiters. These are set to ~<~ and ~>~ by ~evil-cleverparens~, and I'm resetting manual indentation to ~g>~ and ~g<~ in Lisp modes—I don't manually indent in Lisp modes much anyway.
+- ~evil-cp->~ and ~evil-cp-<~ for a symex to increase/decrease its scope ("barfing" and "slurping"). These are set to ~<~ and ~>~ by ~evil-cleverparens~, and I'm resetting manual indentation to ~g>~ and ~g<~ in Lisp modes—I don't manually indent in Lisp modes much anyway.
 - ~evil-cp-insert-at-beginning-of-form~ and the end version, for inserting/appending symbols in forms. These are set automatically to ~M-i~ and ~M-a~.
 - Quoting and unquoting via Symex commands (/not/ wrapping in quotes, but the special Lisp concept of quoting/unquoting). Unfortunately, these commands require point to be at the start of the symbol, or the start of the quote/unquote if it already has it.
 
@@ -2755,7 +2745,7 @@ This is something that a more advanced solution could give you (maybe Treesitter
              "g>" #'evil-shift-right)
 
     (:states '(normal motion operator)
-             :keymaps crj--lisp-mode-maps
+             :keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
              "+" #'on-parens-down-sexp
              "-" #'on-parens-up-sexp
              "H" #'on-parens-backward-sexp-in-supersexp
@@ -3813,11 +3803,13 @@ Not sure what to do about the modeline for now, although it's also... not very i
 
 I'd like to clean it up, and... maybe make Evil states more visible? Probably do some actual config here eventually!
 
-** Config Changes Todo
+** Config Changes Todos
 
 *** timers
 
 *** Add markup mode add-heading-above command
+
+*** rewrite symex section copy
 
 *** switch to msgs buffer cmd
 
