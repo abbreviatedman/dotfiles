@@ -3759,6 +3759,12 @@ Making my life easier!
   (use-package ox-gfm)
 #+end_src
 
+** Modeline
+
+Not sure what to do about the modeline for now, although it's also... not very important!
+
+I'd like to clean it up, and... maybe make Evil states more visible? Probably do some actual config here eventually!
+
 ** Config Changes Todo
 
 *** timers
