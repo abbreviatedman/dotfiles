@@ -1272,6 +1272,48 @@ And finally, since I do this search so often, it's got a quicker shortcut of ~SP
           "SPC" '(project-find-file :which-key "Find file within current project.")))
 #+end_src
 
+*** Editing Results
+
+We can edit filtered results live with wgrep.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package wgrep
+    :commands wgrep-change-to-wgrep-mode
+
+    :config (setq wgrep-auto-save-buffer t)
+
+    :general
+    (general-def grep-mode-map
+      "C-c C-e" '(wgrep-change-to-wgrep-mode :which-key "Switch to writable search results.")))
+
+  (use-package emacs
+    :init
+    (defun crj-vertico-embark-export-write ()
+      "Export the current vertico results to a writable buffer if possible.
+
+  Supports exporting consult-grep to wgrep, file to wdired, and consult-location to occur-edit.
+
+  Credit to Doom Emacs."
+      (interactive)
+      (require 'embark)
+      (require 'wgrep)
+      (let* ((edit-command
+              (pcase-let ((`(,type . ,candidates)
+                           (run-hook-with-args-until-success 'embark-candidate-collectors)))
+                (pcase type
+                  ('consult-grep #'wgrep-change-to-wgrep-mode)
+                  ('file #'wdired-change-to-wdired-mode)
+                  ('consult-location #'occur-edit-mode)
+                  (x (user-error "embark category %S doesn't support writable export" x)))))
+             (embark-after-export-hook `(,@embark-after-export-hook ,edit-command)))
+        (embark-export)))
+
+    :general
+    (general-def minibuffer-local-map
+      "C-c C-e" '(crj-vertico-embark-export-write :which-key "Switch to writable search results."))
+    (general-def dired-mode-map
+      "C-c C-e" '(wdired-change-to-wdired-mode :which-key "Switch to writable search results.")))
+#+end_src
 
 ** Look and Feel
 
