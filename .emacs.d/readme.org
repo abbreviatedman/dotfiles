@@ -3236,6 +3236,53 @@ Here that all is!
     (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
+****** Embark Which-Key Integration
+
+I have not dived into /how/ this code from the Embark author works, but it integrates the actions better with ~which-key~. This makes the Embark actions popup look great instead of ugly. Huzzah!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package embark
+    :init
+    (defun embark-which-key-indicator ()
+      "An embark indicator that displays keymaps using which-key.
+  The which-key help message will show the type and value of the
+  current target followed by an ellipsis if there are further
+  targets."
+      (lambda (&optional keymap targets prefix)
+        (if (null keymap)
+            (which-key--hide-popup-ignore-command)
+          (which-key--show-keymap
+           (if (eq (plist-get (car targets) :type) 'embark-become)
+               "Become"
+             (format "Act on %s '%s'%s"
+                     (plist-get (car targets) :type)
+                     (embark--truncate-target (plist-get (car targets) :target))
+                     (if (cdr targets) "…" "")))
+           (if prefix
+               (pcase (lookup-key keymap prefix 'accept-default)
+                 ((and (pred keymapp) km) km)
+                 (_ (key-binding prefix 'accept-default)))
+             keymap)
+           nil nil t (lambda (binding)
+                       (not (string-suffix-p "-argument" (cdr binding))))))))
+
+    (setq embark-indicators
+          '(embark-which-key-indicator
+            embark-highlight-indicator
+            embark-isearch-highlight-indicator))
+
+    (defun embark-hide-which-key-indicator (fn &rest args)
+      "Hide the which-key indicator immediately when using the completing-read prompter."
+      (which-key--hide-popup-ignore-command)
+      (let ((embark-indicators
+             (remq #'embark-which-key-indicator embark-indicators)))
+        (apply fn args)))
+
+    :config
+    (advice-add #'embark-completing-read-prompter
+                :around #'embark-hide-which-key-indicator))
+#+end_src
+
 **** Minibuffer Search Data Sets
 
 ~consult~ is a library containing a set of functions that each search a different set of data. That sounds dry, but it's really not!
