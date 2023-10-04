@@ -2731,12 +2731,14 @@ This is something that a more advanced solution could give you (maybe Treesitter
 #+begin_src emacs-lisp :lexical no
   (use-package evil-cleverparens
     :general
-    (:states 'normal
-             :keymaps crj--lisp-mode-maps
-             "A" #'evil-cp-insert-at-end-of-form
-             "I" #'evil-cp-insert-at-beginning-of-form
-             "D" #'evil-cp-drag-forward
-             "C" #'evil-cp-drag-backward)
+    (crj-leader-keys
+      "l" '(:ignore t "Lisp menu"))
+
+    (crj-leader-keys
+      "li" '(evil-cp-insert-at-beginning-of-form :which-key "Insert at beginning of form.")
+      "la" '(evil-cp-insert-at-end-of-form :which-key "Insert at end of form.")
+      "lf" '(evil-cp-drag-forward :which-key "Drag atom or form forwards.")
+      "lb" '(evil-cp-drag-backward :which-key "Drag atom or form backwards."))
 
     (general-def 'normal
       "W" #'evil-cp-forward-symbol-begin
