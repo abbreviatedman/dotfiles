@@ -641,14 +641,49 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
 **** Org Exporting
 
-#+begin_src emacs-lisp
+Org mode can export to other formats—probably its strongest feature.
+
+***** General Settings
+
+Most of this is pretty standard, but I also do have my own CSS to make exporting a little better. It's dead simple, and I'm sure I will change it if I start exporting to HTML more seriously.
+
+#+begin_src emacs-lisp :lexical no
   (use-package org
     :init
-    (setq org-export-with-section-numbers nil
-          org-export-with-toc nil
+    (setq org-html-special-string-regexps nil
+          org-html-postamble nil
           org-export-with-date nil
-          org-export-with-entities nil
-          org-export-headline-levels 6))
+          org-export-with-section-numbers nil
+          org-export-with-toc nil
+          org-export-headline-levels 6
+          org-babel-default-header-args `((:results . "verbatim pp replace output")
+                                          (:exports . "both")
+                                          (:noweb . "strip-export")
+                                          (:session . "none")
+                                          (:padline . "no"))
+
+          org-html-head-extra
+          "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>"))
+
+  #+end_src
+
+***** Org Export to GFM
+
+Org doesn't have at least one format I like using: Github Flavored Markdown. So let's add that with a package.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package ox-gfm)
+#+end_src
+
+***** Importing Into Org Mode
+
+Org Mode is great at exporting to other formats, but other formats usually don't export to Org. And there's no built-in way to do it, weirdly. So! Package time.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org-pandoc-import
+    :straight (:host github
+                     :repo "tecosaur/org-pandoc-import"
+                     :files ("*.el" "filters" "preprocessors")))
 #+end_src
 
 **** Org Code Evaluation
@@ -3772,12 +3807,6 @@ Making my life easier!
         (set setting new-value))))
 #+end_src
 
-** Org Export to GFM
-
-#+begin_src emacs-lisp :lexical no
-  (use-package ox-gfm)
-#+end_src
-
 ** Modeline
 
 Not sure what to do about the modeline for now, although it's also... not very important!
@@ -4035,32 +4064,6 @@ And ~e~ in any terminal should open file in Emacs buffer.
 *** jest mode
 
 *** create wttrin library
-
-*** Org Export
-
-#+begin_src emacs-lisp :lexical no :tangle no
-  (eval-after-load 'ox-html
-    '(setq org-html-special-string-regexps nil))
-
-  ;; org export settings
-  (after! org
-    (setq org-html-postamble nil
-          org-export-with-toc nil
-          org-export-headline-levels 6
-          org-babel-default-header-args `((:results . "verbatim pp replace output")
-                                          (:exports . "both")
-                                          (:noweb . "strip-export")
-                                          (:session . "none")
-                                          (:padline . "no"))))
-
-  ;; Quick and dirty CSS.
-  ;; TODO add to it, maybe make it a global file or host on a CDN.
-  (setq org-html-head-extra
-        "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>")
-
-  ;; convert TO Org
-  (use-package! org-pandoc-import :after org)
-#+end_src
 
 *** eglot get info on symbol
 
