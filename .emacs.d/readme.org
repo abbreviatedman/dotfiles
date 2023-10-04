@@ -1272,7 +1272,6 @@ And finally, since I do this search so often, it's got a quicker shortcut of ~SP
           "SPC" '(project-find-file :which-key "Find file within current project.")))
 #+end_src
 
-*** TODO add more ~consult~ searches
 
 ** Look and Feel
 
