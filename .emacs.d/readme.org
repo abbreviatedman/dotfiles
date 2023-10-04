@@ -3890,6 +3890,8 @@ I'd like to clean it up, and... maybe make Evil states more visible? Probably do
 
 *** timers
 
+*** embark
+
 *** Add markup mode add-heading-above command
 
 *** rewrite symex section copy
