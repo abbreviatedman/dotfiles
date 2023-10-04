@@ -2519,6 +2519,29 @@ Avy config will be kept around for now, but I'm disabling it. Consider it "archi
 
 are configured elsewhere!
 
+**** Multiple Cursor
+
+ I used multiple cursors before learning Vim, which for the most part obviated the need for them. These days I use Evil Ex Commands, or writable occur buffers, or lsp-based renaming, but I'm bringing multiple cursors back to see if they have a place in my toolbox.
+
+ one thing that I really like about the multi-cursors approach is that, like the writable occur buffers but unlike the other two listed above, you're still dealing with the buffer, and therefore have access to all your in-buffer text-editing tools, like Evil and the many tools I've built up around it, as well as the other great Emacs' editing tools (and those I've built around /those/).
+
+ There are others I want to try too, such as the Evil-MC package, but I'm trying Henrik Lissner's Evil Multiedit package first, and it seems to be doing everything I want so far.
+
+ Its default keybindings are pretty good, except for unnecessarily shadowing one of my oft-used Emacs quick-editing commands in ~kill-word~ and not binding its most useful command at all, ~evil-multiedit-match-all~.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-multiedit
+    :init
+    (evil-multiedit-default-keybinds)
+
+    :general
+    (general-def 'insert
+      "M-d" #'kill-word)
+
+    (general-def 'normal
+      "M-e" #'evil-multiedit-match-all))
+#+end_src
+
 *** Writing
 
 **** Spell-Check With Flyspell
