@@ -326,6 +326,10 @@ Searching a markup outline.
 
 *** Emmet Abbreviations
 
+These abbreviations are a great tool for HTML, to the point where they're built into many editors now. But not Emacs, so they're a package.
+
+If you don't know at least the simple Emmet abbreviations, and you write HTML, man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
+
 #+begin_src emacs-lisp :lexical no
   (use-package emmet-mode
     :ghook
