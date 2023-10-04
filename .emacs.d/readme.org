@@ -2592,7 +2592,7 @@ are configured elsewhere!
 
 #+begin_src emacs-lisp :lexical no
   (use-package evil-multiedit
-    :init
+    :config
     (evil-multiedit-default-keybinds)
 
     :general
