@@ -2817,6 +2817,9 @@ This is something that a more advanced solution could give you (maybe Treesitter
 
   (use-package on-parens
     :general
+    (crj-leader-keys
+      "lr" '(paredit-raise-sexp :which-key "Raise form."))
+
     (:states 'normal
              "g<" #'evil-shift-left
              "g>" #'evil-shift-right)
