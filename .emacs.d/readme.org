@@ -2699,6 +2699,36 @@ Set ~W~/~B~ movements ignore the many many delimiters Lisps use, so that we're n
 
 This is part of the [[https://github.com/emacs-evil/evil-cleverparens][evil-cleverparens]] package.
 
+*The more I use this, the more I feel like we /all/ should have been using this all the time.*
+
+I'll have to give this more of a go, but it really seems like Vim's "big word" movements should /always/ have been traveling by symbols, and not just in Lisp languages.
+
+Take this JavaScript, for example:
+
+#+begin_src javascript :tangle no
+  function greet({name}) {
+    return `Hello, ${name}!`
+  }
+#+end_src
+
+If you just changed the symbol ~greet~, there are three possible movements we could make with different versions of Vim/Evil's ~w~ movement:
+
+1. move to the ~(~ using ~w~
+2. move to the ~{~ using ~W~
+3. move to the symbol ~name~ using Evil Cleverparens' version of ~W~
+
+ Not only is #3 the overwhelmingly more likely use case to the point where this next part shouldn't matter, but you can also easily do the other 2 use cases  with ~f(~ and ~f{~ (and sure, you could use ~fn~ for getting to the next symbol, but that a) isn't as much of a structural movement and b) can easily gotcha you momentarily if there's another ~n~ in the way).
+
+ Basically, "words" should always be "words", not words and punctuation.
+
+ The one use case for moving by words-with-punctuation is with multi-word symbols with punctuation, such as a variable in ~kebab-case~ or ~snake_case~. Little word movement ~w~ would move from ~kebab~ to ~case~, while ~W~ would move right to the next symbol. But Evil Cleverparens takes this into account, and still considers punctuation that simly signifies a new word /within/ a symbol as a little word that ~W~ goes right past.
+
+ And this is where ~w~ really shines if you're talking about a /part/ of a symbol. If you want to move by little word within ~user-data~ or ~user_data~ or even ~userData~, you can do that as long as you turn on Emacs' great ~subword-mode~.
+
+ And, of course, being not just movements but /text objects/, we can change and yank and delete and everything else using these /much/ more useful modalities.
+
+ Okay, I still do need to use this more, so maybe I'll change my mind, but the more I think about it, the more obvious it seems that this is by far the best versions of ~w~ and ~W~ you can have.
+
 ******** Move Up And Down Trees
 
 The Symex library gets away from Evil a little too much for me, but it has an /excellent/ way of moving up and down trees. See [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] to see it in action!
