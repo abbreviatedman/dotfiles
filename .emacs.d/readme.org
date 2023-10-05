@@ -3766,6 +3766,12 @@ Don't be like me.
     (add-hook 'rjsx-mode-hook #'eglot-ensure)
     (add-hook 'typescript-mode-hook #'eglot-ensure)
 
+    ;; This advice might break things... copier beware!
+    (defun crj--remove-eglot-modeline-extra-info ()
+      (eglot-forget-pending-continuations (eglot-current-server)))
+
+    (advice-add 'eglot--mode-line-format :before #'crj--remove-eglot-modeline-extra-info)
+
     :config
     (add-to-list 'eglot-server-programs
                  '((typescript-mode)
