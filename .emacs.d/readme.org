@@ -989,12 +989,41 @@ I'm still a /big/ fan of modal editing, since you spend so much time straight up
 
 [[./assets/funky-flow.gif]]
 
-Also included is some readline commands that aren't in actual Emacs, like ~kill-line~ and ~backwards-kill-sentence~ and (sometimes excluded) ~backward-kill-word~.
-
-Also included is a nifty function that deletes everything but one space before the cursor, super useful if you've got a bunch of accidental whitespace. Okay, it's only very /occasionally/ super useful, but I use it every couple of weeks and it's great.
+Also included in generally surfacing more Emacsy insert-state commands:
+- some readline commands that aren't in actual Emacs, like ~kill-line~ and ~backwards-kill-sentence~ and (sometimes excluded) ~backward-kill-word~.
+- a nifty little unshortcutted function that deletes everything but one space before the cursor, super useful if you've got a bunch of accidental whitespace. Okay, it's only very /occasionally/ super useful, but I use it every couple of weeks and it's great.
+- ~zap-up-to-char~, the Emacsy equivalent of Evil's ~dt[char]~, is not currently keybound. (~zap-to-char~, Emacs' ~df[char]~, has a keybinding already.)
+- Backwards versions of those two zaps. I don't /love/ Emacs' way of doing this, which would be to use Control-dash to give the function a negative number, /then/ ~M-z~ to run the command. I'd rather just wrap the command, passing in a negative number, then set that to ~M-Z~.
 
 #+begin_src emacs-lisp
   (use-package evil
+    :init
+    (defun crj-zap-to-char-backwards (arg char)
+      "A wrapped version of `zap-to-char' that goes backwards.
+
+  Kill up to and including ARGth occurrence of CHAR, backwards.
+  Case is ignored if `case-fold-search' is non-nil in the current buffer.
+  See also `zap-up-to-char' and the wrapped `crj-zap-up-to-char-backwards'."
+      (interactive (list (prefix-numeric-value current-prefix-arg)
+                         (read-char-from-minibuffer "Zap back to char: "
+                                                    nil 'read-char-history)))
+      (zap-to-char (- arg) char))
+
+    (defun crj-zap-up-to-char-backwards (arg char)
+      "A wrapped version of `zap-up-to-char' that goes backwards.
+
+  Kill up to, but not including ARGth occurrence of CHAR, backwards.
+
+  Case is ignored if case-fold-search is non-nil in the current buffer.
+  Goes backward if ARG is negative; error if CHAR not found.
+  Ignores CHAR at point.
+
+  See also `zap-to-char' and the wrapped `crj-zap-to-char-backwards'."
+      (interactive (list (prefix-numeric-value current-prefix-arg)
+                         (read-char-from-minibuffer "Zap back up to char: "
+                                                    nil 'read-char-history)))
+      (zap-up-to-char (- arg) char))
+
     :general
     (general-def global-map
       "C-u" #'backward-kill-sentence
@@ -1010,7 +1039,10 @@ Also included is a nifty function that deletes everything but one space before t
      "C-k" #'kill-line
      "C-u" #'backward-kill-sentence
      "C-w" #'backward-kill-word
-     "<S-backspace>" #'just-one-space))
+     "<S-backspace>" #'just-one-space
+     "M-t" #'zap-up-to-char
+     "M-Z" #'crj-zap-to-char-backwards
+     "M-T" #'crj-zap-up-to-char-backwards))
 #+end_src
 
 *** Visualizing Evil Commands
