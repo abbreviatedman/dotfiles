@@ -4398,6 +4398,8 @@ And ~e~ in any terminal should open file in Emacs buffer.
 
 *** jest mode
 
+*** Move all menus to Menus section
+
 *** create wttrin library
 
 *** eglot get info on symbol
