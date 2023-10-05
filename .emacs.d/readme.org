@@ -3404,7 +3404,6 @@ Here that all is!
 
     :init
     (setq prefix-help-command #'embark-prefix-help-command)
-    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
 
     (defun crj-embark-act-noquit ()
       "Run action but don't quit the minibuffer afterwards."
@@ -3468,9 +3467,7 @@ I have not dived into /how/ this code from the Embark author works, but it integ
                        (not (string-suffix-p "-argument" (cdr binding))))))))
 
     (setq embark-indicators
-          '(embark-which-key-indicator
-            embark-highlight-indicator
-            embark-isearch-highlight-indicator))
+          '(embark-which-key-indicator))
 
     (defun embark-hide-which-key-indicator (fn &rest args)
       "Hide the which-key indicator immediately when using the completing-read prompter."
