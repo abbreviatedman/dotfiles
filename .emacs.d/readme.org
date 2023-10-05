@@ -297,6 +297,8 @@ Which key shows you a constantly updating list of what keys you can press next a
 
 #+begin_src emacs-lisp
   (use-package which-key
+    :diminish 'which-key-mode
+
     :config
     (which-key-mode)
     (setq which-key-idle-delay 2
@@ -450,6 +452,8 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
             org-startup-indented t
             org-adapt-indentation nil)
       (variable-pitch-mode +1)
+      (diminish 'buffer-face-mode)
+      (diminish 'variable-pitch-mode)
       (mapc
        (lambda (face) ;; Other fonts that require it are set to fixed-pitch.
          (set-face-attribute face nil :inherit 'fixed-pitch))
@@ -504,6 +508,11 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
   (use-package org
     :init
     (setq org-link-descriptive nil)
+
+    (defun crj--diminish-org-indent-mode ()
+      (diminish 'org-indent-mode))
+
+    (add-hook 'org-indent-mode-hook #'crj--diminish-org-indent-mode)
 
     (defun efs/org-mode-setup ()
       (org-indent-mode)
@@ -889,6 +898,8 @@ There are just a ton of variables here that finely set how Evil Mode is configur
 
 #+begin_src emacs-lisp
   (use-package evil
+    :diminish 'subword-mode
+
     :init
     (defun crj--escape-plus ()
       (evil-ex-nohighlight))
@@ -942,7 +953,11 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
 
 #+begin_src emacs-lisp
   (use-package evil-collection
+    :diminish 'unimpaired
+    :diminish 'evil-collection-unimpaired-mode
+
     :after evil
+
     :init
     (evil-collection-init)
     (evil-collection-quickrun-setup)
@@ -1062,6 +1077,8 @@ Also included in generally surfacing more Emacsy insert-state commands:
 
 #+begin_src emacs-lisp
   (use-package evil-goggles
+    :diminish 'evil-goggles-mode
+
     :after evil
 
     :init
@@ -1374,6 +1391,8 @@ These are some sane defaults for the UI.
 
 #+begin_src emacs-lisp
   (use-package emacs
+    :diminish 'visual-line-mode
+
     :init
     (scroll-bar-mode -1)
     (tool-bar-mode -1)
@@ -1812,6 +1831,8 @@ Let's visualize our indentation!
 
 #+begin_src emacs-lisp :lexical no
   (use-package highlight-indent-guides
+    :diminish 'highlight-indent-guides-mode
+
     :ghook 'prog-mode-hook
 
     :custom
@@ -1823,6 +1844,8 @@ Let's visualize our indentation!
 #+begin_src emacs-lisp :lexical no
   (use-package vimish-fold)
   (use-package evil-vimish-fold
+    :diminish 'evil-vimish-fold-mode
+
     :init
     (setq evil-vimish-fold-target-modes '(prog-mode text-mode))
     (global-evil-vimish-fold-mode))
@@ -2559,6 +2582,8 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
 
 #+begin_src emacs-lisp
   (use-package ws-butler
+    :diminish 'ws-butler-mode
+
     :config
     (ws-butler-global-mode))
 #+end_src
@@ -2611,6 +2636,8 @@ Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and
 
 #+begin_src emacs-lisp
   (use-package evil-snipe
+    :diminish 'evil-snipe-local-mode
+
     :after evil
 
     :init
@@ -2678,7 +2705,10 @@ I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion w
 
 #+begin_src emacs-lisp
   (use-package flyspell
+    :diminish 'flyspell-mode
+
     :demand t
+
     :init
     (defun crj--turn-on-flyspell ()
       (flyspell-mode 1))
@@ -2753,6 +2783,8 @@ By default, it helps you see the blocks from your cursor to four delimiters outw
 
   #+begin_src emacs-lisp
     (use-package highlight-parentheses
+      :diminish 'highlight-parentheses-mode
+
       :ghook 'prog-mode-hook
       :custom
       (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
@@ -3147,6 +3179,8 @@ Better go-to-definition function for Emacs Lisp.
 
 #+begin_src emacs-lisp
   (use-package elisp-def
+    :diminish 'elisp-def-mode
+
     :init
     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
       (add-hook hook #'elisp-def-mode))
@@ -3785,7 +3819,10 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 
   #+begin_src emacs-lisp
     (use-package flymake
+      :diminish 'flymake-mode
+
       :hook (prog-mode . flymake-mode)
+
       :general
       (:keymaps 'normal
        "]e" '(flymake-goto-next-error
