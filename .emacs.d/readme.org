@@ -360,6 +360,31 @@ Org is built into Emacs, but you probably want the newest version.
   (use-package org)
 #+end_src
 
+**** Basic Setup
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org
+    :init
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+    (setq org-refile-use-outline-path t
+          org-link-descriptive nil
+          org-refile-targets
+          '((org-agenda-files . (:maxlevel . 6))))
+
+    (defun crj-refile-in-current-buffer ()
+      (interactive)
+      (let ((org-refile-use-outline-path t)
+            (org-refile-targets '((nil . (:maxlevel . 6)))))
+        (org-refile)))
+
+    :general
+    (:keymaps 'org-mode-map
+     :states 'insert
+     "M-h" #'org-promote-subtree
+     "M-l" #'org-demote-subtree))
+#+end_src
+
 **** Keybindings
 
 Let's make Org keybindings a bit better.
@@ -407,13 +432,16 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
 #+begin_src emacs-lisp
-  (defun my/buffer-face-mode-variable ()
-    "Set font to a variable width (proportional) fonts in current buffer."
-    (interactive)
-    (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                          :height 1.0
-                                          :width normal))
-    (buffer-face-mode))
+  (use-package org
+    :init
+    (defun my/buffer-face-mode-variable ()
+      "Set font to a variable width (proportional) fonts in current buffer."
+      (interactive)
+      (setq buffer-face-mode-face '(:family crj--variable-pitch-font
+                                    :height 1.0
+                                    :width normal))
+
+      (buffer-face-mode))
 
     (defun my/set-general-faces-org ()
       (my/buffer-face-mode-variable)
@@ -447,22 +475,24 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
              'org-property-value
              )))
 
-      (defun efs/org-font-setup ()
-        ;; Replace list hyphen with dot
-        (font-lock-add-keywords 'org-mode
-                                '(("^ *\\([-]\\) "
-                                   (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    (defun efs/org-font-setup ()
+      ;; Replace list hyphen with dot
+      (font-lock-add-keywords 'org-mode
+                              '(("^ *\\([-]\\) "
+                                 (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-        ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-        (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
-        (set-face-attribute 'org-table nil    :font crj--coding-font)
-        (set-face-attribute 'org-formula nil  :font crj--coding-font)
-        (set-face-attribute 'org-code nil     :font crj--coding-font)
-        (set-face-attribute 'org-table nil    :font crj--coding-font)
-        (set-face-attribute 'org-verbatim nil :font crj--coding-font)
-        (set-face-attribute 'org-special-keyword nil :font crj--coding-font)
-        (set-face-attribute 'org-meta-line nil :font crj--coding-font)
-        (set-face-attribute 'org-checkbox nil  :font crj--coding-font))
+      ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+      (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
+      (set-face-attribute 'org-table nil    :font crj--coding-font)
+      (set-face-attribute 'org-formula nil  :font crj--coding-font)
+      (set-face-attribute 'org-code nil     :font crj--coding-font)
+      (set-face-attribute 'org-table nil    :font crj--coding-font)
+      (set-face-attribute 'org-verbatim nil :font crj--coding-font)
+      (set-face-attribute 'org-special-keyword nil :font crj--coding-font)
+      (set-face-attribute 'org-meta-line nil :font crj--coding-font)
+      (set-face-attribute 'org-checkbox nil  :font crj--coding-font))
+
+    (add-hook 'org-mode-hook #'my/set-general-faces-org))
 
 #+end_src
 
@@ -471,18 +501,16 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
 This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
 
 #+begin_src emacs-lisp
-  (defun efs/org-mode-setup ()
-    (org-indent-mode)
-    ;; (variable-pitch-mode 1)
-    (visual-line-mode 1))
-
   (use-package org
     :init
     (setq org-link-descriptive nil)
 
-    :hook
-    (org-mode . efs/org-mode-setup)
-    (org-mode . my/set-general-faces-org)
+    (defun efs/org-mode-setup ()
+      (org-indent-mode)
+      ;; (variable-pitch-mode 1)
+      (visual-line-mode 1))
+
+    (add-hook 'org-mode-hook #'efs/org-mode-setup)
 
     :general
     (:keymaps 'org-mode-map
@@ -616,7 +644,7 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
 #+end_src
 
-***** Nicer Heading Bullets
+**** Nicer Heading Bullets
 
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 
@@ -628,23 +656,6 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
 #+end_src
 
-**** Org Refiling
-
-#+begin_src emacs-lisp :lexical no
-  (use-package org
-    :init
-    (setq org-refile-use-outline-path t
-          org-refile-targets
-          '((org-agenda-files . (:maxlevel . 6))))
-
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-    (defun crj-refile-in-current-buffer ()
-      (interactive)
-      (let ((org-refile-use-outline-path t)
-            (org-refile-targets '((nil . (:maxlevel . 6)))))
-        (org-refile))))
-#+end_src
 
 **** Org Exporting
 
@@ -1478,50 +1489,52 @@ And a picture of what my setup actually looks like:
 **** Using Fixed Pitch In Some Buffers
 
 #+begin_src emacs-lisp
-  (defface crj--monospace
-    '((t
-       :family "Hack"
-       :foundry unspecified
-       :width normal
-       :height 1.0
-       :weight normal
-       :slant normal
-       :foreground "#505050"
-       :distantForeground unspecified
-       :background "#f8f8f8"
-       :underline nil
-       :overline nil
-       :strike-through nil
-       :box nil
-       :inverse nil
-       :stipple nil
-       :font "Hack"
-       :fontset unspecified
-       :extend nil))
+  (use-package emacs
+    :init
+    (defface crj--monospace
+      '((t
+         :family "Hack"
+         :foundry unspecified
+         :width normal
+         :height 1.0
+         :weight normal
+         :slant normal
+         :foreground "#505050"
+         :distantForeground unspecified
+         :background "#f8f8f8"
+         :underline nil
+         :overline nil
+         :strike-through nil
+         :box nil
+         :inverse nil
+         :stipple nil
+         :font "Hack"
+         :fontset unspecified
+         :extend nil))
 
-    "Face for monospace fonts.")
+      "Face for monospace fonts.")
 
-  (defun crj--use-fixed-pitch ()
-    "Make the current buffer use a fixed pitch.
+    (defun crj--use-fixed-pitch ()
+      "Make the current buffer use a fixed pitch.
 
   Sometimes I really do want fixed-pitch for alignment, such as with terminals."
-    (interactive)
-    (set (make-local-variable 'buffer-face-mode-face) 'crj--monospace)
-    (buffer-face-mode t))
+      (interactive)
+      (set (make-local-variable 'buffer-face-mode-face) 'crj--monospace)
+      (buffer-face-mode t))
 
-  ;; Hooks for modes I want to use fixed pitch in.
-  (setq crj--fixed-pitch-mode-hooks
-        '(vterm-mode-hook
-          calendar-mode-hook
-          proced-mode-hook
-          cfw:calendar-mode-hook
-          minibuffer-setup-hook
-          mu4e-headers-mode-hook
-          magit-log-mode-hook))
+    ;; Hooks for modes I want to use fixed pitch in.
+    (setq crj--fixed-pitch-mode-hooks
+          '(vterm-mode-hook
+            calendar-mode-hook
+            proced-mode-hook
+            cfw:calendar-mode-hook
+            minibuffer-setup-hook
+            mu4e-headers-mode-hook
+            magit-log-mode-hook))
 
-  ;; Add the fixed-pitch function for each mode.
-  (dolist (hook crj--fixed-pitch-mode-hooks)
-    (add-hook hook #'crj--use-fixed-pitch))
+    ;; Add the fixed-pitch function for each mode.
+    (dolist (hook crj--fixed-pitch-mode-hooks)
+      (add-hook hook #'crj--use-fixed-pitch)))
 #+end_src
 
 
@@ -3390,7 +3403,7 @@ Here that all is!
     (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 
-****** Embark Which-Key Integration
+****** Changing How Embark Displays Actions
 
 I have not dived into /how/ this code from the Embark author works, but it integrates the actions better with ~which-key~. This makes the Embark actions popup look great instead of ugly. Huzzah!
 
