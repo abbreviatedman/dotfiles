@@ -2011,6 +2011,12 @@ Let's set up a menu for Version Control.
 
 Only some minor settings changes from the basic setup.
 
+- Turn on insert state and off Copilot mode when writing Git commits. Though I know there are some AI features focused on commit messages and maybe I should check them out, plain Copilot is /really/ bad at commit messages.
+- Make Magit a little more Evil by reclaiming ~h~ and ~l~ and the low-digit count keys.
+- Turn on confirmation.
+- Make the window setup a little tidier.
+- And add some shortcuts to both the general Magit menus and things I do more often, like clone and switch/create branches.
+
 #+begin_src emacs-lisp
   (use-package magit
     :init
