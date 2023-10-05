@@ -2030,8 +2030,13 @@ Only some minor settings changes from the basic setup.
     (magit-no-confirm nil)
 
     :general
-    (general-def (magit-mode-map magit-blame-read-only-mode-map)
-      "SPC" nil)
+    (general-def '(normal emacs)
+      (magit-mode-map magit-blame-read-only-mode-map)
+      "SPC" nil
+      "1" #'digit-argument
+      "2" #'digit-argument
+      "3" #'digit-argument
+      "4" #'digit-argument)
 
     (crj-leader-keys
       "gg" '(magit-status :which-key "Launch Git interface.")
