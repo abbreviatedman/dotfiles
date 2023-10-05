@@ -2599,7 +2599,7 @@ Avy config will be kept around for now, but I'm disabling it. Consider it "archi
 
 are configured elsewhere!
 
-**** Multiple Cursor
+**** Multiple Cursors
 
  I used multiple cursors before learning Vim, which for the most part obviated the need for them. These days I use Evil Ex Commands, or writable occur buffers, or lsp-based renaming, but I'm bringing multiple cursors back to see if they have a place in my toolbox.
 
@@ -2616,8 +2616,10 @@ are configured elsewhere!
     (general-def 'insert
       "M-d" #'kill-word)
 
-    (general-def 'normal
-      "M-e" #'evil-multiedit-match-all))
+    (crj-leader-keys
+      "icc" '(evil-multiedit-match-and-next :which-key "Add cursor at current/next match.")
+      "icC" '(evil-multiedit-match-and-prev :which-key "Add cursor at current/previous match.")
+      "ice" '(evil-multiedit-match-all :which-key "Add cursor to all matches.")))
 #+end_src
 
 *** Writing
