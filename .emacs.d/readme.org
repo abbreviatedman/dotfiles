@@ -167,6 +167,19 @@ Now it's not much code to add fairly complex keybindings, and once we get ~which
 
 Next we'll define a bunch more keybindings, as well as answer the question, /why leader keys at all?/
 
+*** Let's Define Some Menus!
+
+I'll add to this section every time I have a new menu to add to the hierarchy.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (crj-leader-keys
+      "m" '(:ignore t :which-key "Markup Menu")
+      "i" '(:ignore t :which-key "Insert menu.")
+      "ic" '(:ignore t :which-key "Insert cursor menu.")))
+#+end_src
+
 *** General Emacs' Keybindings
 
 Many of my keybindings are taken from Doom Emacs' well-thought-through keybindings—although part of this is certainly that I'm just used to using them for the last couple of years.
@@ -306,17 +319,6 @@ This is as good a place as any to show how to make a menu with which-key!
 #+end_src
 
 ** Markup Documents
-
-*** General Markup Keybindings
-
-The overarching menu.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "m" '(:ignore t :which-key "Markup Menu")))
-#+end_src
 
 Searching a markup outline.
 
