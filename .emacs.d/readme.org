@@ -3709,6 +3709,12 @@ And an extra package for completing Org blocks.
 
 **** Eglot
 
+Pretty typical setup here aside from a major advice hack to stop the annoying modeline numbers appearing and disappearing.
+
+My advice: don't use ~advice~. Don't be like me!
+
+Don't be like me.
+
 #+begin_src emacs-lisp
   (use-package eglot
     :init
@@ -4177,9 +4183,47 @@ Making my life easier!
 
 ** Modeline
 
-Not sure what to do about the modeline for now, although it's also... not very important!
+Modeline is in pretty good shape, and hopefully I don't futz with it more.
 
-I'd like to clean it up, and... maybe make Evil states more visible? Probably do some actual config here eventually!
+I've:
+
+- Removed most of the minor modes from showing up using Diminish, added way higher up there.
+- Configured what else shows up and doesn't with the ~crj--modeline-r-format~ variable below. Check the docstring of the variables it uses to learn what I've done.
+- Hacked the LSP info so it doesn't constantly report on lag, which is honestly more distracting than LSP lag itself. See the Eglot section for how I did this.
+- Merged the modeline and the minibuffer using the excellent Mini Modeline package. This gets you back some substantial screen estate, especially since the modeline is now on just the frame, not each individual window.
+- Merging with the minibuffer /also/ means that when you change the format to have no info, you're really hiding the modeline entirely. I do that by default, but I can toggle it back on if I need to.
+
+
+#+begin_src emacs-lisp :lexical no
+  (use-package mini-modeline
+    :straight (:repo "kiennq/emacs-mini-modeline" :host github)
+
+    :diminish 'mini-modeline-mode
+
+    :init
+    (defconst crj--modeline-r-on-format '("%e" mode-line-front-space mode-line-modified mode-line-remote " " mode-line-buffer-identification " " (:eval (car (vc-git-branches))) " " mode-line-percent-position " " evil-mode-line-tag
+                                       (:eval
+                                        (string-trim
+                                         (format-mode-line mode-line-modes)))
+                                       mode-line-misc-info))
+  crj--modeline-r-on-format
+
+    (setq mini-modeline-face-attr nil)
+    (setq mini-modeline-r-format " ")
+
+    (defun crj-toggle-modeline ()
+      (interactive)
+      (setq mini-modeline-r-format (if (eq mini-modeline-r-format crj--modeline-r-on-format)
+                                       crj--modeline-r-off-format
+                                     crj--modeline-r-on-format)))
+
+    (mini-modeline-mode t)
+
+    :general
+    (crj-leader-keys
+      "tm" '(crj-toggle-modeline :which-key "Toggle modeline.")))
+
+#+end_src
 
 ** Config Changes Todos
 
