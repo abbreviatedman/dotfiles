@@ -4255,11 +4255,10 @@ I've:
 
     :init
     (defconst crj--modeline-r-on-format '("%e" mode-line-front-space mode-line-modified mode-line-remote " " mode-line-buffer-identification " " (:eval (car (vc-git-branches))) " " mode-line-percent-position " " evil-mode-line-tag
-                                       (:eval
-                                        (string-trim
-                                         (format-mode-line mode-line-modes)))
-                                       mode-line-misc-info))
-  crj--modeline-r-on-format
+                                          (:eval
+                                           (string-trim
+                                            (format-mode-line mode-line-modes)))
+                                          mode-line-misc-info))
 
     (setq mini-modeline-face-attr nil)
     (setq mini-modeline-r-format " ")
@@ -4267,7 +4266,7 @@ I've:
     (defun crj-toggle-modeline ()
       (interactive)
       (setq mini-modeline-r-format (if (eq mini-modeline-r-format crj--modeline-r-on-format)
-                                       crj--modeline-r-off-format
+                                       " "
                                      crj--modeline-r-on-format)))
 
     (mini-modeline-mode t)
