@@ -2231,7 +2231,9 @@ Let's integrate it with Magit!
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
     (defun crj-yadm-magit-status ()
-      (interactive (magit-status "/yadm::")))
+      (interactive)
+       (setq mini-modeline-r-format '(" "))
+       (magit-status "/yadm::")))
 
     :general
     (crj-leader-keys
