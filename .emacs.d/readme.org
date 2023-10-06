@@ -2233,7 +2233,7 @@ Let's integrate it with Magit!
     (defun crj-yadm-magit-status ()
       (interactive)
        (setq mini-modeline-r-format '(" "))
-       (magit-status "/yadm::")))
+       (magit-status "/yadm::"))
 
     :general
     (crj-leader-keys
