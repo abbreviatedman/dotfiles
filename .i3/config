@@ -87,9 +87,9 @@ bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(multi-vterm)"
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
 # start work browser
-bindsym $mod+Shift+Return exec "google-chrome-stable"
+bindsym $mod+Shift+Return exec "vivaldi-stable"
 # start personal browser
-bindsym $mod+$alt+Return exec "vivaldi-stable"
+bindsym $mod+$alt+Return exec "floorp"
 # start emacs browser
 bindsym $mod+Return exec emacsclient -cn -a "" -e '(switch-to-buffer "*Messages*") (end-of-buffer)'
 
