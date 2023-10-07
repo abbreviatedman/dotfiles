@@ -4342,6 +4342,10 @@ I've:
   ;;       `((".*" "~/.emacs.d/backups/" t)))
 #+end_src
 
+*** org capture
+
+*** org protocol capture
+
 *** Better scratch buffers
 
 #+begin_src emacs-lisp :lexical no
