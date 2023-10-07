@@ -388,13 +388,7 @@ Org is built into Emacs, but you probably want the newest version.
       (interactive)
       (let ((org-refile-use-outline-path t)
             (org-refile-targets '((nil . (:maxlevel . 6)))))
-        (org-refile)))
-
-    :general
-    (:keymaps 'org-mode-map
-     :states 'insert
-     "M-h" #'org-promote-subtree
-     "M-l" #'org-demote-subtree))
+        (org-refile))))
 #+end_src
 
 **** Keybindings
@@ -533,9 +527,9 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
     :general
     (:keymaps 'org-mode-map
-     :states 'insert
-     "M-h" #'org-promote-subtree
-     "M-l" #'org-demote-subtree))
+     :states '(normal insert)
+     "M-h" #'org-metaleft
+     "M-l" #'org-metaright))
 
   ;; (use-package org
   ;;   :commands (org-capture org-agenda)
@@ -1008,11 +1002,15 @@ This library adds some basic Evil bindings. In addition to the "key themes"" you
     :general
     (:keymaps 'org-mode-map :states 'insert
      "RET" #'evil-org-return)
+
     (:keymaps 'org-mode-map :states '(motion normal visual)
      "gl" #'org-down-element
      "gh" #'org-up-element
      "gk" #'org-backward-element
-     "gj" #'org-forward-element))
+     "gj" #'org-forward-element)
+
+    (evil-define-key '(normal visual insert) 'evil-org-mode
+          (kbd "C-S-k") nil))
 #+end_src
 
 *** Emacs In Vim In Emacs
