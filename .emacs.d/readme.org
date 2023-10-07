@@ -2,9 +2,21 @@
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
 
 * Colin Jaffe's Literate Config
+
 ** Introduction
 
-Emacs is a text editor. Or... is it?
+This is my configuration for Emacs, the greatest text editor. Note that "greatest" doesn't necessarily mean "best for everyone"which we'll explore as we go!. It contains:
+
+- *code for configuring Emacs*, including setting up a nice system for downloading and installing 3rd-party packages
+- code to install and configure many, many *third-party packages*
+- *custom functions* to get /just/ the behavior I want in a text editor
+- my thinking on *why* these configurations, *why* these packages, and, especially, *why* Emacs
+
+Per that last point: this document is, through the magic of "literate programming", both *the commentary* /and/ the code itself.
+
+We'll explore that /too/ as we go!
+
+** Why Emacs?
 
 Well, most people use it predominantly as a text editor, but at its nerdy awkward heart it's actually a Lisp programming environment. Setting Emacs' preferences and extending it with third-party code is all done through Lisp code that the Emacs user writes.
 
