@@ -2975,7 +2975,8 @@ This is something that a more advanced solution could give you (maybe Treesitter
 
     (:states 'normal
      "g<" #'evil-shift-left
-     "g>" #'evil-shift-right)
+     "g>" #'evil-shift-right
+     "r" #'paredit-raise-sexp)
 
     (:states '(normal motion operator)
      :keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
