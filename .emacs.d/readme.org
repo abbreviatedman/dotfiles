@@ -734,9 +734,6 @@ Org Mode is great at exporting to other formats, but other formats usually don't
 Literate programming for fun and profit. Or... at least, for fun.
 
 #+begin_src emacs-lisp :lexical no
-  (use-package ob-racket
-    :straight (:host github :repo "DEADB17/ob-racket"))
-
   (use-package emacs
     :init
     (org-babel-do-load-languages
@@ -753,6 +750,8 @@ Literate programming for fun and profit. Or... at least, for fun.
        ;; (sql . t)
        ;; (go . t)
        )))
+  (use-package ob-racket
+    :straight (:host github :repo "DEADB17/ob-racket"))
 #+end_src
 
 *** Markdown
