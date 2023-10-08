@@ -3235,6 +3235,22 @@ Better go-to-definition function for Emacs Lisp.
 
 ******* TODO configure elisp more
 
+****** Scheme
+
+I want to give learning Scheme a shot!
+
+******* SICP
+
+I'm starting with Structure and Interpretation of Computer Programs, a famous textbook on programming from MIT.
+
+We can install the manual right into Emacs!
+
+This'll also give me a good opportunity to learn the Info Mode keybindings.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package sicp)
+#+end_src
+
 ****** Racket
 
 #+begin_src emacs-lisp :lexical no
