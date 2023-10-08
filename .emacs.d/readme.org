@@ -858,6 +858,20 @@ The ugly-but-fully-featured markup language.
           web-mode-comment-style 2))
 #+end_src
 
+*** Info Mode
+
+Info Mode is the special mode Emacs uses for manuals.
+
+Only making one change so far: removing the shadowing of my leader key.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (:keymaps 'Info-mode-map
+     :states 'normal
+     "SPC" nil))
+#+end_src
+
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
