@@ -2044,6 +2044,17 @@ So you can wish everyone would leave you alone, but /within Emacs/.
     (crj-leader-keys "ac" '(:ignore t :which-key "Calendar Menu")))
 #+end_src
 
+**** Calendar View
+
+#+begin_src emacs-lisp :lexical no
+  (use-package calfw)
+
+  (use-package calfw-org
+    :general
+    (crj-leader-keys
+      "acv" '(cfw:open-org-calendar :which-key "View calendar.")))
+#+end_src
+
 **** Google Calendar Integration
 
 Although I'm exploring ways to cut out Google entirely from my life, my work uses Google Calendar, so I need to be able to see it. This is a way to do that.
