@@ -20,7 +20,7 @@ exec --no-startup-id picom
 exec --no-startup-id syncthing -no-browser
 
 # Startup Programs
-# exec emacsclient -cn -a "" -e "(+eshell/here)"
+exec emacs
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
