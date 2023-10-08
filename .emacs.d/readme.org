@@ -12,7 +12,7 @@ This is my configuration for Emacs, the greatest text editor. Note that "greates
 - *custom functions* to get /just/ the behavior I want in a text editor
 - my thinking on *why* these configurations, *why* these packages, and, especially, *why* Emacs
 
-Per that last point: this document is, through the magic of "literate programming", both *the commentary* /and/ the code itself.
+Per that last point: this document is, through the magic of "literate programming", both *the commentary* /and/ *the code itself*.
 
 We'll explore that /too/ as we go!
 
