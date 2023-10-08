@@ -868,7 +868,7 @@ Only making one change so far: removing the shadowing of my leader key.
   (use-package emacs
     :general
     (:keymaps 'Info-mode-map
-     :states 'normal
+     :states '(normal motion)
      "SPC" nil))
 #+end_src
 
