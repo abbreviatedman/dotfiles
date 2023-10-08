@@ -736,6 +736,7 @@ Literate programming for fun and profit. Or... at least, for fun.
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
     :init
+    (setq org-confirm-babel-evaluate nil)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
@@ -749,7 +750,13 @@ Literate programming for fun and profit. Or... at least, for fun.
        ;; (javascript . t)
        ;; (sql . t)
        ;; (go . t)
-       )))
+       ))
+
+    :general
+    (:keymaps 'org-mode-map
+     :states 'normal
+     "RET" #'org-ctrl-c-ctrl-c))
+
   (use-package ob-racket
     :straight (:host github :repo "DEADB17/ob-racket"))
 #+end_src
