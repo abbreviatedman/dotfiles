@@ -3056,7 +3056,11 @@ This is something that a more advanced solution could give you (maybe Treesitter
     (crj-leader-keys
       "lr" '(paredit-raise-sexp :which-key "Raise form."))
 
-    (:states 'normal
+    (:keymaps '(paredit-mode-map symex-mode-map)
+     ")" nil)
+
+    (:keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
+     :states 'normal
      "g<" #'evil-shift-left
      "g>" #'evil-shift-right
      "r" #'paredit-raise-sexp)
