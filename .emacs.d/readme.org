@@ -2910,11 +2910,21 @@ The greatest languages.
 
 Some general Lisp bindings.
 
-******* Improving Evil For Symexes
+******* Editing Symexes In Evil-Flavored Emacs
 
 First off, what is a "symex"? Well, I'm not going to explain what a symbolic expression is here, but you'll see the shortening "sexp" thrown around a lot in Lisp circles, and it's just /awful/. It's a terrible, terrible name.
 
 "Symex" is a far better term, coined by a friend of the maker of the [[https://github.com/drym-org/symex.el][Symex package]]. I'll be using that term from now on, and if it never catches on, well, at least /I'm/ not using a terrible name for them.
+
+So there are three ways for an ex-Vim person to manipulate Symexes in a Lisp language:
+
+1. Go with basic Evil and its standard, amazing grammar. It doesn't align quite as well with Lisp as it does other languages, since Evil tends to be line-based, but you're using the exact same tools as in other languages, so there's no need to change the way you edit code depending on context. And Evil's standard tools are powerful tools!
+2. Go with the above mostly, but supplement it with some lisp-specific motions like raising and splitting and slurping and barfing, and lisp-specific text objects, like forms and top-level forms. I've done this some, and I'm experimenting with it. I'd also like to expand it someday into a more feature-rich Lisp-specific editing language that simply extends Evil's language. You're an Evil user who finds that Evil doesn't have the nouns or verbs for Lisp? Well, let's make some new nouns and verbs, but keep the same grammar.
+3. Go with a /different/ language that can be used either in insert mode (like paredit) or as another state you can go into, like Symex or Lispyville.
+
+I'm experimenting with #3 again currently after failing to take to it a couple of times, and I don't honestly know which is better—especially since no one has fully fleshed out #2 that I've seen—but I /do/ think it's probably ultimately #3.
+
+******* Adding Lisp Motions And Text Objects To Evil
 
 Anyway! I'm trying to find a way to navigate and manipulate symexes here, while keeping all of Evil's grammar.
 
@@ -3152,6 +3162,55 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 -
 
   More later...
+
+******* A Lisp-Specific Editing State
+
+Let's try Symex for this.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package symex
+    :config
+    (setq symex--user-evil-keyspec
+          '(("j" . symex-go-up)
+            ("k" . symex-go-down)
+            ("C-j" . symex-climb-branch)
+            ("C-k" . symex-descend-branch)
+            ("M-j" . symex-goto-highest)
+            ("M-k" . symex-goto-lowest)))
+
+    (symex-initialize)
+
+    :custom
+    (symex-modal-backend 'evil)
+    (symex-highlight-p t)
+
+    :general
+    (crj-leader-keys
+      "L" 'symex-mode-interface)
+
+    (:keymaps 'symex-mode-map
+     :states 'insert
+     (kbd "<escape>") #'symex-mode-interface)
+
+    (:keymaps '(symex-mode-map symex-editing-mode-map)
+     :states '(normal operator symex visual)
+     "K" nil
+     "[" nil
+     "]" nil
+     "(" nil
+     ")" nil
+     "w" nil
+     "w)" #'symex-wrap-round
+     "w]" #'symex-wrap-square
+     "w}" #'symex-wrap-curly
+     "r" #'paredit-raise-sexp
+     "^" #'symex-goto-first
+     "gh" #'evil-backward-char
+     "gl" #'evil-forward-char)
+
+    ([remap symex-emit-forward] #'symex-emit-backward)
+    ([remap symex-emit-backward] #'symex-emit-forward))
+#+end_src
 
 ****** Lisp Indentation
 
@@ -4128,6 +4187,7 @@ Besides different keybindings, I've only added a couple extra configurations her
              :which-key "Search through minor modes.")
       "hM" '(describe-mode
              :which-key "Describe currently active modes."))
+
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
     ([remap describe-variable] #'helpful-variable)
