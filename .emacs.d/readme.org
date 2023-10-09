@@ -4397,6 +4397,17 @@ I've:
 
 *** Add markup mode add-heading-above command
 
+*** configure modeline further
+
+1. make minor modes opt-in - perhaps a custom list we can display?
+2. buffer name or. file and parent directory
+3. vc-git-branches
+4. modified
+5. percent position
+   1. possibly with last line using ~line-number-at-pos~ and ~point-max~
+   2. possibly with ~0%~ and ~100%~ instead of the nonparallel "Top" and "Bot"
+6. maybe the ~mode-line-misc-info~, can maybe substitute our own instead?
+
 *** rewrite symex section copy
 
 *** switch to msgs buffer cmd
