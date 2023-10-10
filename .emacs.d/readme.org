@@ -3889,45 +3889,54 @@ Sets up:
 - cool icons for same
 
 #+begin_src emacs-lisp
-  (use-package corfu
-    :config
-    (general-unbind corfu-map "RET")
-    :general
-    (:keymaps 'corfu-map :states 'insert
-     "C-n" #'corfu-next
-     "C-p" #'corfu-previous
-     "C-S-n" #'corfu-scroll-up
-     "C-S-p" #'corfu-scroll-down
-     "C-S-j" #'corfu-scroll-up
-     "C-S-k" #'corfu-scroll-down
-     "M-g" #'corfu-quit
-     "TAB" #'corfu-next
-     [tab] #'corfu-next
-     "S-TAB" #'corfu-previous
-     [backtab] #'corfu-previous
-     "M-d" #'corfu-show-documentation
-     "M-l" #'corfu-show-location)
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    (corfu-separator ?#)
-    (corfu-preview-current 'insert)
-    (corfu-quit-at-boundary 'separator)
-    (corfu-auto-prefix 1)
-    (corfu-preselect 'prompt)
-    (corfu-on-exact-match nil)
+    (use-package corfu
+      :straight
+      (corfu :files (:defaults "extensions/*"))
 
-    :hook ((prog-mode . corfu-mode)
-           (shell-mode . corfu-mode)
-           (eshell-mode . corfu-mode))
+      :init
+      (corfu-history-mode 1)
+      (add-to-list 'savehist-additional-variables 'corfu-history)
+      (corfu-popupinfo-mode 1)
+      (setq corfu-popupinfo-delay nil)
 
-    :init
-    (global-corfu-mode))
+      :config
+      (general-unbind corfu-map "RET")
 
+      :general
+      (:keymaps 'corfu-map
+       :states 'insert
+       "C-n" #'corfu-next
+       "C-p" #'corfu-previous
+       "C-S-n" #'corfu-scroll-up
+       "C-S-p" #'corfu-scroll-down
+       "C-S-j" #'corfu-scroll-up
+       "C-S-k" #'corfu-scroll-down
+       "C-G" #'corfu-quit
+       "<escape>" #'corfu-insert
+       "TAB" #'corfu-next
+       [tab] #'corfu-next
+       "S-TAB" #'corfu-previous
+       [backtab] #'corfu-previous
 
-  (use-package emacs
-    :init
-    (setq tab-always-indent 'complete))
+      (:keymaps 'global-map "M-l" nil)
+
+      :custom
+      (corfu-cycle t)
+      (corfu-auto t)
+      (corfu-separator ?#)
+      (corfu-preview-current 'insert)
+      (corfu-quit-at-boundary 'separator)
+      (corfu-auto-prefix 1)
+      (corfu-preselect 'prompt)
+      (corfu-on-exact-match nil)
+
+      :hook ((prog-mode . corfu-mode)
+             (shell-mode . corfu-mode)
+             (eshell-mode . corfu-mode))
+
+      :init
+      (global-corfu-mode))
+
     (use-package kind-icon
       :after corfu
       :custom
@@ -3938,6 +3947,10 @@ Sets up:
 
       :config
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+    (use-package emacs
+      :init
+      (setq tab-always-indent 'complete))
 #+end_src
 
 And an extra package for completing Org blocks.
