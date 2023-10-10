@@ -5124,6 +5124,9 @@ And ~e~ in any terminal should open file in Emacs buffer.
       (rename-buffer name)))
 #+end_src
 
+*** TODO configure Vterm Copy mode
+*** TODO configure pass-through keys
+
 *** Check if THIS is a tangle we have natively now:
 
 #+begin_src emacs-lisp :lexical no
