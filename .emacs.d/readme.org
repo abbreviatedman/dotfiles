@@ -197,24 +197,24 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
   (use-package emacs
     :general
     (crj-leader-keys
-      "m" '(:ignore t :which-key "Markup menu")
+      "m" '(:ignore t :which-key "Markup menu.")
       "i" '(:ignore t :which-key "Insert menu.")
       "ic" '(:ignore t :which-key "Insert cursor menu.")
-      "l" '(:ignore t :which-key "Lisp menu")
-      "b" '(:ignore t :which-key "Buffers menu")
+      "l" '(:ignore t :which-key "Lisp menu.")
+      "b" '(:ignore t :which-key "Buffers menu.")
       "t" '(:ignore t :which-key "Toggle menu.")
       "s" '(:ignore t :which-key "Search menu.")
-      "z" '(:ignore t :which-key "Zooming menu")
-      "c" '(:ignore t :which-key "Code menu")
-      "q" '(:ignore t :which-key "Quit menu")
-      "p" '(:ignore t :which-key "project menu")
-      "a" '(:ignore t :which-key "Applications menu")
-      "ac" '(:ignore t :which-key "Calendar menu")
-      "acg" '(:ignore t :which-key "Google Calendar menu")
-      "g" '(:ignore t :which-key "Git menu")
-      "ai" '(:ignore t :which-key "AI Menu")
-      "aib" '(:ignore t :which-key "Bing Chat Menu")
-      "h" '(:ignore t :which-key "Help Menu")))
+      "z" '(:ignore t :which-key "Zooming menu.")
+      "c" '(:ignore t :which-key "Code menu.")
+      "q" '(:ignore t :which-key "Quit menu.")
+      "p" '(:ignore t :which-key "project menu.")
+      "a" '(:ignore t :which-key "Applications menu.")
+      "ac" '(:ignore t :which-key "Calendar menu.")
+      "acg" '(:ignore t :which-key "Google Calendar menu.")
+      "g" '(:ignore t :which-key "Git menu.")
+      "ai" '(:ignore t :which-key "AI menu.")
+      "aib" '(:ignore t :which-key "Bing Chat menu.")
+      "h" '(:ignore t :which-key "Help menu.")))
 #+end_src
 
 *** General Emacs' Keybindings
