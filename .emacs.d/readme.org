@@ -197,9 +197,13 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
   (use-package emacs
     :general
     (crj-leader-keys
-      "m" '(:ignore t :which-key "Markup Menu")
+      "m" '(:ignore t :which-key "Markup menu")
       "i" '(:ignore t :which-key "Insert menu.")
-      "ic" '(:ignore t :which-key "Insert cursor menu.")))
+      "ic" '(:ignore t :which-key "Insert cursor menu.")
+      "b" '(:ignore t :which-key "Buffers menu")
+      "t" '(:ignore t :which-key "Toggle menu.")
+      "s" '(:ignore t :which-key "Search menu")
+      "z" '(:ignore t :which-key "Zooming menu")))
 #+end_src
 
 *** General Emacs' Keybindings
@@ -252,15 +256,6 @@ I think you get the basics—as I did with learning and writing this section! Le
       ";" '(execute-extended-command :which-key "Run interactive command.")
       ":" '(eval-expression :which-key "Evaluate expression.")
       "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")))
-#+end_src
-
-Creating a buffers menu.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "b" '(:ignore t :which-key "Buffers Menu")))
 #+end_src
 
 And adding some buffer commands, including a custom one.
@@ -331,17 +326,6 @@ Which key shows you a constantly updating list of what keys you can press next a
           which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL")))
 #+end_src
 
-**** A Which-Key Menu
-
-This is as good a place as any to show how to make a menu with which-key!
-
-#+begin_src emacs-lisp :lexical no
-  (use-package which-key
-    :general
-    (crj-leader-keys
-      "t" '(:ignore t :which-key "Toggle menu.")))
-#+end_src
-
 ** Markup Documents
 
 Searching a markup outline.
@@ -408,26 +392,6 @@ Org is built into Emacs, but you probably want the newest version.
 Let's make Org keybindings a bit better.
 
 ***** Todos
-
-****** Todos menu
-
-#+begin_src emacs-lisp
-  (use-package org
-    :general
-    (crj-leader-keys
-      "mt" '(:ignore t :which-key "Todos Menu")))
-#+end_src
-
-****** General Bindings
-
-Some general todo bindings.
-
-#+begin_src emacs-lisp
-  (use-package org
-    :general
-    (crj-leader-keys
-      "mtt" '(org-todo :which-key "Change todo state.")))
-#+end_src
 
 ***** Searching Org Documents
 
@@ -1225,14 +1189,6 @@ Shows you the difference between two different bits of text. Another very occasi
 
 Searching is something Emacs does very, /very/ well.
 
-We'll build in a search menu first.
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys "s" '(:ignore t :which-key "Search Menu")))
-#+end_src
-
   We'll use various ~consult~ commands to search through different sets of data.
 
   We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
@@ -1570,7 +1526,6 @@ Next, we make some keybindings for them.
   (use-package emacs
     :general
     (crj-leader-keys
-      "z" '(:ignore t :which-key "Zooming Menu")
       "zj" '(crj-zoom-in-all-buffers :which-key "Zoom in globally.")
       "zk" '(crj-zoom-out-all-buffers :which-key "Zoom out globally.")
       "zb" '(crj-zoom-reset-all-buffers :which-key "Reset zoom globally.")
