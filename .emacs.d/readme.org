@@ -3916,41 +3916,39 @@ Sets up:
      "TAB" #'corfu-next
      [tab] #'corfu-next
      "S-TAB" #'corfu-previous
-     [backtab] #'corfu-previous
+     [backtab] #'corfu-previous)
 
-     (:keymaps 'global-map "M-l" nil)
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    (corfu-separator ?#)
+    (corfu-preview-current 'insert)
+    (corfu-quit-at-boundary 'separator)
+    (corfu-auto-prefix 1)
+    (corfu-preselect 'prompt)
+    (corfu-on-exact-match nil)
 
-     :custom
-     (corfu-cycle t)
-     (corfu-auto t)
-     (corfu-separator ?#)
-     (corfu-preview-current 'insert)
-     (corfu-quit-at-boundary 'separator)
-     (corfu-auto-prefix 1)
-     (corfu-preselect 'prompt)
-     (corfu-on-exact-match nil)
+    :hook ((prog-mode . corfu-mode)
+           (shell-mode . corfu-mode)
+           (eshell-mode . corfu-mode))
 
-     :hook ((prog-mode . corfu-mode)
-            (shell-mode . corfu-mode)
-            (eshell-mode . corfu-mode))
+    :init
+    (global-corfu-mode))
 
-     :init
-     (global-corfu-mode))
+  (use-package kind-icon
+    :after corfu
+    :custom
+    (kind-icon-use-icons t)
+    (kind-icon-default-face 'corfu-default)
+    (kind-icon-blend-background nil)
+    (kind-icon-blend-frac 0.08)
 
-    (use-package kind-icon
-      :after corfu
-      :custom
-      (kind-icon-use-icons t)
-      (kind-icon-default-face 'corfu-default)
-      (kind-icon-blend-background nil)
-      (kind-icon-blend-frac 0.08)
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-      :config
-      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
-    (use-package emacs
-      :init
-      (setq tab-always-indent 'complete))
+  (use-package emacs
+    :init
+    (setq tab-always-indent 'complete))
 #+end_src
 
 And an extra package for completing Org blocks.
