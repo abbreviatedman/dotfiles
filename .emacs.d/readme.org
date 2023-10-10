@@ -293,11 +293,11 @@ And adding some buffer commands, including a custom one.
 
 Check out this (useful!) keybinding.
 
-#+begin_src emacs-lisp
-  ;; (use-package emacs
-  ;;   :general
-  ;;   (:states 'insert
-  ;;    "<S-backspace>" #'just-one-space))
+#+begin_src emacs-lisp :tangle no
+  (use-package emacs
+    :general
+    (:states 'insert
+     "<S-backspace>" #'just-one-space))
 #+end_src
 
 See the <S-backspace> mapping? Well, it took me a good while to find the right way to write shift-backspace in the same syntax as the rest of it, and in the process, I happened upon this alternate syntax:
@@ -542,131 +542,6 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
      :states '(normal insert)
      "M-h" #'org-metaleft
      "M-l" #'org-metaright))
-
-  ;; (use-package org
-  ;;   :commands (org-capture org-agenda)
-  ;;   :hook (org-mode . efs/org-mode-setup)
-  ;;   :config
-  ;;   (setq org-ellipsis " ▾")
-
-  ;;   (setq org-agenda-start-with-log-mode t)
-  ;;   (setq org-log-done 'time)
-  ;;   (setq org-log-into-drawer t)
-
-  ;;   (setq org-agenda-files
-  ;;         '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
-  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
-  ;;           "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
-
-  ;;   (require 'org-habit)
-  ;;   (add-to-list 'org-modules 'org-habit)
-  ;;   (setq org-habit-graph-column 60)
-
-  ;;   (setq org-todo-keywords
-  ;;         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-  ;;           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-  ;;   (setq org-refile-targets
-  ;;         '(("Archive.org" :maxlevel . 1)
-  ;;           ("Tasks.org" :maxlevel . 1)))
-
-  ;;   ;; Save Org buffers after refiling!
-  ;;   (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-  ;;   (setq org-tag-alist
-  ;;         '((:startgroup)
-  ;;                                         ; Put mutually exclusive tags here
-  ;;           (:endgroup)
-  ;;         ("@errand" . ?E)
-  ;;         ("@home" . ?H)
-  ;;         ("@work" . ?W)
-  ;;         ("agenda" . ?a)
-  ;;         ("planning" . ?p)
-  ;;         ("publish" . ?P)
-  ;;         ("batch" . ?b)
-  ;;         ("note" . ?n)
-  ;;         ("idea" . ?i)))
-
-  ;; ;; Configure custom agenda views
-  ;; (setq org-agenda-custom-commands
-  ;;       '(("d" "Dashboard"
-  ;;          ((agenda "" ((org-deadline-warning-days 7)))
-  ;;           (todo "NEXT"
-  ;;                 ((org-agenda-overriding-header "Next Tasks")))
-  ;;           (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-  ;;         ("n" "Next Tasks"
-  ;;          ((todo "NEXT"
-  ;;                 ((org-agenda-overriding-header "Next Tasks")))))
-
-  ;;         ("W" "Work Tasks" tags-todo "+work-email")
-
-  ;;         ;; Low-effort next actions
-  ;;         ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-  ;;          ((org-agenda-overriding-header "Low Effort Tasks")
-  ;;           (org-agenda-max-todos 20)
-  ;;           (org-agenda-files org-agenda-files)))
-
-  ;;         ("w" "Workflow Status"
-  ;;          ((todo "WAIT"
-  ;;                 ((org-agenda-overriding-header "Waiting on External")
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "REVIEW"
-  ;;                 ((org-agenda-overriding-header "In Review")
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "PLAN"
-  ;;                 ((org-agenda-overriding-header "In Planning")
-  ;;                  (org-agenda-todo-list-sublevels nil)
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "BACKLOG"
-  ;;                 ((org-agenda-overriding-header "Project Backlog")
-  ;;                  (org-agenda-todo-list-sublevels nil)
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "READY"
-  ;;                 ((org-agenda-overriding-header "Ready for Work")
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "ACTIVE"
-  ;;                 ((org-agenda-overriding-header "Active Projects")
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "COMPLETED"
-  ;;                 ((org-agenda-overriding-header "Completed Projects")
-  ;;                  (org-agenda-files org-agenda-files)))
-  ;;           (todo "CANC"
-  ;;                 ((org-agenda-overriding-header "Cancelled Projects")
-  ;;                  (org-agenda-files org-agenda-files)))))))
-
-  ;; (setq org-capture-templates
-  ;;       `(("t" "Tasks / Projects")
-  ;;         ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
-  ;;          "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
-
-  ;;         ("j" "Journal Entries")
-  ;;         ("jj" "Journal" entry
-  ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-  ;;          "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-  ;;          ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
-  ;;          :clock-in :clock-resume
-  ;;          :empty-lines 1)
-  ;;         ("jm" "Meeting" entry
-  ;;          (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-  ;;          "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-  ;;          :clock-in :clock-resume
-  ;;          :empty-lines 1)
-
-  ;;         ("w" "Workflows")
-  ;;         ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
-  ;;          "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
-
-  ;;         ("m" "Metrics Capture")
-  ;;         ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
-  ;;          "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
-
-  ;; (define-key global-map (kbd "C-c j")
-  ;;   (lambda () (interactive) (org-capture nil "jj")))
-
-  ;; (efs/org-font-setup)
-  ;; )
-
 #+end_src
 
 **** Nicer Heading Bullets
@@ -699,12 +574,6 @@ Most of this is pretty standard, but I also do have my own CSS to make exporting
           org-export-with-section-numbers nil
           org-export-with-toc nil
           org-export-headline-levels 6
-          ;; org-babel-default-header-args `((:results . "verbatim pp replace output")
-          ;;                                 (:exports . "both")
-          ;;                                 (:noweb . "strip-export")
-          ;;                                 (:session . "none")
-          ;;                                 (:padline . "no"))
-
           org-html-head-extra
           "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>"))
 
@@ -1693,9 +1562,11 @@ From there, I can use those to zoom in on all current buffers. These functions s
 
 This package, ~default-text-scale~, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
 
-#+begin_src emacs-lisp
-  ;; (use-package default-text-scale
-  ;;   :init (default-text-scale-mode))
+I'm not using it, but it's worth exploring at some point.
+
+#+begin_src emacs-lisp :tangle no
+  (use-package default-text-scale
+    :init (default-text-scale-mode))
 #+end_src
 
 But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts  I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
@@ -1871,13 +1742,6 @@ When displaying code to others, it's often good to make the line numbers absolut
     :general
     (crj-leader-keys
       "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
-#+end_src
-
-**** TODO make line numbers increase in size at a lower rate. This command could be useful:
-
-#+begin_src emacs-lisp
-  (defun crj--reset-line-number-height ()
-    (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
 
 *** Indentation
@@ -2638,15 +2502,6 @@ We'll go with spaces!
   (use-package emacs
     :init
     (indent-tabs-mode -1))
-#+end_src
-
-***** TODO
-#+begin_src emacs-lisp :lexical no
-  (setq indentation-to-check-out '(indent-tabs-mode
-                                   tab-width
-                                   markdown-list-indent-width
-                                   evil-shift-width
-                                   css-indent-offset))
 #+end_src
 
 ***** Column Length
@@ -3593,8 +3448,7 @@ Here that all is!
 #+begin_src emacs-lisp :lexical no
   (use-package embark
     :bind
-    (("C-." . embark-act)         ;; pick some comfortable binding
-     ;; ("C-;" . embark-dwim)        ;; good alternative: M-.
+    (("C-." . embark-act)
      ("C->" . crj-embark-act-noquit)
      ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
@@ -3750,135 +3604,6 @@ Once you're used to this speedy filtering process, it /greatly/ cuts down on the
 
 #+end_src
 
-**** Lots of completion settings to look over!
-
-#+begin_src emacs-lisp
-  ;; snippet settings
-
-  ;; (defun crj--set-up-snippets ()
-  ;;   (yas-global-mode)
-  ;;   (setq yas-snippet-dirs '("~/.doom.d/snippets"))
-  ;;   (yas-reload-all)
-  ;;   ;; I like having a specific (non-tab) and easy key for expanding snippets
-  ;;   (map! :i [M-tab] #'yas-expand
-  ;; 	:map yas-keymap "TAB" nil
-  ;; 	"<tab>" nil
-  ;; 	[M-tab] #'yas-next-field-or-maybe-expand))
-
-  ;; (require 'yasnippet)
-  ;; (after! yasnippet (crj--set-up-snippets))
-
-  ;; ;; don't add newlines to end of snippet files
-  ;; (defun no-final-newline-in-buffer ()
-  ;;   (setq-local require-final-newline nil))
-  ;; (add-hook! 'snippet-mode-hook 'no-final-newline-in-buffer)
-
-#+end_src
-
-****** TODO set up Emmet
-
-#+begin_src emacs-lisp
-  ;; (map! :i [C-tab] nil)
-  ;; (map! :i [C-tab] #'emmet-expand-line)
-  ;; (map! :map emmet-mode-keymap "<tab>" nil)
-
-#+end_src
-
-This looks like something I'll want to implement too.
-
-#+begin_src emacs-lisp
-  ;; (defun toggle-eldoc-mode ()
-  ;;   (interactive)
-  ;;   (if eldoc-mode
-  ;;       (eldoc-mode -1)
-  ;;     (eldoc-mode 1)))
-
-  ;; (map!
-  ;;  :leader
-  ;;  (:prefix ("t" . "toggle")
-  ;; 	  :desc "eldoc for current symbol" :n "k" #'eldoc
-  ;; 	  :desc "eldoc mode." :n "K" #'toggle-eldoc-mode))
-
-  #+end_src
-
-  Might be some useful Embark stuff here, since I'll be setting that up soon.
-  #+begin_src emacs-lisp
-    ;; (use-package vertico
-    ;;   :config
-    ;;   embark act and resume completion
-    ;;   (defun crj--embark-act-without-quitting ()
-    ;;     (interactive)
-    ;;     (let ((embark-quit-after-action nil))
-    ;;       (embark-act)))
-    ;;   (map! :map vertico-map "C-:" #'crj--embark-act-without-quitting)
-    ;;   (map! :leader
-    ;; 	:desc "Select from previous completions." "\"" #'vertico-repeat-select)
-    ;;   (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
-    ;;   (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
-#+end_src
-
-
-These might be useful Corfu settings? check them out once I get Eglot going?
-
-  #+begin_src emacs-lisp
-    ;; (use-package corfu
-    ;;   :config
-    ;;   (define-key corfu-map (kbd "M-g") #'corfu-quit)
-    ;;   (define-key corfu-map (kbd "C-n") #'corfu-next)
-    ;;   (define-key corfu-map (kbd "C-j") #'corfu-next)
-    ;; (define-key corfu-map (kbd "C-p") #'corfu-previous)
-    ;; (define-key corfu-map (kbd "C-k") #'corfu-previous)
-    ;; (define-key corfu-map (kbd "C-S-n") #'corfu-scroll-up)
-    ;; (define-key corfu-map (kbd "C-S-j") #'corfu-scroll-up)
-    ;; (define-key corfu-map (kbd "C-S-p") #'corfu-scroll-down)
-    ;;   (define-key corfu-map (kbd "C-S-k") #'corfu-scroll-down)
-    ;;   (define-key corfu-map (kbd "RET") nil)
-    ;;   (define-key corfu-map (kbd "RET") #'corfu-complete)
-    ;;   (define-key corfu-map (kbd "TAB") nil)
-    ;;   (define-key corfu-map (kbd "<tab>") nil)
-    ;;   (define-key corfu-map (kbd "<tab>") #'corfu-insert)
-    ;;   (define-key corfu-map (kbd "TAB") #'corfu-insert)
-    ;; (setq corfu-commit-predicate nil
-    ;; 	completion-category-overrides '((eglot (styles orderless)))
-    ;; 	corfu-auto t
-    ;; 	corfu-auto-prefix 1
-    ;; 	corfu-quit-no-match t
-    ;; 	corfu-cycle t))
-
-    ;; (after! projectile
-    ;; 	(add-to-list 'projectile-project-root-files ".git"))
-
-    ;; ;; I don't need the "symbol class" info in my documentation.
-    ;; (after! marginalia
-    ;; 	(setf (alist-get 'variable marginalia-annotator-registry)
-    ;; 	      '(crj--custom-marginalia-annotate-variable builtin none))
-    ;; 	(setf (alist-get 'symbol marginalia-annotator-registry)
-    ;; 	      '(crj--custom-marginalia-annotate-symbol builtin none))
-    ;; 	(setf (alist-get 'function marginalia-annotator-registry)
-    ;; 	      '(crj--custom-marginalia-annotate-function none)))
-
-    ;; (org-babel-do-load-languages
-    ;; 'org-babel-load-languages
-    ;; '((emacs-lisp . t)))
-    ;; (sql-mode . t)
-    ;; (racket . t)
-    ;; (python . t)
-    ;; (ipython . t)
-    ;; (bash . t)
-    ;; (sh . t)
-    ;; (js . t)
-    ;; (javascript . t)
-    ;; (sql . t)
-    ;; (go . t)
-
-
-    ;; (map! :leader
-    ;;       :desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring)
-
-    ;; ;; (map! :i "C-SPC" #'complete-symbol)
-
-    ;; (setq embark-prompter 'embark-completing-read-prompter)
-  #+end_src
 *** In-Buffer Completion
 
 **** Corfu
@@ -4173,22 +3898,11 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
       "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
 #+end_src
 
-** EFS/Better Modeline
-
-[[https://github.com/seagle0128/doom-modeline][doom-modeline]] is a very attractive and rich (yet still minimal) mode line configuration for Emacs.  The default configuration is quite good but you can check out the [[https://github.com/seagle0128/doom-modeline#customize][configuration options]] for more things you can enable or disable.
-
-*NOTE:* The first time you load your configuration on a new machine, you'll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
-
-#+begin_src emacs-lisp
-  ;; (use-package doom-modeline
-  ;;   :init (doom-modeline-mode 1)
-  ;;   :custom ((doom-modeline-height 15)))
-#+end_src
-
 ** Improving Help Commands
 
 Original description of Emacs From Scratch's equivalent section perfectly sums it up, so I'll let it do so:
 
+#+BEGIN_QUOTE
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers.  For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 #+end_quote
 
@@ -4244,181 +3958,6 @@ Besides different keybindings, I've only added a couple extra configurations her
     ("C-h F" #'describe-face))
 #+end_src
 
-*** TODO set help commands on the help map
-
-** EFS/Configure Babel Languages
-
-To execute or export code in ~org-mode~ code blocks, you'll need to set up ~org-babel-load-languages~ for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with ~org-babel~.
-
-#+begin_src emacs-lisp
-
-  ;; (with-eval-after-load 'org
-  ;; (org-babel-do-load-languages
-  ;; 'org-babel-load-languages
-  ;; '((emacs-lisp . t)
-  ;; (python . t)))
-
-  ;; (push '("conf-unix" . conf-unix) org-src-lang-modes))
-
-#+end_src
-
-** EFS/Structure Templates
-
-Org Mode's [[https://orgmode.org/manual/Structure-Templates.html][structure templates]] feature enables you to quickly insert code blocks into your Org files in combination with ~org-tempo~ by typing ~<~ followed by the template name like ~el~ or ~py~ and then press ~TAB~.  For example, to insert an empty ~emacs-lisp~ block below, you can type ~<el~ and press ~TAB~ to expand into such a block.
-
-You can add more ~src~ block templates below by copying one of the lines and changing the two strings at the end, the first to be the template name and the second to contain the name of the language [[https://orgmode.org/worg/org-contrib/babel/languages.html][as it is known by Org Babel]].
-
-#+begin_src emacs-lisp
-
-  (with-eval-after-load 'org
-    ;; This is needed as of Org 9.2
-    (require 'org-tempo)
-
-    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-    (add-to-list 'org-structure-template-alist '("py" . "src python")))
-
-#+end_src
-
-** EFS/Languages
-
-*** Debugging with dap-mode
-
-[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
-
-#+begin_src emacs-lisp
-
-  ;; (use-package dap-mode
-  ;; Uncomment the config below if you want all UI panes to be hidden by default!
-  ;; :custom
-  ;; (lsp-enable-dap-auto-configure nil)
-  ;; :config
-  ;; (dap-ui-mode 1)
-  ;; :commands dap-debug
-  ;; :config
-  ;; Set up Node debugging
-  ;; (require 'dap-node)
-  ;; (dap-node-setup) ;; Automatically installs Node debug adapter if needed
-
-  ;; Bind `C-c l d` to `dap-hydra` for easy access
-  ;; (general-define-key
-  ;; :keymaps 'lsp-mode-map
-  ;; :prefix lsp-keymap-prefix
-  ;; "d" '(dap-hydra t :wk "debugger")))
-
-#+end_src
-
-** EFS/Eshell
-
-[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
-
-The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well.  However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
-
-*Useful key bindings:*
-
-- ~C-c C-p~ / ~C-c C-n~ - go back and forward in the buffer's prompts (also ~[[~ and ~]]~ with evil-mode)
-- ~M-p~ / ~M-n~ - go back and forward in the input history
-- ~C-c C-u~ - delete the current input string backwards up to the cursor
-- ~counsel-esh-history~ - A searchable history of commands typed into Eshell
-
-We will be covering Eshell more in future videos highlighting other things you can do with it.
-
-For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
-- https://ambrevar.xyz/emacs-eshell/index.html
-- https://ambrevar.xyz/emacs-eshell-versus-shell/index.html
-
-#+begin_src emacs-lisp
-
-  (defun efs/configure-eshell ()
-    ;; Save command history when commands are entered
-    (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
-
-    ;; Truncate buffer for performance
-    (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
-
-    ;; Bind some useful keys for evil-mode
-    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
-    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
-    (evil-normalize-keymaps)
-
-    (setq eshell-history-size         10000
-          eshell-buffer-maximum-lines 10000
-          eshell-hist-ignoredups t
-          eshell-scroll-to-bottom-on-input t))
-
-  (use-package eshell
-    :hook (eshell-first-time-mode . efs/configure-eshell)
-    :config
-
-    (with-eval-after-load 'esh-opt
-      (setq eshell-destroy-buffer-when-process-dies t)
-      (setq eshell-visual-commands '("htop" "zsh" "vim"))))
-
-
-#+end_src
-
-** EFS/Dired
-
-Dired is a built-in file manager for Emacs that does some pretty amazing things!  Here are some key bindings you should try out:
-
-*** Key Bindings
-
-**** Navigation
-
-*Emacs* / *Evil*
-- ~n~ / ~j~ - next line
-- ~p~ / ~k~ - previous line
-- ~j~ / ~J~ - jump to file in buffer
-- ~RET~ - select file or directory
-- ~^~ - go to parent directory
-- ~S-RET~ / ~g O~ - Open file in "other" window
-- ~M-RET~ - Show file in other window without focusing (previewing files)
-- ~g o~ (~dired-view-file~) - Open file but in a "preview" mode, close with ~q~
-- ~g~ / ~g r~ Refresh the buffer with ~revert-buffer~ after changing configuration (and after filesystem changes!)
-
-**** Marking files
-
-- ~m~ - Marks a file
-- ~u~ - Unmarks a file
-- ~U~ - Unmarks all files in buffer
-- ~* t~ / ~t~ - Inverts marked files in buffer
-- ~% m~ - Mark files in buffer using regular expression
-- ~*~ - Lots of other auto-marking functions
-- ~k~ / ~K~ - "Kill" marked items (refresh buffer with ~g~ / ~g r~ to get them back)
-- Many operations can be done on a single file if there are no active marks!
-
-**** Copying and Renaming files
-
-- ~C~ - Copy marked files (or if no files are marked, the current file)
-- Copying single and multiple files
-- ~U~ - Unmark all files in buffer
-- ~R~ - Rename marked files, renaming multiple is a move!
-- ~% R~ - Rename based on regular expression: ~^test~ , ~old-\&~
-
-*Power command*: ~C-x C-q~ (~dired-toggle-read-only~) - Makes all file names in the buffer editable directly to rename them!  Press ~Z Z~ to confirm renaming or ~Z Q~ to abort.
-
-**** Deleting files
-
-- ~D~ - Delete marked file
-- ~d~ - Mark file for deletion
-- ~x~ - Execute deletion for marks
-- ~delete-by-moving-to-trash~ - Move to trash instead of deleting permanently
-
-**** Creating and extracting archives
-
-- ~Z~ - Compress or decompress a file or folder to (~.tar.gz~)
-- ~c~ - Compress selection to a specific file
-- ~dired-compress-files-alist~ - Bind compression commands to file extension
-
-**** Other common operations
-
-- ~T~ - Touch (change timestamp)
-- ~M~ - Change file mode
-- ~O~ - Change file owner
-- ~G~ - Change file group
-- ~S~ - Create a symbolic link to this file
-- ~L~ - Load an Emacs Lisp file into Emacs
-
 ** Utility Functions
 Making my life easier!
 
@@ -4455,7 +3994,6 @@ I've:
 - Hacked the LSP info so it doesn't constantly report on lag, which is honestly more distracting than LSP lag itself. See the Eglot section for how I did this.
 - Merged the modeline and the minibuffer using the excellent Mini Modeline package. This gets you back some substantial screen estate, especially since the modeline is now on just the frame, not each individual window.
 - Merging with the minibuffer /also/ means that when you change the format to have no info, you're really hiding the modeline entirely. I do that by default, but I can toggle it back on if I need to.
-
 
 #+begin_src emacs-lisp :lexical no
   (use-package mini-modeline
@@ -4503,9 +4041,404 @@ I've:
 
 *** timers
 
+*** remove old org mode config stuff
+
+Anything useful here?
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (use-package org
+    :commands (org-capture org-agenda)
+    :hook (org-mode . efs/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
+
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+
+    (setq org-agenda-files
+          '("~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org"
+            "~/Projects/Code/emacs-from-scratch/OrgFiles/Habits.org"
+            "~/Projects/Code/emacs-from-scratch/OrgFiles/Birthdays.org"))
+
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
+
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+
+    (setq org-refile-targets
+          '(("Archive.org" :maxlevel . 1)
+            ("Tasks.org" :maxlevel . 1)))
+
+    ;; Save Org buffers after refiling!
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+    (setq org-tag-alist
+          '((:startgroup)
+                                          ; Put mutually exclusive tags here
+            (:endgroup)
+            ("@errand" . ?E)
+            ("@home" . ?H)
+            ("@work" . ?W)
+            ("agenda" . ?a)
+            ("planning" . ?p)
+            ("publish" . ?P)
+            ("batch" . ?b)
+            ("note" . ?n)
+            ("idea" . ?i)))
+
+    ;; Configure custom agenda views
+    (setq org-agenda-custom-commands
+          '(("d" "Dashboard"
+             ((agenda "" ((org-deadline-warning-days 7)))
+              (todo "NEXT"
+                    ((org-agenda-overriding-header "Next Tasks")))
+              (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+            ("n" "Next Tasks"
+             ((todo "NEXT"
+                    ((org-agenda-overriding-header "Next Tasks")))))
+
+            ("W" "Work Tasks" tags-todo "+work-email")
+
+            ;; Low-effort next actions
+            ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+             ((org-agenda-overriding-header "Low Effort Tasks")
+              (org-agenda-max-todos 20)
+              (org-agenda-files org-agenda-files)))
+
+            ("w" "Workflow Status"
+             ((todo "WAIT"
+                    ((org-agenda-overriding-header "Waiting on External")
+                     (org-agenda-files org-agenda-files)))
+              (todo "REVIEW"
+                    ((org-agenda-overriding-header "In Review")
+                     (org-agenda-files org-agenda-files)))
+              (todo "PLAN"
+                    ((org-agenda-overriding-header "In Planning")
+                     (org-agenda-todo-list-sublevels nil)
+                     (org-agenda-files org-agenda-files)))
+              (todo "BACKLOG"
+                    ((org-agenda-overriding-header "Project Backlog")
+                     (org-agenda-todo-list-sublevels nil)
+                     (org-agenda-files org-agenda-files)))
+              (todo "READY"
+                    ((org-agenda-overriding-header "Ready for Work")
+                     (org-agenda-files org-agenda-files)))
+              (todo "ACTIVE"
+                    ((org-agenda-overriding-header "Active Projects")
+                     (org-agenda-files org-agenda-files)))
+              (todo "COMPLETED"
+                    ((org-agenda-overriding-header "Completed Projects")
+                     (org-agenda-files org-agenda-files)))
+              (todo "CANC"
+                    ((org-agenda-overriding-header "Cancelled Projects")
+                     (org-agenda-files org-agenda-files)))))))
+
+    (setq org-capture-templates
+          `(("t" "Tasks / Projects")
+            ("tt" "Task" entry (file+olp "~/Projects/Code/emacs-from-scratch/OrgFiles/Tasks.org" "Inbox")
+             "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+
+            ("j" "Journal Entries")
+            ("jj" "Journal" entry
+             (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+             "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+             ;; ,(dw/read-file-as-string "~/Notes/Templates/Daily.org")
+             :clock-in :clock-resume
+             :empty-lines 1)
+            ("jm" "Meeting" entry
+             (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+             "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+             :clock-in :clock-resume
+             :empty-lines 1)
+
+            ("w" "Workflows")
+            ("we" "Checking Email" entry (file+olp+datetree "~/Projects/Code/emacs-from-scratch/OrgFiles/Journal.org")
+             "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+            ("m" "Metrics Capture")
+            ("mw" "Weight" table-line (file+headline "~/Projects/Code/emacs-from-scratch/OrgFiles/Metrics.org" "Weight")
+             "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+
+    (define-key global-map (kbd "C-c j")
+      (lambda () (interactive) (org-capture nil "jj")))
+
+    (efs/org-font-setup)
+    )
+
+#+end_src
+
+*** add bindings for org deadlines and schedules
+
+*** redo font size to be calculated based on resolution
+
+*** Figure out how to get Eldoc to echo again
+
+*** make sure tabs are set correctly
+
+Possibly use my own variable to hold my current favorite indentation amount.
+
+And another one for the other popular one!
+
+Some variables to check out:
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (setq indentation-to-check-out '(indent-tabs-mode
+                                   tab-width
+                                   markdown-list-indent-width
+                                   evil-shift-width
+                                   css-indent-offset))
+#+end_src
+*** configure Vterm Copy mode
+
+*** configure pass-through keys
+
+
+*** make line numbers increase in size at a lower rate. This command could be useful:
+
+#+begin_src emacs-lisp
+  (defun crj--reset-line-number-height ()
+    (set-face-attribute 'line-number nil :height crj--default-font-size))
+#+end_src
+
+*** add ability to zoom to preset big size.
+
+*** add zooming to new-buffer-hook to adjust to current text scale?
+
+Would require that global-default-variable idea (or maybe reuse what exists?)
+
+*** add "i" and "o" (or switch those with j/k?) to zoom in by larger increments
+
+*** Figure out babel exporting
+
+Some sample code:
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (setq org-babel-default-header-args `((:results . "verbatim pp replace output")
+                                        (:exports . "both")
+                                        (:noweb . "strip-export")
+                                        (:session . "none")
+                                        (:padline . "no")))
+#+end_src
+
+*** See if any of this completion code is useful
+
+
+**** Lots of completion settings to look over!
+
+I'll need to look this stuff over at some point. Particularly if I ever want to return to using snippets.
+
+#+begin_src emacs-lisp :tangle no
+  snippet settings
+
+  (defun crj--set-up-snippets ()
+    (yas-global-mode)
+    (setq yas-snippet-dirs '("~/.doom.d/snippets"))
+    (yas-reload-all)
+    ;; I like having a specific (non-tab) and easy key for expanding snippets
+    (map! :i [M-tab] #'yas-expand
+          :map yas-keymap "TAB" nil
+          "<tab>" nil
+          [M-tab] #'yas-next-field-or-maybe-expand))
+
+  (require 'yasnippet)
+  (after! yasnippet (crj--set-up-snippets))
+
+  ;; don't add newlines to end of snippet files
+  (defun no-final-newline-in-buffer ()
+    (setq-local require-final-newline nil))
+  (add-hook! 'snippet-mode-hook 'no-final-newline-in-buffer)
+
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+  (map! :i [C-tab] nil)
+  (map! :i [C-tab] #'emmet-expand-line)
+  (map! :map emmet-mode-keymap "<tab>" nil)
+
+#+end_src
+
+This looks like something I'll want to implement too.
+
+#+begin_src emacs-lisp :tangle no
+  (defun toggle-eldoc-mode ()
+    (interactive)
+    (if eldoc-mode
+        (eldoc-mode -1)
+      (eldoc-mode 1)))
+
+  (map!
+   :leader
+   (:prefix ("t" . "toggle")
+    :desc "eldoc for current symbol" :n "k" #'eldoc
+    :desc "eldoc mode." :n "K" #'toggle-eldoc-mode))
+
+  #+end_src
+
+  Might be some useful Embark stuff here, since I'll be setting that up soon.
+
+  #+begin_src emacs-lisp :tangle no
+    (use-package vertico
+      :config
+      embark act and resume completion
+      (defun crj--embark-act-without-quitting ()
+        (interactive)
+        (let ((embark-quit-after-action nil))
+          (embark-act)))
+      (map! :map vertico-map "C-:" #'crj--embark-act-without-quitting)
+      (map! :leader
+            :desc "Select from previous completions." "\"" #'vertico-repeat-select)
+      (map! :map vertico-map "C-S-P" #'vertico-scroll-down)
+      (map! :map vertico-map "C-S-N" #'vertico-scroll-up))
+#+end_src
+
+These might be useful Corfu settings? check them out once I get Eglot going?
+
+  #+begin_src emacs-lisp :tangle no
+    (use-package corfu
+      :config
+      (define-key corfu-map (kbd "M-g") #'corfu-quit)
+      (define-key corfu-map (kbd "C-n") #'corfu-next)
+      (define-key corfu-map (kbd "C-j") #'corfu-next)
+      (define-key corfu-map (kbd "C-p") #'corfu-previous)
+      (define-key corfu-map (kbd "C-k") #'corfu-previous)
+      (define-key corfu-map (kbd "C-S-n") #'corfu-scroll-up)
+      (define-key corfu-map (kbd "C-S-j") #'corfu-scroll-up)
+      (define-key corfu-map (kbd "C-S-p") #'corfu-scroll-down)
+      (define-key corfu-map (kbd "C-S-k") #'corfu-scroll-down)
+      (define-key corfu-map (kbd "RET") nil)
+      (define-key corfu-map (kbd "RET") #'corfu-complete)
+      (define-key corfu-map (kbd "TAB") nil)
+      (define-key corfu-map (kbd "<tab>") nil)
+      (define-key corfu-map (kbd "<tab>") #'corfu-insert)
+      (define-key corfu-map (kbd "TAB") #'corfu-insert)
+      (setq corfu-commit-predicate nil
+            completion-category-overrides '((eglot (styles orderless)))
+            corfu-auto t
+            corfu-auto-prefix 1
+            corfu-quit-no-match t
+            corfu-cycle t))
+
+    (after! projectile
+            (add-to-list 'projectile-project-root-files ".git"))
+
+    ;; I don't need the "symbol class" info in my documentation.
+    (after! marginalia
+            (setf (alist-get 'variable marginalia-annotator-registry)
+                  '(crj--custom-marginalia-annotate-variable builtin none))
+            (setf (alist-get 'symbol marginalia-annotator-registry)
+                  '(crj--custom-marginalia-annotate-symbol builtin none))
+            (setf (alist-get 'function marginalia-annotator-registry)
+                  '(crj--custom-marginalia-annotate-function none)))
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)))
+    (sql-mode . t)
+    (racket . t)
+    (python . t)
+    (ipython . t)
+    (bash . t)
+    (sh . t)
+    (js . t)
+    (javascript . t)
+    (sql . t)
+    (go . t)
+
+
+    (map! :leader
+          :desc "Yank from kill ring with completion." :n "P" #'yank-from-kill-ring)
+
+    ;; (map! :i "C-SPC" #'complete-symbol)
+
+    (setq embark-prompter 'embark-completing-read-prompter)
+
+  #+end_src
+
 *** Add Evil Embrace
 
 *** Add markup mode add-heading-above command
+
+*** Set Up Debugging With Dap-Mode
+
+Some code and docs to start with from Emacs From Scratch:
+
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+
+#+begin_src emacs-lisp :tangle no
+  (use-package dap-mode
+    Uncomment the config below if you want all UI panes to be hidden by default!
+    :custom
+    (lsp-enable-dap-auto-configure nil)
+    :config
+    (dap-ui-mode 1)
+    :commands dap-debug
+    :config
+    Set up Node debugging
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+    Bind `C-c l d` to `dap-hydra` for easy access
+    (general-define-key
+     :keymaps 'lsp-mode-map
+     :prefix lsp-keymap-prefix
+     "d" '(dap-hydra t :wk "debugger")))
+#+end_src
+
+*** Set Up Eshell
+
+This is Emacs From Scratch's code and documentation on it:
+
+[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
+
+The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well.  However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
+
+*Useful key bindings:*
+
+- ~C-c C-p~ / ~C-c C-n~ - go back and forward in the buffer's prompts (also ~[[~ and ~]]~ with evil-mode)
+- ~M-p~ / ~M-n~ - go back and forward in the input history
+- ~C-c C-u~ - delete the current input string backwards up to the cursor
+- ~counsel-esh-history~ - A searchable history of commands typed into Eshell
+
+We will be covering Eshell more in future videos highlighting other things you can do with it.
+
+For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
+- https://ambrevar.xyz/emacs-eshell/index.html
+- https://ambrevar.xyz/emacs-eshell-versus-shell/index.html
+
+#+begin_src emacs-lisp :tangle no
+  (defun efs/configure-eshell ()
+    ;; Save command history when commands are entered
+    (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+
+    ;; Truncate buffer for performance
+    (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+
+    ;; Bind some useful keys for evil-mode
+    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'counsel-esh-history)
+    (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
+    (evil-normalize-keymaps)
+
+    (setq eshell-history-size         10000
+          eshell-buffer-maximum-lines 10000
+          eshell-hist-ignoredups t
+          eshell-scroll-to-bottom-on-input t))
+
+  (use-package eshell
+    :hook (eshell-first-time-mode . efs/configure-eshell)
+    :config
+
+    (with-eval-after-load 'esh-opt
+      (setq eshell-destroy-buffer-when-process-dies t)
+      (setq eshell-visual-commands '("htop" "zsh" "vim"))))
+
+
+#+end_src
+
 
 *** configure modeline further
 
@@ -4530,16 +4463,16 @@ I've:
 
 *** file management
 
-#+begin_src emacs-lisp :lexical no
-  ;; (setq! auto-save-default t)
-  ;; (setq backup-by-copying t      ; don't clobber symlinks
-  ;;       backup-directory-alist '(("." . "~/.emacs.d/backups/"))    ; don't litter my fs tree
-  ;;       delete-old-versions t
-  ;;       kept-new-versions 6
-  ;;       kept-old-versions 2
-  ;;       version-control t)       ; use versioned backups
-  ;; (setq auto-save-file-name-transforms
-  ;;       `((".*" "~/.emacs.d/backups/" t)))
+#+begin_src emacs-lisp :lexical no :tangle no
+  (setq! auto-save-default t)
+  (setq backup-by-copying t      ; don't clobber symlinks
+        backup-directory-alist '(("." . "~/.emacs.d/backups/"))    ; don't litter my fs tree
+        delete-old-versions t
+        kept-new-versions 6
+        kept-old-versions 2
+        version-control t)       ; use versioned backups
+  (setq auto-save-file-name-transforms
+        `((".*" "~/.emacs.d/backups/" t)))
 #+end_src
 
 *** org capture
@@ -4548,113 +4481,117 @@ I've:
 
 *** Better scratch buffers
 
-#+begin_src emacs-lisp :lexical no
-  ;; (defun crj--get-new-scratch-buffer-mode (previous-mode read-only-p desired-mode)
-  ;;   (cond (desired-mode desired-mode)
-  ;;         ((not read-only-p) previous-mode)
-  ;;         (t 'emacs-lisp-mode)))
+Some old code to revisit and maybe put back into play!
 
-  ;; (defun crj/open-scratch-buffer (&optional new-buffer-p project-p same-window-p desired-mode)
-  ;;   "Open a scratch buffer with the current buffer's mode applied.
+#+begin_src emacs-lisp :lexical no :tangle no
+  (defun crj--get-new-scratch-buffer-mode (previous-mode read-only-p desired-mode)
+    (cond (desired-mode desired-mode)
+          ((not read-only-p) previous-mode)
+          (t 'emacs-lisp-mode)))
 
-  ;; Passes on arguments to `doom/open-scratch-buffer'. See that function's doc string for the arguments used.
+  (defun crj/open-scratch-buffer (&optional new-buffer-p project-p same-window-p desired-mode)
+    "Open a scratch buffer with the current buffer's mode applied.
 
-  ;; Setting `doom-scratch-initial-major-mode' to `t' was supposed to handle the \"use the same mode\" part, but it does not appear to be working. So: hack."
-  ;;   (interactive)
-  ;;   (let ((new-mode (crj--get-new-scratch-buffer-mode major-mode buffer-read-only desired-mode)))
-  ;;     (doom/open-scratch-buffer new-buffer-p project-p same-window-p)
-  ;;     (funcall new-mode)))
+  Passes on arguments to `doom/open-scratch-buffer'. See that function's doc string for the arguments used.
 
-  ;; (defun crj/switch-to-scratch-buffer ()
-  ;;   "Switch to the scratch buffer with the current mode applied."
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil nil t))
+  Setting `doom-scratch-initial-major-mode' to `t' was supposed to handle the \"use the same mode\" part, but it does not appear to be working. So: hack."
+    (interactive)
+    (let ((new-mode (crj--get-new-scratch-buffer-mode major-mode buffer-read-only desired-mode)))
+      (doom/open-scratch-buffer new-buffer-p project-p same-window-p)
+      (funcall new-mode)))
 
-  ;; ;; Currently unused, but... here's how I'd do it if I brought it back.
-  ;; (defun crj/open-new-scratch-buffer ()
-  ;;   "View a new scratch buffer with the current buffer's mode applied."
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer t))
+  (defun crj/switch-to-scratch-buffer ()
+    "Switch to the scratch buffer with the current mode applied."
+    (interactive)
+    (crj/open-scratch-buffer nil nil t))
 
-  ;; (defun crj/open-project-scratch-buffer ()
-  ;;   "Open a project-specific scratch buffer with the current buffer's mode applied."
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil t))
+  ;; Currently unused, but... here's how I'd do it if I brought it back.
+  (defun crj/open-new-scratch-buffer ()
+    "View a new scratch buffer with the current buffer's mode applied."
+    (interactive)
+    (crj/open-scratch-buffer t))
 
-  ;; (defun crj/open-project-scratch-buffer-in-new-window ()
-  ;;   "View a project-specific scratch buffer with the current buffer's mode applied."
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil t t))
+  (defun crj/open-project-scratch-buffer ()
+    "Open a project-specific scratch buffer with the current buffer's mode applied."
+    (interactive)
+    (crj/open-scratch-buffer nil t))
 
-  ;; (defun crj/open-scratch-buffer-in-emacs-lisp-mode ()
-  ;;   "Open a scratch buffer in `emacs-lisp-mode.'"
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil nil nil 'emacs-lisp-mode))
+  (defun crj/open-project-scratch-buffer-in-new-window ()
+    "View a project-specific scratch buffer with the current buffer's mode applied."
+    (interactive)
+    (crj/open-scratch-buffer nil t t))
 
-  ;; (defun crj/open-scratch-buffer-in-a-js-mode ()
-  ;;   "Open a scratch buffer in `rjsx-mode"
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil nil nil 'rjsx-mode))
+  (defun crj/open-scratch-buffer-in-emacs-lisp-mode ()
+    "Open a scratch buffer in `emacs-lisp-mode.'"
+    (interactive)
+    (crj/open-scratch-buffer nil nil nil 'emacs-lisp-mode))
 
-  ;; (defun crj/switch-to-scratch-buffer-in-emacs-lisp-mode ()
-  ;;   "Switch to a scratch buffer in `emacs-lisp-mode'."
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil nil t 'emacs-lisp-mode))
+  (defun crj/open-scratch-buffer-in-a-js-mode ()
+    "Open a scratch buffer in `rjsx-mode"
+    (interactive)
+    (crj/open-scratch-buffer nil nil nil 'rjsx-mode))
 
-  ;; (defun crj/switch-to-scratch-buffer-in-a-js-mode ()
-  ;;   "Switch to a scratch buffer in a JavaScript Mode
+  (defun crj/switch-to-scratch-buffer-in-emacs-lisp-mode ()
+    "Switch to a scratch buffer in `emacs-lisp-mode'."
+    (interactive)
+    (crj/open-scratch-buffer nil nil t 'emacs-lisp-mode))
 
-  ;; Currently we're using `rjsx-mode'."
-  ;;   (interactive)
-  ;;   (crj/open-scratch-buffer nil nil t 'rjsx-mode))
+  (defun crj/switch-to-scratch-buffer-in-a-js-mode ()
+    "Switch to a scratch buffer in a JavaScript Mode
 
-  ;; ;; Gotta remove doom's built-in ones first.
-  ;; (define-key doom-leader-map "x" nil)
-  ;; (define-key doom-leader-map "X" nil)
+  Currently we're using `rjsx-mode'."
+    (interactive)
+    (crj/open-scratch-buffer nil nil t 'rjsx-mode))
 
-  ;; (map! :leader
-  ;;   (:prefix ("x" . "open scratch")
-  ;;    :desc "Open a scratch buffer in current mode." :n "x" #'crj/open-scratch-buffer
-  ;;    :desc "Open a scratch buffer in Emacs Lisp mode." :n "e" #'crj/open-scratch-buffer-in-emacs-lisp-mode
-  ;;    :desc "Open a scratch buffer in a JS mode." :n "j" #'crj/open-scratch-buffer-in-a-js-mode)
-  ;;   (:prefix ("X" . "switch to scratch")
-  ;;    :desc "Open a scratch buffer in current mode." :n "x" #'crj/switch-to-scratch-buffer
-  ;;    :desc "Open a scratch buffer in Emacs Lisp mode." :n "e" #'crj/switch-to-scratch-buffer-in-emacs-lisp-mode
-  ;;    :desc "Open a scratch buffer in a JS mode." :n "j" #'crj/switch-to-scratch-buffer-in-a-js-mode))
+  ;; Gotta remove doom's built-in ones first.
+  (define-key doom-leader-map "x" nil)
+  (define-key doom-leader-map "X" nil)
 
-  ;; (setq doom-scratch-dir "~/Documents/work/playground/")
+  (map! :leader
+    (:prefix ("x" . "open scratch")
+     :desc "Open a scratch buffer in current mode." :n "x" #'crj/open-scratch-buffer
+     :desc "Open a scratch buffer in Emacs Lisp mode." :n "e" #'crj/open-scratch-buffer-in-emacs-lisp-mode
+     :desc "Open a scratch buffer in a JS mode." :n "j" #'crj/open-scratch-buffer-in-a-js-mode)
+    (:prefix ("X" . "switch to scratch")
+     :desc "Open a scratch buffer in current mode." :n "x" #'crj/switch-to-scratch-buffer
+     :desc "Open a scratch buffer in Emacs Lisp mode." :n "e" #'crj/switch-to-scratch-buffer-in-emacs-lisp-mode
+     :desc "Open a scratch buffer in a JS mode." :n "j" #'crj/switch-to-scratch-buffer-in-a-js-mode))
+
+  (setq doom-scratch-dir "~/Documents/work/playground/")
 #+end_src
 
 *** Save and kill buffer
 
-#+begin_src emacs-lisp :lexical no
-  ;; (setq crj/immortal-buffer-names '("*scratch*" "#emacs" "*Messages*" shell-command-buffer-name shell-command-buffer-name-async))
+More old code to revisit and reactivate maybe.
 
-  ;; (defun crj/kill-or-bury-current-buffer ()
-  ;;   (interactive)
-  ;;   (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
-  ;;       (bury-buffer)
-  ;;     (kill-buffer (current-buffer))))
+#+begin_src emacs-lisp :lexical no :tangle no
+  (setq crj/immortal-buffer-names '("*scratch*" "#emacs" "*Messages*" shell-command-buffer-name shell-command-buffer-name-async))
 
-  ;; (defun crj/save-and-kill-or-bury-current-buffer ()
-  ;;   (interactive)
-  ;;   (save-buffer)
-  ;;   (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
-  ;;       (bury-buffer)
-  ;;     (kill-buffer (current-buffer))))
+  (defun crj/kill-or-bury-current-buffer ()
+    (interactive)
+    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
+        (bury-buffer)
+      (kill-buffer (current-buffer))))
 
-  ;; (map! :leader
-  ;;   (:prefix ("b" . "+buffer")
-  ;;    :desc "Save file and close buffer."
-  ;;    :n "q"
-  ;;    #'crj/save-and-kill-or-bury-current-buffer
-  ;;    :desc "Kill buffer."
-  ;;    :n "d"
-  ;;    #'crj/kill-or-bury-current-buffer)
-  ;;   (:prefix ("f" . "+file")
-  ;;    :desc "Save file and close buffer."
-  ;;    :n "q"
-  ;;    #'crj/save-and-kill-or-bury-current-buffer))
+  (defun crj/save-and-kill-or-bury-current-buffer ()
+    (interactive)
+    (save-buffer)
+    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
+        (bury-buffer)
+      (kill-buffer (current-buffer))))
+
+  (map! :leader
+    (:prefix ("b" . "+buffer")
+     :desc "Save file and close buffer."
+     :n "q"
+     #'crj/save-and-kill-or-bury-current-buffer
+     :desc "Kill buffer."
+     :n "d"
+     #'crj/kill-or-bury-current-buffer)
+    (:prefix ("f" . "+file")
+     :desc "Save file and close buffer."
+     :n "q"
+     #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
 
 *** mu4e
@@ -4675,71 +4612,73 @@ And ~e~ in any terminal should open file in Emacs buffer.
 
 **** more window stuff
 
-#+begin_src emacs-lisp :lexical no
-  ;; (defun hydra-move-split-right-more (arg)
-  ;;   "Move window split right by a hardcoded higher amount."
-  ;;   (interactive "p")
-  ;;   (let ((movement-amount (* arg 10)))
-  ;;     (if (let ((windmove-wrap-around))
-  ;;           (windmove-find-other-window 'left))
-  ;;         (shrink-window-horizontally movement-amount)
-  ;;       (enlarge-window-horizontally movement-amount))))
+Yup, more old code I used to use.
 
-  ;; (defun hydra-move-split-left-more (arg)
-  ;;   "Move window split left by a hardcoded higher amount."
-  ;;   (interactive "p")
-  ;;   (let ((movement-amount (* arg 10)))
-  ;;     (if (let ((windmove-wrap-around))
-  ;;           (windmove-find-other-window 'right))
-  ;;         (shrink-window-horizontally movement-amount)
-  ;;       (enlarge-window-horizontally movement-amount))))
+#+begin_src emacs-lisp :lexical no :tangle no
+  (defun hydra-move-split-right-more (arg)
+    "Move window split right by a hardcoded higher amount."
+    (interactive "p")
+    (let ((movement-amount (* arg 10)))
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'left))
+          (shrink-window-horizontally movement-amount)
+        (enlarge-window-horizontally movement-amount))))
 
-  ;; (defun hydra-move-split-up-more (arg)
-  ;;   "Move window split up by a hardcoded higher amount."
-  ;;   (interactive "p")
-  ;;   (let ((movement-amount (* arg 5)))
-  ;;     (if (let ((windmove-wrap-around))
-  ;;           (windmove-find-other-window 'up))
-  ;;         (enlarge-window movement-amount)
-  ;;       (shrink-window movement-amount))))
+  (defun hydra-move-split-left-more (arg)
+    "Move window split left by a hardcoded higher amount."
+    (interactive "p")
+    (let ((movement-amount (* arg 10)))
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'right))
+          (shrink-window-horizontally movement-amount)
+        (enlarge-window-horizontally movement-amount))))
 
-  ;; (defun hydra-move-split-down-more (arg)
-  ;;   "Move window split down by a hardcoded higher amount."
-  ;;   (interactive "p")
-  ;;   (let ((movement-amount (* arg 5)))
-  ;;     (if (let ((windmove-wrap-around))
-  ;;           (windmove-find-other-window 'up))
-  ;;         (shrink-window movement-amount)
-  ;;       (enlarge-window movement-amount))))
+  (defun hydra-move-split-up-more (arg)
+    "Move window split up by a hardcoded higher amount."
+    (interactive "p")
+    (let ((movement-amount (* arg 5)))
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (enlarge-window movement-amount)
+        (shrink-window movement-amount))))
 
-  ;; (defhydra hydra/crj-window-nav (:hint nil)
-  ;;   "
-  ;; Split: _v_ert  _s_:horz
-  ;; Delete: _c_lose  _o_nly
-  ;; Switch Window: _h_:left  _j_:down  _k_:up  _l_:right
-  ;; Resize: _H_:splitter left  _J_:splitter down  _K_:splitter up  _L_:splitter right
-  ;; Balance Windows: _=_
-  ;; Quit: _q_
-  ;; "
+  (defun hydra-move-split-down-more (arg)
+    "Move window split down by a hardcoded higher amount."
+    (interactive "p")
+    (let ((movement-amount (* arg 5)))
+      (if (let ((windmove-wrap-around))
+            (windmove-find-other-window 'up))
+          (shrink-window movement-amount)
+        (enlarge-window movement-amount))))
 
-  ;;   ("s" +evil/window-split-and-follow)
-  ;;   ("v" +evil/window-vsplit-and-follow)
+  (defhydra hydra/crj-window-nav (:hint nil)
+    "
+  Split: _v_ert  _s_:horz
+  Delete: _c_lose  _o_nly
+  Switch Window: _h_:left  _j_:down  _k_:up  _l_:right
+  Resize: _H_:splitter left  _J_:splitter down  _K_:splitter up  _L_:splitter right
+  Balance Windows: _=_
+  Quit: _q_
+  "
 
-  ;;   ("c" delete-window)
-  ;;   ("o" delete-other-windows)
+    ("s" +evil/window-split-and-follow)
+    ("v" +evil/window-vsplit-and-follow)
 
-  ;;   ("h" windmove-left)
-  ;;   ("j" windmove-down)
-  ;;   ("k" windmove-up)
-  ;;   ("l" windmove-right)
+    ("c" delete-window)
+    ("o" delete-other-windows)
 
-  ;;   ("H" hydra-move-split-left-more)
-  ;;   ("J" hydra-move-split-down-more)
-  ;;   ("K" hydra-move-split-up-more)
-  ;;   ("L" hydra-move-split-right-more)
+    ("h" windmove-left)
+    ("j" windmove-down)
+    ("k" windmove-up)
+    ("l" windmove-right)
 
-  ;;   ("=" balance-windows)
-  ;;   ("q" nil))
+    ("H" hydra-move-split-left-more)
+    ("J" hydra-move-split-down-more)
+    ("K" hydra-move-split-up-more)
+    ("L" hydra-move-split-right-more)
+
+    ("=" balance-windows)
+    ("q" nil))
 #+end_src
 
 *** setup bookmark
@@ -4772,334 +4711,344 @@ And ~e~ in any terminal should open file in Emacs buffer.
 
 *** show flymake project diagnostics
 
-#+begin_src emacs-lisp :lexical no
-  ;; (map! :leader
-  ;;   (:prefix ("c" . "+code")
-  ;;    :desc "Show diagnostics in buffer." :n "x" #'+default/diagnostics
-  ;;    :desc "Show project diagnostics." :n "X" #'flymake-show-project-diagnostics))
+I used to like this one! Would take some digging into Doom though to find the original code.
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (map! :leader
+    (:prefix ("c" . "+code")
+     :desc "Show diagnostics in buffer." :n "x" #'+default/diagnostics
+     :desc "Show project diagnostics." :n "X" #'flymake-show-project-diagnostics))
 #+end_src
 
 *** Maybe some more vterm fixes?
 
-#+begin_src emacs-lisp :lexical no
-  ;; (require 'dwim-shell-commands)
+A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I start spending lots of time in terms again.
 
-  ;; (setq vterm-max-scrollback 100000)
+#+begin_src emacs-lisp :lexical no :tangle no
+  (require 'dwim-shell-commands)
 
-  ;; (defun crj/toggle-eshell-scrollback ()
-  ;;   (interactive)
-  ;;   (if (equal eshell-scroll-to-bottom-on-output 'all)
-  ;;       (setq eshell-scroll-to-bottom-on-output nil)
-  ;;     (setq eshell-scroll-to-bottom-on-output 'all)))
+  (setq vterm-max-scrollback 100000)
 
-  ;; ;; command to toggle scroll-on-output on or off
-  ;; (map! :map evil-normal-state :leader
-  ;;   (:prefix ("z" . "more toggling")
-  ;;    :desc "toggle terminal auto-scroll" "s" #'crj/toggle-eshell-scrollback
-  ;;    :desc "read eshell history in" "r" #'eshell/r))
+  (defun crj/toggle-eshell-scrollback ()
+    (interactive)
+    (if (equal eshell-scroll-to-bottom-on-output 'all)
+        (setq eshell-scroll-to-bottom-on-output nil)
+      (setq eshell-scroll-to-bottom-on-output 'all)))
 
-
-  ;; (setq vterm-always-compile-module t)
-
-  ;; (defun kill-terminals ()
-  ;;   (interactive)
-  ;;   (mapc (lambda (buffer)
-  ;;           (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
-  ;;             (kill-buffer buffer)))
-  ;;         (buffer-list)))
-
-  ;; (map! :leader
-  ;;   (:prefix ("q" . "quit/session")
-  ;;    :desc "Kill all terminals."
-  ;;    :n "t" #'kill-terminals))
+  ;; command to toggle scroll-on-output on or off
+  (map! :map evil-normal-state :leader
+    (:prefix ("z" . "more toggling")
+     :desc "toggle terminal auto-scroll" "s" #'crj/toggle-eshell-scrollback
+     :desc "read eshell history in" "r" #'eshell/r))
 
 
-  ;; (map! :leader
-  ;;   (:prefix ("v" . "view")
-  ;;    :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
+  (setq vterm-always-compile-module t)
 
-  ;; ;; zsh baby
-  ;; (setq vterm-shell "/usr/sbin/zsh")
+  (defun kill-terminals ()
+    (interactive)
+    (mapc (lambda (buffer)
+            (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
+              (kill-buffer buffer)))
+          (buffer-list)))
 
-  ;; (defun open-vterm-other-frame ()
-  ;;   (interactive)
-  ;;   (make-frame-command)
-  ;;   (let ((buf (current-buffer)))
-  ;;     (switch-to-buffer buf)
-  ;;     (switch-to-buffer-other-frame buf))
-  ;;   (+vterm/here nil))
-
-  ;; (defun open-eshell-other-frame ()
-  ;;   (interactive)
-  ;;   (make-frame-command)
-  ;;   (let ((buf (current-buffer)))
-  ;;     (switch-to-buffer buf)
-  ;;     (switch-to-buffer-other-frame buf))
-  ;;   (+eshell/here))
-
-  ;; (defun crj/vterm-in-current-directory ()
-  ;;   (interactive)
-  ;;   (+vterm/here t))
-
-  ;; ;; set up did-you-mean suggestions
-  ;;                                         ; (eshell-did-you-mean-setup)
-
-  ;; ;; open terminals
-  ;; (map! :leader
-  ;;   (:prefix ("o" . "open")
-  ;;    :desc "Open vterm buffer in current directory"
-  ;;    :n "v" #'crj/vterm-in-current-directory
-  ;;    :desc "Open vterm in other frame"
-  ;;    :n "V" #'open-vterm-other-frame
-  ;;    :desc "Open eshell buffer"
-  ;;    :n "e" #'+eshell/here
-  ;;    :desc "Open eshell in other frame"
-  ;;    :n "E" #'open-eshell-other-frame))
-
-  ;; ;;; Toggleable vterm/eshell popups
-  ;; (map! :map evil-normal-state :leader
-  ;;   (:prefix ("t" . "toggle")
-  ;;    :desc "eshell popup" "e" #'+eshell/toggle
-  ;;    :desc "vterm popup" "v" #'+vterm/toggle))
-
-  ;; ;; TODO switch eshell buffers
-
-  ;; ;; remember moar better
-  ;; (setq eshell-history-size 100000)
-
-  ;; ;; Some
-  ;; (map! :map 'vterm-mode-map
-  ;;   "C-c <escape>" #'vterm-send-escape
-  ;;   "C-c :" #'vterm--self-insert)
+  (map! :leader
+    (:prefix ("q" . "quit/session")
+     :desc "Kill all terminals."
+     :n "t" #'kill-terminals))
 
 
-  ;; ;; turn off their history saving so we can do it more often
-  ;; (setq eshell-save-history-on-exit nil)
+  (map! :leader
+    (:prefix ("v" . "view")
+     :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
 
-  ;; (defun crj/eshell-update-history ()
-  ;;   "Append to eshell's command history and read it everywhere."
-  ;;   (when eshell-history-ring
-  ;;     (let ((newest-cmd-ring (make-ring 1)))
-  ;;       (ring-insert newest-cmd-ring (car (ring-elements eshell-history-ring)))
-  ;;       (let ((eshell-history-ring newest-cmd-ring))
-  ;;         (eshell-write-history eshell-history-file-name t)))))
+  ;; zsh baby
+  (setq vterm-shell "/usr/sbin/zsh")
 
-  ;; ;; always write to eshell history after every command
-  ;; (add-hook 'eshell-pre-command-hook 'crj/eshell-update-history)
-  ;; ;; When creating a new terminal, get the history of all previous terminals.
-  ;; (add-hook 'eshell-hist-load-hook 'eshell-read-history)
+  (defun open-vterm-other-frame ()
+    (interactive)
+    (make-frame-command)
+    (let ((buf (current-buffer)))
+      (switch-to-buffer buf)
+      (switch-to-buffer-other-frame buf))
+    (+vterm/here nil))
 
-  ;; (setq async-shell-command-buffer 'new-buffer)
+  (defun open-eshell-other-frame ()
+    (interactive)
+    (make-frame-command)
+    (let ((buf (current-buffer)))
+      (switch-to-buffer buf)
+      (switch-to-buffer-other-frame buf))
+    (+eshell/here))
 
-  ;; (defun crj/async-shell-command-no-window ()
-  ;;   "A version of `async-shell-command' that won't create a window to display its
-  ;; output buffer."
-  ;;   (interactive)
-  ;;   (crj/call-and-bury-window-from-interactive-command
-  ;;    #'async-shell-command
-  ;;    shell-command-buffer-name-async))
+  (defun crj/vterm-in-current-directory ()
+    (interactive)
+    (+vterm/here t))
 
-  ;; (defun crj/shell-command-no-window ()
-  ;;   "A version of `shell-command' that won't create a window to display its output
-  ;; buffer."
-  ;;   (interactive)
-  ;;   (crj/call-and-bury-window-from-interactive-command
-  ;;    #'shell-command
-  ;;    shell-command-buffer-name))
+  ;; set up did-you-mean suggestions
+                                          ; (eshell-did-you-mean-setup)
 
-  ;; (defun crj/projectile-run-shell-command-in-root-no-window ()
-  ;;   "A version of `projectile-run-shell-command-in-root' that won't create a
-  ;; window to display its output buffer."
-  ;;   (interactive)
-  ;;   (crj/call-and-bury-window-from-interactive-command
-  ;;    #'projectile-run-shell-command-in-root
-  ;;    shell-command-buffer-name))
+  ;; open terminals
+  (map! :leader
+    (:prefix ("o" . "open")
+     :desc "Open vterm buffer in current directory"
+     :n "v" #'crj/vterm-in-current-directory
+     :desc "Open vterm in other frame"
+     :n "V" #'open-vterm-other-frame
+     :desc "Open eshell buffer"
+     :n "e" #'+eshell/here
+     :desc "Open eshell in other frame"
+     :n "E" #'open-eshell-other-frame))
 
-  ;; (defun crj/projectile-run-async-shell-command-in-root-no-window ()
-  ;;   "A version of `projectile-run-async-shell-command-in-root' that won't create a
-  ;; window to display its output buffer."
-  ;;   (interactive)
-  ;;   (crj/call-and-bury-window-from-interactive-command
-  ;;    #'projectile-run-async-shell-command-in-root
-  ;;    shell-command-buffer-name-async))
+  ;;; Toggleable vterm/eshell popups
+  (map! :map evil-normal-state :leader
+    (:prefix ("t" . "toggle")
+     :desc "eshell popup" "e" #'+eshell/toggle
+     :desc "vterm popup" "v" #'+vterm/toggle))
 
-  ;; (map! :leader :n "7" #'crj/async-shell-command-no-window)
-  ;; (map! :leader :n "&" #'async-shell-command)
-  ;; (map! :leader :n "1" #'crj/shell-command-no-window)
-  ;; (map! :leader :n "!" #'shell-command)
-  ;; (map! :leader
-  ;;   (:prefix "p"
-  ;;    :desc "Run project async shell command without a window opening."
-  ;;    :n "7" #'crj/projectile-run-async-shell-command-in-root-no-window
-  ;;    :desc "Run project shell command without a window opening."
-  ;;    :n "1" #'crj/projectile-run-shell-command-in-root-no-window))
+  ;; TODO switch eshell buffers
 
-  ;; ;; TODO maybe this code can help?
-  ;; ;; (add-to-list 'display-buffer-alist
-  ;; ;; 	     (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
-  ;; (defun crj/call-and-bury-window-from-interactive-command (command window-name)
-  ;;   "A helper function that calls COMMAND interactively while preventing any
-  ;;   buffer with the name WINDOW-NAME from creating a window.
+  ;; remember moar better
+  (setq eshell-history-size 100000)
 
-  ;; This is useful for times when you want a command to create an output buffer
-  ;; without distracting the user."
-  ;;   (let
-  ;;       ((display-buffer-alist
-  ;;         '(window-name '(#'display-buffer-no-window))))
-  ;;     (call-interactively command)))
+  ;; Some
+  (map! :map 'vterm-mode-map
+    "C-c <escape>" #'vterm-send-escape
+    "C-c :" #'vterm--self-insert)
 
-  ;; ;; Good for playing nice with vi mode shell keybindings. See `crj/toggle-evil-in-vterm' for more info.
-  ;; (defun crj/set-up-vterm ()
-  ;;   (turn-off-evil-mode))
 
-  ;; ;; Hook for running above function for each new vterm buffer.
-  ;; ;; Turned off for now.
-  ;; ;; (add-hook 'vterm-mode-hook #'crj/set-up-vterm)
+  ;; turn off their history saving so we can do it more often
+  (setq eshell-save-history-on-exit nil)
 
-  ;; (defun crj/toggle-evil-in-vterm ()
-  ;;   "Toggles evil mode in Vterm so as to leave ESC to the shell's keybindings.
+  (defun crj/eshell-update-history ()
+    "Append to eshell's command history and read it everywhere."
+    (when eshell-history-ring
+      (let ((newest-cmd-ring (make-ring 1)))
+        (ring-insert newest-cmd-ring (car (ring-elements eshell-history-ring)))
+        (let ((eshell-history-ring newest-cmd-ring))
+          (eshell-write-history eshell-history-file-name t)))))
 
-  ;; To use:
+  ;; always write to eshell history after every command
+  (add-hook 'eshell-pre-command-hook 'crj/eshell-update-history)
+  ;; When creating a new terminal, get the history of all previous terminals.
+  (add-hook 'eshell-hist-load-hook 'eshell-read-history)
 
-  ;; ;; Start with evil turned off.
-  ;; (add-hook 'vterm-mode-hook #'turn-off-evil-mode)
-  ;; ;; Add to the copy-mode hook.
-  ;; ;; Which runs on entering /or/ leaving Vterm Copy Mode.
+  (setq async-shell-command-buffer 'new-buffer)
+
+  (defun crj/async-shell-command-no-window ()
+    "A version of `async-shell-command' that won't create a window to display its
+  output buffer."
+    (interactive)
+    (crj/call-and-bury-window-from-interactive-command
+     #'async-shell-command
+     shell-command-buffer-name-async))
+
+  (defun crj/shell-command-no-window ()
+    "A version of `shell-command' that won't create a window to display its output
+  buffer."
+    (interactive)
+    (crj/call-and-bury-window-from-interactive-command
+     #'shell-command
+     shell-command-buffer-name))
+
+  (defun crj/projectile-run-shell-command-in-root-no-window ()
+    "A version of `projectile-run-shell-command-in-root' that won't create a
+  window to display its output buffer."
+    (interactive)
+    (crj/call-and-bury-window-from-interactive-command
+     #'projectile-run-shell-command-in-root
+     shell-command-buffer-name))
+
+  (defun crj/projectile-run-async-shell-command-in-root-no-window ()
+    "A version of `projectile-run-async-shell-command-in-root' that won't create a
+  window to display its output buffer."
+    (interactive)
+    (crj/call-and-bury-window-from-interactive-command
+     #'projectile-run-async-shell-command-in-root
+     shell-command-buffer-name-async))
+
+  (map! :leader :n "7" #'crj/async-shell-command-no-window)
+  (map! :leader :n "&" #'async-shell-command)
+  (map! :leader :n "1" #'crj/shell-command-no-window)
+  (map! :leader :n "!" #'shell-command)
+  (map! :leader
+    (:prefix "p"
+     :desc "Run project async shell command without a window opening."
+     :n "7" #'crj/projectile-run-async-shell-command-in-root-no-window
+     :desc "Run project shell command without a window opening."
+     :n "1" #'crj/projectile-run-shell-command-in-root-no-window))
+
+  ;; TODO maybe this code can help?
+  ;; (add-to-list 'display-buffer-alist
+  ;; 	     (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+  (defun crj/call-and-bury-window-from-interactive-command (command window-name)
+    "A helper function that calls COMMAND interactively while preventing any
+    buffer with the name WINDOW-NAME from creating a window.
+
+  This is useful for times when you want a command to create an output buffer
+  without distracting the user."
+    (let
+        ((display-buffer-alist
+          '(window-name '(#'display-buffer-no-window))))
+      (call-interactively command)))
+
+  ;; Good for playing nice with vi mode shell keybindings. See `crj/toggle-evil-in-vterm' for more info.
+  (defun crj/set-up-vterm ()
+    (turn-off-evil-mode))
+
+  ;; Hook for running above function for each new vterm buffer.
+  ;; Turned off for now.
+  ;; (add-hook 'vterm-mode-hook #'crj/set-up-vterm)
+
+  (defun crj/toggle-evil-in-vterm ()
+    "Toggles evil mode in Vterm so as to leave ESC to the shell's keybindings.
+
+  To use:
+
+  ;; Start with evil turned off.
+  (add-hook 'vterm-mode-hook #'turn-off-evil-mode)
+  ;; Add to the copy-mode hook.
+  ;; Which runs on entering /or/ leaving Vterm Copy Mode.
+  (add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
+
+  The problem we're trying to solve here is that if you want to use
+  both Emacs' Evil Mode and your shell's Vim keybindings, then when
+  you press ESC to switch to Normal Mode, do you want Evil Mode's
+  Normal Mode or the shell's Normal Mode? Without a solution, Evil
+  Mode will greedily gobble the ESC up and you'll be unable to
+  enter your shell's Vim emulation. So we need to be able to
+  disambiguate which Normal Mode we want to enter.
+
+  This function provides a solution that leverages Vterm Copy Mode
+  to give Emacs an alternative way to exit to Evil's Normal Mode,
+  leaving ESC to the shell.
+
+  An alternative solution is to keep ESC for Evil's Normal Mode and
+  use a different keybinding for the shell's Normal Mode.
+
+  Here are a couple ways to do that:
+
+  1. Set a non-ESC keybinding for entering normal mode in your
+  shell's config file.
+
+  - You can do this in your bash configuration file:
+
+  bind '\"jk\":vi-movement-mode'
+
+  Source: URL'https://unix.stackexchange.com/a/303401'
+
+  - For zsh, you can use the following in your config file:
+
+  bindkey -M viins jk vi-cmd-mode
+
+  Source: URL'https://unix.stackexchange.com/a/697026'
+
+  - For zsh, you could also use the excellent zsh plugin Zsh Vim
+    Mode (URL'https://github.com/softmoth/zsh-vim-mode'), which has
+    many benefits including additional ways you can customize
+    entering Normal Mode.
+
+  2. An alternative method for keeping ESC reserved for Evil Mode
+  is to leverage Vterm Mode's ability to send a key directly to the
+  shell. You can do this, for example:
+
+  (define-key vterm-mode-map (kbd \"C-c <escape>\") #'vterm-send-escape)
+
+  This will mean that using ~C-c <escape>~ will send the escape key
+  to your shell. ~ESC~ goes to Evil, while ~C-c ESC~ sends ESC to
+  your shell. This means you can use ESC in other places in your
+  shell besides the direct command line, which can be useful for
+  interactive shell programs as well. (Thus, this is recommended
+  even with this function's solution.)
+
+  In short, this function's solution allows you to have the same
+  exact experience in a Vterm as you do in a non-Emacs terminal
+  emulator.
+
+  The advantage of the other solutions is that you keep the same
+  Emacs Evil keybinding of ESC even in Vterm Mode.
+
+  Which solution works for you likely depends on which workflow you
+  prioritize and which context you want to context-switch in."
+
+    (interactive)
+    (if (bound-and-true-p vterm-copy-mode)
+        (progn
+          (turn-on-evil-mode)
+          (evil-normal-state))
+      (evil-insert-state)
+      (turn-off-evil-mode)))
+
+  (map! :map vterm-mode-map
+    "C-c t" #'vterm-copy-mode
+    "C-c n" #'vterm-copy-mode)
+
+  (map! :map vterm-copy-mode-map
+    "C-c t" #'vterm-copy-mode
+    "C-c i" #'vterm-copy-mode)
+
   ;; (add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
-
-  ;; The problem we're trying to solve here is that if you want to use
-  ;; both Emacs' Evil Mode and your shell's Vim keybindings, then when
-  ;; you press ESC to switch to Normal Mode, do you want Evil Mode's
-  ;; Normal Mode or the shell's Normal Mode? Without a solution, Evil
-  ;; Mode will greedily gobble the ESC up and you'll be unable to
-  ;; enter your shell's Vim emulation. So we need to be able to
-  ;; disambiguate which Normal Mode we want to enter.
-
-  ;; This function provides a solution that leverages Vterm Copy Mode
-  ;; to give Emacs an alternative way to exit to Evil's Normal Mode,
-  ;; leaving ESC to the shell.
-
-  ;; An alternative solution is to keep ESC for Evil's Normal Mode and
-  ;; use a different keybinding for the shell's Normal Mode.
-
-  ;; Here are a couple ways to do that:
-
-  ;; 1. Set a non-ESC keybinding for entering normal mode in your
-  ;; shell's config file.
-
-  ;; - You can do this in your bash configuration file:
-
-  ;; bind '\"jk\":vi-movement-mode'
-
-  ;; Source: URL'https://unix.stackexchange.com/a/303401'
-
-  ;; - For zsh, you can use the following in your config file:
-
-  ;; bindkey -M viins jk vi-cmd-mode
-
-  ;; Source: URL'https://unix.stackexchange.com/a/697026'
-
-  ;; - For zsh, you could also use the excellent zsh plugin Zsh Vim
-  ;;   Mode (URL'https://github.com/softmoth/zsh-vim-mode'), which has
-  ;;   many benefits including additional ways you can customize
-  ;;   entering Normal Mode.
-
-  ;; 2. An alternative method for keeping ESC reserved for Evil Mode
-  ;; is to leverage Vterm Mode's ability to send a key directly to the
-  ;; shell. You can do this, for example:
-
-  ;; (define-key vterm-mode-map (kbd \"C-c <escape>\") #'vterm-send-escape)
-
-  ;; This will mean that using ~C-c <escape>~ will send the escape key
-  ;; to your shell. ~ESC~ goes to Evil, while ~C-c ESC~ sends ESC to
-  ;; your shell. This means you can use ESC in other places in your
-  ;; shell besides the direct command line, which can be useful for
-  ;; interactive shell programs as well. (Thus, this is recommended
-  ;; even with this function's solution.)
-
-  ;; In short, this function's solution allows you to have the same
-  ;; exact experience in a Vterm as you do in a non-Emacs terminal
-  ;; emulator.
-
-  ;; The advantage of the other solutions is that you keep the same
-  ;; Emacs Evil keybinding of ESC even in Vterm Mode.
-
-  ;; Which solution works for you likely depends on which workflow you
-  ;; prioritize and which context you want to context-switch in."
-
-  ;;   (interactive)
-  ;;   (if (bound-and-true-p vterm-copy-mode)
-  ;;       (progn
-  ;;         (turn-on-evil-mode)
-  ;;         (evil-normal-state))
-  ;;     (evil-insert-state)
-  ;;     (turn-off-evil-mode)))
-
-  ;; (map! :map vterm-mode-map
-  ;;   "C-c t" #'vterm-copy-mode
-  ;;   "C-c n" #'vterm-copy-mode)
-
-  ;; (map! :map vterm-copy-mode-map
-  ;;   "C-c t" #'vterm-copy-mode
-  ;;   "C-c i" #'vterm-copy-mode)
-
-  ;; ;; (add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
 #+end_src
 
 *** string inflection
 
-#+begin_src emacs-lisp :lexical no
-  ;; (map! :n "zc" nil)
-  ;; (map! (:prefix "z"
-  ;;        :desc "Open all folds."
-  ;;        :n "R" #'org-fold-show-all
-  ;;        (:prefix ("c" . "Manage case")
-  ;;         (:desc "Cycle Case" :n "z" #'string-inflection-all-cycle
-  ;;          :desc "Switch to camelCase" :n "c" #'string-inflection-lower-camelcase
-  ;;          :desc "Switch to PascalCase" :n "C" #'string-inflection-camelcase
-  ;;          :desc "Switch to snake_case" :n "s" #'string-inflection-underscore
-  ;;          :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
+This was occasionally useful, should be easy to get back
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (map! :n "zc" nil)
+  (map! (:prefix "z"
+         :desc "Open all folds."
+         :n "R" #'org-fold-show-all
+         (:prefix ("c" . "Manage case")
+          (:desc "Cycle Case" :n "z" #'string-inflection-all-cycle
+           :desc "Switch to camelCase" :n "c" #'string-inflection-lower-camelcase
+           :desc "Switch to PascalCase" :n "C" #'string-inflection-camelcase
+           :desc "Switch to snake_case" :n "s" #'string-inflection-underscore
+           :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
 #+end_src
 
 *** Forge PRs
 
-#+begin_src emacs-lisp :lexical no
-  ;; (map! :leader (:prefix "g" :desc "Checkout pull request." :n "v" #'forge-checkout-pullreq))
+Super easy to fix up for my current framework if I start checking out PRs again.
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (map! :leader (:prefix "g" :desc "Checkout pull request." :n "v" #'forge-checkout-pullreq))
 #+end_src
 
 *** Elisp
 
-#+begin_src emacs-lisp :lexical no
-  ;; (defun crj/open-intro-to-elisp ()
-  ;;   "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info
-  ;;   node '(eintr)'), re-using the current window."
-  ;;   (interactive)
-  ;;   (info "eintr")
-  ;;   (delete-other-windows))
+Some old Elisp code, might be useful?
 
-  ;; (defun crj/open-elisp-reference-manual ()
-  ;;   "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node
-  ;;   '(elisp)'), re-using the current window."
-  ;;   (interactive)
-  ;;   (info "elisp")
-  ;;   (delete-other-windows))
+#+begin_src emacs-lisp :lexical no :tangle no
+  (defun crj/open-intro-to-elisp ()
+    "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info
+    node '(eintr)'), re-using the current window."
+    (interactive)
+    (info "eintr")
+    (delete-other-windows))
 
-  ;; (map!
-  ;;  :leader
-  ;;  (:prefix "o"
-  ;;   :n "l" #'crj/open-elisp-reference-manual
-  ;;   :n "L" #'crj/open-intro-to-elisp))
+  (defun crj/open-elisp-reference-manual ()
+    "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node
+    '(elisp)'), re-using the current window."
+    (interactive)
+    (info "elisp")
+    (delete-other-windows))
 
-  ;; ;;; Evaluating Elisp
+  (map!
+   :leader
+   (:prefix "o"
+    :n "l" #'crj/open-elisp-reference-manual
+    :n "L" #'crj/open-intro-to-elisp))
 
-  ;; (map! :leader :n "e" #'+eval:region)
-  ;; (map! :leader :n "E" #'+eval:replace-region)
+  ;;; Evaluating Elisp
 
-  ;; (map!
-  ;;  :leader
-  ;;  (:prefix ("t" . "Toggle")
-  ;;   :desc "debug during elisp errors."
-  ;;   :n "B" #'toggle-debug-on-error))
+  (map! :leader :n "e" #'+eval:region)
+  (map! :leader :n "E" #'+eval:replace-region)
+
+  (map!
+   :leader
+   (:prefix ("t" . "Toggle")
+    :desc "debug during elisp errors."
+    :n "B" #'toggle-debug-on-error))
 #+end_src
 
 *** check if org tangle now does what you want from your Doom Emacs config
@@ -5112,7 +5061,7 @@ And ~e~ in any terminal should open file in Emacs buffer.
 
 **** rename buffer with project name prefix
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :tangle no
   (defun rename-buffer-with-project-name-prefix ()
     "Prompts the user to rename the buffer, supplying the project prefix."
     (interactive)
@@ -5127,103 +5076,103 @@ And ~e~ in any terminal should open file in Emacs buffer.
 
 *** Check if THIS is a tangle we have natively now:
 
-#+begin_src emacs-lisp :lexical no
-  ;; (defun org-babel-tangle-single-block (block-counter &optional only-this-block)
-  ;;   "Collect the tangled source for current block.
-  ;; Return the list of block attributes needed by
-  ;; `org-babel-tangle-collect-blocks'.  When ONLY-THIS-BLOCK is
-  ;; non-nil, return the full association list to be used by
-  ;; `org-babel-tangle' directly."
-  ;;   (let* ((info (org-babel-get-src-block-info))
-  ;;          (start-line
-  ;;           (save-restriction (widen)
-  ;;                             (+ 1 (line-number-at-pos (point)))))
-  ;;          (file (buffer-file-name (buffer-base-buffer)))
-  ;;          (src-lang (nth 0 info))
-  ;;          (params (nth 2 info))
-  ;;          (extra (nth 3 info))
-  ;;          (coderef (nth 6 info))
-  ;;          (cref-regexp (org-src-coderef-regexp coderef))
-  ;;          (link (org-babel-tangle--unbracketed-link params))
-  ;;          (source-name
-  ;;           (or (nth 4 info)
-  ;;               (format "%s:%d"
-  ;;                       (or (ignore-errors (nth 4 (org-heading-components)))
-  ;;                           "No heading")
-  ;;                       block-counter)))
-  ;;          (expand-cmd (intern (concat "org-babel-expand-body:" src-lang)))
-  ;;          (assignments-cmd
-  ;;           (intern (concat "org-babel-variable-assignments:" src-lang)))
-  ;;          (body
-  ;;           ;; Run the tangle-body-hook.
-  ;;           (let ((body (if (org-babel-noweb-p params :tangle)
-  ;;                           (if (string= "strip-tangle" (cdr (assq :noweb (nth 2
-  ;;                                                                              info))))
-  ;;                               (replace-regexp-in-string (org-babel-noweb-wrap)
-  ;;                                                         "" (nth 1 info))
-  ;;                             (org-babel-expand-noweb-references info))
-  ;;                         (nth 1 info))))
-  ;;             (with-temp-buffer
-  ;;               (insert
-  ;;                ;; Expand body in language specific manner.
-  ;;                (cond ((assq :no-expand params) body)
-  ;;                      ((fboundp expand-cmd) (funcall expand-cmd body params))
-  ;;                      (t
-  ;;                       (org-babel-expand-body:generic
-  ;;                        body params (and (fboundp assignments-cmd)
-  ;;                                         (funcall assignments-cmd params))))))
-  ;;               (when (string-match "-r" extra)
-  ;;                 (goto-char (point-min))
-  ;;                 (while (re-search-forward cref-regexp nil t)
-  ;;                   (replace-match "")))
-  ;;               (run-hooks 'org-babel-tangle-body-hook)
-  ;;               (buffer-string))))
-  ;;          (comment
-  ;;           (when (or (string= "both" (cdr (assq :comments params)))
-  ;;                     (string= "org" (cdr (assq :comments params))))
-  ;;             ;; From the previous heading or code-block end
-  ;;             (funcall
-  ;;              org-babel-process-comment-text
-  ;;              (buffer-substring
-  ;;               (max (condition-case nil
-  ;;                        (save-excursion
-  ;;                          (org-back-to-heading t) ; Sets match data
-  ;;                          (match-end 0))
-  ;;                      (error (point-min)))
-  ;;                    (save-excursion
-  ;;                      (if (re-search-backward
-  ;;                           org-babel-src-block-regexp nil t)
-  ;;                          (match-end 0)
-  ;;                        (point-min))))
-  ;;               (point)))))
-  ;;          (src-tfile (cdr (assq :tangle params)))
-  ;;          (result
-  ;;           (list start-line
-  ;;                 (if org-babel-tangle-use-relative-file-links
-  ;;                     (file-relative-name file)
-  ;;                   file)
-  ;;                 link
-  ;;                 source-name
-  ;;                 params
-  ;;                 (if org-src-preserve-indentation
-  ;;                     (org-trim body t)
-  ;;                   (org-trim (org-remove-indentation body)))
-  ;;                 comment)))
-  ;;     (if only-this-block
-  ;;         (let* ((file-name (org-babel-effective-tangled-filename
-  ;;                            (nth 1 result) src-lang src-tfile)))
-  ;;           (list (cons file-name (list (cons src-lang result)))))
-  ;;       result)))
+#+begin_src emacs-lisp :lexical no :tangle no
+  (defun org-babel-tangle-single-block (block-counter &optional only-this-block)
+    "Collect the tangled source for current block.
+  Return the list of block attributes needed by
+  `org-babel-tangle-collect-blocks'.  When ONLY-THIS-BLOCK is
+  non-nil, return the full association list to be used by
+  `org-babel-tangle' directly."
+    (let* ((info (org-babel-get-src-block-info))
+           (start-line
+            (save-restriction (widen)
+                              (+ 1 (line-number-at-pos (point)))))
+           (file (buffer-file-name (buffer-base-buffer)))
+           (src-lang (nth 0 info))
+           (params (nth 2 info))
+           (extra (nth 3 info))
+           (coderef (nth 6 info))
+           (cref-regexp (org-src-coderef-regexp coderef))
+           (link (org-babel-tangle--unbracketed-link params))
+           (source-name
+            (or (nth 4 info)
+                (format "%s:%d"
+                        (or (ignore-errors (nth 4 (org-heading-components)))
+                            "No heading")
+                        block-counter)))
+           (expand-cmd (intern (concat "org-babel-expand-body:" src-lang)))
+           (assignments-cmd
+            (intern (concat "org-babel-variable-assignments:" src-lang)))
+           (body
+            ;; Run the tangle-body-hook.
+            (let ((body (if (org-babel-noweb-p params :tangle)
+                            (if (string= "strip-tangle" (cdr (assq :noweb (nth 2
+                                                                               info))))
+                                (replace-regexp-in-string (org-babel-noweb-wrap)
+                                                          "" (nth 1 info))
+                              (org-babel-expand-noweb-references info))
+                          (nth 1 info))))
+              (with-temp-buffer
+                (insert
+                 ;; Expand body in language specific manner.
+                 (cond ((assq :no-expand params) body)
+                       ((fboundp expand-cmd) (funcall expand-cmd body params))
+                       (t
+                        (org-babel-expand-body:generic
+                         body params (and (fboundp assignments-cmd)
+                                          (funcall assignments-cmd params))))))
+                (when (string-match "-r" extra)
+                  (goto-char (point-min))
+                  (while (re-search-forward cref-regexp nil t)
+                    (replace-match "")))
+                (run-hooks 'org-babel-tangle-body-hook)
+                (buffer-string))))
+           (comment
+            (when (or (string= "both" (cdr (assq :comments params)))
+                      (string= "org" (cdr (assq :comments params))))
+              ;; From the previous heading or code-block end
+              (funcall
+               org-babel-process-comment-text
+               (buffer-substring
+                (max (condition-case nil
+                         (save-excursion
+                           (org-back-to-heading t) ; Sets match data
+                           (match-end 0))
+                       (error (point-min)))
+                     (save-excursion
+                       (if (re-search-backward
+                            org-babel-src-block-regexp nil t)
+                           (match-end 0)
+                         (point-min))))
+                (point)))))
+           (src-tfile (cdr (assq :tangle params)))
+           (result
+            (list start-line
+                  (if org-babel-tangle-use-relative-file-links
+                      (file-relative-name file)
+                    file)
+                  link
+                  source-name
+                  params
+                  (if org-src-preserve-indentation
+                      (org-trim body t)
+                    (org-trim (org-remove-indentation body)))
+                  comment)))
+      (if only-this-block
+          (let* ((file-name (org-babel-effective-tangled-filename
+                             (nth 1 result) src-lang src-tfile)))
+            (list (cons file-name (list (cons src-lang result)))))
+        result)))
 
-  ;; (defun org-babel-noweb-p (params context)
-  ;;   "Check if PARAMS require expansion in CONTEXT.
-  ;; CONTEXT may be one of :tangle, :export or :eval."
-  ;;   (let ((allowed-values (cl-case context
-  ;;                           (:tangle '("yes" "tangle" "no-export" "strip-export"
-  ;;                                      "strip-tangle"))
-  ;;                           (:eval   '("yes" "no-export" "strip-export" "eval"
-  ;;                                      "strip-tangle"))
-  ;;                           (:export '("yes" "strip-tangle")))))
-  ;;     (cl-some (lambda (v) (member v allowed-values))
-  ;;              (split-string (or (cdr (assq :noweb params)) "")))))
+  (defun org-babel-noweb-p (params context)
+    "Check if PARAMS require expansion in CONTEXT.
+  CONTEXT may be one of :tangle, :export or :eval."
+    (let ((allowed-values (cl-case context
+                            (:tangle '("yes" "tangle" "no-export" "strip-export"
+                                       "strip-tangle"))
+                            (:eval   '("yes" "no-export" "strip-export" "eval"
+                                       "strip-tangle"))
+                            (:export '("yes" "strip-tangle")))))
+      (cl-some (lambda (v) (member v allowed-values))
+               (split-string (or (cdr (assq :noweb params)) "")))))
 #+end_src
