@@ -3553,7 +3553,12 @@ Here that all is!
 
 #+begin_src emacs-lisp
   (use-package vertico
+    :straight
+    (vertico :files (:defaults "extensions/*")
+             :includes (vertico-repeat))
+
     :init
+
     (vertico-mode)
     (vertico-multiform-mode)
 
@@ -3562,13 +3567,9 @@ Here that all is!
           vertico-multiform-categories '((t reverse)))
 
     (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+
     (with-eval-after-load 'savehist
-      (add-to-list 'savehist-additional-variables 'vertico-repeat-history))
-
-    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
-
-    :straight (vertico :files (:defaults "extensions/*")
-                       :includes (vertico-repeat))
+      (add-to-list 'savehist-additional-variables 'vertico-repeat-history)) (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
 
     :general
     (crj-leader-keys
