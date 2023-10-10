@@ -2346,6 +2346,8 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
      [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
      [remap dired-up-directory] #'dired-single-up-directory))
 
+  (use-package all-the-icons)
+
   (use-package all-the-icons-dired
     :ghook #'all-the-icons-dired-mode-hook)
 
@@ -3479,6 +3481,17 @@ Set Emacs to only include commands that are relevant to the current "major mode"
     (setq read-extended-command-predicate #'command-completion-default-include-p))
 #+end_src
 
+**** Minibuffer Prettiness
+
+Add icons!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package all-the-icons-completion
+    :init
+    (all-the-icons-completion-mode)
+    (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup))
+#+end_src
+
 **** Minibuffer Search Interface
 
 Vertico and Marginalia together make an amazing interface for minibuffer search.
@@ -3891,17 +3904,20 @@ Sets up:
     :init
     (global-corfu-mode))
 
-  (use-package kind-icon
-    :after corfu
-    :custom
-    (kind-icon-use-icons t)
-    (kind-icon-default-face 'corfu-default)
-    (kind-icon-blend-background nil)
-    (kind-icon-blend-frac 0.08))
 
   (use-package emacs
     :init
     (setq tab-always-indent 'complete))
+    (use-package kind-icon
+      :after corfu
+      :custom
+      (kind-icon-use-icons t)
+      (kind-icon-default-face 'corfu-default)
+      (kind-icon-blend-background nil)
+      (kind-icon-blend-frac 0.08)
+
+      :config
+      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
 And an extra package for completing Org blocks.
@@ -4133,7 +4149,6 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 *NOTE:* The first time you load your configuration on a new machine, you'll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
 
 #+begin_src emacs-lisp
-  (use-package all-the-icons)
   ;; (use-package doom-modeline
   ;;   :init (doom-modeline-mode 1)
   ;;   :custom ((doom-modeline-height 15)))
