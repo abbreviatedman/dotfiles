@@ -2918,12 +2918,6 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
             ("J" . symex-join-lines)
             ("M-j" . symex-append-newline)
             ("W" . symex-wrap-round)
-            ("w)" . symex-wrap-round)
-            ("w(" . symex-wrap-round)
-            ("w]" . symex-wrap-square)
-            ("w[" . symex-wrap-square)
-            ("w}" . symex-wrap-curly)
-            ("w{" . symex-wrap-curly)
             ("_" . paredit-raise-sexp)
             ("gh" . evil-backward-char)
             ("gl" . evil-forward-char)
@@ -2950,6 +2944,18 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
     :general
     (crj-leader-keys
       "L" 'symex-mode-interface)
+
+    (:keymaps 'symex-editing-mode-map
+     :states '(operator visual normal)
+     :prefix "w"
+     "[" #'symex-wrap-square
+     "]" #'symex-wrap-square
+     "(" #'symex-wrap-round
+     ")" #'symex-wrap-round
+     "{" #'symex-wrap-curly
+     "}" #'symex-wrap-curly
+     "<" #'symex-wrap-angled
+     ">" #'symex-wrap-angled)
 
     (:keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
      :states 'normal
