@@ -200,10 +200,21 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
       "m" '(:ignore t :which-key "Markup menu")
       "i" '(:ignore t :which-key "Insert menu.")
       "ic" '(:ignore t :which-key "Insert cursor menu.")
+      "l" '(:ignore t :which-key "Lisp menu")
       "b" '(:ignore t :which-key "Buffers menu")
       "t" '(:ignore t :which-key "Toggle menu.")
-      "s" '(:ignore t :which-key "Search menu")
-      "z" '(:ignore t :which-key "Zooming menu")))
+      "s" '(:ignore t :which-key "Search menu.")
+      "z" '(:ignore t :which-key "Zooming menu")
+      "c" '(:ignore t :which-key "Code menu")
+      "q" '(:ignore t :which-key "Quit menu")
+      "p" '(:ignore t :which-key "project menu")
+      "a" '(:ignore t :which-key "Applications menu")
+      "ac" '(:ignore t :which-key "Calendar menu")
+      "acg" '(:ignore t :which-key "Google Calendar menu")
+      "g" '(:ignore t :which-key "Git menu")
+      "ai" '(:ignore t :which-key "AI Menu")
+      "aib" '(:ignore t :which-key "Bing Chat Menu")
+      "h" '(:ignore t :which-key "Help Menu")))
 #+end_src
 
 *** General Emacs' Keybindings
@@ -1731,15 +1742,6 @@ Let's visualize our indentation!
 
 This section is for parts of Emacs that are well-integrated applications.
 
-Let's set up a keybinding for applications, and then we can put these apps under it!
-
-#+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "a" '(:ignore t :which-key "Applications Menu")))
-#+end_src
-
 *** Internet Radio with Eradio
 
 I love this no-hassle don't-have-to-think-about-what-to-listen-to background music. I need need /need/ music to focus.
@@ -1869,14 +1871,6 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 
 So you can wish everyone would leave you alone, but /within Emacs/.
 
-**** A Calendar Menu
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :general
-    (crj-leader-keys "ac" '(:ignore t :which-key "Calendar Menu")))
-#+end_src
-
 **** Calendar View
 
 #+begin_src emacs-lisp :lexical no
@@ -1902,14 +1896,6 @@ There are a /lot/ of moving parts with ~org-gcal~, those parts are continuously 
 - And also for now, you do NOT want to check the box for killing the pstore buffer, and you'll do better if you quit Emacs, save that buffer, and then restart Emacs.
 
 I hope to document a clear and simple way to set this up in the future (perhaps I could practice in a VM?), but for now: this is what I've got.
-
-**** Google Calendar Menu
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :general
-    (crj-leader-keys "acg" '(:ignore t :which-key "Google Calendar Menu")))
-#+end_src
 
 **** Google Calendar Setup
 
@@ -1947,18 +1933,6 @@ I could write a lot about Magit here.
 I should write a lot about Magit here!
 
 Not today though.
-
-
-**** Version Control Menu
-
-Let's set up a menu for Version Control.
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :general
-    (crj-leader-keys
-      "g" '(:ignore t :which-key "Git Menu")))
-#+end_src
 
 **** Basic Magit Setup
 
@@ -2216,7 +2190,6 @@ A better Emacs kill command binding to kill the Emacs server as well.
     :general
     ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
     (crj-leader-keys
-      "q" '(:ignore t :which-key "Quit Menu")
       "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
@@ -2370,14 +2343,6 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 Although having such great ability to switch files and buffers obviates the need for so many other ways to navigate (like tabs or file trees), it's still nice to narrow that down to the concept of a project.
 
 Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' built-in =project.el= library.
-
-*** Project Menu
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :general
-    (crj-leader-keys "p" '(:ignore t :which-key "project Menu")))
-#+end_src
 
 *** Project Customizations
 
@@ -2591,17 +2556,6 @@ Settings for... coding.
 
 **** General
 
-***** A Code Menu
-
-I don't use this very much yet. But I should!
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :init
-    (crj-leader-keys
-      "c" '(:ignore t :which-key "Code Menu")))
-#+end_src
-
 ***** Coding Block Delimiters
 
 Sometimes simply called "parens" or "brackets", delimiters are a big part of coding. This is particularly true in Lisp languages, but even the indentation-for-delimiting-code-blocks Python benefits from handling them well.
@@ -2807,7 +2761,6 @@ This is something that a more advanced solution could give you (maybe Treesitter
   (use-package evil-cleverparens
     :general
     (crj-leader-keys
-      "l" '(:ignore t :which-key "Lisp menu")
       "la" '(evil-cp-insert-at-end-of-form :which-key "Insert at end of form.")
       "li" '(evil-cp-insert-at-beginning-of-form :which-key "Insert at beginning of form.")
       "lf" '(evil-cp-drag-forward :which-key "Drag atom or form forwards.")
@@ -3690,23 +3643,7 @@ It's the robots!
     (auth-source-pass-get 'secret "ai/openai/key"))
 #+end_src
 
-*** An AI Menu
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :general
-    (crj-leader-keys "ai" '(:ignore t :which-key "AI Menu")))
-#+end_src
-
 *** Bing Chat
-
-**** A Bing Menu
-
-#+begin_src emacs-lisp :lexical no
-  (use-package emacs
-    :general
-    (crj-leader-keys "aib" '(:ignore t :which-key "Bing Chat Menu")))
-#+end_src
 
 **** Main Bing Setup
 
@@ -3837,8 +3774,6 @@ Besides different keybindings, I've only added a couple extra configurations her
 
     :general
     (crj-leader-keys
-      "h" '(:ignore t
-            :which-key "Help Menu")
       "hv" '(helpful-variable
              :which-key "Describe variable.")
       "hf" '(helpful-callable
@@ -4610,8 +4545,6 @@ Yup, more old code I used to use.
 *** kill all terms
 
 *** jest mode
-
-*** Move all menus to Menus section
 
 *** create wttrin library
 
