@@ -1175,8 +1175,6 @@ This library is amazing for working with surrounding text. Changing double quote
     (global-evil-surround-mode 1))
 #+end_src
 
-**** TODO add Evil Embrace
-
 *** Evil-Style Commenting
 
 Really really great way to handle comments.
@@ -4458,6 +4456,8 @@ I've:
 ** Config Changes Todos
 
 *** timers
+
+*** Add Evil Embrace
 
 *** Add markup mode add-heading-above command
 
