@@ -3863,7 +3863,7 @@ Besides different keybindings, I've only added a couple extra configurations her
 
 - ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - ~helpful-at-point~ is a great quick Emacs Lisp documentation lookup. With Evil, I can just press ~K~ on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
-- ~consult-minor-mode-menu~ lets you search minor modes, both active and not, and even toggle them! It's not really for getting information /about/ the modes, but you can probably Embark-act to those? I'll think about setting that up when I configure Embark!
+- ~consult-minor-mode-menu~ lets you search minor modes, both active and not, and even toggle them! You can use Embark from there to get documentation on any mode.
 
 #+begin_src emacs-lisp
   (use-package helpful
