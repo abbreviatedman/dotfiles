@@ -429,9 +429,6 @@ Some general todo bindings.
       "mtt" '(org-todo :which-key "Change todo state.")))
 #+end_src
 
-******* TODO add bindings for:
-- deadlines and schedules
-
 ***** Searching Org Documents
 
 The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
@@ -744,8 +741,6 @@ Only making one change so far: removing the shadowing of my leader key.
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
-
-TODO Delete the ~gj~/~j~ bindings once I find the part of the Emacs For Scratch bindings where they're changing them.
 
 *** Transposing Characters
 
@@ -1184,8 +1179,6 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
     :init
     (global-evil-visualstar-mode))
 #+end_src
-**** TODO add targets
-**** TODO add Tree-sitter in Emacs 29
 
 *** Evil Motion For Diffing Text
 
@@ -1442,8 +1435,6 @@ And a picture of what my setup actually looks like:
 
 [[./assets/font-setup-screenshot.png]]
 
-**** TODO redo font size as calculated based on resolution
-
 **** Using Fixed Pitch In Some Buffers
 
 #+begin_src emacs-lisp
@@ -1614,10 +1605,6 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
     (crj-leader-keys
       "zz" '(crj-hydra/text-zoom/body :which-key "Zoom hydra interface.")))
 #+end_src
-
-**** TODO add ability to zoom to preset big size.
-**** TODO add to new-buffer-hook to adjust to current text scale?
-**** TODO add "i" and "o" (or switch those with j/k?) to zoom in by larger increments
 
 *** Scrolling
 
@@ -1848,9 +1835,6 @@ Let's use a wrapper around it that allows multiple terminals.
     (crj-leader-keys
       "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
 #+end_src
-
-**** TODO configure Vterm Copy mode
-**** TODO configure pass-through keys
 
 *** Org Agenda
 
@@ -3191,11 +3175,6 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
 
 ****** Emacs Lisp
 
-******* TODO configure elisp more
-
-******** TODO configure keybindings
-******** TODO figure out evil keybindings for movement
-
 ******* Emacs Lisp Documentation Lookup
 
 Better go-to-definition function for Emacs Lisp.
@@ -3212,8 +3191,6 @@ Better go-to-definition function for Emacs Lisp.
     (:keymaps 'org-mode-map :states 'normal
      "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
-
-******* TODO configure elisp more
 
 ****** Scheme
 
@@ -3555,8 +3532,6 @@ And that's not even all of them! Minibuffer searches are a /huge/ part of how yo
     :general
     (crj-leader-keys "/" '(consult-line :which-key "Search in current buffer.")))
 #+end_src
-
-***** TODO add bindings for Consult searches for grep and project search and maybe others?
 
 **** Minibuffer Search Filtering
 
