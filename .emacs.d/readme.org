@@ -2942,7 +2942,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
     (symex-initialize)
 
     :custom
-    (symex-quote-prefix-list (cons "#'" symex-quote-prefix-list))
+    (symex-quote-prefix-list (list "'" "#'" "`"))
 
     :general
     (crj-leader-keys
