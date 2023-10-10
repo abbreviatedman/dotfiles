@@ -3030,14 +3030,14 @@ This is something that a more advanced solution could give you (maybe Treesitter
 ******** And, Finally, The Code That Does All That
 
 #+begin_src emacs-lisp :lexical no
+  (use-package paredit)
+
   (use-package evil-cleverparens
     :general
     (crj-leader-keys
-      "l" '(:ignore t "Lisp menu"))
-
-    (crj-leader-keys
-      "li" '(evil-cp-insert-at-beginning-of-form :which-key "Insert at beginning of form.")
+      "l" '(:ignore t :which-key "Lisp menu")
       "la" '(evil-cp-insert-at-end-of-form :which-key "Insert at end of form.")
+      "li" '(evil-cp-insert-at-beginning-of-form :which-key "Insert at beginning of form.")
       "lf" '(evil-cp-drag-forward :which-key "Drag atom or form forwards.")
       "lb" '(evil-cp-drag-backward :which-key "Drag atom or form backwards."))
 
@@ -3062,8 +3062,7 @@ This is something that a more advanced solution could give you (maybe Treesitter
     (:keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
      :states 'normal
      "g<" #'evil-shift-left
-     "g>" #'evil-shift-right
-     "r" #'paredit-raise-sexp)
+     "g>" #'evil-shift-right)
 
     (:states '(normal motion operator)
      :keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
@@ -3080,7 +3079,8 @@ This is something that a more advanced solution could give you (maybe Treesitter
      "<" #'on-parens-backward-slurp
      ">" #'on-parens-forward-slurp
      "M-<" #'on-parens-backward-barf
-     "M->" #'on-parens-forward-barf))
+     "M->" #'on-parens-forward-barf
+     "_" #'paredit-raise-sexp))
 #+end_src
 
 ******** And some code to test it on
@@ -3169,7 +3169,17 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 ******* A Lisp-Specific Editing State
 
-Let's try Symex for this.
+This is that approach #3 above: a separate Lisp-editing state. I'm using the great [[https://github.com/drym-org/symex.el][Symex]] package. Check it out, as well as the great visualizations in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]].
+
+So far, on my third or fourth attempt to work with Symex, it's going much better for some reason. Might simply be coming back to it with  bit more Lisp practice, or more willingness to work with a different system than pure Evil. One thing that's definitely helping is that I'm slightly simplifying the keys used here to use fewer chords, delegate to Evil for things Evil is more appropriate for, and to emphasize the commands I use more often.
+
+Here are the broad strokes of the changes I'm making, and I recommend checking out the Symex documentation to see what you can do with it by default!
+
+- I removed /plenty/ of features I don't use too often in favor of their Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions.
+- I made wrapping and line-whitespace-management slightly /less/ efficient in order to use normal-mode bindings of parens and angle brackets for slurping/barfing (or, as Symex puts it better, "emitting" and "capturing"). (And maybe "bubbling" and "ejecting" would be even better?)
+- I reversed the "j" and "k" bindings to make more sense to me. Further into a nested form feels more "down" to me than "up"! The Symex guide indicates a couple of times that this is a common tweak to make. I wonder if it might even be the /more/ popular way to think about it—but either way, it's popular enough that it's in the docs.
+- I switched to Symex's line-joining system (though only in one direction to simplify things), moving Evil's joining to an alternate keybinding.
+- I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list instead ~0~, which is slightly less efficient on my weird keyboards. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
 
 #+begin_src emacs-lisp :lexical no
   (use-package symex
@@ -3177,43 +3187,52 @@ Let's try Symex for this.
     (setq symex--user-evil-keyspec
           '(("j" . symex-go-up)
             ("k" . symex-go-down)
-            ("C-j" . symex-climb-branch)
-            ("C-k" . symex-descend-branch)
-            ("M-j" . symex-goto-highest)
-            ("M-k" . symex-goto-lowest)))
+            ("C-k" . symex-goto-lowest)
+            ("^" . symex-goto-first)
+            ("C-j" . evil-join)
+            ("J" . symex-join-lines)
+            ("M-j" . symex-append-newline)
+            ("W" . symex-wrap-round)
+            ("w)" . symex-wrap-round)
+            ("w(" . symex-wrap-round)
+            ("w]" . symex-wrap-square)
+            ("w[" . symex-wrap-square)
+            ("w}" . symex-wrap-curly)
+            ("w{" . symex-wrap-curly)
+            ("_" . paredit-raise-sexp)
+            ("gh" . evil-backward-char)
+            ("gl" . evil-forward-char)
+            ("(" . symex-capture-backward)
+            (")" . symex-capture-forward)
+            ("<" . symex-emit-backward)
+            (">" . symex-emit-forward)
+            ("f" . nil)
+            ("t" . nil)
+            ("s" . nil)
+            ("S" . nil)
+            ("=" . nil)
+            ("r" . nil)
+            ("K" . nil)
+            ("[" . nil)
+            ("]" . nil)
+            ("w" . nil)
+            ("C-f" . nil)
+            ("C-b" . nil)
+            ("z" . nil)))
 
     (symex-initialize)
-
-    :custom
-    (symex-modal-backend 'evil)
-    (symex-highlight-p t)
 
     :general
     (crj-leader-keys
       "L" 'symex-mode-interface)
 
+    (:keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
+     :states 'normal
+     "\\" #'symex-mode-interface)
+
     (:keymaps 'symex-mode-map
      :states 'insert
-     (kbd "<escape>") #'symex-mode-interface)
-
-    (:keymaps '(symex-mode-map symex-editing-mode-map)
-     :states '(normal operator symex visual)
-     "K" nil
-     "[" nil
-     "]" nil
-     "(" nil
-     ")" nil
-     "w" nil
-     "w)" #'symex-wrap-round
-     "w]" #'symex-wrap-square
-     "w}" #'symex-wrap-curly
-     "r" #'paredit-raise-sexp
-     "^" #'symex-goto-first
-     "gh" #'evil-backward-char
-     "gl" #'evil-forward-char)
-
-    ([remap symex-emit-forward] #'symex-emit-backward)
-    ([remap symex-emit-backward] #'symex-emit-forward))
+     (kbd "<escape>") #'symex-mode-interface))
 #+end_src
 
 ****** Lisp Indentation
