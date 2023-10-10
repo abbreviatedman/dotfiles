@@ -3889,53 +3889,53 @@ Sets up:
 - cool icons for same
 
 #+begin_src emacs-lisp
-    (use-package corfu
-      :straight
-      (corfu :files (:defaults "extensions/*"))
+  (use-package corfu
+    :straight
+    (corfu :files (:defaults "extensions/*"))
 
-      :init
-      (corfu-history-mode 1)
-      (add-to-list 'savehist-additional-variables 'corfu-history)
-      (corfu-popupinfo-mode 1)
-      (setq corfu-popupinfo-delay nil)
+    :init
+    (corfu-history-mode 1)
+    (add-to-list 'savehist-additional-variables 'corfu-history)
+    (corfu-popupinfo-mode 1)
+    (setq corfu-popupinfo-delay nil)
 
-      :config
-      (general-unbind corfu-map "RET")
+    :config
+    (general-unbind corfu-map "RET")
 
-      :general
-      (:keymaps 'corfu-map
-       :states 'insert
-       "C-n" #'corfu-next
-       "C-p" #'corfu-previous
-       "C-S-n" #'corfu-scroll-up
-       "C-S-p" #'corfu-scroll-down
-       "C-S-j" #'corfu-scroll-up
-       "C-S-k" #'corfu-scroll-down
-       "C-G" #'corfu-quit
-       "<escape>" #'corfu-insert
-       "TAB" #'corfu-next
-       [tab] #'corfu-next
-       "S-TAB" #'corfu-previous
-       [backtab] #'corfu-previous
+    :general
+    (:keymaps 'corfu-map
+     :states 'insert
+     "C-n" #'corfu-next
+     "C-p" #'corfu-previous
+     "C-S-n" #'corfu-scroll-up
+     "C-S-p" #'corfu-scroll-down
+     "C-S-j" #'corfu-scroll-up
+     "C-S-k" #'corfu-scroll-down
+     "C-G" #'corfu-quit
+     "<escape>" #'corfu-insert
+     "TAB" #'corfu-next
+     [tab] #'corfu-next
+     "S-TAB" #'corfu-previous
+     [backtab] #'corfu-previous
 
-      (:keymaps 'global-map "M-l" nil)
+     (:keymaps 'global-map "M-l" nil)
 
-      :custom
-      (corfu-cycle t)
-      (corfu-auto t)
-      (corfu-separator ?#)
-      (corfu-preview-current 'insert)
-      (corfu-quit-at-boundary 'separator)
-      (corfu-auto-prefix 1)
-      (corfu-preselect 'prompt)
-      (corfu-on-exact-match nil)
+     :custom
+     (corfu-cycle t)
+     (corfu-auto t)
+     (corfu-separator ?#)
+     (corfu-preview-current 'insert)
+     (corfu-quit-at-boundary 'separator)
+     (corfu-auto-prefix 1)
+     (corfu-preselect 'prompt)
+     (corfu-on-exact-match nil)
 
-      :hook ((prog-mode . corfu-mode)
-             (shell-mode . corfu-mode)
-             (eshell-mode . corfu-mode))
+     :hook ((prog-mode . corfu-mode)
+            (shell-mode . corfu-mode)
+            (eshell-mode . corfu-mode))
 
-      :init
-      (global-corfu-mode))
+     :init
+     (global-corfu-mode))
 
     (use-package kind-icon
       :after corfu
