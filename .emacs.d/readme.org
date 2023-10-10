@@ -3905,6 +3905,7 @@ Sets up:
     :general
     (:keymaps 'corfu-map
      :states 'insert
+     "<escape>" nil
      "C-n" #'corfu-next
      "C-p" #'corfu-previous
      "C-S-n" #'corfu-scroll-up
@@ -3912,7 +3913,6 @@ Sets up:
      "C-S-j" #'corfu-scroll-up
      "C-S-k" #'corfu-scroll-down
      "C-G" #'corfu-quit
-     "<escape>" #'corfu-insert
      "TAB" #'corfu-next
      [tab] #'corfu-next
      "S-TAB" #'corfu-previous
