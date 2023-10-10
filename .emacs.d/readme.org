@@ -2941,6 +2941,9 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
     (symex-initialize)
 
+    :custom
+    (symex-quote-prefix-list (cons "#'" symex-quote-prefix-list))
+
     :general
     (crj-leader-keys
       "L" 'symex-mode-interface)
