@@ -3843,8 +3843,10 @@ A few more additions to the help menu:
   Returns the point to its previous position when done."
       (interactive)
       (save-excursion
-        (unless (thing-at-point 'symbol)
-          (re-search-forward "\\_<"))
+        (or
+         (thing-at-point 'symbol)
+         (re-search-forward "\\_<" nil t)
+         (re-search-backward "\\_<" nil t))
         (evil-lookup)))
 
     (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
