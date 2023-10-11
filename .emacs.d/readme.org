@@ -3820,6 +3820,8 @@ Original description of Emacs From Scratch's equivalent section perfectly sums i
 #+end_quote
 
 Besides different keybindings, I've only added a couple extra configurations here:
+I also do some configuring for the evil lookup function, replacing the standard one with Helpful's, but also rebinding the usual Evil lookup shortcut of ~K~ to a version that goes to the next symbol first.
+
 
 - ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - ~helpful-at-point~ is a great quick Emacs Lisp documentation lookup. With Evil, I can just press ~K~ on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
@@ -3831,16 +3833,31 @@ Besides different keybindings, I've only added a couple extra configurations her
     (defun crj--set-elisp-lookup-function ()
       "Sets the documentation function for Emacs Lisp."
       (setq evil-lookup-func #'helpful-at-point))
+
+    (defun crj-lookup-next-symbol ()
+      "Look up the first symbol at or after point.
+
+  Returns the point to its previous position when done."
+      (interactive)
+      (save-excursion
+        (unless (thing-at-point 'symbol)
+          (re-search-forward "\\_<"))
+        (evil-lookup)))
+
     (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
 
-    :commands (helpful-callable
-               helpful-command
-               helpful-variable
-               helpful-at-point
-               helpful-key
-               helpful-face)
+    :commands
+    (helpful-callable
+     helpful-command
+     helpful-variable
+     helpful-at-point
+     helpful-key
+     helpful-face)
 
     :general
+    (:states 'normal
+     "K" #'crj-lookup-next-symbol)
+
     (crj-leader-keys
       "hv" '(helpful-variable
              :which-key "Describe variable.")
