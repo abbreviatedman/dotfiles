@@ -858,7 +858,7 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
 
 This library adds some basic Evil bindings. In addition to the "key themes"" you'll find in [[https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org][the Evil Org keythemes documentation]], I've included their awesome ~RET~ function, which continues list items and other such, while removing many of the other default keybindings in favor of my own slightly modified versions, such as removing their ~C-S-k~ binding, which I use for ~evil-insert-digraph~, having moved /that/ command's usual binding (~C-k~) to make room for the more Emacsy ~kill-line~.
 
-Also added a few of my own custom ones, including
+Also added some good Evil-y movement bindings, as you can see at the bottom.
 
 #+begin_src emacs-lisp
   (use-package evil-org
