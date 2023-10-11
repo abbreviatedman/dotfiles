@@ -3838,7 +3838,9 @@ A few more additions to the help menu:
       (setq evil-lookup-func #'helpful-at-point))
 
     (defun crj-lookup-next-symbol ()
-      "Look up the first symbol at or after point.
+      "Look up the first symbol at or near point.
+
+  Prefers forward, but will look backward if there's no match forward.
 
   Returns the point to its previous position when done."
       (interactive)
