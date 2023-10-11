@@ -1,4 +1,4 @@
-#+title:   Colin Jaffe's Literate Emacs Configuration
+#+title: Colin Jaffe's Literate Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
 
 * Colin Jaffe's Literate Config
@@ -235,7 +235,7 @@ For example, opening a file in Vanilla Emacs keybindings would be ~C-x C-f~, whi
 
 In Evil-Mode-style keybindings, the same command might be something like ~SPC f o~, which means press the ~spacebar~, then press the ~f~ key, then press the ~o~ key.
 
-This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, ~/~ begins a text search (like ~C-f~ or ~Command-f~ in many apps), and ~dd~ deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is ~i~ (for ~i~nsert).
+This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, ~/~ begins a text search (like ~C-f~ or ~Command-f~ in many apps), and ~dd~ deletes the line the cursor is on. To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is ~i~ (for ~i~nsert).
 
 This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like ~Control~ and ~Alt~ and ~Command~ to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use ~SPC f o~ to ~o~ pen a ~f~ ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
 
@@ -377,7 +377,11 @@ If you don't know at least the simple Emmet abbreviations, and you write HTML...
 
 *** Org Mode
 
-[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+As Emacs From Scratch put it:
+
+#+BEGIN_QUOTE
+[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+#+END_QUOTE
 
 **** Install Newest Version
 
@@ -427,7 +431,7 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 
 **** Org Mode Better Font Faces
 
-The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
 #+begin_src emacs-lisp
   (use-package org
@@ -498,7 +502,11 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
 
 **** Basic Config
 
-This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+Emacs' From Scratch's Commentary (this is one of the areas of my config I have edited but not rewritten):
+
+#+BEGIN_QUOTE
+This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates. There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+#+END_QUOTE
 
 #+begin_src emacs-lisp
   (use-package org
@@ -526,7 +534,11 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
 **** Nicer Heading Bullets
 
-[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+Emacs From Scratch's commentary on this:
+
+#+BEGIN_QUOTE
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control. Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+#+END_QUOTE
 
 #+begin_src emacs-lisp
   (use-package org-bullets
@@ -556,7 +568,6 @@ Most of this is pretty standard, but I also do have my own CSS to make exporting
           org-export-headline-levels 6
           org-html-head-extra
           "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>"))
-
   #+end_src
 
 ***** Org Export to GFM
@@ -3686,23 +3697,23 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 
 *** Flymake
 
-  A great error-navigation library
+A great error-navigation library
 
-  #+begin_src emacs-lisp
-    (use-package flymake
-      :diminish 'flymake-mode
+#+begin_src emacs-lisp
+  (use-package flymake
+    :diminish 'flymake-mode
 
-      :hook (prog-mode . flymake-mode)
+    :hook (prog-mode . flymake-mode)
 
-      :general
-      (:keymaps 'normal
-       "]e" '(flymake-goto-next-error
-              :which-key "Go to next error.")
-       "[e" '(flymake-goto-prev-error
-              :which-key "Go to previous error."))
-      (crj-leader-keys
-        "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
-      #+end_src
+    :general
+    (:keymaps 'normal
+     "]e" '(flymake-goto-next-error
+            :which-key "Go to next error.")
+     "[e" '(flymake-goto-prev-error
+            :which-key "Go to previous error."))
+    (crj-leader-keys
+      "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
+#+end_src
 
 ** AI
 
@@ -3816,7 +3827,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 Original description of Emacs From Scratch's equivalent section perfectly sums it up, so I'll let it do so:
 
 #+BEGIN_QUOTE
-[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers.  For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
+[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers. For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration. It is very useful for figuring out how things work in Emacs.
 #+end_quote
 
 So Helpful dramatically improves the built-in help commands. Which were pretty great already.
@@ -4303,7 +4314,7 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
 Some code and docs to start with from Emacs From Scratch:
 
-[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]]. You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language. Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
 #+begin_src emacs-lisp :tangle no
   (use-package dap-mode
@@ -4329,9 +4340,9 @@ Some code and docs to start with from Emacs From Scratch:
 
 This is Emacs From Scratch's code and documentation on it:
 
-[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
+[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp. It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc). It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~). Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
 
-The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well.  However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
+The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well. However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
 
 *Useful key bindings:*
 
