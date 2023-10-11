@@ -3819,13 +3819,16 @@ Original description of Emacs From Scratch's equivalent section perfectly sums i
 [[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers.  For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
 #+end_quote
 
-Besides different keybindings, I've only added a couple extra configurations here:
+So Helpful dramatically improves the built-in help commands. Which were pretty great already.
+
 I also do some configuring for the evil lookup function, replacing the standard one with Helpful's, but also rebinding the usual Evil lookup shortcut of ~K~ to a version that goes to the next symbol first.
 
+A few more additions to the help menu:
 
-- ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - ~helpful-at-point~ is a great quick Emacs Lisp documentation lookup. With Evil, I can just press ~K~ on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
+- ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - ~consult-minor-mode-menu~ lets you search minor modes, both active and not, and even toggle them! You can use Embark from there to get documentation on any mode.
+- ~embark-keybindings~ lets you search active keybindings, which is super sweet.
 
 #+begin_src emacs-lisp
   (use-package helpful
@@ -3861,6 +3864,7 @@ I also do some configuring for the evil lookup function, replacing the standard 
     (crj-leader-keys
       "hv" '(helpful-variable
              :which-key "Describe variable.")
+      "hB" '(embark-bindings  :which-key "Search active keybindings.")
       "hf" '(helpful-callable
              :which-key "Describe function.")
       "hF" '(describe-face
