@@ -80,6 +80,13 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 
+pop-kill-ring() {
+    zle yank-pop
+}
+zle -N pop-kill-ring
+
+bindkey '\ey' pop-kill-ring
+
 # User configuration
 
 # zsh autusuggest color
