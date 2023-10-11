@@ -3892,6 +3892,8 @@ I've:
 
 ** Config Changes Todos
 
+*** add C-h for backspace character, move help to C-H
+
 *** timers
 
 *** remove old org mode config stuff
