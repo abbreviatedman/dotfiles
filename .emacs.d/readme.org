@@ -2917,9 +2917,27 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 - I reversed the "j" and "k" bindings to make more sense to me. Further into a nested form feels more "down" to me than "up"! The Symex guide indicates a couple of times that this is a common tweak to make. I wonder if it might even be the /more/ popular way to think about it—but either way, it's popular enough that it's in the docs.
 - I switched to Symex's line-joining system (though only in one direction to simplify things), moving Evil's joining to an alternate keybinding.
 - I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list instead ~0~, which is slightly less efficient on my weird keyboards. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
+- Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
 #+begin_src emacs-lisp :lexical no
   (use-package symex
+    :init
+    (defun crj--symex-remaining-length-but-using-save-excursion ()
+      "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
+
+  There are probably better fixes!
+
+  Here's the original doc-string:
+
+  Compute the remaining length of the current symex.
+
+  This should be done via DSL computation semantics at some point."
+      (save-excursion
+        (let ((result (symex-execute-traversal symex--traversal-goto-last)))
+          (1+ (length result)))))
+
+    (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
+
     :config
     (setq symex--user-evil-keyspec
           '(("j" . symex-go-up)
