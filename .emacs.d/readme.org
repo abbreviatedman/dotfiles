@@ -2693,10 +2693,10 @@ I'll have to give this more of a go, but it really seems like Vim's "big word" m
 
 Take this JavaScript, for example:
 
-#+begin_src javascript
-  // function greet({name}) {
-  //   return `Hello, ${name}!`
-  // }
+#+begin_src javascript :tangle no
+  function greet({name}) {
+    return `Hello, ${name}!`
+  }
 #+end_src
 
 If you just changed the symbol ~greet~, there are three possible movements we could make with different versions of Vim/Evil's ~w~ movement:
