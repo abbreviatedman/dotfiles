@@ -1804,6 +1804,7 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     :init
     (defun crj-agenda () (interactive) (org-agenda t "g"))
     (setq org-agenda-start-day nil
+          org-agenda-window-setup 'only-window
           org-agenda-files '("~/org-stuff/inbox.org"
                              "~/org-stuff/readme.org"
                              "~/org-stuff/personal.org"
