@@ -3333,8 +3333,7 @@ Here that all is!
   (use-package embark
     :bind
     (("C-." . embark-act)
-     ("C->" . crj-embark-act-noquit)
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+     ("C->" . crj-embark-act-noquit))
 
     :init
     (setq prefix-help-command #'embark-prefix-help-command)
@@ -3813,9 +3812,7 @@ Besides different keybindings, I've only added a couple extra configurations her
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
     ([remap describe-variable] #'helpful-variable)
-    ([remap describe-key] #'helpful-key)
-    ("C-h g" #'customize-group)
-    ("C-h F" #'describe-face))
+    ([remap describe-key] #'helpful-key))
 #+end_src
 
 ** Utility Functions
