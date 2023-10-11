@@ -193,10 +193,19 @@ Next we'll define a bunch more keybindings, as well as answer the question, /why
 
 I'll add to this section every time I have a new menu to add to the hierarchy.
 
+I'm also mapping a new help command in a couple places, so that I can later remap ~C-h~ to deleting a character.
+
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
+    :init
+    (setq embark-help-key "C-S-h")
+
     :general
+    ("C-S-h" 'help-command)
+
     (crj-leader-keys
+      "h" '(:keymap help-map :which-key "Help menu.")
+      "w" '(evil-window-map :which-key "Window menu.")
       "m" '(:ignore t :which-key "Markup menu.")
       "i" '(:ignore t :which-key "Insert menu.")
       "ic" '(:ignore t :which-key "Insert cursor menu.")
@@ -213,8 +222,7 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
       "ai" '(:ignore t :which-key "AI menu.")
-      "aib" '(:ignore t :which-key "Bing Chat menu.")
-      "h" '(:ignore t :which-key "Help menu.")))
+      "aib" '(:ignore t :which-key "Bing Chat menu.")))
 #+end_src
 
 *** General Emacs' Keybindings
@@ -872,7 +880,8 @@ Also added some good Evil-y movement bindings, as you can see at the bottom.
     :config
     (evil-org-set-key-theme '(textobjects todo additional))
     (evil-define-key '(normal visual insert) 'evil-org-mode
-      (kbd "C-S-k") nil)
+      (kbd "C-S-k") nil
+      (kbd "C-S-h") nil)
 
     :general
     (:keymaps 'org-mode-map :states 'insert
@@ -3742,10 +3751,6 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
 Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
 
 #+begin_src emacs-lisp
-  (use-package emacs
-    :general
-    (crj-leader-keys "w" '(:keymap evil-window-map :which-key "window")))
-
   (use-package emacs
     :general
     (crj-leader-keys
