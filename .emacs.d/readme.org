@@ -588,7 +588,8 @@ Literate programming for fun and profit. Or... at least, for fun.
 
   (use-package emacs
     :init
-    (setq org-confirm-babel-evaluate nil)
+    (setq org-confirm-babel-evaluate nil
+          org-src-window-setup 'current-window)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
