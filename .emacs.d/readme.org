@@ -973,10 +973,11 @@ Also included in generally surfacing more Emacsy insert-state commands:
 
     :general
     (general-def global-map
+      "C-h" #'backward-delete-char
       "C-u" #'backward-kill-sentence
       "C-w" #'backward-kill-word)
 
-    (:states 'insert
+    (:states '(insert emacs)
      "C-n" #'next-line
      "C-p" #'previous-line
      "C-e" #'end-of-visual-line
@@ -3897,8 +3898,6 @@ I've:
 #+end_src
 
 ** Config Changes Todos
-
-*** add C-h for backspace character, move help to C-H
 
 *** timers
 
