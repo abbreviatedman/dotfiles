@@ -2923,7 +2923,7 @@ So far, on my third or fourth attempt to work with Symex, it's going much better
 
 Here are the broad strokes of the changes I'm making, and I recommend checking out the Symex documentation to see what you can do with it by default!
 
-- I removed /plenty/ of features I don't use too often in favor of their Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions.
+- I removed /plenty/ of features I don't use too often in favor of the shadowed Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions.
 - I made wrapping and line-whitespace-management slightly /less/ efficient in order to use normal-mode bindings of parens and angle brackets for slurping/barfing (or, as Symex puts it better, "emitting" and "capturing"). (And maybe "bubbling" and "ejecting" would be even better?)
 - I reversed the "j" and "k" bindings to make more sense to me. Further into a nested form feels more "down" to me than "up"! The Symex guide indicates a couple of times that this is a common tweak to make. I wonder if it might even be the /more/ popular way to think about it—but either way, it's popular enough that it's in the docs.
 - I switched to Symex's line-joining system (though only in one direction to simplify things), moving Evil's joining to an alternate keybinding.
@@ -2966,6 +2966,8 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
             (")" . symex-capture-forward)
             ("<" . symex-emit-backward)
             (">" . symex-emit-forward)
+            ("X" . symex-delete)
+            ("x" . nil)
             ("f" . nil)
             ("t" . nil)
             ("s" . nil)
