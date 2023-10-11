@@ -578,7 +578,7 @@ Org Mode is great at exporting to other formats, but other formats usually don't
                :files ("*.el" "filters" "preprocessors")))
 #+end_src
 
-**** Org Code Evaluation
+**** Org Code Editing And Evaluation
 
 Literate programming for fun and profit. Or... at least, for fun.
 
@@ -861,7 +861,7 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
     (general-def '(normal visual motion) :prefix "]"
       "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
       "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
-      #+end_src
+    #+end_src
 
 *** Evil Keybindings for Org Mode
 
@@ -1029,22 +1029,22 @@ This library is amazing for working with surrounding text. Changing double quote
 
 Really really great way to handle comments.
 
-  #+begin_src emacs-lisp
-    (use-package evil-nerd-commenter
-      :after evil
+#+begin_src emacs-lisp
+  (use-package evil-nerd-commenter
+    :after evil
 
-      :config
-      :general
-      ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
-      (:keymaps 'normal :prefix "g"
-       "c" '(evilnc-comment-operator :which-key "Toggle comment.")
-       "C" '(evilnc-copy-and-comment-operator :which-key "Copy and comment.")
-       "K" '(evilnc-comment-box :which-key "Create comment box."))
+    :config
+    :general
+    ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
+    (:keymaps 'normal :prefix "g"
+     "c" '(evilnc-comment-operator :which-key "Toggle comment.")
+     "C" '(evilnc-copy-and-comment-operator :which-key "Copy and comment.")
+     "K" '(evilnc-comment-box :which-key "Create comment box."))
 
-      (general-def 'normal evil-inner-text-objects-map
-        "c" #'evilnc-inner-comment)
-      (general-def 'normal evil-outer-text-objects-map
-        "c" #'evilnc-outer-comment))
+    (general-def 'normal evil-inner-text-objects-map
+      "c" #'evilnc-inner-comment)
+    (general-def 'normal evil-outer-text-objects-map
+      "c" #'evilnc-outer-comment))
 #+end_src
 
 *** Replace With Clipboard In Evil
@@ -1121,7 +1121,7 @@ A surprisingly useful Evil text object for the entire buffer.
     :straight (evil-textobj-entire
                :host github
                :repo "nscoder/evil-textobj-entire"))
-  #+end_src
+#+end_src
 
 **** Between Characters Text Object
 
@@ -1211,9 +1211,9 @@ Shows you the difference between two different bits of text. Another very occasi
 
 Searching is something Emacs does very, /very/ well.
 
-  We'll use various ~consult~ commands to search through different sets of data.
+We'll use various ~consult~ commands to search through different sets of data.
 
-  We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
+We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1346,7 +1346,7 @@ I am not a respected developer.
 
 I use Input for coding because when I head about a minority of developers using a variable pitch font for coding, I read up on it, and the few articles I read in defense of it were pretty convincing.
 
-See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~,  characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
+See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~, characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
 
 But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a ~!~ or an ~n~ or an ~m~. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
 
@@ -1538,7 +1538,7 @@ I'm not using it, but it's worth exploring at some point.
     :init (default-text-scale-mode))
 #+end_src
 
-But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts  I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
+But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
 
 All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. ~default-text-scale~ is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
 
@@ -2006,11 +2006,11 @@ In the meantime, the workaround is to define ~seq-keep~ ourselves.
 
 **** Magit As A Simple Cloud Save Feature
 
-Here, we'll adapt  Git for use not for its usual powerful version control abilities, but simply for saving to a remote repository. We're using Git, one of the most powerful and deep and flexible pieces of software ever created, as a dropbox.
+Here, we'll adapt Git for use not for its usual powerful version control abilities, but simply for saving to a remote repository. We're using Git, one of the most powerful and deep and flexible pieces of software ever created, as a dropbox.
 
 Somewhere Linus Torvalds is crying, but, when you aren't really working on a serious project, this can be useful!
 
-***** Our  Cloud Save Function
+***** Our Cloud Save Function
 
 #+begin_src emacs-lisp :lexical no
   (defun crj-git-cloud-save ()
@@ -2205,7 +2205,7 @@ A better Emacs kill command binding to kill the Emacs server as well.
       "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
-Save backups of files, every 10 idle seconds, to a backups folder in our  main emacs directory
+Save backups of files, every 10 idle seconds, to a backups folder in our main emacs directory.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -2604,15 +2604,15 @@ This next library highlights the delimiters of the block the cursor is currently
 
 By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle visual indication as to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
-  #+begin_src emacs-lisp
-    (use-package highlight-parentheses
-      :diminish 'highlight-parentheses-mode
+#+begin_src emacs-lisp
+  (use-package highlight-parentheses
+    :diminish 'highlight-parentheses-mode
 
-      :ghook 'prog-mode-hook
-      :custom
-      (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
-      (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
-    #+end_src
+    :ghook 'prog-mode-hook
+    :custom
+    (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
+    (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
+#+end_src
 
 ****** Using Different Colors For Different Depths With Rainbow Delimiters
 
@@ -2694,7 +2694,7 @@ If you just changed the symbol ~greet~, there are three possible movements we co
 2. move to the ~{~ using ~W~
 3. move to the symbol ~name~ using Evil Cleverparens' version of ~W~
 
- Not only is #3 the overwhelmingly more likely use case to the point where this next part shouldn't matter, but you can also easily do the other 2 use cases  with ~f(~ and ~f{~ (and sure, you could use ~fn~ for getting to the next symbol, but that a) isn't as much of a structural movement and b) can easily gotcha you momentarily if there's another ~n~ in the way).
+ Not only is #3 the overwhelmingly more likely use case to the point where this next part shouldn't matter, but you can also easily do the other 2 use cases with ~f(~ and ~f{~ (and sure, you could use ~fn~ for getting to the next symbol, but that a) isn't as much of a structural movement and b) can easily gotcha you momentarily if there's another ~n~ in the way).
 
  Basically, "words" should always be "words", not words and punctuation.
 
@@ -2742,21 +2742,21 @@ In particular, I like:
 
 ******** Commands That Could Be Done Structurally
 
-  I may at some point experiment with the following, all of which can be seen in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]]
+I may at some point experiment with the following, all of which can be seen in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]]:
 
-  - raising
-  - splitting
-  - merging
+- raising
+- splitting
+- merging
 
-    These motions don't have easy ways to do them with Evil.
+These motions don't have easy ways to do them with Evil.
 
-    For raise, I can probably do it with Evil Replace: I can yank the inner form, then go to the outer form, then run evil-replace. Not /too/ bad.
+For raise, I can probably do it with Evil Replace: I can yank the inner form, then go to the outer form, then run evil-replace. Not /too/ bad.
 
-    Merging is relatively easy with Evil, just hunting the opening and closing parens and using ~x~ to delete them... but possibly a command would be nice for this, so that I'm working structurally.
+Merging is relatively easy with Evil, just hunting the opening and closing parens and using ~x~ to delete them... but possibly a command would be nice for this, so that I'm working structurally.
 
-    For splitting, I could... hmm... go to the place to split them (which you have to do with Symex's commands anyway), then enter insert state, type in the closing and opening parens, and exit back to normal state. And delete the extra parens if you have auto-pairing on.
+For splitting, I could... hmm... go to the place to split them (which you have to do with Symex's commands anyway), then enter insert state, type in the closing and opening parens, and exit back to normal state. And delete the extra parens if you have auto-pairing on.
 
-    All of those are /okay/ solutions, but if I find myself doing them more often, it may make sense to use more structural commands on them.
+All of those are /okay/ solutions, but if I find myself doing them more often, it may make sense to use more structural commands on them.
 
 ******** Add More Text Objects
 
@@ -2863,9 +2863,9 @@ Basically, my choice appears to be:
 - add some one-off shortcut commands, like the cycling quoting and the slurping/barfing. But these aren't integrated into the Evil editing language in any meaningful way.
 - embrace a separate editing state to switch to for Evil, such as going full Symex, or the more popular [[https://github.com/noctuid/lispyville][Lispyville package]]. Again, not very Evil-y.
 
-  I've chosen the first one, but what I /want/ to exist is this third option:
+I've chosen the first one, but what I /want/ to exist is this third option:
 
-  - Evil motions and text objects for dealing with Lisp.
+- Evil motions and text objects for dealing with Lisp.
 
 I'm really surprised and annoyed this doesn't exist, and I really want it to.
 
@@ -2893,7 +2893,7 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 *additional ideas*
 
-- just like most text objects, a text object used without a motion should /default/  to traveling to the next such text object
+- just like most text objects, a text object used without a motion should /default/ to traveling to the next such text object
 - all motions should take counts
 - we /could/ implement not just (i)n and (a)round but (o)uter
 - and possibly (n)ext and (p)revious, as [[https://github.com/noctuid/targets.el][targets.el]] does.
@@ -2902,13 +2902,13 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 -
 
-  More later...
+More later...
 
-******* A Lisp-Specific Editing State
+******* A Lisp-Specific Editing State With Symex
 
 This is that approach #3 above: a separate Lisp-editing state. I'm using the great [[https://github.com/drym-org/symex.el][Symex]] package. Check it out, as well as the great visualizations in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]].
 
-So far, on my third or fourth attempt to work with Symex, it's going much better for some reason. Might simply be coming back to it with  bit more Lisp practice, or more willingness to work with a different system than pure Evil. One thing that's definitely helping is that I'm slightly simplifying the keys used here to use fewer chords, delegate to Evil for things Evil is more appropriate for, and to emphasize the commands I use more often.
+So far, on my third or fourth attempt to work with Symex, it's going much better for some reason. Might simply be coming back to it with bit more Lisp practice, or more willingness to work with a different system than pure Evil. One thing that's definitely helping is that I'm slightly simplifying the keys used here to use fewer chords, delegate to Evil for things Evil is more appropriate for, and to emphasize the commands I use more often.
 
 Here are the broad strokes of the changes I'm making, and I recommend checking out the Symex documentation to see what you can do with it by default!
 
@@ -2957,9 +2957,6 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
     (symex-quote-prefix-list (list "'" "#'" "`"))
 
     :general
-    (crj-leader-keys
-      "L" 'symex-mode-interface)
-
     (:keymaps 'symex-editing-mode-map
      :states '(operator visual normal)
      :prefix "w"
@@ -3353,14 +3350,15 @@ Here that all is!
     (defvar-keymap embark-help-actions
       :doc "Keymap for actions for help searches."
       :parent embark-general-map)
-
     (add-to-list 'embark-keymap-alist '(help . embark-help-actions))
 
     :general
     (general-def (embark-become-help-map embark-symbol-map)
       "x" #'execute-extended-command)
+
     (general-def (embark-command-map embark-function-map)
       "h" #'helpful-command)
+
     (general-def (embark-become-file+buffer-map)
       "d" #'delete-file))
 
