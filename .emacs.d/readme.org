@@ -3901,6 +3901,8 @@ I've:
 
 *** timers
 
+*** one command to prettify source code for markdown or emacs-lisp
+
 *** remove old org mode config stuff
 
 Anything useful here?
