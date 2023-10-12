@@ -6,7 +6,7 @@
 [core]
 	excludesFile = ~/.gitignore-global
 	ignorecase = false
-	editor = code -w
+	editor = emacsclient -c
 [interactive]
 	singleKey = true
 [init]
