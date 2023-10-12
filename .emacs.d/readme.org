@@ -2908,6 +2908,25 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
 #+begin_src emacs-lisp :lexical no
   (use-package symex
+    :init
+    (defvar-local crj-test--original-color nil)
+    (defun crj-test--switch-cursor-color ()
+      (interactive)
+      (unless crj-test--original-color
+        (setq crj-test--original-color (face-background 'cursor))
+        (add-to-list 'face-remapping-alist '(cursor :background "red"))))
+
+    (defun crj-test--restore-cursor-color ()
+      (interactive)
+      (when crj-test--original-color
+        (setq face-remapping-alist
+              (assq-delete-all 'cursor face-remapping-alist))
+        (setq crj-test--original-color nil)))
+
+
+
+
+
     :config
     (setq symex--user-evil-keyspec
           '(("j" . symex-go-up)
@@ -3892,6 +3911,8 @@ I've:
 ** Config Changes Todos
 
 *** timers
+
+*** add cursor style to Symex mode
 
 *** remove old org mode config stuff
 
