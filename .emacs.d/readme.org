@@ -95,10 +95,11 @@ And turn off the built-in package manager. (This needs to go in ~early-init.el~,
 (setq package-enable-at-startup nil)
 #+end_src
 
-Use ~straight~ to install ~use-package~.
+Use ~straight~ to install ~use-package~, with a quick tweak to add its declarations to ~imenu~.
 
 #+begin_src emacs-lisp
-(straight-use-package 'use-package)
+  (setq use-package-enable-imenu-support t)
+  (straight-use-package 'use-package)
 #+end_src
 
 Tell ~use-package~ to install packages using ~straight~ whenever I declare a ~use-package~ block.
@@ -2511,10 +2512,24 @@ Avy config will be kept around for now, but I'm disabling it. Consider it "archi
      "?" #'evil-ex-search-forward))
 #+end_src
 
-***** Evil Ex-Search and Consult
+***** Evil Ex-Search and Consult-Line
 
 are configured elsewhere!
 
+***** Consult-Imenu
+
+Thinking about giving this a try. It's a little less pretty than ~consult-org-heading~ when searching headings in org, but the latter's tailoring to Org means it loses the flexibility to work elsewhere. So let's give Imenu a try—it works in all files, whether markup or code.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq imenu-auto-rescan t
+          imenu-use-popup-menu t)
+
+    :general
+    (crj-leader-keys
+      "s." '(consult-imenu :which-key "Search buffer sections.")))
+#+end_src
 **** Multiple Cursors
 
  I used multiple cursors before learning Vim, which for the most part obviated the need for them. These days I use Evil Ex Commands, or writable occur buffers, or lsp-based renaming, but I'm bringing multiple cursors back to see if they have a place in my toolbox.
