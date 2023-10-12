@@ -18,7 +18,7 @@ message/rfc822=userapp-Thunderbird.desktop
 application/pdf=epdfview.desktop
 application/x-bittorrent=deluge.desktop
 x-scheme-handler/postman=Postman.desktop
-x-scheme-handler/webcal=google-chrome.desktop
+x-scheme-handler/webcal=vivaldi-stable.desktop
 
 [Added Associations]
 x-scheme-handler/http=google-chrome.desktop;
