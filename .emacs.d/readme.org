@@ -2938,11 +2938,13 @@ So far, on my third or fourth attempt to work with Symex, it's going much better
 
 Here are the broad strokes of the changes I'm making, and I recommend checking out the Symex documentation to see what you can do with it by default!
 
-- I removed /plenty/ of features I don't use too often in favor of the shadowed Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions.
+- I removed /plenty/ of features I don't use too often in favor of the shadowed Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions. In general, I kept the Symex commands that work on... symexes, since Evil doesn't handle that well. But I chose the Evil keybinding (removing or moving the Symex command) when the Evil command provides functionality Symex doesn't generally cover. This was either:
+  - large-scale scrolling commands I use a lot, like ~zz~ or ~Ctrl-f~
+  - single-character manipulation, like ~x~ and ~r~
 - I made wrapping and line-whitespace-management slightly /less/ efficient in order to use normal-mode bindings of parens and angle brackets for slurping/barfing (or, as Symex puts it better, "emitting" and "capturing"). (And maybe "bubbling" and "ejecting" would be even better?)
 - I reversed the "j" and "k" bindings to make more sense to me. Further into a nested form feels more "down" to me than "up"! The Symex guide indicates a couple of times that this is a common tweak to make. I wonder if it might even be the /more/ popular way to think about it—but either way, it's popular enough that it's in the docs.
-- I switched to Symex's line-joining system (though only in one direction to simplify things), moving Evil's joining to an alternate keybinding.
-- I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list instead ~0~, which is slightly less efficient on my weird keyboards. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
+- In a rare case, Symex left Evil's ~J~ line-joining command in place and put its own versions in alternate keybindings. I love their version and switched it.
+- I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list, which is slightly more efficient on my weird keyboards than 0. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
 - Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
 #+begin_src emacs-lisp :lexical no
@@ -3017,11 +3019,11 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
     (:keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
      :states 'normal
-     "\\" #'symex-mode-interface)
+     "\\" #'symex-mode-interface) ; switch to Symex Mode with backslash
 
     (:keymaps 'symex-mode-map
      :states 'insert
-     (kbd "<escape>") #'symex-mode-interface))
+     (kbd "<escape>") #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
 #+end_src
 
 ****** Lisp Indentation
