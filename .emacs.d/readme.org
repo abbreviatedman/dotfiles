@@ -401,8 +401,8 @@ Org is built into Emacs, but you probably want the newest version.
 
     (setq org-refile-use-outline-path t
           org-link-descriptive nil
-          org-refile-targets
-          '((org-agenda-files . (:maxlevel . 6))))
+          org-startup-folded 'show2levels
+          org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 
     (defun crj-refile-in-current-buffer ()
       (interactive)
