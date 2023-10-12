@@ -1,4 +1,4 @@
-#+title:   Colin Jaffe's Literate Emacs Configuration
+#+title: Colin Jaffe's Literate Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
 
 * Colin Jaffe's Literate Config
@@ -49,12 +49,31 @@ You can read more on this subject… and I’ll probably write more. But in the 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs--org-babel-tangle-config)))
 #+end_src
 
-** Start The Emacs Server
+** Emacs OS Integration
+
+*** Start The Emacs Server
 
 Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
 
 #+begin_src emacs-lisp
-  (server-start)
+  (unless (server-running-p)
+    (server-start))
+#+end_src
+
+*** Set It As The Default Editor
+
+Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package with-editor
+    :init
+    (keymap-global-set "<remap> <async-shell-command>"
+                       #'with-editor-async-shell-command)
+    (keymap-global-set "<remap> <shell-command>"
+                       #'with-editor-shell-command)
+
+    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
+      (add-hook hook #'with-editor-export-editor)))
 #+end_src
 
 ** Start With Messages
@@ -95,10 +114,11 @@ And turn off the built-in package manager. (This needs to go in ~early-init.el~,
 (setq package-enable-at-startup nil)
 #+end_src
 
-Use ~straight~ to install ~use-package~.
+Use ~straight~ to install ~use-package~, with a quick tweak to add its declarations to ~imenu~.
 
 #+begin_src emacs-lisp
-(straight-use-package 'use-package)
+  (setq use-package-enable-imenu-support t)
+  (straight-use-package 'use-package)
 #+end_src
 
 Tell ~use-package~ to install packages using ~straight~ whenever I declare a ~use-package~ block.
@@ -193,10 +213,19 @@ Next we'll define a bunch more keybindings, as well as answer the question, /why
 
 I'll add to this section every time I have a new menu to add to the hierarchy.
 
+I'm also mapping a new help command in a couple places, so that I can later remap ~C-h~ to deleting a character.
+
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
+    :init
+    (setq embark-help-key "C-S-h")
+
     :general
+    ("C-S-h" 'help-command)
+
     (crj-leader-keys
+      "h" '(:keymap help-map :which-key "Help menu.")
+      "w" '(evil-window-map :which-key "Window menu.")
       "m" '(:ignore t :which-key "Markup menu.")
       "i" '(:ignore t :which-key "Insert menu.")
       "ic" '(:ignore t :which-key "Insert cursor menu.")
@@ -213,8 +242,7 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
       "ai" '(:ignore t :which-key "AI menu.")
-      "aib" '(:ignore t :which-key "Bing Chat menu.")
-      "h" '(:ignore t :which-key "Help menu.")))
+      "aib" '(:ignore t :which-key "Bing Chat menu.")))
 #+end_src
 
 *** General Emacs' Keybindings
@@ -227,7 +255,7 @@ For example, opening a file in Vanilla Emacs keybindings would be ~C-x C-f~, whi
 
 In Evil-Mode-style keybindings, the same command might be something like ~SPC f o~, which means press the ~spacebar~, then press the ~f~ key, then press the ~o~ key.
 
-This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, ~/~ begins a text search (like ~C-f~ or ~Command-f~ in many apps), and ~dd~ deletes the line the cursor is on.  To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is ~i~ (for ~i~nsert).
+This works because in a modal editing system like Vim and Evil, pressing keys doesn't type anything into a file, but activates commands instead. For example, ~/~ begins a text search (like ~C-f~ or ~Command-f~ in many apps), and ~dd~ deletes the line the cursor is on. To enter a text insertion state and actually type text, you have to use a command—in Evil/Vim, the classic command is ~i~ (for ~i~nsert).
 
 This system of different "modes" (Vim parlance) or "states" (Evil parlance, since "mode" has a different meaning in Emacs) gives you tons of freedom in your keybindings. If you /don't/ have non-typing states to unlock these fast editing commands, you need to use modifiers keys like ~Control~ and ~Alt~ and ~Command~ to differentiate commands from typing. In a modal system's "normal state"—so called because editing text is /more/ common than typing new text—you can use ~SPC f o~ to ~o~ pen a ~f~ ile. This opens you up to simpler keybindings that can be a little more mnemonic /without/ contorting your hands.
 
@@ -369,7 +397,11 @@ If you don't know at least the simple Emmet abbreviations, and you write HTML...
 
 *** Org Mode
 
-[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs.  It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+As Emacs From Scratch put it:
+
+#+BEGIN_QUOTE
+[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+#+END_QUOTE
 
 **** Install Newest Version
 
@@ -388,8 +420,8 @@ Org is built into Emacs, but you probably want the newest version.
 
     (setq org-refile-use-outline-path t
           org-link-descriptive nil
-          org-refile-targets
-          '((org-agenda-files . (:maxlevel . 6))))
+          org-startup-folded 'show2levels
+          org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 
     (defun crj-refile-in-current-buffer ()
       (interactive)
@@ -419,7 +451,7 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 
 **** Org Mode Better Font Faces
 
-The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~.  We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
 #+begin_src emacs-lisp
   (use-package org
@@ -490,7 +522,11 @@ The ~efs/org-font-setup~ function configures various text faces to tweak the siz
 
 **** Basic Config
 
-This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates.  There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+Emacs' From Scratch's Commentary (this is one of the areas of my config I have edited but not rewritten):
+
+#+BEGIN_QUOTE
+This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates. There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+#+END_QUOTE
 
 #+begin_src emacs-lisp
   (use-package org
@@ -518,7 +554,11 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 
 **** Nicer Heading Bullets
 
-[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control.  Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+Emacs From Scratch's commentary on this:
+
+#+BEGIN_QUOTE
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control. Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+#+END_QUOTE
 
 #+begin_src emacs-lisp
   (use-package org-bullets
@@ -548,7 +588,6 @@ Most of this is pretty standard, but I also do have my own CSS to make exporting
           org-export-headline-levels 6
           org-html-head-extra
           "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>"))
-
   #+end_src
 
 ***** Org Export to GFM
@@ -570,7 +609,7 @@ Org Mode is great at exporting to other formats, but other formats usually don't
                :files ("*.el" "filters" "preprocessors")))
 #+end_src
 
-**** Org Code Evaluation
+**** Org Code Editing And Evaluation
 
 Literate programming for fun and profit. Or... at least, for fun.
 
@@ -580,7 +619,8 @@ Literate programming for fun and profit. Or... at least, for fun.
 
   (use-package emacs
     :init
-    (setq org-confirm-babel-evaluate nil)
+    (setq org-confirm-babel-evaluate nil
+          org-src-window-setup 'current-window)
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((emacs-lisp . t)
@@ -597,6 +637,13 @@ Literate programming for fun and profit. Or... at least, for fun.
        ))
 
     :general
+    (:keymaps 'org-src-mode-map
+     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block.")
+     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block."))
+
     (:keymaps 'org-mode-map
      :states 'normal
      "RET" #'org-ctrl-c-ctrl-c))
@@ -852,13 +899,13 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
     (general-def '(normal visual motion) :prefix "]"
       "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
       "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
-      #+end_src
+    #+end_src
 
 *** Evil Keybindings for Org Mode
 
 This library adds some basic Evil bindings. In addition to the "key themes"" you'll find in [[https://github.com/Somelauw/evil-org-mode/blob/master/doc/keythemes.org][the Evil Org keythemes documentation]], I've included their awesome ~RET~ function, which continues list items and other such, while removing many of the other default keybindings in favor of my own slightly modified versions, such as removing their ~C-S-k~ binding, which I use for ~evil-insert-digraph~, having moved /that/ command's usual binding (~C-k~) to make room for the more Emacsy ~kill-line~.
 
-Also added a few of my own custom ones, including
+Also added some good Evil-y movement bindings, as you can see at the bottom.
 
 #+begin_src emacs-lisp
   (use-package evil-org
@@ -872,7 +919,8 @@ Also added a few of my own custom ones, including
     :config
     (evil-org-set-key-theme '(textobjects todo additional))
     (evil-define-key '(normal visual insert) 'evil-org-mode
-      (kbd "C-S-k") nil)
+      (kbd "C-S-k") nil
+      (kbd "C-S-h") nil)
 
     :general
     (:keymaps 'org-mode-map :states 'insert
@@ -963,10 +1011,11 @@ Also included in generally surfacing more Emacsy insert-state commands:
 
     :general
     (general-def global-map
+      "C-h" #'backward-delete-char
       "C-u" #'backward-kill-sentence
       "C-w" #'backward-kill-word)
 
-    (:states 'insert
+    (:states '(insert emacs)
      "C-n" #'next-line
      "C-p" #'previous-line
      "C-e" #'end-of-visual-line
@@ -1018,22 +1067,22 @@ This library is amazing for working with surrounding text. Changing double quote
 
 Really really great way to handle comments.
 
-  #+begin_src emacs-lisp
-    (use-package evil-nerd-commenter
-      :after evil
+#+begin_src emacs-lisp
+  (use-package evil-nerd-commenter
+    :after evil
 
-      :config
-      :general
-      ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
-      (:keymaps 'normal :prefix "g"
-       "c" '(evilnc-comment-operator :which-key "Toggle comment.")
-       "C" '(evilnc-copy-and-comment-operator :which-key "Copy and comment.")
-       "K" '(evilnc-comment-box :which-key "Create comment box."))
+    :config
+    :general
+    ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
+    (:keymaps 'normal :prefix "g"
+     "c" '(evilnc-comment-operator :which-key "Toggle comment.")
+     "C" '(evilnc-copy-and-comment-operator :which-key "Copy and comment.")
+     "K" '(evilnc-comment-box :which-key "Create comment box."))
 
-      (general-def 'normal evil-inner-text-objects-map
-        "c" #'evilnc-inner-comment)
-      (general-def 'normal evil-outer-text-objects-map
-        "c" #'evilnc-outer-comment))
+    (general-def 'normal evil-inner-text-objects-map
+      "c" #'evilnc-inner-comment)
+    (general-def 'normal evil-outer-text-objects-map
+      "c" #'evilnc-outer-comment))
 #+end_src
 
 *** Replace With Clipboard In Evil
@@ -1110,7 +1159,7 @@ A surprisingly useful Evil text object for the entire buffer.
     :straight (evil-textobj-entire
                :host github
                :repo "nscoder/evil-textobj-entire"))
-  #+end_src
+#+end_src
 
 **** Between Characters Text Object
 
@@ -1200,9 +1249,9 @@ Shows you the difference between two different bits of text. Another very occasi
 
 Searching is something Emacs does very, /very/ well.
 
-  We'll use various ~consult~ commands to search through different sets of data.
+We'll use various ~consult~ commands to search through different sets of data.
 
-  We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
+We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -1335,7 +1384,7 @@ I am not a respected developer.
 
 I use Input for coding because when I head about a minority of developers using a variable pitch font for coding, I read up on it, and the few articles I read in defense of it were pretty convincing.
 
-See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~,  characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
+See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~, characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
 
 But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a ~!~ or an ~n~ or an ~m~. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
 
@@ -1527,7 +1576,7 @@ I'm not using it, but it's worth exploring at some point.
     :init (default-text-scale-mode))
 #+end_src
 
-But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts  I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
+But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
 
 All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. ~default-text-scale~ is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
 
@@ -1779,15 +1828,49 @@ RSS might be a great technology? I'm only just getting into it with this package
 
 Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
 
-Let's use a wrapper around it that allows multiple terminals.
-
-#+begin_src emacs-lisp
-  (use-package multi-vterm
+#+begin_src emacs-lisp :lexical no
+  (use-package vterm
     :init
     (setq vterm-shell "/usr/sbin/zsh"
           vterm-always-compile-module t
           vterm-max-scrollback 100000)
 
+    (defun crj-kill-unnamed-vterm-terminals ()
+      "Kill all vterm buffers that still have their default buffer names.
+
+  It temporarily removes confirmation of killing modified buffers.
+
+  So please be sure you want to kill all modified vterm buffers before
+  you run this command."
+      (interactive)
+      (let ((kill-buffer-query-functions
+             (remq 'process-kill-buffer-query-function kill-buffer-query-functions)))
+        (mapc (lambda (buffer)
+                (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
+                  (kill-buffer buffer)))
+              (buffer-list))))
+
+    :general
+    (crj-leader-keys
+      "qv" '(crj-kill-unnamed-vterm-terminals :which-key "Kill all unnamed vterm buffers."))
+
+    (:keymaps 'vterm-mode-map
+     "C-c <escape>" '(vterm-send-escape :which-key "Send escape key to underlying shell.")
+     "C-c :" '(vterm--self-insert :which-key "Send colon key to underlying shell."))
+
+    (:keymaps 'vterm-mode-map
+     "C-c n" '(vterm-copy-mode :which-key "Switch to Vterm Copy Mode.")
+     "C-c C-t" '(vterm-copy-mode :which-key "Switch to Vterm Copy Mode."))
+
+    (:keymaps 'vterm-copy-mode-map
+     "C-c i" '(vterm-copy-mode :which-key "Turn off Vterm Copy Mode.")
+     "C-c C-t" '(vterm-copy-mode :which-key "Turn off Vterm Copy Mode.")))
+#+end_src
+
+Let's also use a wrapper around vterm that allows multiple terminals.
+
+#+begin_src emacs-lisp
+  (use-package multi-vterm
     :general
     (crj-leader-keys
       "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
@@ -1804,6 +1887,7 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     :init
     (defun crj-agenda () (interactive) (org-agenda t "g"))
     (setq org-agenda-start-day nil
+          org-agenda-window-setup 'only-window
           org-agenda-files '("~/org-stuff/inbox.org"
                              "~/org-stuff/readme.org"
                              "~/org-stuff/personal.org"
@@ -1971,6 +2055,13 @@ Only some minor settings changes from the basic setup.
       "3" #'digit-argument
       "4" #'digit-argument)
 
+    (:keymaps 'with-editor-mode-map
+     "C-c C-c" '(with-editor-finish :which-key "Finish editing.")
+     "C-c c" '(with-editor-finish :which-key "Finish editing.")
+     "C-c '" '(with-editor-finish :which-key "Finish editing.")
+     "C-c k" '(with-editor-cancel :which-key "Cancel editing.")
+     "C-c C-k" '(with-editor-cancel :which-key "Cancel editing."))
+
     (crj-leader-keys
       "gg" '(magit-status :which-key "Launch Git interface.")
       "gm" '(magit-dispatch :which-key "Show Git HUD.")
@@ -1994,11 +2085,11 @@ In the meantime, the workaround is to define ~seq-keep~ ourselves.
 
 **** Magit As A Simple Cloud Save Feature
 
-Here, we'll adapt  Git for use not for its usual powerful version control abilities, but simply for saving to a remote repository. We're using Git, one of the most powerful and deep and flexible pieces of software ever created, as a dropbox.
+Here, we'll adapt Git for use not for its usual powerful version control abilities, but simply for saving to a remote repository. We're using Git, one of the most powerful and deep and flexible pieces of software ever created, as a dropbox.
 
 Somewhere Linus Torvalds is crying, but, when you aren't really working on a serious project, this can be useful!
 
-***** Our  Cloud Save Function
+***** Our Cloud Save Function
 
 #+begin_src emacs-lisp :lexical no
   (defun crj-git-cloud-save ()
@@ -2193,7 +2284,7 @@ A better Emacs kill command binding to kill the Emacs server as well.
       "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
-Save backups of files, every 10 idle seconds, to a backups folder in our  main emacs directory
+Save backups of files, every 10 idle seconds, to a backups folder in our main emacs directory.
 
 #+begin_src emacs-lisp
   (use-package emacs
@@ -2488,10 +2579,24 @@ Avy config will be kept around for now, but I'm disabling it. Consider it "archi
      "?" #'evil-ex-search-forward))
 #+end_src
 
-***** Evil Ex-Search and Consult
+***** Evil Ex-Search and Consult-Line
 
 are configured elsewhere!
 
+***** Consult-Imenu
+
+Thinking about giving this a try. It's a little less pretty than ~consult-org-heading~ when searching headings in org, but the latter's tailoring to Org means it loses the flexibility to work elsewhere. So let's give Imenu a try—it works in all files, whether markup or code.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq imenu-auto-rescan t
+          imenu-use-popup-menu t)
+
+    :general
+    (crj-leader-keys
+      "s." '(consult-imenu :which-key "Search buffer sections.")))
+#+end_src
 **** Multiple Cursors
 
  I used multiple cursors before learning Vim, which for the most part obviated the need for them. These days I use Evil Ex Commands, or writable occur buffers, or lsp-based renaming, but I'm bringing multiple cursors back to see if they have a place in my toolbox.
@@ -2592,15 +2697,15 @@ This next library highlights the delimiters of the block the cursor is currently
 
 By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle visual indication as to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
-  #+begin_src emacs-lisp
-    (use-package highlight-parentheses
-      :diminish 'highlight-parentheses-mode
+#+begin_src emacs-lisp
+  (use-package highlight-parentheses
+    :diminish 'highlight-parentheses-mode
 
-      :ghook 'prog-mode-hook
-      :custom
-      (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
-      (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
-    #+end_src
+    :ghook 'prog-mode-hook
+    :custom
+    (highlight-parentheses-colors `(,(modus-themes-get-color-value 'fg-heading-4 t)))
+    (highlight-parentheses-attributes `((:background ,(modus-themes-get-color-value 'bg-heading-4 t)))))
+#+end_src
 
 ****** Using Different Colors For Different Depths With Rainbow Delimiters
 
@@ -2670,10 +2775,10 @@ I'll have to give this more of a go, but it really seems like Vim's "big word" m
 
 Take this JavaScript, for example:
 
-#+begin_src javascript
-  // function greet({name}) {
-  //   return `Hello, ${name}!`
-  // }
+#+begin_src javascript :tangle no
+  function greet({name}) {
+    return `Hello, ${name}!`
+  }
 #+end_src
 
 If you just changed the symbol ~greet~, there are three possible movements we could make with different versions of Vim/Evil's ~w~ movement:
@@ -2682,7 +2787,7 @@ If you just changed the symbol ~greet~, there are three possible movements we co
 2. move to the ~{~ using ~W~
 3. move to the symbol ~name~ using Evil Cleverparens' version of ~W~
 
- Not only is #3 the overwhelmingly more likely use case to the point where this next part shouldn't matter, but you can also easily do the other 2 use cases  with ~f(~ and ~f{~ (and sure, you could use ~fn~ for getting to the next symbol, but that a) isn't as much of a structural movement and b) can easily gotcha you momentarily if there's another ~n~ in the way).
+ Not only is #3 the overwhelmingly more likely use case to the point where this next part shouldn't matter, but you can also easily do the other 2 use cases with ~f(~ and ~f{~ (and sure, you could use ~fn~ for getting to the next symbol, but that a) isn't as much of a structural movement and b) can easily gotcha you momentarily if there's another ~n~ in the way).
 
  Basically, "words" should always be "words", not words and punctuation.
 
@@ -2730,21 +2835,21 @@ In particular, I like:
 
 ******** Commands That Could Be Done Structurally
 
-  I may at some point experiment with the following, all of which can be seen in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]]
+I may at some point experiment with the following, all of which can be seen in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]]:
 
-  - raising
-  - splitting
-  - merging
+- raising
+- splitting
+- merging
 
-    These motions don't have easy ways to do them with Evil.
+These motions don't have easy ways to do them with Evil.
 
-    For raise, I can probably do it with Evil Replace: I can yank the inner form, then go to the outer form, then run evil-replace. Not /too/ bad.
+For raise, I can probably do it with Evil Replace: I can yank the inner form, then go to the outer form, then run evil-replace. Not /too/ bad.
 
-    Merging is relatively easy with Evil, just hunting the opening and closing parens and using ~x~ to delete them... but possibly a command would be nice for this, so that I'm working structurally.
+Merging is relatively easy with Evil, just hunting the opening and closing parens and using ~x~ to delete them... but possibly a command would be nice for this, so that I'm working structurally.
 
-    For splitting, I could... hmm... go to the place to split them (which you have to do with Symex's commands anyway), then enter insert state, type in the closing and opening parens, and exit back to normal state. And delete the extra parens if you have auto-pairing on.
+For splitting, I could... hmm... go to the place to split them (which you have to do with Symex's commands anyway), then enter insert state, type in the closing and opening parens, and exit back to normal state. And delete the extra parens if you have auto-pairing on.
 
-    All of those are /okay/ solutions, but if I find myself doing them more often, it may make sense to use more structural commands on them.
+All of those are /okay/ solutions, but if I find myself doing them more often, it may make sense to use more structural commands on them.
 
 ******** Add More Text Objects
 
@@ -2851,9 +2956,9 @@ Basically, my choice appears to be:
 - add some one-off shortcut commands, like the cycling quoting and the slurping/barfing. But these aren't integrated into the Evil editing language in any meaningful way.
 - embrace a separate editing state to switch to for Evil, such as going full Symex, or the more popular [[https://github.com/noctuid/lispyville][Lispyville package]]. Again, not very Evil-y.
 
-  I've chosen the first one, but what I /want/ to exist is this third option:
+I've chosen the first one, but what I /want/ to exist is this third option:
 
-  - Evil motions and text objects for dealing with Lisp.
+- Evil motions and text objects for dealing with Lisp.
 
 I'm really surprised and annoyed this doesn't exist, and I really want it to.
 
@@ -2881,7 +2986,7 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 *additional ideas*
 
-- just like most text objects, a text object used without a motion should /default/  to traveling to the next such text object
+- just like most text objects, a text object used without a motion should /default/ to traveling to the next such text object
 - all motions should take counts
 - we /could/ implement not just (i)n and (a)round but (o)uter
 - and possibly (n)ext and (p)revious, as [[https://github.com/noctuid/targets.el][targets.el]] does.
@@ -2890,27 +2995,31 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 -
 
-  More later...
+More later...
 
-******* A Lisp-Specific Editing State
+******* A Lisp-Specific Editing State With Symex
 
 This is that approach #3 above: a separate Lisp-editing state. I'm using the great [[https://github.com/drym-org/symex.el][Symex]] package. Check it out, as well as the great visualizations in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]].
 
-So far, on my third or fourth attempt to work with Symex, it's going much better for some reason. Might simply be coming back to it with  bit more Lisp practice, or more willingness to work with a different system than pure Evil. One thing that's definitely helping is that I'm slightly simplifying the keys used here to use fewer chords, delegate to Evil for things Evil is more appropriate for, and to emphasize the commands I use more often.
+So far, on my third or fourth attempt to work with Symex, it's going much better for some reason. Might simply be coming back to it with bit more Lisp practice, or more willingness to work with a different system than pure Evil. One thing that's definitely helping is that I'm slightly simplifying the keys used here to use fewer chords, delegate to Evil for things Evil is more appropriate for, and to emphasize the commands I use more often.
 
 Here are the broad strokes of the changes I'm making, and I recommend checking out the Symex documentation to see what you can do with it by default!
 
-- I removed /plenty/ of features I don't use too often in favor of their Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions.
+- I removed /plenty/ of features I don't use too often in favor of the shadowed Evil bindings. You can see all the ~nil~ bindings below, where I disabled the Symex versions. In general, I kept the Symex commands that work on... symexes, since Evil doesn't handle that well. But I chose the Evil keybinding (removing or moving the Symex command) when the Evil command provides functionality Symex doesn't generally cover. This was either:
+  - large-scale scrolling commands I use a lot, like ~zz~ or ~Ctrl-f~
+  - single-character manipulation, like ~x~ and ~r~
 - I made wrapping and line-whitespace-management slightly /less/ efficient in order to use normal-mode bindings of parens and angle brackets for slurping/barfing (or, as Symex puts it better, "emitting" and "capturing"). (And maybe "bubbling" and "ejecting" would be even better?)
 - I reversed the "j" and "k" bindings to make more sense to me. Further into a nested form feels more "down" to me than "up"! The Symex guide indicates a couple of times that this is a common tweak to make. I wonder if it might even be the /more/ popular way to think about it—but either way, it's popular enough that it's in the docs.
-- I switched to Symex's line-joining system (though only in one direction to simplify things), moving Evil's joining to an alternate keybinding.
-- I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list instead ~0~, which is slightly less efficient on my weird keyboards. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
+- In a rare case, Symex left Evil's ~J~ line-joining command in place and put its own versions in alternate keybindings. I love their version and switched it.
+- I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list, which is slightly more efficient on my weird keyboards than 0. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
+- Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
 #+begin_src emacs-lisp :lexical no
   (use-package symex
     :init
     (defvar-local crj-test--original-color nil)
     (defun crj-test--switch-cursor-color ()
+      "This and the below function are for testing out changing the cursor based on whether we're in Symex mode or not."
       (interactive)
       (unless crj-test--original-color
         (setq crj-test--original-color (face-background 'cursor))
@@ -2923,9 +3032,21 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
               (assq-delete-all 'cursor face-remapping-alist))
         (setq crj-test--original-color nil)))
 
+    (defun crj--symex-remaining-length-but-using-save-excursion ()
+      "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
 
+    There are probably better fixes!
 
+    Here's the original doc-string:
 
+    Compute the remaining length of the current symex.
+
+    This should be done via DSL computation semantics at some point."
+      (save-excursion
+        (let ((result (symex-execute-traversal symex--traversal-goto-last)))
+          (1+ (length result)))))
+
+    (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
 
     :config
     (setq symex--user-evil-keyspec
@@ -2944,6 +3065,8 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
             (")" . symex-capture-forward)
             ("<" . symex-emit-backward)
             (">" . symex-emit-forward)
+            ("X" . symex-delete)
+            ("x" . nil)
             ("f" . nil)
             ("t" . nil)
             ("s" . nil)
@@ -2964,9 +3087,6 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
     (symex-quote-prefix-list (list "'" "#'" "`"))
 
     :general
-    (crj-leader-keys
-      "L" 'symex-mode-interface)
-
     (:keymaps 'symex-editing-mode-map
      :states '(operator visual normal)
      :prefix "w"
@@ -2981,11 +3101,11 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
     (:keymaps '(emacs-lisp-mode-map racket-mode-map scheme-mode-map)
      :states 'normal
-     "\\" #'symex-mode-interface)
+     "\\" #'symex-mode-interface) ; switch to Symex Mode with backslash
 
     (:keymaps 'symex-mode-map
      :states 'insert
-     (kbd "<escape>") #'symex-mode-interface))
+     (kbd "<escape>") #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
 #+end_src
 
 ****** Lisp Indentation
@@ -3340,8 +3460,7 @@ Here that all is!
   (use-package embark
     :bind
     (("C-." . embark-act)
-     ("C->" . crj-embark-act-noquit)
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+     ("C->" . crj-embark-act-noquit))
 
     :init
     (setq prefix-help-command #'embark-prefix-help-command)
@@ -3352,7 +3471,43 @@ Here that all is!
       (let ((embark-quit-after-action nil))
         (embark-act)))
 
+    (defun embark-which-key-indicator ()
+      "An embark indicator that displays keymaps using which-key.
+    The which-key help message will show the type and value of the
+    current target followed by an ellipsis if there are further
+    targets."
+      (lambda (&optional keymap targets prefix)
+        (if (null keymap)
+            (which-key--hide-popup-ignore-command)
+          (which-key--show-keymap
+           (if (eq (plist-get (car targets) :type) 'embark-become)
+               "Become"
+             (format "Act on %s '%s'%s"
+                     (plist-get (car targets) :type)
+                     (embark--truncate-target (plist-get (car targets) :target))
+                     (if (cdr targets) "…" "")))
+           (if prefix
+               (pcase (lookup-key keymap prefix 'accept-default)
+                 ((and (pred keymapp) km) km)
+                 (_ (key-binding prefix 'accept-default)))
+             keymap)
+           nil nil t (lambda (binding)
+                       (not (string-suffix-p "-argument" (cdr binding))))))))
+
+    (setq embark-indicators
+          '(embark-which-key-indicator))
+
+    (defun embark-hide-which-key-indicator (fn &rest args)
+      "Hide the which-key indicator immediately when using the completing-read prompter."
+      (which-key--hide-popup-ignore-command)
+      (let ((embark-indicators
+             (remq #'embark-which-key-indicator embark-indicators)))
+        (apply fn args)))
+
     :config
+    (advice-add #'embark-completing-read-prompter
+                :around #'embark-hide-which-key-indicator)
+
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                    nil
@@ -3361,14 +3516,15 @@ Here that all is!
     (defvar-keymap embark-help-actions
       :doc "Keymap for actions for help searches."
       :parent embark-general-map)
-
     (add-to-list 'embark-keymap-alist '(help . embark-help-actions))
 
     :general
     (general-def (embark-become-help-map embark-symbol-map)
       "x" #'execute-extended-command)
+
     (general-def (embark-command-map embark-function-map)
       "h" #'helpful-command)
+
     (general-def (embark-become-file+buffer-map)
       "d" #'delete-file))
 
@@ -3642,23 +3798,23 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 
 *** Flymake
 
-  A great error-navigation library
+A great error-navigation library
 
-  #+begin_src emacs-lisp
-    (use-package flymake
-      :diminish 'flymake-mode
+#+begin_src emacs-lisp
+  (use-package flymake
+    :diminish 'flymake-mode
 
-      :hook (prog-mode . flymake-mode)
+    :hook (prog-mode . flymake-mode)
 
-      :general
-      (:keymaps 'normal
-       "]e" '(flymake-goto-next-error
-              :which-key "Go to next error.")
-       "[e" '(flymake-goto-prev-error
-              :which-key "Go to previous error."))
-      (crj-leader-keys
-        "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
-      #+end_src
+    :general
+    (:keymaps 'normal
+     "]e" '(flymake-goto-next-error
+            :which-key "Go to next error.")
+     "[e" '(flymake-goto-prev-error
+            :which-key "Go to previous error."))
+    (crj-leader-keys
+      "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
+#+end_src
 
 ** AI
 
@@ -3762,10 +3918,6 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys "w" '(:keymap evil-window-map :which-key "window")))
-
-  (use-package emacs
-    :general
     (crj-leader-keys
       "wd" '(evil-window-delete :which-key "Close window.")
       "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
@@ -3776,14 +3928,19 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 Original description of Emacs From Scratch's equivalent section perfectly sums it up, so I'll let it do so:
 
 #+BEGIN_QUOTE
-[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers.  For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration.  It is very useful for figuring out how things work in Emacs.
+[[https://github.com/Wilfred/helpful][Helpful]] adds a lot of very helpful (get it?) information to Emacs' ~describe-~ command buffers. For example, if you use ~describe-function~, you will not only get the documentation about the function, you will also see the source code of the function and where it gets used in other places in the Emacs configuration. It is very useful for figuring out how things work in Emacs.
 #+end_quote
 
-Besides different keybindings, I've only added a couple extra configurations here:
+So Helpful dramatically improves the built-in help commands. Which were pretty great already.
 
-- ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
+I also do some configuring for the evil lookup function, replacing the standard one with Helpful's, but also rebinding the usual Evil lookup shortcut of ~K~ to a version that goes to the next symbol first.
+
+A few more additions to the help menu:
+
 - ~helpful-at-point~ is a great quick Emacs Lisp documentation lookup. With Evil, I can just press ~K~ on a function or variable and get its documentation and source code. It makes Emacs' amazing introspectability even easier.
+- ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - ~consult-minor-mode-menu~ lets you search minor modes, both active and not, and even toggle them! You can use Embark from there to get documentation on any mode.
+- ~embark-keybindings~ lets you search active keybindings, which is super sweet.
 
 #+begin_src emacs-lisp
   (use-package helpful
@@ -3791,19 +3948,39 @@ Besides different keybindings, I've only added a couple extra configurations her
     (defun crj--set-elisp-lookup-function ()
       "Sets the documentation function for Emacs Lisp."
       (setq evil-lookup-func #'helpful-at-point))
+
+    (defun crj-lookup-next-symbol ()
+      "Look up the first symbol at or near point.
+
+  Prefers forward, but will look backward if there's no match forward.
+
+  Returns the point to its previous position when done."
+      (interactive)
+      (save-excursion
+        (or
+         (thing-at-point 'symbol)
+         (re-search-forward "\\_<" nil t)
+         (re-search-backward "\\_<" nil t))
+        (evil-lookup)))
+
     (add-hook 'emacs-lisp-mode-hook #'crj--set-elisp-lookup-function)
 
-    :commands (helpful-callable
-               helpful-command
-               helpful-variable
-               helpful-at-point
-               helpful-key
-               helpful-face)
+    :commands
+    (helpful-callable
+     helpful-command
+     helpful-variable
+     helpful-at-point
+     helpful-key
+     helpful-face)
 
     :general
+    (:states 'normal
+     "K" #'crj-lookup-next-symbol)
+
     (crj-leader-keys
       "hv" '(helpful-variable
              :which-key "Describe variable.")
+      "hB" '(embark-bindings  :which-key "Search active keybindings.")
       "hf" '(helpful-callable
              :which-key "Describe function.")
       "hF" '(describe-face
@@ -3824,9 +4001,7 @@ Besides different keybindings, I've only added a couple extra configurations her
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
     ([remap describe-variable] #'helpful-variable)
-    ([remap describe-key] #'helpful-key)
-    ("C-h g" #'customize-group)
-    ("C-h F" #'describe-face))
+    ([remap describe-key] #'helpful-key))
 #+end_src
 
 ** Utility Functions
@@ -3911,9 +4086,8 @@ I've:
 ** Config Changes Todos
 
 *** timers
-
 *** add cursor style to Symex mode
-
+*** one command to prettify source code for markdown or emacs-lisp
 *** remove old org mode config stuff
 
 Anything useful here?
@@ -4066,11 +4240,6 @@ Some variables to check out:
                                    evil-shift-width
                                    css-indent-offset))
 #+end_src
-*** configure Vterm Copy mode
-
-*** configure pass-through keys
-
-
 *** make line numbers increase in size at a lower rate. This command could be useful:
 
 #+begin_src emacs-lisp
@@ -4240,7 +4409,7 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
 Some code and docs to start with from Emacs From Scratch:
 
-[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]].  You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language.  Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]]. You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language. Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
 #+begin_src emacs-lisp :tangle no
   (use-package dap-mode
@@ -4266,9 +4435,9 @@ Some code and docs to start with from Emacs From Scratch:
 
 This is Emacs From Scratch's code and documentation on it:
 
-[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp.  It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc).  It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~).  Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
+[[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html#Contributors-to-Eshell][Eshell]] is Emacs' own shell implementation written in Emacs Lisp. It provides you with a cross-platform implementation (even on Windows!) of the common GNU utilities you would find on Linux and macOS (~ls~, ~rm~, ~mv~, ~grep~, etc). It also allows you to call Emacs Lisp functions directly from the shell and you can even set up aliases (like aliasing ~vim~ to ~find-file~). Eshell is also an Emacs Lisp REPL which allows you to evaluate full expressions at the shell.
 
-The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well.  However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
+The downsides to Eshell are that it can be harder to configure than other packages due to the particularity of where you need to set some options for them to go into effect, the lack of shell completions (by default) for some useful things like Git commands, and that REPL programs sometimes don't work as well. However, many of these limitations can be dealt with by good configuration and installing external packages, so don't let that discourage you from trying it!
 
 *Useful key bindings:*
 
@@ -4591,14 +4760,12 @@ I used to like this one! Would take some digging into Doom though to find the or
      :desc "Show project diagnostics." :n "X" #'flymake-show-project-diagnostics))
 #+end_src
 
-*** Maybe some more vterm fixes?
+*** Old eshell/vterm config
 
 A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I start spending lots of time in terms again.
 
 #+begin_src emacs-lisp :lexical no :tangle no
   (require 'dwim-shell-commands)
-
-  (setq vterm-max-scrollback 100000)
 
   (defun crj/toggle-eshell-scrollback ()
     (interactive)
@@ -4613,27 +4780,9 @@ A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I st
      :desc "read eshell history in" "r" #'eshell/r))
 
 
-  (setq vterm-always-compile-module t)
-
-  (defun kill-terminals ()
-    (interactive)
-    (mapc (lambda (buffer)
-            (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
-              (kill-buffer buffer)))
-          (buffer-list)))
-
-  (map! :leader
-    (:prefix ("q" . "quit/session")
-     :desc "Kill all terminals."
-     :n "t" #'kill-terminals))
-
-
   (map! :leader
     (:prefix ("v" . "view")
      :desc "View available eshell buffers." :n "e" #'+eshell/switch-to))
-
-  ;; zsh baby
-  (setq vterm-shell "/usr/sbin/zsh")
 
   (defun open-vterm-other-frame ()
     (interactive)
@@ -4680,12 +4829,6 @@ A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I st
 
   ;; remember moar better
   (setq eshell-history-size 100000)
-
-  ;; Some
-  (map! :map 'vterm-mode-map
-    "C-c <escape>" #'vterm-send-escape
-    "C-c :" #'vterm--self-insert)
-
 
   ;; turn off their history saving so we can do it more often
   (setq eshell-save-history-on-exit nil)
@@ -4761,103 +4904,6 @@ A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I st
         ((display-buffer-alist
           '(window-name '(#'display-buffer-no-window))))
       (call-interactively command)))
-
-  ;; Good for playing nice with vi mode shell keybindings. See `crj/toggle-evil-in-vterm' for more info.
-  (defun crj/set-up-vterm ()
-    (turn-off-evil-mode))
-
-  ;; Hook for running above function for each new vterm buffer.
-  ;; Turned off for now.
-  ;; (add-hook 'vterm-mode-hook #'crj/set-up-vterm)
-
-  (defun crj/toggle-evil-in-vterm ()
-    "Toggles evil mode in Vterm so as to leave ESC to the shell's keybindings.
-
-  To use:
-
-  ;; Start with evil turned off.
-  (add-hook 'vterm-mode-hook #'turn-off-evil-mode)
-  ;; Add to the copy-mode hook.
-  ;; Which runs on entering /or/ leaving Vterm Copy Mode.
-  (add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
-
-  The problem we're trying to solve here is that if you want to use
-  both Emacs' Evil Mode and your shell's Vim keybindings, then when
-  you press ESC to switch to Normal Mode, do you want Evil Mode's
-  Normal Mode or the shell's Normal Mode? Without a solution, Evil
-  Mode will greedily gobble the ESC up and you'll be unable to
-  enter your shell's Vim emulation. So we need to be able to
-  disambiguate which Normal Mode we want to enter.
-
-  This function provides a solution that leverages Vterm Copy Mode
-  to give Emacs an alternative way to exit to Evil's Normal Mode,
-  leaving ESC to the shell.
-
-  An alternative solution is to keep ESC for Evil's Normal Mode and
-  use a different keybinding for the shell's Normal Mode.
-
-  Here are a couple ways to do that:
-
-  1. Set a non-ESC keybinding for entering normal mode in your
-  shell's config file.
-
-  - You can do this in your bash configuration file:
-
-  bind '\"jk\":vi-movement-mode'
-
-  Source: URL'https://unix.stackexchange.com/a/303401'
-
-  - For zsh, you can use the following in your config file:
-
-  bindkey -M viins jk vi-cmd-mode
-
-  Source: URL'https://unix.stackexchange.com/a/697026'
-
-  - For zsh, you could also use the excellent zsh plugin Zsh Vim
-    Mode (URL'https://github.com/softmoth/zsh-vim-mode'), which has
-    many benefits including additional ways you can customize
-    entering Normal Mode.
-
-  2. An alternative method for keeping ESC reserved for Evil Mode
-  is to leverage Vterm Mode's ability to send a key directly to the
-  shell. You can do this, for example:
-
-  (define-key vterm-mode-map (kbd \"C-c <escape>\") #'vterm-send-escape)
-
-  This will mean that using ~C-c <escape>~ will send the escape key
-  to your shell. ~ESC~ goes to Evil, while ~C-c ESC~ sends ESC to
-  your shell. This means you can use ESC in other places in your
-  shell besides the direct command line, which can be useful for
-  interactive shell programs as well. (Thus, this is recommended
-  even with this function's solution.)
-
-  In short, this function's solution allows you to have the same
-  exact experience in a Vterm as you do in a non-Emacs terminal
-  emulator.
-
-  The advantage of the other solutions is that you keep the same
-  Emacs Evil keybinding of ESC even in Vterm Mode.
-
-  Which solution works for you likely depends on which workflow you
-  prioritize and which context you want to context-switch in."
-
-    (interactive)
-    (if (bound-and-true-p vterm-copy-mode)
-        (progn
-          (turn-on-evil-mode)
-          (evil-normal-state))
-      (evil-insert-state)
-      (turn-off-evil-mode)))
-
-  (map! :map vterm-mode-map
-    "C-c t" #'vterm-copy-mode
-    "C-c n" #'vterm-copy-mode)
-
-  (map! :map vterm-copy-mode-map
-    "C-c t" #'vterm-copy-mode
-    "C-c i" #'vterm-copy-mode)
-
-  ;; (add-hook 'vterm-copy-mode-hook #'crj/toggle-evil-in-vterm)
 #+end_src
 
 *** string inflection
@@ -4941,9 +4987,6 @@ Some old Elisp code, might be useful?
            (name (concat project-prefix (read-string prompt))))
       (rename-buffer name)))
 #+end_src
-
-*** TODO configure Vterm Copy mode
-*** TODO configure pass-through keys
 
 *** Check if THIS is a tangle we have natively now:
 

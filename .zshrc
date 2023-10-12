@@ -2,12 +2,6 @@
 # linux keychain
 # eval `keychain -q --eval id_ed25519`
 
-# open vim
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
-
-
 # If you come from bash you might have to change your $PATH.
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -80,6 +74,13 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 
+pop-kill-ring() {
+    zle yank-pop
+}
+zle -N pop-kill-ring
+
+bindkey '\ey' pop-kill-ring
+
 # User configuration
 
 # zsh autusuggest color
@@ -96,7 +97,7 @@ MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL #00ffff"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR='emacsclient --socket-name=alt -cn -a ""'
+export EDITOR='emacsclient -c'
 export VISUAL=$EDITOR
 export ALTERNATE_EDITOR=$EDITOR
 
@@ -105,9 +106,6 @@ export ALTERNATE_EDITOR=$EDITOR
 
 # Aliases!
 
-# doom emacs
-alias ds='doom sync'
-alias dmd='doom doctor'
 
 # pacman and yay
 alias yay='yay --color=always'
@@ -153,20 +151,21 @@ alias cdgtd='cd ~/Sync/gtd'
 # database management
 alias smg='sequelize model:generate'
 
-# open emacs
-# open file(s) in emacs
-# alias emacs='emacsclient --no-wait -c -a ""'
+# open emacs (you can also open a file this way)
+alias e='emacsclient -cn'
 
-alias e='emacsclient --no-wait -c -a ""'
 # open an emacs terminal in this location
-alias th='emacsclient --no-wait -c -a "" -e "(+vterm/here 1)"&'
+alias th='emacsclient -cn -e "(vterm)"'
 
 # open current directory in a stand-alone terminal
 alias kh='kitty --detach&'
 
 # open vim
-# alias vim='nvim'
 alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+
+# open old vim
 alias ovim='\vim'
 
 # open vim fuzzy finder
