@@ -618,6 +618,13 @@ Literate programming for fun and profit. Or... at least, for fun.
        ))
 
     :general
+    (:keymaps 'org-src-mode-map
+     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block.")
+     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block."))
+
     (:keymaps 'org-mode-map
      :states 'normal
      "RET" #'org-ctrl-c-ctrl-c))
@@ -1994,6 +2001,13 @@ Only some minor settings changes from the basic setup.
       "2" #'digit-argument
       "3" #'digit-argument
       "4" #'digit-argument)
+
+    (:keymaps 'with-editor-mode-map
+     "C-c C-c" '(with-editor-finish :which-key "Finish editing.")
+     "C-c c" '(with-editor-finish :which-key "Finish editing.")
+     "C-c '" '(with-editor-finish :which-key "Finish editing.")
+     "C-c k" '(with-editor-cancel :which-key "Cancel editing.")
+     "C-c C-k" '(with-editor-cancel :which-key "Cancel editing."))
 
     (crj-leader-keys
       "gg" '(magit-status :which-key "Launch Git interface.")
