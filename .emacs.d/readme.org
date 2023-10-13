@@ -3055,6 +3055,15 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
     (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
 
     :config
+    (defun crj--switch-to-symex-state ()
+      (if symex-mode
+          (run-with-timer 0.25 nil #'symex-mode-interface)))
+
+    (dolist (mode-name '(lisp-interaction-mode emacs-lisp-mode inferior-emacs-lisp-mode racket-mode racket-repl-mode clojure-mode clojurescript-mode clojurec-mode lisp-mode slime-repl-mode sly-mrepl-mode scheme-mode arc-mode))
+      (let ((mode-hook (intern (concat (symbol-name mode-name)
+                                       "-hook"))))
+        (add-hook mode-hook 'symex-mode)))
+
     (add-hook 'symex-mode-hook #'crj--switch-to-symex-state)
     (add-hook 'evil-insert-state-exit-hook #'crj--switch-to-symex-state)
 
