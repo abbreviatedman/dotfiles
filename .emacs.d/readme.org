@@ -647,7 +647,9 @@ Literate programming for fun and profit. Or... at least, for fun.
 
     (:keymaps 'org-mode-map
      :states 'normal
-     "RET" #'org-ctrl-c-ctrl-c)
+     "RET" #'org-ctrl-c-ctrl-c
+     "C-c n" '(org-babel-next-src-block :which-key "Go to next source block.")
+     "C-c p" '(org-babel-previous-src-block :which-key "Go to previous source block."))
 
     (:keymaps 'org-mode-map
      :states '(normal emacs visual insert motion)
