@@ -3038,21 +3038,6 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 #+begin_src emacs-lisp :lexical no
   (use-package symex
     :init
-    (defvar-local crj-test--original-color nil)
-    (defun crj-test--switch-cursor-color ()
-      "This and the below function are for testing out changing the cursor based on whether we're in Symex mode or not."
-      (interactive)
-      (unless crj-test--original-color
-        (setq crj-test--original-color (face-background 'cursor))
-        (add-to-list 'face-remapping-alist '(cursor :background "red"))))
-
-    (defun crj-test--restore-cursor-color ()
-      (interactive)
-      (when crj-test--original-color
-        (setq face-remapping-alist
-              (assq-delete-all 'cursor face-remapping-alist))
-        (setq crj-test--original-color nil)))
-
     (defun crj--symex-remaining-length-but-using-save-excursion ()
       "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
 
@@ -3070,6 +3055,26 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
     (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
 
     :config
+    (add-hook 'symex-mode-hook #'crj--switch-to-symex-state)
+    (add-hook 'evil-insert-state-exit-hook #'crj--switch-to-symex-state)
+
+    (defconst crj--default-cursor-color (face-attribute 'cursor :background))
+    (defun crj--switch-to-default-cursor ()
+      (set-face-attribute 'cursor nil :background crj--default-cursor-color))
+
+    (defun crj--switch-to-symex-state-cursor ()
+      (set-face-attribute 'cursor nil :background (modus-themes-get-color-value 'mail-cite-2 t)))
+
+    (add-hook 'evil-symex-state-entry-hook #'crj--switch-to-symex-state-cursor)
+    (add-hook 'evil-symex-state-exit-hook #'crj--switch-to-default-cursor)
+
+    (defun crj--switch-to-appopriate-cursor-with-delay ()
+      (run-with-timer 0.25 nil '(lambda () (if evil-symex-state-minor-mode
+                                               (crj--switch-to-symex-state-cursor)
+                                             (crj--switch-to-default-cursor)))))
+
+    (add-hook 'buffer-list-update-hook #'crj--switch-to-appopriate-cursor-with-delay)
+
     (setq symex--user-evil-keyspec
           '(("j" . symex-go-up)
             ("k" . symex-go-down)
@@ -3106,6 +3111,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
     :custom
     (symex-quote-prefix-list (list "'" "#'" "`"))
+    (symex-highlight-p nil)
 
     :general
     (:keymaps 'symex-editing-mode-map
@@ -4107,7 +4113,6 @@ I've:
 ** Config Changes Todos
 
 *** timers
-*** add cursor style to Symex mode
 *** one command to prettify source code for markdown or emacs-lisp
 
 *** one shortcut for all in-buffer semantic searches
