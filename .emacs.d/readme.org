@@ -646,7 +646,20 @@ Literate programming for fun and profit. Or... at least, for fun.
 
     (:keymaps 'org-mode-map
      :states 'normal
-     "RET" #'org-ctrl-c-ctrl-c))
+     "RET" #'org-ctrl-c-ctrl-c)
+
+    (:keymaps 'org-mode-map
+     :states '(normal emacs visual insert motion)
+     "C-c C-v k" '(org-babel-remove-result :which-key "Remove results block of current block.")
+     "C-c C-v C-k" '(org-babel-remove-result :which-key "Remove results block of current block.")
+     "C-c C-v K" '((lambda ()
+                     (interactive)
+                     (org-babel-remove-result-one-or-many t))
+                   :which-key "Remove results block of all blocks.")
+     "C-c C-v C-K" '((lambda ()
+                       (interactive)
+                       (org-babel-remove-result-one-or-many t))
+                     :which-key "Remove results block of all blocks.")))
 #+end_src
 
 *** Markdown
