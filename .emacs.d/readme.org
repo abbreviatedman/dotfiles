@@ -4120,8 +4120,8 @@ I've:
 #+end_src
 
 ** Config Changes Todos
-
 *** timers
+*** redo this document to have load order at the bottom and re-organize the doc itself nicely
 *** switch back to pre-insert mode (or possibly skip this one and just do symex mode)
 
 use a variable to remember whether you're in normal or symex mode
@@ -4564,7 +4564,6 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 
 #+end_src
-
 
 *** configure modeline further
 
