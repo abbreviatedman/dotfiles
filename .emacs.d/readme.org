@@ -3036,16 +3036,31 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 #+begin_src emacs-lisp :lexical no
   (use-package symex
     :init
+    (defvar-local crj-test--original-color nil)
+    (defun crj-test--switch-cursor-color ()
+      "This and the below function are for testing out changing the cursor based on whether we're in Symex mode or not."
+      (interactive)
+      (unless crj-test--original-color
+        (setq crj-test--original-color (face-background 'cursor))
+        (add-to-list 'face-remapping-alist '(cursor :background "red"))))
+
+    (defun crj-test--restore-cursor-color ()
+      (interactive)
+      (when crj-test--original-color
+        (setq face-remapping-alist
+              (assq-delete-all 'cursor face-remapping-alist))
+        (setq crj-test--original-color nil)))
+
     (defun crj--symex-remaining-length-but-using-save-excursion ()
       "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
 
-  There are probably better fixes!
+    There are probably better fixes!
 
-  Here's the original doc-string:
+    Here's the original doc-string:
 
-  Compute the remaining length of the current symex.
+    Compute the remaining length of the current symex.
 
-  This should be done via DSL computation semantics at some point."
+    This should be done via DSL computation semantics at some point."
       (save-excursion
         (let ((result (symex-execute-traversal symex--traversal-goto-last)))
           (1+ (length result)))))
@@ -4090,7 +4105,7 @@ I've:
 ** Config Changes Todos
 
 *** timers
-
+*** add cursor style to Symex mode
 *** one command to prettify source code for markdown or emacs-lisp
 
 *** one shortcut for all in-buffer semantic searches
