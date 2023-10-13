@@ -638,11 +638,11 @@ Literate programming for fun and profit. Or... at least, for fun.
 
     :general
     (:keymaps 'org-src-mode-map
-     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
      "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
      "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
-     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block.")
-     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block."))
+     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block.")
+     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block."))
 
     (:keymaps 'org-mode-map
      :states 'normal
