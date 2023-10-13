@@ -4093,6 +4093,19 @@ I've:
 
 *** one command to prettify source code for markdown or emacs-lisp
 
+*** one shortcut for all in-buffer semantic searches
+
+- Maybe ~SPC s s~ for "search symbol"?
+- Add them to specific mode maps for specific modes.
+- could include:
+  - ~counsel-outline~ for markdown
+  - ~counsel-org-heading~ for org
+  - ~counsel-imenu~ for prog mode
+
+*** change leader key func name from ~crj-leader-keys~ to just ~leader~
+
+Possibly one-line them any time it's only one command
+
 *** remove old org mode config stuff
 
 Anything useful here?
@@ -4226,9 +4239,12 @@ Anything useful here?
 
 *** add bindings for org deadlines and schedules
 
+*** add bindings for org-mode-src block movement
+~[b~ and ~]b~?
+
 *** redo font size to be calculated based on resolution
 
-*** Figure out how to get Eldoc to echo again
+*** shortcut to toggle eldoc-mode
 
 *** make sure tabs are set correctly
 
