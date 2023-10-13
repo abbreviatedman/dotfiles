@@ -236,7 +236,8 @@ I'm also mapping a new help command in a couple places, so that I can later rema
       "z" '(:ignore t :which-key "Zooming menu.")
       "c" '(:ignore t :which-key "Code menu.")
       "q" '(:ignore t :which-key "Quit menu.")
-      "p" '(:ignore t :which-key "project menu.")
+      "p" '(:ignore t :which-key "Project menu.")
+      "v" '(:ignore t :which-key "Visualize menu.")
       "a" '(:ignore t :which-key "Applications menu.")
       "ac" '(:ignore t :which-key "Calendar menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
@@ -2538,7 +2539,10 @@ Vundo (Visualize Undo) takes Emac's very powerful and /very/ unintuitive undo sy
 There are alternatives, but Vundo integrates nicely with Evil through the Evil Collection package, and also avoids changing anything about the actual undo system you use. Simple packages is better packages.
 
 #+begin_src emacs-lisp :lexical no
-  (use-package vundo)
+  (use-package vundo
+    :general
+    (crj-leader-keys
+      "vu" '(vundo :which-key "Visualize undo.")))
 #+end_src
 
 **** Searching In Buffer
