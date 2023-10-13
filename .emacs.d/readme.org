@@ -238,7 +238,8 @@ I'm also mapping a new help command in a couple places, so that I can later rema
       "z" '(:ignore t :which-key "Zooming menu.")
       "c" '(:ignore t :which-key "Code menu.")
       "q" '(:ignore t :which-key "Quit menu.")
-      "p" '(:ignore t :which-key "project menu.")
+      "p" '(:ignore t :which-key "Project menu.")
+      "v" '(:ignore t :which-key "Visualize menu.")
       "a" '(:ignore t :which-key "Applications menu.")
       "ac" '(:ignore t :which-key "Calendar menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
@@ -640,15 +641,30 @@ Literate programming for fun and profit. Or... at least, for fun.
 
     :general
     (:keymaps 'org-src-mode-map
-     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
      "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
      "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
-     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block.")
-     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block."))
+     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block.")
+     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block."))
 
     (:keymaps 'org-mode-map
      :states 'normal
-     "RET" #'org-ctrl-c-ctrl-c))
+     "RET" #'org-ctrl-c-ctrl-c
+     "C-c n" '(org-babel-next-src-block :which-key "Go to next source block.")
+     "C-c p" '(org-babel-previous-src-block :which-key "Go to previous source block."))
+
+    (:keymaps 'org-mode-map
+     :states '(normal emacs visual insert motion)
+     "C-c C-v k" '(org-babel-remove-result :which-key "Remove results block of current block.")
+     "C-c C-v C-k" '(org-babel-remove-result :which-key "Remove results block of current block.")
+     "C-c C-v K" '((lambda ()
+                     (interactive)
+                     (org-babel-remove-result-one-or-many t))
+                   :which-key "Remove results block of all blocks.")
+     "C-c C-v C-K" '((lambda ()
+                       (interactive)
+                       (org-babel-remove-result-one-or-many t))
+                     :which-key "Remove results block of all blocks.")))
 #+end_src
 
 *** Markdown
@@ -2527,7 +2543,10 @@ Vundo (Visualize Undo) takes Emac's very powerful and /very/ unintuitive undo sy
 There are alternatives, but Vundo integrates nicely with Evil through the Evil Collection package, and also avoids changing anything about the actual undo system you use. Simple packages is better packages.
 
 #+begin_src emacs-lisp :lexical no
-  (use-package vundo)
+  (use-package vundo
+    :general
+    (crj-leader-keys
+      "vu" '(vundo :which-key "Visualize undo.")))
 #+end_src
 
 **** Searching In Buffer
@@ -4090,6 +4109,20 @@ I've:
 *** timers
 *** add cursor style to Symex mode
 *** one command to prettify source code for markdown or emacs-lisp
+
+*** one shortcut for all in-buffer semantic searches
+
+- Maybe ~SPC s s~ for "search symbol"?
+- Add them to specific mode maps for specific modes.
+- could include:
+  - ~counsel-outline~ for markdown
+  - ~counsel-org-heading~ for org
+  - ~counsel-imenu~ for prog mode
+
+*** change leader key func name from ~crj-leader-keys~ to just ~leader~
+
+Possibly one-line them any time it's only one command
+
 *** remove old org mode config stuff
 
 Anything useful here?
@@ -4223,9 +4256,12 @@ Anything useful here?
 
 *** add bindings for org deadlines and schedules
 
+*** add bindings for org-mode-src block movement
+~[b~ and ~]b~?
+
 *** redo font size to be calculated based on resolution
 
-*** Figure out how to get Eldoc to echo again
+*** shortcut to toggle eldoc-mode
 
 *** make sure tabs are set correctly
 
