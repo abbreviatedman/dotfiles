@@ -3132,7 +3132,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
     (:keymaps 'symex-mode-map
      :states 'insert
-     (kbd "<escape>") #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
+     "<escape>" #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
 #+end_src
 
 ****** Lisp Indentation
