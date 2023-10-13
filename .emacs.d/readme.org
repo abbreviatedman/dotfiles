@@ -49,33 +49,6 @@ You can read more on this subject… and I’ll probably write more. But in the 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs--org-babel-tangle-config)))
 #+end_src
 
-** Emacs OS Integration
-
-*** Start The Emacs Server
-
-Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
-
-#+begin_src emacs-lisp
-  (unless (server-running-p)
-    (server-start))
-#+end_src
-
-*** Set It As The Default Editor
-
-Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
-
-#+begin_src emacs-lisp :lexical no
-  (use-package with-editor
-    :init
-    (keymap-global-set "<remap> <async-shell-command>"
-                       #'with-editor-async-shell-command)
-    (keymap-global-set "<remap> <shell-command>"
-                       #'with-editor-shell-command)
-
-    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
-      (add-hook hook #'with-editor-export-editor)))
-#+end_src
-
 ** Start With Messages
 
 I usually want to see the startup log first, and I'm tired of manually switching to it. I also usually want to see the newest messages.
@@ -134,6 +107,35 @@ Now every time I configure a package with ~use-package~, ~use-package~ will use 
 This means that if you or I copy this configuration to another machine and launch Emacs, it will install the necessary packages automatically and configure them the exact same way. This is now a portable document capable of replicating my setup anywhere. And explaining it!
 
 The only extra step necessary is that, because this file is actually an org document, you'll have to run Emacs, tangle this file, and then restart Emacs. But such is the price of being literate(ly configured).
+
+** Emacs OS Integration
+
+*** Start The Emacs Server
+
+Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
+
+#+begin_src emacs-lisp
+  (require 'server)
+  (unless (server-running-p)
+    (server-start))
+#+end_src
+
+*** Set It As The Default Editor
+
+Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package with-editor
+    :init
+    (require 'compat)
+    (keymap-global-set "<remap> <async-shell-command>"
+                       #'with-editor-async-shell-command)
+    (keymap-global-set "<remap> <shell-command>"
+                       #'with-editor-shell-command)
+
+    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
+      (add-hook hook #'with-editor-export-editor)))
+#+end_src
 
 ** Cleaning Up The Modeline
 
