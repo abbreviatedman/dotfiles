@@ -1030,8 +1030,8 @@ Also included in generally surfacing more Emacsy insert-state commands:
     :general
     (general-def global-map
       "C-h" #'backward-delete-char
-      "C-u" #'backward-kill-sentence
-      "C-w" #'backward-kill-word)
+      "C-u" #'evil-delete-back-to-indentation
+      "C-w" #'evil-delete-backward-word)
 
     (:states '(insert emacs)
      "C-n" #'next-line
@@ -1040,9 +1040,9 @@ Also included in generally surfacing more Emacsy insert-state commands:
      "C-a" #'beginning-of-visual-line
      "C-d" #'delete-char
      "C-S-k" #'evil-insert-digraph
-     "C-k" #'kill-line
-     "C-u" #'backward-kill-sentence
-     "C-w" #'backward-kill-word
+     "C-k" #'evil-delete-line
+     "C-u" #'evil-delete-back-to-indentation
+     "C-w" #'evil-delete-backward-word
      "<S-backspace>" #'just-one-space
      "M-t" #'zap-up-to-char
      "M-Z" #'crj-zap-to-char-backwards
