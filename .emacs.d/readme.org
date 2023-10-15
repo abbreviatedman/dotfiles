@@ -2879,7 +2879,7 @@ This is something that a more advanced solution could give you (maybe Treesitter
 
 ******** And, Finally, The Code That Does All That
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :tangle no
   (use-package paredit)
 
   (use-package evil-cleverparens
@@ -3035,6 +3035,8 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
 #+begin_src emacs-lisp :lexical no
   (use-package symex
+    :disabled
+
     :init
     (defun crj--symex-remaining-length-but-using-save-excursion ()
       "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
@@ -3139,7 +3141,43 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
     (:keymaps 'symex-mode-map
      :states 'insert
-     "<escape>" #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
+     "<escape>" #'symex-mode-interface))
+                                          ; escape brings you from insert to Symex State—another escape brings you to Normal State
+#+end_src
+
+******* A Lisp-Specific Editing State With Lispyville
+
+#+begin_src emacs-lisp :lexical no
+  (use-package lispy
+    :init
+    (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1))))
+
+  (use-package lispyville
+    :ghook 'lispy-mode-hook
+
+    :init
+    (lispyville-set-key-theme
+     ('operators
+      c-w
+      c-u
+      prettify
+      text-objects
+      ;; the below makes motions like w affect words (and subwords in subword mode), motions like W affect atoms
+      (atom-motions t)
+      additional-motions
+      commentary
+      slurp/barf-cp
+      wrap
+      additional
+      additional-insert
+      additional-wrap))
+
+    :general
+    (:keymaps 'lispyville-mode-map
+     :states 'normal
+     "-" #'lispyville-backward-up-list
+     "_" #'lispy-raise-sexp
+     "M-r" #'lispyville-raise-list))
 #+end_src
 
 ****** Lisp Indentation
