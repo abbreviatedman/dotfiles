@@ -2351,9 +2351,7 @@ Measure startup time using an excellent bit of code taken from Emacs From Scratc
     :general
     (general-def minibuffer-mode-map
       "C-p" #'previous-line-or-history-element
-      "C-n" #'next-line-or-history-element
-      "C-k" #'previous-line-or-history-element
-      "C-j" #'next-line-or-history-element))
+      "C-n" #'next-line-or-history-element))
 #+end_src
 
 **** Allow Minibuffers Within Minibuffers
