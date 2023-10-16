@@ -3186,20 +3186,45 @@ Also:
       text-objects
       ;; the below makes motions like w affect words (and subwords in subword mode), motions like W affect atoms
       (atom-motions t)
-      additional-motions
       commentary
       slurp/barf-cp
       wrap
-      additional
       additional-insert
       additional-wrap))
 
     :general
-    (:keymaps 'lispyville-mode-map
+    (:keymaps '(lispyville-mode-map
+               lispy-mode-map
+               lispy-mode-map-lispy
+               evil-collection-lispy-mode-map
+               lispy-mode-map-evilcp)
+
      :states 'normal
+     "H" #'lispyville-drag-backward
+     "L" #'lispyville-drag-forward
      "-" #'lispyville-backward-up-list
      "_" #'lispy-raise-sexp
-     "M-r" #'lispyville-raise-list))
+     "(" #'lispyville-previous-opening
+     ")" #'lispyville-next-closing
+     "{" #'lispyville-next-opening
+     "}" #'lispyville-previous-closing
+     "[" nil
+     "]" nil))
+
+  (use-package symex
+    :init
+    (general-setq symex-highlight-p nil)
+
+    :config
+    (symex-initialize)
+
+    :general
+    (:keymaps 'lispyville-mode-map
+     :states 'normal
+     "h" #'symex-go-backward
+     "l" #'symex-go-forward
+     "gh" #'evil-backward-char
+     "gl" #'evil-forward-char))
 #+end_src
 
 ****** Lisp Indentation
