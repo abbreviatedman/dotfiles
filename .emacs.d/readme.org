@@ -3209,6 +3209,10 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "L" #'symex-go-forward
      "M-^" #'symex-goto-first
      "M-$" #'symex-goto-last
+     "-" #'symex-collapse
+     "+" #'symex-unfurl
+     "M--" #'symex-collapse-remaining
+     "M-+" #'symex-unfurl-remaining
      "M-j" #'symex-join-lines
      "C-j" #'symex-append-newline
      "M-o" #'symex-open-line-after
