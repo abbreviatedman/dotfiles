@@ -3174,7 +3174,7 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
 
     :init
     (lispyville-set-key-theme
-     ('operators
+     '(operators
       c-w
       c-u
       prettify
