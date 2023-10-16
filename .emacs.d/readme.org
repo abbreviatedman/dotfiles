@@ -2758,7 +2758,7 @@ Configurations specific to certain languages.
 
 ***** Lisps
 
-The greatest languages.
+The greatest language(s).
 
 ****** Keybindings
 
@@ -2770,29 +2770,25 @@ First off, what is a "symex"? Well, I'm not going to explain what a symbolic exp
 
 "Symex" is a far better term, coined by a friend of the maker of the [[https://github.com/drym-org/symex.el][Symex package]]. I'll be using that term from now on, and if it never catches on, well, at least /I'm/ not using a terrible name for them.
 
-So there are three ways for an ex-Vim person to manipulate Symexes in a Lisp language:
+So there are three approaches for an ex-Vim person to manipulate symexes in a Lisp language:
 
 1. Go with basic Evil and its standard, amazing grammar. It doesn't align quite as well with Lisp as it does other languages, since Evil tends to be line-based, but you're using the exact same tools as in other languages, so there's no need to change the way you edit code depending on context. And Evil's standard tools are powerful tools!
-2. Go with the above mostly, but supplement it with some lisp-specific motions like raising and splitting and slurping and barfing, and lisp-specific text objects, like forms and top-level forms. I've done this some, and I'm experimenting with it. I'd also like to expand it someday into a more feature-rich Lisp-specific editing language that simply extends Evil's language. You're an Evil user who finds that Evil doesn't have the nouns or verbs for Lisp? Well, let's make some new nouns and verbs, but keep the same grammar.
-3. Go with a /different/ language that can be used either in insert mode (like paredit) or as another state you can go into, like Symex or Lispyville.
+2. Go with the above mostly, but supplement it with some lisp-specific motions like raising and splitting and slurping and barfing, and lisp-specific text objects, like forms and top-level forms. I've done this some, and I'm experimenting with it. I'd also like to expand it someday into a more feature-rich Lisp-specific editing language that simply extends Evil's language. You're an Evil user who finds that Evil doesn't have the nouns or verbs for Lisp? Well, let's make some new nouns and verbs, but keep the same grammar!
+3. Go with a /different/ language that can be used either in insert mode (like paredit) or as another state you can go into, like Symex.
 
-I'm experimenting with #3 again currently after failing to take to it a couple of times, and I don't honestly know which is better—especially since no one has fully fleshed out #2 that I've seen—but I /do/ think it's probably ultimately #3.
+I'm back to approach #2 again after a lengthy experiment using Symex for approach #3. I still think
 
-******* Adding Lisp Motions And Text Objects To Evil
+******** Adding Lisp Motions And Text Objects To Evil
 
-Anyway! I'm trying to find a way to navigate and manipulate symexes here, while keeping all of Evil's grammar.
+This is /not/ the system I'm going with right now—see the configuration for Lispyville below for my current system. This was a custom configuration of Evil with a little bit of lisp manipulation from other libraries thrown in. I think there's still room to think about other using Evil with text objects and motions that better handle Lisp, and you can see some of the thoughts on how to do so below.
 
-We'll see how I do.
-
-Changes I'm going for:
-
-******** Move By Symbols
+*Move By Symbols*
 
 Set ~W~/~B~ movements ignore the many many delimiters Lisps use, so that we're not stopping on parens. If I want to go to a parens, ~f(~ is way clearer. I want to go by programming symbols!
 
 This is part of the [[https://github.com/emacs-evil/evil-cleverparens][evil-cleverparens]] package.
 
-*The more I use this, the more I feel like we /all/ should have been using this all the time.*
+The more I use this, the more I feel like we /all/ should have been using this all the time.
 
 I'll have to give this more of a go, but it really seems like Vim's "big word" movements should /always/ have been traveling by symbols, and not just in Lisp languages.
 
@@ -2822,7 +2818,7 @@ If you just changed the symbol ~greet~, there are three possible movements we co
 
  Okay, I still do need to use this more, so maybe I'll change my mind, but the more I think about it, the more obvious it seems that this is by far the best versions of ~w~ and ~W~ you can have.
 
-******** Move Up And Down Trees
+*Move Up And Down Trees*
 
 The Symex library gets away from Evil a little too much for me, but it has an /excellent/ way of moving up and down trees. See [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] to see it in action!
 
@@ -2833,7 +2829,7 @@ This is what I'm thinking:
 - ~(~ and ~)~ to move up or down branches
 - ~{~ and ~}~ to move to the start or end of a branch
 
-******** Keep Parens Balanced
+*Keep Parens Balanced*
 
 For example, if I delete a line with Evil's ~dd~, I usually don't want to delete the closing parens that is needed by an earlier line.
 
@@ -2845,7 +2841,7 @@ I think it feels better to simply be more precise with my commands in such conte
 
 So I'm still not positive I want it, but I'm giving it a try!
 
-******** Manipulate Symexes
+*Manipulate Symexes*
 
 Probably going to use ~evil-cleverparens~ for this, though there may be better ones out there.
 
@@ -2856,7 +2852,7 @@ In particular, I like:
 - ~evil-cp-insert-at-beginning-of-form~ and the end version, for inserting/appending symbols in forms. These are set automatically to ~M-i~ and ~M-a~.
 - Quoting and unquoting via Symex commands (/not/ wrapping in quotes, but the special Lisp concept of quoting/unquoting). Unfortunately, these commands require point to be at the start of the symbol, or the start of the quote/unquote if it already has it.
 
-******** Commands That Could Be Done Structurally
+*Commands That Could Be Done Structurally*
 
 I may at some point experiment with the following, all of which can be seen in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]]:
 
@@ -2874,14 +2870,16 @@ For splitting, I could... hmm... go to the place to split them (which you have t
 
 All of those are /okay/ solutions, but if I find myself doing them more often, it may make sense to use more structural commands on them.
 
-******** Add More Text Objects
+*Add More Text Objects*
 
 This is something that a more advanced solution could give you (maybe Treesitter?)), but for now, ~evil-cleverparens~ gives you the following text objects to manipulate:
 
 - ~f~ for a form (aka symex)
 - ~d~ for a defun (aka a top-level symex, like a function)
 
-******** And, Finally, The Code That Does All That
+*And, Finally, The Code That Does All That*
+
+After all that, I've moved on to other systems, so this is merely historical. See the Lispyville section below for mycurrent system!
 
 #+begin_src emacs-lisp :lexical no :tangle no
   (use-package paredit)
@@ -2936,41 +2934,7 @@ This is something that a more advanced solution could give you (maybe Treesitter
      "_" #'paredit-raise-sexp))
 #+end_src
 
-******** And some code to test it on
-
-#+begin_src emacs-lisp :lexical no
-  ;; (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
-
-  ;; (defconst new-list '(:keyword-1 some-value
-  ;;                      :keyword-2 some-other-value
-  ;;                      :keyword-3 yet-another))
-
-  ;; (defconst lst '(colin
-  ;;                 sarah
-  ;;                 alice))
-
-  ;; (defconst my-message "hello")
-  ;; (defconst failure-message "not equal")
-
-  ;; (defun lisp-playground-test-fun ()
-  ;;   "Just a test function to play with some code."
-  ;;   (interactive)
-  ;;   (if (string-equal "hello" my-message)
-  ;;       (message "they're equal")
-  ;;     (message failure-message)))
-
-  ;; (defun should-have-sharp-quote ()
-  ;;   "Just testing."
-  ;;   (interactive)
-  ;;   (message "this should have a sharp quote"))
-
-  ;; (crj-leader-keys
-  ;;   "l" #'lisp-playground-test-fun
-  ;;   "k" 'should-have-sharp-quote
-  ;;   "bm" (lambda () (interactive) (message "test lambda")))
-#+end_src
-
-******** So Where To Next On This?
+*So Where To Next On This?*
 
 Well, I've added some nice commands that are particular to Lisp that aren't easy to do in standard Evil, but it's still not very /Evil/. None of these are motions, and I've only added one text object I couldn't easily get elsewhere (the defun).
 
@@ -2985,7 +2949,7 @@ I've chosen the first one, but what I /want/ to exist is this third option:
 
 I'm really surprised and annoyed this doesn't exist, and I really want it to.
 
-******** How An Evil Lisp Language /Should/ Work
+*How An Evil Lisp Language /Should/ Work*
 
 I'm unlikely to have time ever to implement this, but here are some ideas:
 
@@ -3020,7 +2984,9 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 More later...
 
-******* A Lisp-Specific Editing State With Symex
+******** A Lisp-Specific Evil Editing State With Symex
+
+I'm disabling Symex for now—or, rather, combining it with Lispyville, as you'll see below. But I'm leaving the commentary and configuration intact.
 
 This is that approach #3 above: a separate Lisp-editing state. I'm using the great [[https://github.com/drym-org/symex.el][Symex]] package. Check it out, as well as the great visualizations in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]].
 
@@ -3148,27 +3114,19 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
      "<escape>" #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
 #+end_src
 
-******* A Lisp-Specific Editing State With Lispyville
+******** A Lisp-Specific Evil Editing State With Lispyville
 
-I'm experimenting with Lispyville now that I've played with the Symex way of editing Lisp code. So far, I like this better—it complements Evil without switching to an entirely new state.
+My current system for editing Lisp. We'll see if I change it up again!
 
-But I'm also bringing in some compatible Symex commands that I think I would miss:
+Symex's system strayed too far for me from Evil. Having a separate state meant that I had to think about what state I was in, and manage the context for that state.
 
-- ~h~ and ~l~ for previous/next symex at same level (but the Symex versions, I don't like how the Lispy versions go in between symexes)
-- and ~gh~ and ~gl~ for the rare need to /actually/ go left or right one character
-- ~C-'~ for quote-cycling
-- maybe Symex's C/D/Y should be in here somewhere? meta, maybe?
+I think staying in Evil Normal State is what I ideally want. The Lispyville package (a clever play on combining the Lispy package with Evil) lets you do just that, bringing new nouns and verbs to the Evil editing language, and for the most part only modifying existing commands so that they keep pairs balanced.
 
-And some Lispyville rebinds to allow other commands to shine through (like the many next/previous commands that ~[~ and ~]~  are prefixes to):
+However, Symex has a /lot/ of great commands to navigate and manipulate Lisp code, and if they're bound to keypresses that (for the most part) don't shadow Evil keybindings, then I can have access to those great commands without losing Evil and Lispy's power.
 
-- ~-~ for going up a list level
-- ~_~ to raise the current symex
-- move previous-opening and next-closing to ~(~ and ~)~
-- move next-opening and previous-closing to ~{~ and ~}~
-- ~H~ and ~L~ for dragging
-- ~&~ for joining
-- ~|~ for splitting
-- convolute should go somewhere, maybe M?
+You can see how I bind Lispyville commands below (though note that much of that work is done through the "key themes", which you can read about in the Lispyville documentation).
+
+I'm also adding many Symex commands—again, avoiding shadowing most Evil bindings—which tend to be more lisp-tree-aware. For example, moving to the first or last symex at the current level, or acting on all remaining symexes in the current list—these are very useful when editing lisp! Check out [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] for a great visualization of what the Symex commands I'm adding actually do.
 
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
@@ -3185,7 +3143,7 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
        c-u
        prettify
        text-objects
-       ;; the below makes motions like w affect words (and subwords in subword mode), motions like W affect atoms
+       ;; the below makes motions like ~w~ affect words (and subwords in subword mode), while motions like ~W~ affect atoms
        (atom-motions t)
        commentary
        slurp/barf-cp
@@ -3201,20 +3159,43 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
                 evil-collection-lispy-mode-map)
 
      :states 'normal
-     "H" #'lispyville-drag-backward
-     "L" #'lispyville-drag-forward
-     "-" #'lispyville-backward-up-list
+     "[" nil
+     "]" nil)
+
+    (:keymaps 'lispyville-mode-map
+     :states 'normal
+     "M-h" #'lispyville-drag-backward
+     "M-l" #'lispyville-drag-forward
+     "U" #'lispyville-backward-up-list
      "_" #'lispy-raise-sexp
      "(" #'lispyville-previous-opening
      ")" #'lispyville-next-closing
      "{" #'lispyville-next-opening
      "}" #'lispyville-previous-closing
-     "[" nil
-     "]" nil))
+     "&" #'lispy-join
+     "|" #'lispy-split
+     "M" #'lispy-convolute))
 
   (use-package symex
     :init
-    (general-setq symex-highlight-p nil)
+    (general-setq symex-highlight-p nil
+                  symex-quote-prefix-list (list "'" "#'" "`"))
+
+    (defun crj--symex-remaining-length-but-using-save-excursion ()
+      "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
+
+    There are probably better fixes!
+
+    Here's the original doc-string:
+
+    Compute the remaining length of the current symex.
+
+    This should be done via DSL computation semantics at some point."
+      (save-excursion
+        (let ((result (symex-execute-traversal symex--traversal-goto-last)))
+          (1+ (length result)))))
+
+    (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
 
     :config
     (symex-initialize)
@@ -3222,10 +3203,53 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
     :general
     (:keymaps 'lispyville-mode-map
      :states 'normal
-     "h" #'symex-go-backward
-     "l" #'symex-go-forward
-     "gh" #'evil-backward-char
-     "gl" #'evil-forward-char))
+     "H" #'symex-go-backward
+     "L" #'symex-go-forward
+     "M-^" #'symex-goto-first
+     "M-$" #'symex-goto-last
+     "M-j" #'symex-join-lines
+     "C-j" #'symex-append-newline
+     "M-o" #'symex-open-line-after
+     "M-O" #'symex-open-line-before
+     "M-d" #'symex-delete-remaining
+     "M-c" #'symex-change-remaining
+     "M-y" #'symex-yank-remaining
+     "C-'" #'symex-cycle-quote
+     "C-," #'symex-cycle-unquote))
+#+end_src
+
+******** Code To Test Lisp-Editing Systems On
+
+#+begin_src emacs-lisp :lexical no
+  ;; (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
+
+  ;; (defconst new-list '(:keyword-1 some-value
+  ;;                      :keyword-2 some-other-value
+  ;;                      :keyword-3 yet-another))
+
+  ;; (defconst lst '(colin
+  ;;                 sarah
+  ;;                 alice))
+
+  ;; (defconst my-message "hello")
+  ;; (defconst failure-message "not equal")
+
+  ;; (defun lisp-playground-test-fun ()
+  ;;   "Just a test function to play with some code."
+  ;;   (interactive)
+  ;;   (if (string-equal "hello" my-message)
+  ;;       (message "they're equal")
+  ;;     (message failure-message)))
+
+  ;; (defun should-have-sharp-quote ()
+  ;;   "Just testing."
+  ;;   (interactive)
+  ;;   (message "this should have a sharp quote"))
+
+  ;; (crj-leader-keys
+  ;;   "l" #'lisp-playground-test-fun
+  ;;   "k" 'should-have-sharp-quote
+  ;;   "bm" (lambda () (interactive) (message "test lambda")))
 #+end_src
 
 ****** Lisp Indentation
