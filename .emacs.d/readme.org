@@ -2881,6 +2881,8 @@ This is something that a more advanced solution could give you (maybe Treesitter
 
 After all that, I've moved on to other systems, so this is merely historical. See the Lispyville section below for mycurrent system!
 
+After all that, I've moved on to other systems, so this is merely historical. See the Lispyville section below for mycurrent system!
+
 #+begin_src emacs-lisp :lexical no :tangle no
   (use-package paredit)
 
