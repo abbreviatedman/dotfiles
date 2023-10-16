@@ -2279,6 +2279,7 @@ Set Emacs to remember recent files, as well as update buffers if the file change
   (use-package emacs
     :init
     (recentf-mode 1)
+    (setq recentf-max-saved-items 50)
     (global-auto-revert-mode 1)
     (setq global-auto-revert-non-file-buffers t))
 #+end_src
