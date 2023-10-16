@@ -3186,8 +3186,8 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
       commentary
       slurp/barf-cp
       wrap
-      additional-insert
-      additional-wrap))
+      additional-wrap
+      additional-insert))
 
     :general
     (:keymaps '(lispyville-mode-map
