@@ -3551,7 +3551,9 @@ Here that all is!
     (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
 
     (with-eval-after-load 'savehist
-      (add-to-list 'savehist-additional-variables 'vertico-repeat-history)) (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+      (add-to-list 'savehist-additional-variables 'vertico-repeat-history))
+
+    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
 
     :general
     (crj-leader-keys
