@@ -2064,8 +2064,12 @@ Only some minor settings changes from the basic setup.
     (magit-no-confirm nil)
 
     :general
-    (general-def '(normal emacs)
-      (magit-mode-map magit-blame-read-only-mode-map)
+    (general-def
+      (magit-mode-map
+       magit-blame-read-only-mode-map
+       magit-section-mode-map
+       magit-diff-mode-map)
+
       "SPC" nil
       "1" #'digit-argument
       "2" #'digit-argument
