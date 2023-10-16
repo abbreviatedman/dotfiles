@@ -4154,6 +4154,17 @@ I've:
 
 #+end_src
 
+** Putting It All Together
+
+This is a list of noweb references with a preliminary load order. Eventually I'll use this to actually tangle the code to the file.
+
+#+NAME: load-order
+#+begin_src emacs-lisp :lexical no :tangle no
+  <<literate-config-setup>>
+  <<start-with-messages>>
+  <<package-system>>
+#+end_src
+
 ** Config Changes Todos
 *** timers
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
