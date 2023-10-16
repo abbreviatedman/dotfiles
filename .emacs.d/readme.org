@@ -3194,11 +3194,11 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
        additional-insert))
 
     :general
-    (:keymaps '(lispyville-mode-map
-               lispy-mode-map
-               lispy-mode-map-lispy
-               evil-collection-lispy-mode-map
-               lispy-mode-map-evilcp)
+    (:keymaps '(lispy-mode-map
+                lispy-mode-map-lispy
+                lispy-mode-map-evilcp
+                lispyville-mode-map
+                evil-collection-lispy-mode-map)
 
      :states 'normal
      "H" #'lispyville-drag-backward
