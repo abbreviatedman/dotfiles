@@ -3164,6 +3164,11 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
 - move next-opening and previous-closing to ~{~ and ~}~
 - ~H~ and ~L~ for dragging
 
+Also:
+
+- convolute should go somewhere, maybe M?
+- maybe Symex's C/D/Y should be in here somewhere? meta, maybe?
+
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
     :init
