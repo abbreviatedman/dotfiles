@@ -4219,38 +4219,9 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 ** Config Changes Todos
 *** timers
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
-*** switch back to pre-insert mode (or possibly skip this one and just do symex mode)
-
-use a variable to remember whether you're in normal or symex mode
-
-use a hook on entering and leaving insert state
-
-on enter:
-
-- if in symex mode, record previous state
-
-on exit:
-
-- if in symex mode, revert to previous state
-
-- on entering symex mode, set state to symex mode interface (or possibly a variable to hold the default)
-
-override ~evil-normal-state~ and check if you were
-
-- in symex mode previously
-- AND you're in a symex mode-compatible mode like the list below
-
-- if yes, call ~symex-mode-interface~
-- otherwise call ~evil-normal-state~ with the args you had
-
-symex-compatible modes:
-
-- edebug-mode-map
-- emacs-lisp-mode-map
-- racket-mode-map
-- scheme-mode-map
-- symex-mode-map
-
+*** add general's tools like gsetq and general-add-hook to clean up my config code
+*** switch to Emacs 29
+Switch to use-package and vc-use-package.
 *** one command to prettify source code for markdown or emacs-lisp
 
 *** one shortcut for all in-buffer semantic searches
