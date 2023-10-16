@@ -51,11 +51,10 @@ You can read more on this subject… and I’ll probably write more. But in the 
 
 ** Start With Messages
 
-I usually want to see the startup log first, and I'm tired of manually switching to it. I also usually want to see the newest messages.
+I usually want to see the startup log first, and I'm tired of manually switching to it.
 
 #+begin_src emacs-lisp
   (switch-to-buffer "*Messages*")
-  (goto-char (point-max))
 #+end_src
 
 ** Package System
