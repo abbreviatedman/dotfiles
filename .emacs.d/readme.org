@@ -3146,6 +3146,24 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 
 ******* A Lisp-Specific Editing State With Lispyville
 
+I'm experimenting with Lispyville now that I've played with the Symex way of editing Lisp code. So far, I like this better—it complements Evil without switching to an entirely new state.
+
+But I'm also bringing in some compatible Symex commands that I think I would miss:
+
+- ~h~ and ~l~ for previous/next symex at same level (but the Symex versions, I don't like how the Lispy versions go in between symexes)
+- and ~gh~ and ~gl~ for the rare need to /actually/ go left or right one character
+- ~C-'~ for quote-cycling
+- ~&~ for joining
+- ~|~ for splitting
+
+And some Lispyville rebinds to allow other commands to shine through (like the many next/previous commands that ~[~ and ~]~  are prefixes to):
+
+- ~-~ for going up a list level
+- ~_~ to raise the current symex
+- move previous-opening and next-closing to ~(~ and ~)~
+- move next-opening and previous-closing to ~{~ and ~}~
+- ~H~ and ~L~ for dragging
+
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
     :init
