@@ -2770,21 +2770,17 @@ First off, what is a "symex"? Well, I'm not going to explain what a symbolic exp
 
 "Symex" is a far better term, coined by a friend of the maker of the [[https://github.com/drym-org/symex.el][Symex package]]. I'll be using that term from now on, and if it never catches on, well, at least /I'm/ not using a terrible name for them.
 
-So there are three ways for an ex-Vim person to manipulate Symexes in a Lisp language:
+So there are three approaches for an ex-Vim person to manipulate Symexes in a Lisp language:
 
 1. Go with basic Evil and its standard, amazing grammar. It doesn't align quite as well with Lisp as it does other languages, since Evil tends to be line-based, but you're using the exact same tools as in other languages, so there's no need to change the way you edit code depending on context. And Evil's standard tools are powerful tools!
-2. Go with the above mostly, but supplement it with some lisp-specific motions like raising and splitting and slurping and barfing, and lisp-specific text objects, like forms and top-level forms. I've done this some, and I'm experimenting with it. I'd also like to expand it someday into a more feature-rich Lisp-specific editing language that simply extends Evil's language. You're an Evil user who finds that Evil doesn't have the nouns or verbs for Lisp? Well, let's make some new nouns and verbs, but keep the same grammar.
-3. Go with a /different/ language that can be used either in insert mode (like paredit) or as another state you can go into, like Symex or Lispyville.
+2. Go with the above mostly, but supplement it with some lisp-specific motions like raising and splitting and slurping and barfing, and lisp-specific text objects, like forms and top-level forms. I've done this some, and I'm experimenting with it. I'd also like to expand it someday into a more feature-rich Lisp-specific editing language that simply extends Evil's language. You're an Evil user who finds that Evil doesn't have the nouns or verbs for Lisp? Well, let's make some new nouns and verbs, but keep the same grammar!
+3. Go with a /different/ language that can be used either in insert mode (like paredit) or as another state you can go into, like Symex.
 
-I'm experimenting with #3 again currently after failing to take to it a couple of times, and I don't honestly know which is better—especially since no one has fully fleshed out #2 that I've seen—but I /do/ think it's probably ultimately #3.
+I'm back to approach #2 again after a lengthy experiment using Symex for approach #3. I still think
 
 ******* Adding Lisp Motions And Text Objects To Evil
 
-Anyway! I'm trying to find a way to navigate and manipulate symexes here, while keeping all of Evil's grammar.
-
-We'll see how I do.
-
-Changes I'm going for:
+This is /not/ the system I'm going with right now—see the configuration for Lispyville below for my current system. This was a custom configuration of Evil with a little bit of lisp manipulation from other libraries thrown in. I think there's still room to think about other using Evil with text objects and motions that better handle Lisp, and you can see some of the thoughts on how to do so below.
 
 ******** Move By Symbols
 
@@ -2882,6 +2878,8 @@ This is something that a more advanced solution could give you (maybe Treesitter
 - ~d~ for a defun (aka a top-level symex, like a function)
 
 ******** And, Finally, The Code That Does All That
+
+After all that, I've moved on to other systems, so this is merely historical. See the Lispyville section below for mycurrent system!
 
 #+begin_src emacs-lisp :lexical no :tangle no
   (use-package paredit)
@@ -3020,7 +3018,9 @@ I'm unlikely to have time ever to implement this, but here are some ideas:
 
 More later...
 
-******* A Lisp-Specific Editing State With Symex
+******* A Lisp-Specific Evil Editing State With Symex
+
+I'm disabling Symex for now—or, rather, combining it with Lispyville, as you'll see below. But I'm leaving the commentary and configuration intact.
 
 This is that approach #3 above: a separate Lisp-editing state. I'm using the great [[https://github.com/drym-org/symex.el][Symex]] package. Check it out, as well as the great visualizations in [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]].
 
@@ -3148,27 +3148,19 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
      "<escape>" #'symex-mode-interface)) ; escape brings you from insert to Symex State—another escape brings you to Normal State
 #+end_src
 
-******* A Lisp-Specific Editing State With Lispyville
+******* A Lisp-Specific Evil Editing State With Lispyville
 
-I'm experimenting with Lispyville now that I've played with the Symex way of editing Lisp code. So far, I like this better—it complements Evil without switching to an entirely new state.
+My current system for editing Lisp. We'll see if I change it up again!
 
-But I'm also bringing in some compatible Symex commands that I think I would miss:
+Symex's system strayed too far for me from Evil. Having a separate state meant that I had to think about what state I was in, and manage the context for that state.
 
-- ~h~ and ~l~ for previous/next symex at same level (but the Symex versions, I don't like how the Lispy versions go in between symexes)
-- and ~gh~ and ~gl~ for the rare need to /actually/ go left or right one character
-- ~C-'~ for quote-cycling
-- maybe Symex's C/D/Y should be in here somewhere? meta, maybe?
+I think staying in Evil Normal State is what I ideally want. The Lispyville package (a clever play on combining the Lispy package with Evil) lets you do just that, bringing new nouns and verbs to the Evil editing language, and for the most part only modifying existing commands so that they keep pairs balanced.
 
-And some Lispyville rebinds to allow other commands to shine through (like the many next/previous commands that ~[~ and ~]~  are prefixes to):
+However, Symex has a /lot/ of great commands to navigate and manipulate Lisp code, and if they're bound to keypresses that (for the most part) don't shadow Evil keybindings, then I can have access to those great commands without losing Evil and Lispy's power.
 
-- ~-~ for going up a list level
-- ~_~ to raise the current symex
-- move previous-opening and next-closing to ~(~ and ~)~
-- move next-opening and previous-closing to ~{~ and ~}~
-- ~H~ and ~L~ for dragging
-- ~&~ for joining
-- ~|~ for splitting
-- convolute should go somewhere, maybe M?
+You can see how I bind Lispyville commands below (though note that much of that work is done through the "key themes", which you can read about in the Lispyville documentation).
+
+I'm also adding many Symex commands—again, avoiding shadowing most Evil bindings—which tend to be more lisp-tree-aware. For example, moving to the first or last symex at the current level, or acting on all remaining symexes in the current list—these are very useful when editing lisp! Check out [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] for a great visualization of what the Symex commands I'm adding actually do.
 
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
@@ -3201,20 +3193,45 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
                 evil-collection-lispy-mode-map)
 
      :states 'normal
-     "H" #'lispyville-drag-backward
-     "L" #'lispyville-drag-forward
-     "-" #'lispyville-backward-up-list
+     "[" nil
+     "]" nil)
+
+    (:keymaps 'lispyville-mode-map
+     :states 'normal
+     "M-h" #'lispyville-drag-backward
+     "M-l" #'lispyville-drag-forward
+     "U" #'lispyville-backward-up-list
      "_" #'lispy-raise-sexp
      "(" #'lispyville-previous-opening
      ")" #'lispyville-next-closing
      "{" #'lispyville-next-opening
      "}" #'lispyville-previous-closing
+     "&" #'lispy-join
+     "|" #'lispy-split
+     "M" #'lispy-convolute
      "[" nil
      "]" nil))
 
   (use-package symex
     :init
-    (general-setq symex-highlight-p nil)
+    (general-setq symex-highlight-p nil
+                  symex-quote-prefix-list (list "'" "#'" "`"))
+
+    (defun crj--symex-remaining-length-but-using-save-excursion ()
+      "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
+
+    There are probably better fixes!
+
+    Here's the original doc-string:
+
+    Compute the remaining length of the current symex.
+
+    This should be done via DSL computation semantics at some point."
+      (save-excursion
+        (let ((result (symex-execute-traversal symex--traversal-goto-last)))
+          (1+ (length result)))))
+
+    (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
 
     :config
     (symex-initialize)
@@ -3222,10 +3239,19 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
     :general
     (:keymaps 'lispyville-mode-map
      :states 'normal
-     "h" #'symex-go-backward
-     "l" #'symex-go-forward
-     "gh" #'evil-backward-char
-     "gl" #'evil-forward-char))
+     "H" #'symex-go-backward
+     "L" #'symex-go-forward
+     "M-^" #'symex-goto-first
+     "M-$" #'symex-goto-last
+     "M-j" #'symex-join-lines
+     "C-j" #'symex-append-newline
+     "M-o" #'symex-open-line-after
+     "M-O" #'symex-open-line-before
+     "M-d" #'symex-delete-remaining
+     "M-c" #'symex-change-remaining
+     "M-y" #'symex-yank-remaining
+     "C-'" #'symex-cycle-quote
+     "C-," #'symex-cycle-unquote))
 #+end_src
 
 ****** Lisp Indentation
