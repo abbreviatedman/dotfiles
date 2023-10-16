@@ -3153,8 +3153,7 @@ But I'm also bringing in some compatible Symex commands that I think I would mis
 - ~h~ and ~l~ for previous/next symex at same level (but the Symex versions, I don't like how the Lispy versions go in between symexes)
 - and ~gh~ and ~gl~ for the rare need to /actually/ go left or right one character
 - ~C-'~ for quote-cycling
-- ~&~ for joining
-- ~|~ for splitting
+- maybe Symex's C/D/Y should be in here somewhere? meta, maybe?
 
 And some Lispyville rebinds to allow other commands to shine through (like the many next/previous commands that ~[~ and ~]~  are prefixes to):
 
@@ -3163,11 +3162,9 @@ And some Lispyville rebinds to allow other commands to shine through (like the m
 - move previous-opening and next-closing to ~(~ and ~)~
 - move next-opening and previous-closing to ~{~ and ~}~
 - ~H~ and ~L~ for dragging
-
-Also:
-
+- ~&~ for joining
+- ~|~ for splitting
 - convolute should go somewhere, maybe M?
-- maybe Symex's C/D/Y should be in here somewhere? meta, maybe?
 
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
