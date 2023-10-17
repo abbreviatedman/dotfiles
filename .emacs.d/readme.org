@@ -4153,26 +4153,17 @@ A few more additions to the help menu:
      "K" #'crj-lookup-next-symbol)
 
     (crj-leader-keys
-      "hv" '(helpful-variable
-             :which-key "Describe variable.")
+      "hv" '(helpful-variable :which-key "Describe variable.")
       "hy" '(shortdoc-display-group :which-key "Elisp documentation.")
       "hB" '(embark-bindings  :which-key "Search active keybindings.")
-      "hf" '(helpful-callable
-             :which-key "Describe function.")
-      "hF" '(describe-face
-             :which-key "Describe face.")
-      "hk" '(helpful-key
-             :which-key "Describe key.")
-      "hx" '(helpful-command
-             :which-key "Describe command.")
-      "hW" '(woman
-             :which-key "Search for manual page.")
-      "hg" '(customize-group
-             :which-key "Search for customize group.")
-      "hm" '(consult-minor-mode-menu
-             :which-key "Search through minor modes.")
-      "hM" '(describe-mode
-             :which-key "Describe currently active modes."))
+      "hf" '(helpful-callable :which-key "Describe function.")
+      "hF" '(describe-face :which-key "Describe face.")
+      "hk" '(helpful-key :which-key "Describe key.")
+      "hx" '(helpful-command :which-key "Describe command.")
+      "hW" '(woman :which-key "Search for manual page.")
+      "hg" '(customize-group :which-key "Search for customize group.")
+      "hm" '(consult-minor-mode-menu :which-key "Search through minor modes.")
+      "hM" '(describe-mode :which-key "Describe currently active modes."))
 
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
@@ -4272,10 +4263,51 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 
 ** Config Changes Todos
 *** timers
+*** snippets - skeleton or tempo or tempel or yasnippet??
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
+*** explore hippie-expand
 *** add general's tools like gsetq and general-add-hook to clean up my config code
+*** add filename cape to capfs
 *** switch to Emacs 29
-Switch to use-package and vc-use-package.
+new features to check out once you do:
+
+- built-in treesitter, use-package, eglot, and sqlite
+- built-in vc-use-package as a stripped down straight—probably keep using straight, though
+- switch init directories
+- improved help window bindings
+- pixel-scroll-precision-mode
+- new build options
+- better executable script settings
+- better Eshell over TRAMP
+- C-d will delete whole graphemes (i.e., emojis or other composite characters)
+- better handling of long lines
+- global font-size modification... maybe can get rid of my custom version! (or not if it can't handle the different fonts)
+- new bindings for find-library (??), which apparently already exists you can bind with (find-function-setup-keys)... actually it seems pretty useful!
+- new way to toggle between M-x and M-X, which seems pretty awesome
+- rename-visited-file!
+- delete-process
+- restart-emacs
+- set-message-functions for inhibiting messages
+- better emoji insertion!
+- help-window-keep-selected
+- help-quick keyboard cheatsheet
+- undelete-frame-mode!
+- highlight-confusing-reorderings
+- cycle-spacing for a more powerful just-one-space
+- show-paren-context-when-offscreen!
+- cusotmizable dired-omit-lines
+- elisp-eval-region-or-buffer!
+- scratch-buffer
+- char-fold options, which might work with evil search, and allow you to... search for similar characters?
+- proced-enable-color-flag!
+- string-edit (for elisp functions/packages)
+- define-key removal!
+- keymap-set commands!
+
+*** think about putting the minibuffer selection at the top (mini-frame-mode)
+*** check out desktop-save-mode
+*** try Combobulate
+*** scroll-on-jump?
 *** one command to prettify source code for markdown or emacs-lisp
 
 *** one shortcut for all in-buffer semantic searches
@@ -4429,6 +4461,9 @@ Anything useful here?
 
 *** redo font size to be calculated based on resolution
 
+*** add completion systems earlier so messing up won't mess up my completions!
+*** add way to run other Emacs with same init directory to check our init... maybe starting a different server, or a serverless Emacs?
+*** add minibuffer completion setup early too in case I bork my completions
 *** shortcut to toggle eldoc-mode
 
 *** make sure tabs are set correctly
