@@ -1037,7 +1037,7 @@ Also included in generally surfacing more Emacsy insert-state commands:
      "C-p" #'previous-line
      "C-e" #'end-of-visual-line
      "C-a" #'beginning-of-visual-line
-     "C-d" #'delete-char
+     "C-d" #'delete-forward-char
      "C-S-k" #'evil-insert-digraph
      "C-k" #'evil-delete-line
      "C-u" #'evil-delete-back-to-indentation
