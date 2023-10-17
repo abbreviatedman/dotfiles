@@ -3896,6 +3896,15 @@ And an extra package for completing Org blocks.
     (add-hook 'org-mode-hook #'org-block-capf-add-to-completion-at-point-functions))
 #+end_src
 
+**** Hippie-Expand
+
+Hippie-expand is a nice complete-everything-in-buffer command. It can complete form almost any source!
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (global-set-key (kbd "M-/") #'hippie-expand))
+#+end_src
+
 **** Eglot
 
 Pretty typical setup here aside from a major advice hack to stop the annoying modeline numbers appearing and disappearing.
