@@ -2224,8 +2224,8 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
     (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
     :general
-    (:states '(normal emacs)
-     :keymaps 'dired-mode-map
+    (:keymaps 'dired-mode-map
+     :states '(normal emacs)
      "SPC" nil))
 
   (use-package dired-single
