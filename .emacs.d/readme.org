@@ -2348,6 +2348,19 @@ Measure startup time using an excellent bit of code taken from Emacs From Scratc
     (savehist-mode))
 #+end_src
 
+**** Put Minibuffer at the top of the frame?
+
+Not sure I'm using this right now, but it's an interesting idea!
+
+If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
+
+#+begin_src emacs-lisp :lexical no
+  (use-package mini-frame
+    :disabled
+    :init
+    (mini-frame-mode))
+#+end_src
+
 **** Navigate That History More Easily
 
 #+begin_src emacs-lisp :lexical no
