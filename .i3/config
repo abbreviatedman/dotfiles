@@ -1,8 +1,7 @@
 # Keyboard configs.
 # Still figuring this out, not universal across my systems yet.
 
-# One thing I'm seeing is that xmodmap is being run by lightdm, and if I execute `xmodmap ~/.Xmodmap` here,
-# then I undo that. If, in the future, I switch to a different system, I may want to add that line here.
+# Maybe add xmodmap call here, if it's idempotent now.
 exec_always --no-startup-id xcape
 exec_always --no-startup-id xset r rate 1000
 
@@ -42,10 +41,6 @@ bindsym $mod+q exec emacsclient -cn -a "" ~/org-stuff/quick-note.md
 bindsym $mod+Shift+t exec  emacsclient -cn -a "" ~/org-stuff/readme.org
 
 bindsym $mod+Shift+c exec org-capture
-
-# Set keyboard options.
-bindsym $mod+Ctrl+Shift+x exec setxkbmap -option compose:sclk
-bindsym $mod+Ctrl+Shift+c exec setxkbmap -option ctrl:nocaps && xcape
 
 # Move specific apps to specific workspaces.
 assign [class="Firefox"] "6"
