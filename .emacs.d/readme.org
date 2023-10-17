@@ -4115,6 +4115,7 @@ A few more additions to the help menu:
 - ~woman~ is for accessing Unix manual pages from within Emacs. Everything should be from within Emacs!
 - ~consult-minor-mode-menu~ lets you search minor modes, both active and not, and even toggle them! You can use Embark from there to get documentation on any mode.
 - ~embark-keybindings~ lets you search active keybindings, which is super sweet.
+- ~shortdoc-display-group~ will help you with built-in elisp functions
 
 #+begin_src emacs-lisp
   (use-package helpful
@@ -4154,6 +4155,7 @@ A few more additions to the help menu:
     (crj-leader-keys
       "hv" '(helpful-variable
              :which-key "Describe variable.")
+      "hy" '(shortdoc-display-group :which-key "Elisp documentation.")
       "hB" '(embark-bindings  :which-key "Search active keybindings.")
       "hf" '(helpful-callable
              :which-key "Describe function.")
