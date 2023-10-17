@@ -3,7 +3,7 @@
 
 # One thing I'm seeing is that xmodmap is being run by lightdm, and if I execute `xmodmap ~/.Xmodmap` here,
 # then I undo that. If, in the future, I switch to a different system, I may want to add that line here.
-Xsession exec_always --no-startup-id xcape
+exec_always --no-startup-id xcape
 exec_always --no-startup-id xset r rate 1000
 
 # Set initial resolution
