@@ -1971,6 +1971,23 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     (evil-org-agenda-set-keys))
 #+end_src
 
+**** Shell Commands
+
+Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/emacs/comments/17aekjs/how_to_autofill_asyncshellcommand_with_last/][a Reddit discussion I was in]] where we found a way to make the minibuffer prompt start with the last shell command. Some fun hacking!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (defun crj--auto-fill-shell-commands (args)
+      (list (car args) (car shell-command-history) '(shell-command-history . 1) (cdddr args)))
+
+    (advice-add 'read-shell-command :filter-args #'crj--auto-fill-shell-commands)
+
+    :general
+    (crj-leader-keys
+      "!" #'shell-command
+      "&" #'async-shell-command))
+#+end_src
 
 *** Calendar
 
