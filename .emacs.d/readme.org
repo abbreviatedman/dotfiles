@@ -772,10 +772,10 @@ Only making one change so far: removing the shadowing of my leader key.
 
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
-    :general
-    (:keymaps 'Info-mode-map
-     :states '(normal motion)
-     "SPC" nil))
+    :after evil
+    :init
+    (define-key Info-mode-map (kbd "SPC") nil)
+    (evil-define-key 'normal Info-mode-map (kbd "SPC") nil))
 #+end_src
 
 ** Evil Mode
