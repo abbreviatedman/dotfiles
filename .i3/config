@@ -2,7 +2,7 @@
 # Still figuring this out, not universal across my systems yet.
 
 # Maybe add xmodmap call here, if it's idempotent now.
-exec_always --no-startup-id xcape
+exec --no-startup-id xcape
 exec_always --no-startup-id xset r rate 1000
 
 # Set initial resolution
