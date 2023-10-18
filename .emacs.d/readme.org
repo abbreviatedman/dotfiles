@@ -667,6 +667,28 @@ Literate programming for fun and profit. Or... at least, for fun.
                      :which-key "Remove results block of all blocks.")))
 #+end_src
 
+**** Pomodoro Task Management
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org-pomodoro
+    :init
+    (dolist (player-args-setting '(org-pomodoro-start-sound-args
+                                   org-pomodoro-killed-sound-args
+                                   org-pomodoro-ticking-sound-args
+                                   org-pomodoro-finished-sound-args
+                                   org-pomodoro-overtime-sound-args
+                                   org-pomodoro-long-break-sound-args
+                                   org-pomodoro-short-break-sound-args))
+      (set player-args-setting "volume=15000"))
+
+    (setq org-pomodoro-manual-break t
+          org-pomodoro-keep-killed-pomodoro-time t
+          org-pomodoro-format "P%s"
+          org-pomodoro-time-format "%m"
+          org-pomodoro-long-break-format "L~%s"
+          org-pomodoro-short-break-format "S~%s"))
+#+end_src
+
 *** Markdown
 
 The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
