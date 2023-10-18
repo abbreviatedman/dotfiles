@@ -1203,7 +1203,10 @@ Making it an official text object with an inner variant does, however, allow you
 And if you want the indentation or trailing whitespace, you can work with the outer variant. Or, again, just the standard work-on-a-line-by-default version of any command!
 
 #+begin_src emacs-lisp :lexical no
-  (use-package evil-textobj-line)
+  (use-package evil-textobj-line
+    :init
+    (setq evil-textobj-line-a-key "L"
+          evil-textobj-line-i-key "L"))
 #+end_src
 
 *** Evil Search From Visual Mode
