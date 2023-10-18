@@ -3255,6 +3255,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "C-j" #'symex-append-newline
      "M-o" #'symex-open-line-after
      "M-O" #'symex-open-line-before
+     "M-s" #'symex-delete
+     "M-S" #'symex-delete-backwards
      "M-d" #'symex-delete-remaining
      "M-c" #'symex-change-remaining
      "M-y" #'symex-yank-remaining
