@@ -3188,7 +3188,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
        (atom-motions t)
        commentary
        slurp/barf-cp
-       wrap
        additional-wrap
        additional-insert))
 
