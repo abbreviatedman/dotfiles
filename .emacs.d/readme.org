@@ -2006,7 +2006,19 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
   (use-package emacs
     :init
     (defun crj--auto-fill-shell-commands (args)
-      (list (car args) (car shell-command-history) '(shell-command-history . 1) (cdddr args)))
+      "Auto-fill the mini-buffer with the most recent shell command.
+
+  This advice for `read-shell-command' takes the original ARGS
+  and substitutes more ergonomic ones for quick repetition of past commands.
+
+  Its main objective is to pass the most recent item in `shell-command-history' as
+  the initial output.
+
+  It also passes the shell command history starting at index 1 as the
+  history to use, so that navigating to the next option doesn't repeat the most
+  recent command, which would give you the most recent option twice."
+      (cl-destructuring-bind (prompt _1 _2 extra-args) args
+        (list prompt (car shell-command-history) '(shell-command-history . 1) extra-args)))
 
     (advice-add 'read-shell-command :filter-args #'crj--auto-fill-shell-commands)
 
