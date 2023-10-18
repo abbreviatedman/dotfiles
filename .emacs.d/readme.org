@@ -1845,58 +1845,6 @@ RSS might be a great technology? I'm only just getting into it with this package
       "ar" '(elfeed :which-key "Launch RSS reader.")))
 #+end_src
 
-*** Vterm
-
-Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
-
-#+begin_src emacs-lisp :lexical no
-  (use-package vterm
-    :init
-    (setq vterm-shell "/usr/sbin/zsh"
-          vterm-always-compile-module t
-          vterm-max-scrollback 100000)
-
-    (defun crj-kill-unnamed-vterm-terminals ()
-      "Kill all vterm buffers that still have their default buffer names.
-
-  It temporarily removes confirmation of killing modified buffers.
-
-  So please be sure you want to kill all modified vterm buffers before
-  you run this command."
-      (interactive)
-      (let ((kill-buffer-query-functions
-             (remq 'process-kill-buffer-query-function kill-buffer-query-functions)))
-        (mapc (lambda (buffer)
-                (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
-                  (kill-buffer buffer)))
-              (buffer-list))))
-
-    :general
-    (crj-leader-keys
-      "qv" '(crj-kill-unnamed-vterm-terminals :which-key "Kill all unnamed vterm buffers."))
-
-    (:keymaps 'vterm-mode-map
-     "C-c <escape>" '(vterm-send-escape :which-key "Send escape key to underlying shell.")
-     "C-c :" '(vterm--self-insert :which-key "Send colon key to underlying shell."))
-
-    (:keymaps 'vterm-mode-map
-     "C-c n" '(vterm-copy-mode :which-key "Switch to Vterm Copy Mode.")
-     "C-c C-t" '(vterm-copy-mode :which-key "Switch to Vterm Copy Mode."))
-
-    (:keymaps 'vterm-copy-mode-map
-     "C-c i" '(vterm-copy-mode :which-key "Turn off Vterm Copy Mode.")
-     "C-c C-t" '(vterm-copy-mode :which-key "Turn off Vterm Copy Mode.")))
-#+end_src
-
-Let's also use a wrapper around vterm that allows multiple terminals.
-
-#+begin_src emacs-lisp
-  (use-package multi-vterm
-    :general
-    (crj-leader-keys
-      "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
-#+end_src
-
 *** Org Agenda
 
 Org Agenda is an amazing application that can take task data from different sources and produce an overview of your current tasks. It's powerful and efficient and customizable. It's one of the best things in Emacs.
@@ -1969,6 +1917,63 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
     :config
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))
+#+end_src
+
+*** Terminals
+
+I'll configure other terminals soon! For now, just shell commands and Vterm.
+Perhaps I'll set up Eshell and Eat sometime.
+
+**** Vterm
+
+Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package vterm
+    :init
+    (setq vterm-shell "/usr/sbin/zsh"
+          vterm-always-compile-module t
+          vterm-max-scrollback 100000)
+
+    (defun crj-kill-unnamed-vterm-terminals ()
+      "Kill all vterm buffers that still have their default buffer names.
+
+  It temporarily removes confirmation of killing modified buffers.
+
+  So please be sure you want to kill all modified vterm buffers before
+  you run this command."
+      (interactive)
+      (let ((kill-buffer-query-functions
+             (remq 'process-kill-buffer-query-function kill-buffer-query-functions)))
+        (mapc (lambda (buffer)
+                (when (string-match-p (regexp-quote "vterm") (buffer-name buffer))
+                  (kill-buffer buffer)))
+              (buffer-list))))
+
+    :general
+    (crj-leader-keys
+      "qv" '(crj-kill-unnamed-vterm-terminals :which-key "Kill all unnamed vterm buffers."))
+
+    (:keymaps 'vterm-mode-map
+     "C-c <escape>" '(vterm-send-escape :which-key "Send escape key to underlying shell.")
+     "C-c :" '(vterm--self-insert :which-key "Send colon key to underlying shell."))
+
+    (:keymaps 'vterm-mode-map
+     "C-c n" '(vterm-copy-mode :which-key "Switch to Vterm Copy Mode.")
+     "C-c C-t" '(vterm-copy-mode :which-key "Switch to Vterm Copy Mode."))
+
+    (:keymaps 'vterm-copy-mode-map
+     "C-c i" '(vterm-copy-mode :which-key "Turn off Vterm Copy Mode.")
+     "C-c C-t" '(vterm-copy-mode :which-key "Turn off Vterm Copy Mode.")))
+#+end_src
+
+Let's also use a wrapper around vterm that allows multiple terminals.
+
+#+begin_src emacs-lisp
+  (use-package multi-vterm
+    :general
+    (crj-leader-keys
+      "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
 #+end_src
 
 **** Shell Commands
