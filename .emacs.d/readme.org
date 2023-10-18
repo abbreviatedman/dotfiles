@@ -4118,10 +4118,14 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
 
 #+begin_src emacs-lisp
   (use-package emacs
+    :init
+    (winner-mode 1)
+
     :general
     (crj-leader-keys
       "wd" '(evil-window-delete :which-key "Close window.")
-      "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
+      "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
+      "wu" '(winner-undo :which-key "Undo last window setup change.")))
 #+end_src
 
 ** Improving Help Commands
