@@ -3199,6 +3199,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
                 evil-collection-lispy-mode-map)
 
      :states 'normal
+     "g<" #'evil-shift-left
+     "g>" #'evil-shift-right
      "[" nil
      "]" nil)
 
