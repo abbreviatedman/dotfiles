@@ -3210,8 +3210,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "_" #'lispy-raise-sexp
      "(" #'lispyville-previous-opening
      ")" #'lispyville-next-closing
-     "{" #'lispyville-next-opening
-     "}" #'lispyville-previous-closing
      "&" #'lispy-join
      "|" #'lispy-split
      "M" #'lispy-convolute))
@@ -3245,6 +3243,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      :states 'normal
      "H" #'symex-go-backward
      "L" #'symex-go-forward
+     "{" #'symex-leap-backward
+     "}" #'symex-leap-forward
      "M-^" #'symex-goto-first
      "M-$" #'symex-goto-last
      "-" #'symex-collapse
