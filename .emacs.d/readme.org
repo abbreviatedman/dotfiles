@@ -3284,10 +3284,29 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "g<" #'evil-shift-left
      "g>" #'evil-shift-right
      "[" nil
-     "]" nil)
+     "]" nil
+     ";" nil)
+
+    (:keymaps '(evil-inner-text-objects-map evil-operator-state-map evil-visual-state-map)
+     :states 'normal
+     "a" #'lispyville-inner-atom
+     "x" #'lispyville-inner-sexp
+     "l" #'lispyville-inner-list
+     "s" #'lispyville-inner-string)
+
+    (:keymaps '(evil-outer-text-objects-map evil-operator-state-map evil-visual-state-map)
+     :states 'normal
+     "a" #'lispyville-outer-atom
+     "x" #'lispyville-outer-sexp
+     "l" #'lispyville-outer-list
+     "s" #'lispyville-outer-string)
 
     (:keymaps 'lispyville-mode-map
      :states 'normal
+     "W" #'lispyville-forward-atom-begin
+     "B" #'lispyville-backward-atom-begin
+     "M-i" #'lispyville-insert-at-beginning-of-list
+     "M-a" #'lispyville-insert-at-end-of-list
      "M-h" #'lispyville-drag-backward
      "M-l" #'lispyville-drag-forward
      "U" #'lispyville-backward-up-list
@@ -3327,16 +3346,12 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      :states 'normal
      "H" #'symex-go-backward
      "L" #'symex-go-forward
-     "{" #'symex-leap-backward
-     "}" #'symex-leap-forward
-     "M-^" #'symex-goto-first
-     "M-$" #'symex-goto-last
-     "-" #'symex-collapse
-     "+" #'symex-unfurl
-     "M--" #'symex-collapse-remaining
-     "M-+" #'symex-unfurl-remaining
-     "M-j" #'symex-join-lines
-     "C-j" #'symex-append-newline
+     "{" #'symex-join-lines
+     "}" #'symex-append-newline
+     "(" #'symex-collapse-remaining
+     ")" #'symex-unfurl-remaining
+     "-" #'symex-goto-first
+     "+" #'symex-goto-last
      "M-o" #'symex-open-line-after
      "M-O" #'symex-open-line-before
      "M-s" #'symex-delete
