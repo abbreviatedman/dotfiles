@@ -1800,8 +1800,17 @@ The eternal struggle.
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
     :init
-    (setq-default indent-tabs-mode nil)
-    (setq standard-indent 2))
+    (setq-default indent-tabs-mode nil))
+#+end_src
+
+**** General Indentation
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :init
+    (setq-default standard-indent 2
+                  sh-basic-offset 2
+                  tab-width 2))
 #+end_src
 
 **** Visualize Indentation Level
