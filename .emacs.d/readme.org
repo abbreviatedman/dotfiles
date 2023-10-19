@@ -2300,10 +2300,50 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
      [remap dired-mouse-find-file-other-window] #'dired-single-buffer-mouse
      [remap dired-up-directory] #'dired-single-up-directory))
 
+  (use-package dired-hacks
+    :init
+    (general-add-hook 'dired-mode-hook '(dired-collapse-mode))
+
+    (defun dired-collapse-jump ()
+    "Jump to the first parent directory with more than one file.
+
+  This is opposite of \"drilling down\" through empty collapsed directories."
+    (interactive)
+    (let* ((file-name (or (buffer-file-name) default-directory))
+           (path (or (f-parent file-name) default-directory))
+           prev-path
+           files)
+      (while (and (file-directory-p path)
+                  (file-readable-p path)
+                  (setq files (f-entries path))
+                  (= 1 (length files)))
+        (setq prev-path path)
+        (setq path (f-parent path)))
+      (dired-jump nil prev-path)
+      (dired-goto-file file-name)))
+
+    :general
+    ('dired-mode-map :states 'normal
+      "-" #'dired-collapse-jump
+      "_" #'dired-single-up-directory))
+
   (use-package all-the-icons)
 
   (use-package all-the-icons-dired
-    :ghook #'all-the-icons-dired-mode-hook)
+    :init
+    (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
+
+  (use-package dired-subtree
+    :general
+    (dired-mode-map
+     :states 'normal
+      "v" 'dired-subtree-toggle)
+
+    :config
+    (advice-add 'dired-subtree-toggle
+                :after (lambda () (interactive)
+                         (when all-the-icons-dired-mode
+                           (revert-buffer)))))
 
   (use-package dired-hide-dotfiles
     :general
