@@ -3361,6 +3361,19 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "M-y" #'symex-yank-remaining
      "C-'" #'symex-cycle-quote
      "C-," #'symex-cycle-unquote))
+
+  (evil-define-operator crj-evil-delete-current-word (beg end type register)
+    :motion evil-a-WORD
+    (interactive "<R><x>")
+    (evil-delete beg end type register))
+
+  (defun crj-delete-previous-word ()
+    (interactive)
+    (let ((previous-thing (thing-at-point 'word)))
+      (evil-backward-WORD-begin)
+      (when (not (eq previous-thing (thing-at-point 'word)))
+        (evil-forward-word))
+      (evil-delete-backward-word)))
 #+end_src
 
 ******** Code To Test Lisp-Editing Systems On
