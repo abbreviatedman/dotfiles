@@ -159,20 +159,20 @@ We can use ~general-create-definer~ to define a pair of leader keys. A leader ke
 #+begin_src emacs-lisp
   (use-package general
     :init
-    (general-create-definer crj-leader-keys
-      :keymaps '(normal insert visual emacs)
-      :prefix "SPC"
-      :global-prefix "M-SPC"))
+    (general-create-definer leader
+      :states '(normal motion emacs visual)
+      :keymaps 'override
+      :prefix "SPC"))
 #+end_src
 
-This code defines a /function/ called ~crj-leader-keys~ that we can use from now on to define keybindings. The important thing here is that we can define upfront what ~crj-leader-keys~ does—what Evil States it's active in, and that it will activate with either spacebar in Evil Normal State, or Meta-spacebar (Alt- or Option-spacebar) when spacebar would otherwise do something else (like print an actual space).
+This code defines a /function/ called ~leader~ that we can use from now on to define keybindings. The important thing here is that we can define upfront what ~leader~ does—what Evil States it's active in, and that it will activate with either spacebar in Evil Normal State, or Meta-spacebar (Alt- or Option-spacebar) when spacebar would otherwise do something else (like print an actual space).
 
 We can now very easily define another level of keybinding. We want ~SPC f~ to activate commands that have to do with files—thus the ~f~.
 
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys "f" '(:ignore t :which-key "Files Menu")))
+    (leader "f" '(:ignore t :which-key "Files Menu")))
 #+end_src
 
 From now on, when you press the user presses the spacebar (or ~M-SPC~) and then ~f~, they'll have access to any commands that follow. And when we put ~which-key~ in there momentarily, when they press ~SPC~ they'll get a menu that will show them that ~f~ leads to commands labeled "files", and if they press ~f~ they'll see a list of letters they can press next and the commands that each will activate.
@@ -200,7 +200,7 @@ Let's define a few commands that open specific commonly accessed files as exampl
       (find-file (expand-file-name "quick-note.md" org-directory)))
 
     :general
-    (crj-leader-keys
+    (leader
       "fc" '(crj-open-literate-config-file :which-key "Open literate config file.")
       "ft" '(crj-open-task-list :which-key "Open task list file.")
       "fq" '(crj-open-quick-note-file :which-key "Open quick notes file.")))
@@ -224,7 +224,7 @@ I'm also mapping a new help command in a couple places, so that I can later rema
     :general
     ("C-S-h" 'help-command)
 
-    (crj-leader-keys
+    (leader
       "h" '(:keymap help-map :which-key "Help menu.")
       "w" '(evil-window-map :which-key "Window menu.")
       "m" '(:ignore t :which-key "Markup menu.")
@@ -268,8 +268,7 @@ The following binds ~SPC f s~ to save a file. It's nice and mnemonic, as well as
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys
-      "fs" '(save-buffer :which-key "Save current buffer.")))
+    (leader "fs" '(save-buffer :which-key "Save current buffer.")))
 #+end_src
 
 The ~:prefix "SPC"~ tells ~general~ that this is a "leader key", a key that leads off a set of commands. ~:keymaps normal~ indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ~"f"~ one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The ~:which-key~ keyword in that and the following line, where we finally bind the ~save-buffer~ command, tells ~which-key~ (see the "Which Key" section below) how to label the menu and commands for discoverability.
@@ -281,8 +280,7 @@ You don't always have to have commands in a deep hierarchy of sections. Here is 
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys
-      "." '(find-file :which-key "Open or create file.")))
+    (leader "." '(find-file :which-key "Open or create file.")))
 #+end_src
 
 I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
@@ -290,7 +288,7 @@ I think you get the basics—as I did with learning and writing this section! Le
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    (crj-leader-keys
+    (leader
       "," '(consult-buffer :which-key "Switch buffer or open recent file.")
       "<" '(consult-project-buffer :which-key "Switch to project-specific buffer.")
       "TAB" '(evil-switch-to-windows-last-buffer :which-key "Previous buffer.")
@@ -317,8 +315,9 @@ And adding some buffer commands, including a custom one.
       (if (member (buffer-name (current-buffer)) crj--immortal-buffer-names)
           (bury-buffer)
         (kill-buffer (current-buffer))))
+
     :general
-    (crj-leader-keys
+    (leader
       "bd" '(crj-kill-or-bury-current-buffer :which-key "Kill buffer.")
       "bz" '(bury-buffer :which-key "Bury buffer.")
       "br" '(revert-buffer :which-key "Revert buffer.")
@@ -374,8 +373,7 @@ Searching a markup outline.
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys
-      "m." '(consult-outline :which-key "Search markup outline.")))
+    (leader "m." '(consult-outline :which-key "Search markup outline.")))
 #+end_src
 
 *** Emmet Abbreviations
@@ -445,10 +443,7 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 #+begin_src emacs-lisp
   (use-package org
     :general
-    (crj-leader-keys
-      :keymaps 'org-mode-map
-      :states '(normal visual)
-      "m/" '(consult-org-heading :which-key "Search current headings.")))
+    (leader "m/" '(consult-org-heading :which-key "Search current headings.")))
 #+end_src
 
 **** Org Mode Better Font Faces
@@ -764,7 +759,12 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
 
     :after markdown-mode
 
-    :ghook ('(markdown-mode-hook gfm-mode-hook)))
+    :ghook ('(markdown-mode-hook gfm-mode-hook))
+
+    :general
+    (:keymaps 'evil-markdown-mode-map
+     :states '(insert emacs)
+     "C-d" nil))
 #+end_src
 
 *** HTML
@@ -890,7 +890,7 @@ There are just a ton of variables here that finely set how Evil Mode is configur
     (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
     (evil-mode 1)
     (evil-select-search-module 'evil-search-module 'evil-search)
-    (evil-define-key 'motion 'global
+    (evil-define-key '(motion global)
       "j" #'evil-next-line
       "gj" #'evil-next-visual-line
       "k" #'evil-previous-line
@@ -1136,9 +1136,7 @@ Being able to type ~SPC r i )~ to say "replace what's in these parens with what 
     :after evil
 
     :general
-    (crj-leader-keys
-      "r" '(evil-replace-with-register
-            :which-key "Replace text with register.")))
+    (leader "r" '(evil-replace-with-register :which-key "Replace text with register.")))
 #+end_src
 
 *** Evil Motion For Exchanging Text
@@ -1269,10 +1267,10 @@ Shows you the difference between two different bits of text. Another very occasi
 #+begin_src emacs-lisp :lexical no
   (use-package evil-extra-operator
     :general
-    (crj-leader-keys
-      "e" #'evil-operator-eval
-      "E" #'evil-operator-eval-replace
-      "C" #'evil-operator-clone))
+    (leader
+      "e" #'(evil-operator-eval :which-key "Evaluate operator.")
+      "E" #'(evil-operator-eval-replace :which-key "Evaluate and replace operator.")
+      "C" #'(evil-operator-clone :which-key "Clone operator.")))
 #+end_src
 
 *** Number Incrementing and Decrementing
@@ -1310,7 +1308,7 @@ We'll also use a custom command for searching text in project files, though it's
       (consult-ripgrep dir initial))
 
     :general
-    (crj-leader-keys
+    (leader
       "sp" '(crj-search-project :which-key "Search text in project files.")
       "sd" '(consult-find :which-key "Search file names in directory.")
       "sm" '(consult-mark :which-key "Search the marks list.")
@@ -1327,8 +1325,7 @@ And finally, since I do this search so often, it's got a quicker shortcut of ~SP
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys
-      "SPC" '(project-find-file :which-key "Find file within current project.")))
+    (leader "SPC" '(project-find-file :which-key "Find file within current project.")))
 #+end_src
 
 *** Editing Results
@@ -1628,7 +1625,7 @@ Next, we make some keybindings for them.
 #+begin_src emacs-lisp
   (use-package emacs
     :general
-    (crj-leader-keys
+    (leader
       "zj" '(crj-zoom-in-all-buffers :which-key "Zoom in globally.")
       "zk" '(crj-zoom-out-all-buffers :which-key "Zoom out globally.")
       "zb" '(crj-zoom-reset-all-buffers :which-key "Reset zoom globally.")
@@ -1659,9 +1656,9 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
       ("j" crj-zoom-in-all-buffers)
       ("k" crj-zoom-out-all-buffers)
       ("b" crj-zoom-reset-all-buffers))
+
     :general
-    (crj-leader-keys
-      "zz" '(crj-hydra/text-zoom/body :which-key "Zoom hydra interface.")))
+    (leader "zz" '(crj-hydra/text-zoom/body :which-key "Zoom hydra interface.")))
 #+end_src
 
 *** Scrolling
@@ -1785,8 +1782,7 @@ When displaying code to others, it's often good to make the line numbers absolut
       (crj-cycle-setting 'display-line-numbers '(relative t nil)))
 
     :general
-    (crj-leader-keys
-      "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
+    (leader "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
 #+end_src
 
 *** Indentation
@@ -1855,7 +1851,7 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
                             ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")
                             ("SomaFM - Secret Agent" . "https://somafm.com/secretagent.pls")))
     :general
-    (crj-leader-keys
+    (leader
       "aM" '(eradio-play :which-key "Play internet radio.")
       "am" '(eradio-stop :which-key "Stop playing internet radio.")))
 #+end_src
@@ -1872,8 +1868,7 @@ RSS might be a great technology? I'm only just getting into it with this package
     (setq elfeed-feeds '("https://planet.emacslife.com/atom.xml"))
 
     :general
-    (crj-leader-keys
-      "ar" '(elfeed :which-key "Launch RSS reader.")))
+    (leader "ar" '(elfeed :which-key "Launch RSS reader.")))
 #+end_src
 
 *** Org Agenda
@@ -1934,8 +1929,9 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
                                                   (org-agenda-entry-types '(:deadline))
                                                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
                                                   (org-agenda-overriding-header "\n Upcoming Deadlines (+14d After)\n")))))))
+
     :general
-    (crj-leader-keys
+    (leader
       "aA" '(org-agenda :which-key "Org Agenda dashboard.")
       "aa" '(crj-agenda :which-key "Custom Org Agenda view.")))
 
@@ -1947,7 +1943,16 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 
     :config
     (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
+    (evil-org-agenda-set-keys)
+
+    :general
+    (general-def
+      (org-agenda-mode-map org-agenda-keymap)
+      "C-S-H" nil)
+
+    (general-def 'motion
+      (org-agenda-mode-map org-agenda-keymap)
+      "C-S-H" nil))
 #+end_src
 
 *** Terminals
@@ -1982,8 +1987,7 @@ Of the many types of terminals in Emacs, Vterm is the most faithful to the stand
               (buffer-list))))
 
     :general
-    (crj-leader-keys
-      "qv" '(crj-kill-unnamed-vterm-terminals :which-key "Kill all unnamed vterm buffers."))
+    (leader "qv" '(crj-kill-unnamed-vterm-terminals :which-key "Kill all unnamed vterm buffers."))
 
     (:keymaps 'vterm-mode-map
      "C-c <escape>" '(vterm-send-escape :which-key "Send escape key to underlying shell.")
@@ -2003,8 +2007,7 @@ Let's also use a wrapper around vterm that allows multiple terminals.
 #+begin_src emacs-lisp
   (use-package multi-vterm
     :general
-    (crj-leader-keys
-      "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
+    (leader "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
 #+end_src
 
 **** Shell Commands
@@ -2032,24 +2035,25 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
     (advice-add 'read-shell-command :filter-args #'crj--auto-fill-shell-commands)
 
     :general
-    (crj-leader-keys
-      "!" #'shell-command
-      "&" #'async-shell-command))
+    (leader
+      "!" #'(shell-command :which-key "Run a shell command.")
+      "&" #'(async-shell-command :which-key "Run an asynchronous shell command.")))
 #+end_src
 
 *** Calendar
 
 So you can wish everyone would leave you alone, but /within Emacs/.
 
-**** Calendar View
+**** View Calendar
 
 #+begin_src emacs-lisp :lexical no
   (use-package calfw)
 
   (use-package calfw-org
     :general
-    (crj-leader-keys
-      "acv" '(cfw:open-org-calendar :which-key "View calendar.")))
+    (:keymaps 'cfw:org-schedule-map "RET" #'cfw:org-open-agenda-day)
+
+    (leader "acv" '(cfw:open-org-calendar :which-key "View calendar.")))
 #+end_src
 
 **** Google Calendar Integration
@@ -2092,8 +2096,7 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
     (setq epg-pinentry-mode 'loopback)
 
     :general
-    (crj-leader-keys
-      "acgf" '(org-gcal-fetch :which-key "Fetch Gcal events.")))
+    (leader "acgf" '(org-gcal-fetch :which-key "Fetch Gcal events.")))
 #+end_src
 
 *** Version Control With Magit
@@ -2138,8 +2141,6 @@ Only some minor settings changes from the basic setup.
        magit-blame-read-only-mode-map
        magit-section-mode-map
        magit-diff-mode-map)
-
-      "SPC" nil
       "1" #'digit-argument
       "2" #'digit-argument
       "3" #'digit-argument
@@ -2152,7 +2153,7 @@ Only some minor settings changes from the basic setup.
      "C-c k" '(with-editor-cancel :which-key "Cancel editing.")
      "C-c C-k" '(with-editor-cancel :which-key "Cancel editing."))
 
-    (crj-leader-keys
+    (leader
       "gg" '(magit-status :which-key "Launch Git interface.")
       "gm" '(magit-dispatch :which-key "Show Git HUD.")
       "gb" '(magit-branch-or-checkout :which-key "Switch or create Git branch.")
@@ -2219,7 +2220,7 @@ Both the cloud save function above, as well as a simple git pull.
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
     :general
-    (crj-leader-keys
+    (leader
       "gp" '(crj-git-cloud-save :which-key "Add/commit/push tracked files to the remote.")
       "gf" '(magit-pull :which-key "Pull from the remote.")))
 #+end_src
@@ -2265,8 +2266,7 @@ Let's integrate it with Magit!
        (magit-status "/yadm::"))
 
     :general
-    (crj-leader-keys
-      "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
+    (leader "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
 #+end_src
 
 *** Dired
@@ -2290,12 +2290,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
           dired-recursive-deletes 'always)
 
     (add-hook 'dired-mode-hook #'dired-omit-mode)
-    (add-hook 'dired-mode-hook #'dired-hide-details-mode)
-
-    :general
-    (:keymaps 'dired-mode-map
-     :states '(normal emacs)
-     "SPC" nil))
+    (add-hook 'dired-mode-hook #'dired-hide-details-mode))
 
   (use-package dired-single
     :general
@@ -2371,8 +2366,8 @@ A better Emacs kill command binding to kill the Emacs server as well.
   (use-package emacs
     :general
     ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
-    (crj-leader-keys
-      "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
+
+    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
 Save backups of files, every 10 idle seconds, to a backups folder in our main emacs directory.
@@ -2553,7 +2548,7 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
     :general
-    (crj-leader-keys
+    (leader
       "pp" '(project-switch-project :which-key "Switch to new project.")
       "pk" '(project-kill-buffers :which-key "Kill all current project buffers.")
       "p," '(project-switch-to-buffer :which-key "Switch buffers in current project.")
@@ -2629,8 +2624,7 @@ There are alternatives, but Vundo integrates nicely with Evil through the Evil C
 #+begin_src emacs-lisp :lexical no
   (use-package vundo
     :general
-    (crj-leader-keys
-      "vu" '(vundo :which-key "Visualize undo.")))
+    (leader "vu" '(vundo :which-key "Visualize undo.")))
 #+end_src
 
 **** Searching In Buffer
@@ -2699,8 +2693,7 @@ Thinking about giving this a try. It's a little less pretty than ~consult-org-he
           imenu-use-popup-menu t)
 
     :general
-    (crj-leader-keys
-      "s." '(consult-imenu :which-key "Search buffer sections.")))
+    (leader "s." '(consult-imenu :which-key "Search buffer sections.")))
 #+end_src
 **** Multiple Cursors
 
@@ -2719,7 +2712,7 @@ Thinking about giving this a try. It's a little less pretty than ~consult-org-he
     (general-def 'insert
       "M-d" #'kill-word)
 
-    (crj-leader-keys
+    (leader
       "icc" '(evil-multiedit-match-and-next :which-key "Add cursor at current/next match.")
       "icC" '(evil-multiedit-match-and-prev :which-key "Add cursor at current/previous match.")
       "ice" '(evil-multiedit-match-all :which-key "Add cursor to all matches.")))
@@ -2970,7 +2963,7 @@ After all that, I've moved on to other systems, so this is merely historical. Se
 
   (use-package evil-cleverparens
     :general
-    (crj-leader-keys
+    (leader
       "la" '(evil-cp-insert-at-end-of-form :which-key "Insert at end of form.")
       "li" '(evil-cp-insert-at-beginning-of-form :which-key "Insert at beginning of form.")
       "lf" '(evil-cp-drag-forward :which-key "Drag atom or form forwards.")
@@ -2988,8 +2981,7 @@ After all that, I've moved on to other systems, so this is merely historical. Se
 
   (use-package on-parens
     :general
-    (crj-leader-keys
-      "lr" '(paredit-raise-sexp :which-key "Raise form."))
+    (leader "lr" '(paredit-raise-sexp :which-key "Raise form."))
 
     (:keymaps '(paredit-mode-map symex-mode-map)
      ")" nil)
@@ -3343,7 +3335,7 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
   ;;   (interactive)
   ;;   (message "this should have a sharp quote"))
 
-  ;; (crj-leader-keys
+  ;; (leader
   ;;   "l" #'lisp-playground-test-fun
   ;;   "k" 'should-have-sharp-quote
   ;;   "bm" (lambda () (interactive) (message "test lambda")))
@@ -3583,10 +3575,9 @@ Only two things aren't easy to figure out here:
       (org-edit-src-exit))
 
     :general
-    (crj-leader-keys
-      "bf" '(prettier-prettify :which-key "Format buffer."))
-    (crj-leader-keys
-      "mf" '(crj-prettify-js-org-src-block :which-key "Format markdown block.")))
+    (leader "bf" '(prettier-prettify :which-key "Format buffer."))
+
+    (leader "mf" '(crj-prettify-js-org-src-block :which-key "Format markdown block.")))
 #+end_src
 
 ** Completion
@@ -3695,9 +3686,7 @@ Here that all is!
     (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
 
     :general
-    (crj-leader-keys
-      "'" '(vertico-repeat-select
-            :which-key "Repeat previous vertico searches."))
+    (leader "'" '(vertico-repeat-select :which-key "Repeat previous vertico searches."))
 
     (:keymaps 'vertico-map
      "C-k" #'vertico-next
@@ -3857,7 +3846,7 @@ And that's not even all of them! Minibuffer searches are a /huge/ part of how yo
     :commands consult-line
 
     :general
-    (crj-leader-keys "/" '(consult-line :which-key "Search in current buffer.")))
+    (leader "/" '(consult-line :which-key "Search in current buffer.")))
 #+end_src
 
 **** Minibuffer Search Filtering
@@ -4024,8 +4013,7 @@ Don't be like me.
                    "--stdio"))
 
     :general
-    (crj-leader-keys
-      "cc" '(eglot :which-key "Run eglot in project root.")))
+    (leader "cc" '(eglot :which-key "Run eglot in project root.")))
 
   (use-package cape
     :after eglot
@@ -4045,10 +4033,12 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 #+begin_src emacs-lisp
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+
     :general
-    (crj-leader-keys
+    (leader
       "tc" '(global-copilot-mode :which-key "Toggle copilot globally.")
       "tC" '(copilot-mode :which-key "Toggle copilot for current buffer."))
+
     (:keymaps 'copilot-mode-map
      "M-RET" #'copilot-accept-completion
      "M-<tab>" #'copilot-next-completion
@@ -4077,8 +4067,8 @@ A great error-navigation library
             :which-key "Go to next error.")
      "[e" '(flymake-goto-prev-error
             :which-key "Go to previous error."))
-    (crj-leader-keys
-      "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
+
+    (leader "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
 #+end_src
 
 ** AI
@@ -4139,7 +4129,7 @@ It's the robots!
     (:keymaps 'markdown-mode-map
      "C-c C-c s" '(crj-send-heading-to-bing-chat :which-key "Send heading as Bing query."))
 
-    (crj-leader-keys
+    (leader
       "aibs" '(crj-send-heading-to-bing-chat :which-key "Send heading as Bing query.")
       "aibf" '(crj-open-bing-chat-file :which-key "Open Bing chat file.")))
 #+end_src
@@ -4186,7 +4176,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
     (winner-mode 1)
 
     :general
-    (crj-leader-keys
+    (leader
       "wd" '(evil-window-delete :which-key "Close window.")
       "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
       "wu" '(winner-undo :which-key "Undo last window setup change.")))
@@ -4247,7 +4237,7 @@ A few more additions to the help menu:
     (:states 'normal
      "K" #'crj-lookup-next-symbol)
 
-    (crj-leader-keys
+    (leader
       "hv" '(helpful-variable :which-key "Describe variable.")
       "hp" '(find-library :which-key "Find Elisp library.")
       "hy" '(shortdoc-display-group :which-key "Elisp documentation.")
@@ -4341,8 +4331,7 @@ I've:
     (mini-modeline-mode t)
 
     :general
-    (crj-leader-keys
-      "tm" '(crj-toggle-modeline :which-key "Toggle modeline.")))
+    (leader "tm" '(crj-toggle-modeline :which-key "Toggle modeline.")))
 
 #+end_src
 
@@ -4476,10 +4465,6 @@ new features to check out once you do:
   - ~counsel-outline~ for markdown
   - ~counsel-org-heading~ for org
   - ~counsel-imenu~ for prog mode
-
-*** change leader key func name from ~crj-leader-keys~ to just ~leader~
-
-Possibly one-line them any time it's only one command
 
 *** remove old org mode config stuff
 
