@@ -4182,7 +4182,7 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
       "wu" '(winner-undo :which-key "Undo last window setup change.")))
 #+end_src
 
-** Improving Help Commands
+** Improving Help Commands With Helpful
 
 Original description of Emacs From Scratch's equivalent section perfectly sums it up, so I'll let it do so:
 
