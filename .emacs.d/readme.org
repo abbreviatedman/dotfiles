@@ -3120,7 +3120,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 - I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list, which is slightly more efficient on my weird keyboards than 0. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
 - Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :tangle no
   (use-package symex
     :disabled
 
