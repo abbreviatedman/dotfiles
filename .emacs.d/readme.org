@@ -4410,6 +4410,13 @@ And then if ~di_~ should delete all but one line,
 #+end_src
 
 So here's the issue, I suppose. We would probably want ~da_~ to delete all whitespace, which would include the blank lines and the area around it—the newline after the previous code block. ~di_~ would then delete all the
+*** tagedit
+*** restore window configuration and kill Magit buffers on exit
+[[https://www.reddit.com/r/emacs/comments/17af1q5/comment/k5e208o/?share_id=RCKIJthLX9VRYwvUxJM4F&utm_name=androidcss][This reddit comment has what you need!]]
+*** add-project keybinding if you have trouble again with finding projects with project.el
+*** explore origami for folding over evil-vimish fold
+*** find calendar navigation commands (or change them for evil ones)
+*** change default browser to Vivaldi
 *** post on Reddit about:
 - evil replace/exchange/eval/title-case operators
 - Emacs in Vim in Emacs
