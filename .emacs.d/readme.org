@@ -4249,6 +4249,7 @@ A few more additions to the help menu:
 
     (crj-leader-keys
       "hv" '(helpful-variable :which-key "Describe variable.")
+      "hp" '(find-library :which-key "Find Elisp library.")
       "hy" '(shortdoc-display-group :which-key "Elisp documentation.")
       "hB" '(embark-bindings  :which-key "Search active keybindings.")
       "hf" '(helpful-callable :which-key "Describe function.")
