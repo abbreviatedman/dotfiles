@@ -3215,7 +3215,13 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
     :init
-    (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1))))
+    (defun crj--start-lispy ()
+      (lispy-mode 1))
+
+    (general-add-hook '(emacs-lisp-mode-hook
+                        clojure-mode-hook
+                        racket-mode-hook)
+                      #'crj--start-lispy))
 
   (use-package lispyville
     :ghook 'lispy-mode-hook
@@ -3489,6 +3495,20 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
 
     :gfhook #'racket-xp-mode)
 
+#+end_src
+
+****** Clojure
+
+#+begin_src emacs-lisp :lexical no
+  (use-package clojure-mode
+    :init
+    (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode)))
+
+  (use-package clj-refactor)
+
+  (use-package cider)
 #+end_src
 
 ***** CSV
