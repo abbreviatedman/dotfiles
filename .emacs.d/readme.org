@@ -1988,7 +1988,10 @@ RSS might be a great technology? I'm only just getting into it with this package
       :init (lambda () (cd (project-prompt-project-dir)))
       :stop-signal 'quit
       :url (lambda (&rest _args)
-             (concat "http://127.0.0.1:" (number-to-string (car crj--live-server-ports))))))
+             (concat "http://127.0.0.1:" (number-to-string (car crj--live-server-ports)))))
+
+    :general
+    (leader "ap" '(prodigy :which-key "Launch process manager.")))
 #+end_src
 
 *** Org Agenda
