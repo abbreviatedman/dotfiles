@@ -1211,6 +1211,25 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
       "tv" '(evil-visual-char :which-key "Evil visual state.")
       "tV" '(evil-visual-line :which-key "Evil visual line state.")))
 #+end_src
+
+**** Better Words Movement
+
+For reasons I'll go into someday, these ~evil-cleverparens~ word motions are just closer to what you mean when you think of a word than Evil's/Vim's built-in ones.
+
+Additionally, I'm binding the rarely-used ~H~ and ~L~ keys as additional forward/backward word motions, because they're somewhat in my muscle memory from the Lisp keybindings I currently use.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil-cleverparens
+    :general
+    (:states 'normal
+      "W" #'evil-cp-forward-symbol-begin
+      "B" #'evil-cp-backward-symbol-begin
+      "L" #'evil-cp-forward-symbol-begin
+      "H" #'evil-cp-backward-symbol-begin
+      "E" #'evil-cp-forward-symbol-end
+      "gE" #'evil-cp-backward-symbol-end))
+#+end_src
+
 *** Evil Jump-To-Matching For Opening And Closing Delimiters
 
 Normally, Evil jumps between brackets with ~%~. Here's one library for opening that up to things like ~if~ and ~else~ and HTML opening/closing tags and anything else you can imagine/configure.
