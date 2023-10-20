@@ -2725,6 +2725,7 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
     (leader
       "pp" '(project-switch-project :which-key "Switch to new project.")
       "pk" '(project-kill-buffers :which-key "Kill all current project buffers.")
+      "pa" '(project-remember-projects-under :which-key "Remember projects in and under directory.")
       "p," '(project-switch-to-buffer :which-key "Switch buffers in current project.")
       "pd" '(project-dired :which-key "Run dired in current project root.")
       "p." '(project-find-file :which-key "Find file in current project.")
