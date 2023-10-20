@@ -3389,6 +3389,28 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 
   (use-package symex
     :init
+    (defun crj-delete-current-symex ()
+      "Delete the current symex.
+
+  This function adapts a symex function to work outside of Symex Mode.
+  Symex Mode maintains the point at the start of a symex, so this function
+  adjusts for more uncertainty of where point is."
+      (interactive)
+      (when (crj--point-is-past-start-of-thing-p 'sexp)
+        (symex--execute-tree-move (symex-make-move -1 0)))
+      (symex-delete 1))
+
+    (defun crj-delete-previous-symex ()
+      "Delete the previous symex.
+
+  This function adapts a symex function to work outside of Symex Mode.
+  Symex Mode maintains the point at the start of a symex, so this function
+  adjusts for more uncertainty of where point is."
+      (interactive)
+      (when (crj--point-is-past-start-of-thing-p 'sexp)
+        (symex--execute-tree-move (symex-make-move -1 0)))
+      (symex-delete-backwards 1))
+
     (general-setq symex-highlight-p nil
                   symex-quote-prefix-list (list "'" "#'" "`"))
 
@@ -3416,6 +3438,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      :states 'normal
      "H" #'symex-go-backward
      "L" #'symex-go-forward
+     "v" #'crj-delete-current-symex
+     "V" #'crj-delete-previous-symex
      "{" #'symex-join-lines
      "}" #'symex-append-newline
      "(" #'symex-collapse-remaining
