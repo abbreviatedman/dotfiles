@@ -3982,7 +3982,9 @@ Here that all is!
       "h" #'helpful-command)
 
     (general-def (embark-become-file+buffer-map)
-      "d" #'delete-file))
+      "d" #'delete-file)
+
+    (leader "d" '(embark-act :which-key "Launch contextual menu for thing at point.")))
 
   (use-package embark-consult
     :hook
