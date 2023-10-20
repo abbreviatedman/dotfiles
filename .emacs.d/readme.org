@@ -241,6 +241,7 @@ I'm also mapping a new help command in a couple places, so that I can later rema
       "v" '(:ignore t :which-key "Visualize menu.")
       "a" '(:ignore t :which-key "Applications menu.")
       "ac" '(:ignore t :which-key "Calendar menu.")
+      "ap" '(:ignore t :which-key "Process management menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
       "ai" '(:ignore t :which-key "AI menu.")
@@ -1947,6 +1948,45 @@ RSS might be a great technology? I'm only just getting into it with this package
 
     :general
     (leader "ar" '(elfeed :which-key "Launch RSS reader.")))
+#+end_src
+
+*** Process Management With Prodigy
+
+#+begin_src emacs-lisp :lexical no
+  (use-package prodigy
+    :init
+    (general-setq prodigy-completion-system 'default)
+
+    (setq crj--live-server-ports '(3263))
+
+    (defun crj--get-new-live-server-port ()
+      (let ((new-port (1+ (car crj--live-server-ports))))
+        (add-to-list 'crj--live-server-ports new-port)
+        (number-to-string new-port)))
+
+    (defun crj--run-live-server-in-project-root ()
+      "TODO:
+
+  - get current project root
+  - get new port
+  - define new service with the following grabbed dynamically:
+  - :name \"live-server: [project dir]\"
+  - :args include port
+  - :url include port
+
+  Optionally truncate project directory.
+
+  Super optionally make a directory-specific command, but probably not that."
+      (message "check the function's todos!"))
+
+    (prodigy-define-service
+      :name "Web live server in project root."
+      :command "live-server"
+      :args (lambda (&rest _args) (list "--no-browser" (concat "--port=" (crj--get-new-live-server-port))))
+      :init (lambda () (cd (project-prompt-project-dir)))
+      :stop-signal 'quit
+      :url (lambda (&rest _args)
+             (concat "http://127.0.0.1:" (number-to-string (car crj--live-server-ports))))))
 #+end_src
 
 *** Org Agenda
