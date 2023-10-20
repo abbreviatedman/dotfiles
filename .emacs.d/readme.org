@@ -2195,9 +2195,13 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
 
 ***** Our Cloud Save Function
 
-#+begin_src emacs-lisp :lexical no
-  (defun crj-git-cloud-save ()
-    "Adds, commits, and pushes without any further input from the user.
+#+begin_src emacs-lisp :lexical no :tangle no
+  (use-package emacs
+    :init
+    (defun crj-git-cloud-save ()
+      "CURRENTLY BROKEN
+
+  Adds, commits, and pushes without any further input from the user.
 
   Basically a way to use Git as an overpowered cloud save.
 
@@ -4495,6 +4499,7 @@ And then if ~di_~ should delete all but one line,
 
 So here's the issue, I suppose. We would probably want ~da_~ to delete all whitespace, which would include the blank lines and the area around it—the newline after the previous code block. ~di_~ would then delete all the
 *** tagedit
+*** fix git-cloud-save function
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** play with dired-ranger copy-and-paste and dired-dwim-target
