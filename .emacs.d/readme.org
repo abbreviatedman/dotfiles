@@ -2195,13 +2195,11 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
 
 ***** Our Cloud Save Function
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical no
   (use-package emacs
     :init
     (defun crj-git-cloud-save ()
-      "CURRENTLY BROKEN
-
-  Adds, commits, and pushes without any further input from the user.
+      "Adds, commits, and pushes without any further input from the user.
 
   Basically a way to use Git as an overpowered cloud save.
 
@@ -2216,18 +2214,16 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
   Only changes made were:
 
   1. Removing the command to save all open buffers. We /could/ save the visited buffer only, though even that should likely be a discrete operation.
-  2. Removing user input from the commit message altogether. It now composes a commit message using the current projectile project name.
+  2. Removing user input from the commit message altogether. It now composes a commit message using the current project name.
   3. Disabling the pop-up git status window. (It still shows in the minibuffer, as well as the buffer `shell-command-buffer-name'.)"
+      (interactive)
+      (magit-stage-modified)
+      (let ((display-buffer-alist
+             `((,shell-command-buffer-name-async display-buffer-no-window))))
+        (async-shell-command
+         (format "git commit -m \"Update %s.\" && git push" (project-root (project-current t)))))))
 
-    (interactive)
-    (magit-stage-modified)
-    (let
-        ((display-buffer-alist
-          '(shell-command-buffer-name '(#'display-buffer-no-window))))
-      (shell-command
-       (format "git commit -m \"Update %s.\""
-               (project-root (project-current t))))
-      (shell-command "git push")))
+  `((,shell-command-buffer-name-async display-buffer-no-window))
 #+end_src
 
 ***** Some Shortcuts For This Workflow
