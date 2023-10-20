@@ -1881,7 +1881,19 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 #+begin_src emacs-lisp
   (use-package emacs
     :init
+    (defun crj-is-sunday-monday-tuesday-wednesday-thursday (date)
+      "Return `t` if DATE is a Monday, Tuesday, Wednesday, or Thusday.
+
+  For use in agenda buffers like so:
+
+  <%%(crj-is-sunday-monday-tuesday-wednesday-thursday date)>
+
+  It may be helpful to put a timestamp in the heading, if it happens at a specific time."
+    (let ((day-of-week (calendar-day-of-week date)))
+      (member day-of-week '(0 1 2 3))))
+
     (defun crj-agenda () (interactive) (org-agenda t "g"))
+
     (setq org-agenda-start-day nil
           org-agenda-window-setup 'only-window
           org-agenda-files '("~/org-stuff/inbox.org"
