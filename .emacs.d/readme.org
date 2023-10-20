@@ -1191,11 +1191,11 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
 
   It's `evil-delete-backward-char', but for words!"
       (interactive)
-      (when (crj--is-point-past-start-of-thing-p 'word)
+      (when (crj--point-is-past-start-of-thing-p 'word)
         (evil-backward-word-begin))
       (evil-delete-backward-word))
 
-    (defun crj--is-point-past-start-of-thing-p (thing)
+    (defun crj--point-is-past-start-of-thing-p (thing)
       "Returns whether point is past start of THING.
 
   For what THING can be, see `thing-at-point'.
