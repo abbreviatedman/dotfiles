@@ -4562,7 +4562,83 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 #+end_src
 
 ** Config Changes Todos
-*** timers
+*** Save and kill buffer
+
+More old code to revisit and reactivate maybe.
+
+#+begin_src emacs-lisp :lexical no :tangle no
+  (setq crj/immortal-buffer-names '("*scratch*" "#emacs" "*Messages*" shell-command-buffer-name shell-command-buffer-name-async))
+
+  (defun crj/kill-or-bury-current-buffer ()
+    (interactive)
+    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
+        (bury-buffer)
+      (kill-buffer (current-buffer))))
+
+  (defun crj/save-and-kill-or-bury-current-buffer ()
+    (interactive)
+    (save-buffer)
+    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
+        (bury-buffer)
+      (kill-buffer (current-buffer))))
+
+  (map! :leader
+    (:prefix ("b" . "+buffer")
+     :desc "Save file and close buffer."
+     :n "q"
+     #'crj/save-and-kill-or-bury-current-buffer
+     :desc "Kill buffer."
+     :n "d"
+     #'crj/kill-or-bury-current-buffer)
+    (:prefix ("f" . "+file")
+     :desc "Save file and close buffer."
+     :n "q"
+     #'crj/save-and-kill-or-bury-current-buffer))
+#+end_src
+
+*** one shortcut for all in-buffer semantic searches
+
+- Maybe ~SPC s s~ for "search symbol"?
+- Add them to specific mode maps for specific modes.
+- could include:
+  - ~counsel-outline~ for markdown
+  - ~counsel-org-heading~ for org
+  - ~counsel-imenu~ for prog mode
+
+*** remove repeat from Symex movement commands
+[[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
+*** Add Evil Embrace
+
+*** Set Up Debugging With Dap-Mode
+
+Some code and docs to start with from Emacs From Scratch:
+
+[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]]. You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language. Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
+
+#+begin_src emacs-lisp :tangle no
+  (use-package dap-mode
+    Uncomment the config below if you want all UI panes to be hidden by default!
+    :custom
+    (lsp-enable-dap-auto-configure nil)
+    :config
+    (dap-ui-mode 1)
+    :commands dap-debug
+    :config
+    Set up Node debugging
+    (require 'dap-node)
+    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+    Bind `C-c l d` to `dap-hydra` for easy access
+    (general-define-key
+     :keymaps 'lsp-mode-map
+     :prefix lsp-keymap-prefix
+     "d" '(dap-hydra t :wk "debugger")))
+#+end_src
+
+*** proced
+
+*** tagedit
+*** get my custom delete-word-backward and delete-symex-backward functions to save and restore position in word
 *** blank lines/whitespace text object
 
 Could be ~i_~ for leaving one blank line on either side, or ~a_~ for selecting all blank lines. Or ~SPC~ for the object!
@@ -4615,21 +4691,15 @@ And then if ~di_~ should delete all but one line,
 #+end_src
 
 So here's the issue, I suppose. We would probably want ~da_~ to delete all whitespace, which would include the blank lines and the area around it—the newline after the previous code block. ~di_~ would then delete all the
-*** get my custom delete-word-backward and delete-symex-backward functions to save and restore position in word
-*** tagedit
-*** fix git-cloud-save function
-*** add don't-collapse local variable to task list file
-*** remove repeat from Symex movement commands
-[[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** play with dired-ranger copy-and-paste and dired-dwim-target
+*** timers
 *** restore window configuration and kill Magit buffers on exit
 [[https://www.reddit.com/r/emacs/comments/17af1q5/comment/k5e208o/?share_id=RCKIJthLX9VRYwvUxJM4F&utm_name=androidcss][This reddit comment has what you need!]]
-*** add-project keybinding if you have trouble again with finding projects with project.el
-*** explore origami for folding over evil-vimish fold
-*** find calendar navigation commands (or change them for evil ones)
 *** change default browser to Vivaldi
 *** post on Reddit about:
 - evil replace/exchange/eval/title-case operators
+- git-cloud-save
+- Evil setup
 - Emacs in Vim in Emacs
 *** snippets - skeleton or tempo or tempel or yasnippet??
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
@@ -4677,15 +4747,6 @@ new features to check out once you do:
 *** try Combobulate
 *** scroll-on-jump?
 *** one command to prettify source code for markdown or emacs-lisp
-
-*** one shortcut for all in-buffer semantic searches
-
-- Maybe ~SPC s s~ for "search symbol"?
-- Add them to specific mode maps for specific modes.
-- could include:
-  - ~counsel-outline~ for markdown
-  - ~counsel-org-heading~ for org
-  - ~counsel-imenu~ for prog mode
 
 *** remove old org mode config stuff
 
@@ -4825,9 +4886,7 @@ Anything useful here?
 
 *** redo font size to be calculated based on resolution
 
-*** add completion systems earlier so messing up won't mess up my completions!
 *** add way to run other Emacs with same init directory to check our init... maybe starting a different server, or a serverless Emacs?
-*** add minibuffer completion setup early too in case I bork my completions
 *** shortcut to toggle eldoc-mode
 
 *** make sure tabs are set correctly
@@ -5006,35 +5065,7 @@ These might be useful Corfu settings? check them out once I get Eglot going?
 
   #+end_src
 
-*** Add Evil Embrace
-
 *** Add markup mode add-heading-above command
-
-*** Set Up Debugging With Dap-Mode
-
-Some code and docs to start with from Emacs From Scratch:
-
-[[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]]. You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language. Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
-
-#+begin_src emacs-lisp :tangle no
-  (use-package dap-mode
-    Uncomment the config below if you want all UI panes to be hidden by default!
-    :custom
-    (lsp-enable-dap-auto-configure nil)
-    :config
-    (dap-ui-mode 1)
-    :commands dap-debug
-    :config
-    Set up Node debugging
-    (require 'dap-node)
-    (dap-node-setup) ;; Automatically installs Node debug adapter if needed
-
-    Bind `C-c l d` to `dap-hydra` for easy access
-    (general-define-key
-     :keymaps 'lsp-mode-map
-     :prefix lsp-keymap-prefix
-     "d" '(dap-hydra t :wk "debugger")))
-#+end_src
 
 *** Set Up Eshell
 
@@ -5206,43 +5237,7 @@ Some old code to revisit and maybe put back into play!
   (setq doom-scratch-dir "~/Documents/work/playground/")
 #+end_src
 
-*** Save and kill buffer
-
-More old code to revisit and reactivate maybe.
-
-#+begin_src emacs-lisp :lexical no :tangle no
-  (setq crj/immortal-buffer-names '("*scratch*" "#emacs" "*Messages*" shell-command-buffer-name shell-command-buffer-name-async))
-
-  (defun crj/kill-or-bury-current-buffer ()
-    (interactive)
-    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
-        (bury-buffer)
-      (kill-buffer (current-buffer))))
-
-  (defun crj/save-and-kill-or-bury-current-buffer ()
-    (interactive)
-    (save-buffer)
-    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
-        (bury-buffer)
-      (kill-buffer (current-buffer))))
-
-  (map! :leader
-    (:prefix ("b" . "+buffer")
-     :desc "Save file and close buffer."
-     :n "q"
-     #'crj/save-and-kill-or-bury-current-buffer
-     :desc "Kill buffer."
-     :n "d"
-     #'crj/kill-or-bury-current-buffer)
-    (:prefix ("f" . "+file")
-     :desc "Save file and close buffer."
-     :n "q"
-     #'crj/save-and-kill-or-bury-current-buffer))
-#+end_src
-
 *** mu4e
-
-*** proced
 
 *** Emacs as $EDITOR
 
@@ -5344,8 +5339,6 @@ Yup, more old code I used to use.
 *** org character marker toggle
 
 *** ibuffer filters
-
-*** kill all terms
 
 *** jest mode
 
@@ -5573,8 +5566,6 @@ Some old Elisp code, might be useful?
 #+end_src
 
 *** check if org tangle now does what you want from your Doom Emacs config
-
-*** automatically or at least easily add current project
 
 *** rename buffers
 
