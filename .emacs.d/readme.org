@@ -1153,6 +1153,64 @@ Another efficient text editing library. This one exchanges two bits of text in a
      "gx" '(evil-exchange :which-key "Exchange text objects.")))
 #+end_src
 
+*** Evil Word Wackiness
+I think I have a lot more to write here about how weird Evil's word motions are. We don't use them as often as other text objects, but while they're basic, I think the reason we avoid them is that there are some serious flaws in their design. Like I said, I'll write some more on them, for sure.
+
+In the meantime, here are some fixes!
+
+**** Quick Word Deletion
+
+Some surprisingly useful motions I wrote one evening. They're like Evil's `x` and `X`, but for words!
+
+Variations on these also come in handy quite often in Lisps (for which there are symex-oriented versions somewhere below).
+
+I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many other long-time Vim/Evil users—don't use the visual modes very often. (And I placed them far away on a distant binding for the rare times I do need them.)
+
+#+begin_src emacs-lisp :lexical no
+  (use-package evil
+    :init
+    (defun crj-delete-current-word ()
+      "Delete current word.
+
+  It's `evil-delete-char', but for words!
+
+  This one's a bit hacky and probably has a ton of edge cases—most obviously,
+  this won't work if it's the last word in the document.
+
+  At some point I'll see if the edge cases ever really come up, in which case
+  this will get refactored."
+      (interactive)
+      (evil-forward-word-begin)
+      (crj-delete-previous-word))
+
+    (defun crj-delete-previous-word ()
+      "Delete previous word.
+
+  It's `evil-delete-backward-char', but for words!"
+      (interactive)
+      (when (crj--is-point-past-start-of-thing-p 'word)
+        (evil-backward-word-begin))
+      (evil-delete-backward-word))
+
+    (defun crj--is-point-past-start-of-thing-p (thing)
+      "Returns whether point is past start of THING.
+
+  For what THING can be, see `thing-at-point'.
+
+  This function answers the age-old question:
+
+  \"Was I just in the middle of something?\""
+      (not (eq (point) (car (bounds-of-thing-at-point thing)))))
+
+    :general
+    (:states 'normal
+      "v"  #'crj-delete-current-word
+      "V" #'crj-delete-previous-word)
+
+    (leader
+      "tv" '(evil-visual-char :which-key "Evil visual state.")
+      "tV" '(evil-visual-line :which-key "Evil visual line state.")))
+#+end_src
 *** Evil Jump-To-Matching For Opening And Closing Delimiters
 
 Normally, Evil jumps between brackets with ~%~. Here's one library for opening that up to things like ~if~ and ~else~ and HTML opening/closing tags and anything else you can imagine/configure.
@@ -3373,32 +3431,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "M-y" #'symex-yank-remaining
      "C-'" #'symex-cycle-quote
      "C-," #'symex-cycle-unquote))
-
-  (use-package emacs
-    :init
-    (evil-define-operator crj-evil-delete-current-word (beg end type register)
-      :motion evil-a-WORD
-      (interactive "<R><x>")
-      (evil-delete beg end type register))
-
-    (defun crj-delete-current-word ()
-      (interactive)
-      (evil-forward-word-begin)
-      (crj-delete-previous-word))
-
-    (defun crj-delete-previous-word ()
-      (interactive)
-      (when (crj--in-middle-of-thing-p 'word)
-        (evil-backward-WORD-begin))
-      (evil-delete-backward-word))
-
-    (defun crj--in-middle-of-thing-p (thing)
-      (not (eq (point) (car (bounds-of-thing-at-point thing)))))
-
-    :general
-    (:states 'normal
-     "v" #'crj-evil-delete-current-word
-     "V" #'crj-delete-previous-word))
 #+end_src
 
 ******** Code To Test Lisp-Editing Systems On
