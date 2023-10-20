@@ -4498,8 +4498,10 @@ And then if ~di_~ should delete all but one line,
 #+end_src
 
 So here's the issue, I suppose. We would probably want ~da_~ to delete all whitespace, which would include the blank lines and the area around it—the newline after the previous code block. ~di_~ would then delete all the
+*** get my custom delete-word-backward and delete-symex-backward functions to save and restore position in word
 *** tagedit
 *** fix git-cloud-save function
+*** add don't-collapse local variable to task list file
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** play with dired-ranger copy-and-paste and dired-dwim-target
