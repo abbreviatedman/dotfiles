@@ -435,7 +435,9 @@ Org is built into Emacs, but you probably want the newest version.
 
 Let's make Org keybindings a bit better.
 
-***** Todos
+***** Org Tasks
+
+Coming soon perhaps, though I'm pretty happy with ~evil-org~'s management of todo keybindings right now.
 
 ***** Searching Org Documents
 
