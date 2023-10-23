@@ -5,8 +5,8 @@ clear Control
 ! Make the Caps Lock key a Control key
 keycode 66 = Control_L
 
-! Make the Left Control key a Compose key
-keycode 135 = Multi_key
-
 ! Update the Control modifier to include the new Control_L mapping
 add Control = Control_L Control_R
+
+! Make the Menu key a Compose key
+keycode 135 = Multi_key
