@@ -4629,7 +4629,7 @@ More old code to revisit and reactivate maybe.
 - [[https://www.lucacambiaghi.com/vanilla-emacs/readme.html]]
 - [[https://config.daviwil.com/emacs]]
 *** make sure we're always fullscreened
-~(add-to-list 'default-frame-alist '(fullscreen . maximized))~
+this might do it: ~(add-to-list 'default-frame-alist '(fullscreen . maximized))~
 *** Set Up Debugging With Dap-Mode
 
 Some code and docs to start with from Emacs From Scratch:
