@@ -1953,7 +1953,17 @@ RSS might be a great technology? I'm only just getting into it with this package
     (leader "ar" '(elfeed :which-key "Launch RSS reader.")))
 #+end_src
 
-*** Process Management With Prodigy
+*** Process Management
+
+**** Monitor System Processes With Proced
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (leader "apm" '(proced :which-key "Run system process manager.")))
+#+end_src
+
+**** Create and Monitor Custom Commands With Prodigy
 
 #+begin_src emacs-lisp :lexical no
   (use-package prodigy
@@ -1968,31 +1978,22 @@ RSS might be a great technology? I'm only just getting into it with this package
         (number-to-string new-port)))
 
     (defun crj--run-live-server-in-project-root ()
-      "TODO:
-
-  - get current project root
-  - get new port
-  - define new service with the following grabbed dynamically:
-  - :name \"live-server: [project dir]\"
-  - :args include port
-  - :url include port
-
-  Optionally truncate project directory.
-
-  Super optionally make a directory-specific command, but probably not that."
-      (message "check the function's todos!"))
-
-    (prodigy-define-service
-      :name "Web live server in project root."
-      :command "live-server"
-      :args (lambda (&rest _args) (list "--no-browser" (concat "--port=" (crj--get-new-live-server-port))))
-      :init (lambda () (cd (project-prompt-project-dir)))
-      :stop-signal 'quit
-      :url (lambda (&rest _args)
-             (concat "http://127.0.0.1:" (number-to-string (car crj--live-server-ports)))))
+      "Run web live server in the current project's root directory."
+      (interactive)
+      (let ((port (crj--get-new-live-server-port))
+            (dir (project-root (project-current t)))
+            (name (concat "Live server for " (project-name (project-current nil)))))
+        (message (format "port: %s, dir: %s, name: %s" port dir name))
+        (prodigy-define-service
+          :name name
+          :command "live-server"
+          :args (list "--no-browser" (concat "--port=" port))
+          :init (lambda () (cd dir))
+          :stop-signal 'quit
+          :url (concat "http://127.0.01:" port))))
 
     :general
-    (leader "ap" '(prodigy :which-key "Launch process manager.")))
+    (leader "app" '(prodigy :which-key "Launch custom process manager.")))
 #+end_src
 
 *** Org Agenda
@@ -4597,7 +4598,7 @@ More old code to revisit and reactivate maybe.
      :n "q"
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
-*** Add prodigy npm start setup.
+*** add npm start prodigy command
 *** one shortcut for all in-buffer semantic searches
 
 - Maybe ~SPC s s~ for "search symbol"?
