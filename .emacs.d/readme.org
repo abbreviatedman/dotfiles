@@ -4565,6 +4565,11 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 #+end_src
 
 ** Config Changes Todos
+*** restclient.el and ob-restclient
+*** clean up config file and add better commentary
+*** remove repeat from Symex movement commands
+[[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
+*** snippets - skeleton or tempo or tempel or yasnippet??
 *** Save and kill buffer
 
 More old code to revisit and reactivate maybe.
@@ -4608,13 +4613,10 @@ More old code to revisit and reactivate maybe.
   - ~counsel-org-heading~ for org
   - ~counsel-imenu~ for prog mode
 
-*** remove repeat from Symex movement commands
-[[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** Add Evil Embrace
-*** Look through [[https://github.com/patrickt/emacs][this repo]] for any basic customizations to the defaults you've missed
+*** Look through [[https://github.com/patrickt/emacs][this repo]] for any basic customizations to the defaults you've missed (or other things!)
 *** make sure we're always fullscreened
 ~(add-to-list 'default-frame-alist '(fullscreen . maximized))~
-*** restclient.el and ob-restclient
 *** Set Up Debugging With Dap-Mode
 
 Some code and docs to start with from Emacs From Scratch:
@@ -4641,73 +4643,18 @@ Some code and docs to start with from Emacs From Scratch:
      "d" '(dap-hydra t :wk "debugger")))
 #+end_src
 
-*** proced
-
 *** tagedit
 *** get my custom delete-word-backward and delete-symex-backward functions to save and restore position in word
-*** blank lines/whitespace text object
-
-Could be ~i_~ for leaving one blank line on either side, or ~a_~ for selecting all blank lines. Or ~SPC~ for the object!
-
-There's some weird stuff around carriage returns, though... For example, the ~c~ and ~d~ actions usually mirror each other. If you want to ~ciw~, it's the exact space that you're affecting when you ~diw~. Same for ~C~ and ~D~. But! ~dd~ affects the line /and its carriage return/, while ~cc~ affects just the line itself.
-
-One way to visualize this is to do a change, and an escape, without writing anything. In /most/ cases, this is the exact same thing as deleting. ~ciw<ESC>~ will do the same thing as ~diw~. Same for many other text objects, and things like ~C<ESC>~ and ~D~. But it does NOT do the same for ~cc<ESC>~ and ~dd~. ~dd~ includes the carriage return.
-
-Another way to visualize this is with actual visual line state. Try typing ~V~ to select the line and enter this state. ~c<ESC>~ from here will clear out the line but not the carriage return, while ~d~ from there will delete the line and its carriage return.
-
-~y~ has the same behavior as ~d~ here, by the way! It includes the carriage return too, which is why ~yyp~ will copy the current line down to the line below it, not append the line to itself, like it would if it acted like ~c~.
-
-So there's a couple of different ways we could go with whether to include carriage returns or not, and it's especially problematic when your text object is pretty much exclusively carriage returns! We could:
-
-1. Just have a different behavior with ~c~ and ~d~ and ~y~. They act on different areas, but have the behavior we might expect
-2. Have all the areas they act on be consistent, even if it leads to some weird behavior... when you come right down to it, ~cc~ letting you change the line /and/ bringing another line up would feel really strange!
-3. Related to #1, we arrange inner and outer selections in such a way that even though they're kinda weird if you think about what "inside" or "aorund" a whitespace blocks means (what /does/ that mean?? I guess that's what we're talking about here), they mimic the behavior we'd expect.
-
-I don't think I'm interested in #2 overall. Let's explore #3 first.
-
-#+begin_src emacs-lisp :lexical no :tangle no
-  (setq value 3)
-
-  |
-
-
-  (setq other-value 5)
-#+end_src
-
-With the cursor at point, it /feels/ like ~da_~ should delete all blank lines. So ~va_~ would select all lines from one pipe to another, and
-
-#+begin_src emacs-lisp :lexical no :tangle no
-  (setq value 3)
-  |
-
-
-  |
-  (setq other-value 5)
-#+end_src
-
-And then if ~di_~ should delete all but one line,
-
-#+begin_src emacs-lisp :lexical no :tangle no
-  (setq value 3)
-  |
-
-
-  |
-  (setq other-value 5)
-#+end_src
-
-So here's the issue, I suppose. We would probably want ~da_~ to delete all whitespace, which would include the blank lines and the area around it—the newline after the previous code block. ~di_~ would then delete all the
 *** play with dired-ranger copy-and-paste and dired-dwim-target
 *** timers
 *** restore window configuration and kill Magit buffers on exit
 [[https://www.reddit.com/r/emacs/comments/17af1q5/comment/k5e208o/?share_id=RCKIJthLX9VRYwvUxJM4F&utm_name=androidcss][This reddit comment has what you need!]]
-*** change default browser to Vivaldi
 *** post on Reddit about:
 - evil replace/exchange/eval/title-case operators
 - git-cloud-save
-- Evil setup
+- Evil word setup
+- Evil lisp setup
 - Emacs in Vim in Emacs
-*** snippets - skeleton or tempo or tempel or yasnippet??
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
 *** explore hippie-expand
 *** add general's tools like gsetq and general-add-hook to clean up my config code
