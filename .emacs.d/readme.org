@@ -449,7 +449,24 @@ Let's make Org keybindings a bit better.
 
 ***** Org Tasks
 
-Coming soon perhaps, though I'm pretty happy with ~evil-org~'s management of todo keybindings right now.
+Configuring how we manage our tasks using Org Mode.
+
+****** Scheduling
+
+Some Evil keybindings for handling scheduling. Although I got used to the built-in keybindings enough that I may not use these that much!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org
+    :general
+    (leader
+      "mcs" '(org-schedule :which-key "Add schedule to headline.")
+      "mcd" '(org-deadline :which-key "Add deadline to headline.")
+      "mct" '(org-timestamp :which-key "Add timestamp to headline.")
+      "mck" '(org-timestamp-up :which-key "Increment timestamp portion at point.")
+      "mcj" '(org-timestamp-down :which-key "Decrement timestamp portion at point.")
+      "mcK" '(org-timestamp-up-day :which-key "Increment timestamp day portion.")
+      "mcJ" '(org-timestamp-down-day :which-key "Decrement timestamp day portion.")))
+#+end_src
 
 ***** Searching Org Documents
 
