@@ -978,7 +978,7 @@ Also added some good Evil-y movement bindings, as you can see at the bottom.
 
     :general
     (:keymaps 'org-mode-map
-     :states 'normal
+     :states 'insert
      "RET" #'evil-org-return)
 
     (:keymaps 'org-mode-map :states '(motion normal visual)
