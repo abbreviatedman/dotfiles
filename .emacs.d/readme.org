@@ -229,6 +229,7 @@ I'm also mapping a new help command in a couple places, so that I can later rema
       "h" '(:keymap help-map :which-key "Help menu.")
       "w" '(evil-window-map :which-key "Window menu.")
       "m" '(:ignore t :which-key "Markup menu.")
+      "mc" '(:ignore t :which-key "Markup clock menu.")
       "i" '(:ignore t :which-key "Insert menu.")
       "ic" '(:ignore t :which-key "Insert cursor menu.")
       "l" '(:ignore t :which-key "Lisp menu.")
@@ -695,7 +696,10 @@ Literate programming for fun and profit. Or... at least, for fun.
           org-pomodoro-format "P%s"
           org-pomodoro-time-format "%m"
           org-pomodoro-long-break-format "L~%s"
-          org-pomodoro-short-break-format "S~%s"))
+          org-pomodoro-short-break-format "S~%s")
+
+    :general
+    (leader "mcp" '(org-pomodoro :which-key "Toggle Org Pomodoro time tracking.")))
 #+end_src
 
 *** Markdown
