@@ -4611,7 +4611,10 @@ More old code to revisit and reactivate maybe.
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** Add Evil Embrace
-
+*** Look through [[https://github.com/patrickt/emacs][this repo]] for any basic customizations to the defaults you've missed
+*** make sure we're always fullscreened
+~(add-to-list 'default-frame-alist '(fullscreen . maximized))~
+*** restclient.el and ob-restclient
 *** Set Up Debugging With Dap-Mode
 
 Some code and docs to start with from Emacs From Scratch:
