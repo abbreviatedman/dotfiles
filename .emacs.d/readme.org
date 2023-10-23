@@ -243,6 +243,7 @@ I'm also mapping a new help command in a couple places, so that I can later rema
       "v" '(:ignore t :which-key "Visualize menu.")
       "a" '(:ignore t :which-key "Applications menu.")
       "ac" '(:ignore t :which-key "Calendar menu.")
+      "am" '(:ignore t :which-key "Music menu.")
       "ap" '(:ignore t :which-key "Process management menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
@@ -1975,8 +1976,8 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
                             ("SomaFM - Secret Agent" . "https://somafm.com/secretagent.pls")))
     :general
     (leader
-      "aM" '(eradio-play :which-key "Play internet radio.")
-      "am" '(eradio-stop :which-key "Stop playing internet radio.")))
+      "amr" '(eradio-play :which-key "Play internet radio.")
+      "amR" '(eradio-stop :which-key "Stop playing internet radio.")))
 #+end_src
 
 *** RSS with Elfeed
