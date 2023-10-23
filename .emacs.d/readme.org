@@ -370,12 +370,22 @@ Which key shows you a constantly updating list of what keys you can press next a
 
 ** Markup Documents
 
+*** General Markup Settings
+
 Searching a markup outline.
 
 #+begin_src emacs-lisp
   (use-package emacs
     :general
     (leader "m." '(consult-outline :which-key "Search markup outline.")))
+#+end_src
+
+This is an Org Mode command, but it works everywhere!
+
+#+begin_src emacs-lisp :lexical no
+  (use-package org
+    :general
+    (leader "ml" '(org-list-repair :which-key "Repair numbered list.")))
 #+end_src
 
 *** Emmet Abbreviations
