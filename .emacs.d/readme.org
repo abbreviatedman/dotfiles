@@ -1486,6 +1486,16 @@ These are some sane defaults for the UI.
 
 If you're just getting started in Emacs, the menu bar might be helpful so you can remove the ~(menu-bar-mode -1)~ line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the ~describe~ functions, ~which-key~, and, when you et there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
 
+*** File Management
+
+There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
+
+#+begin_src emacs-lisp :lexical no
+  (use-package sudo-edit
+    :general
+    (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
+#+end_src
+
 *** Fonts
 
 First, some definitions of the fonts I use. For Emacs in code, eventually, and for you—and future me!—in this document.
