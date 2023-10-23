@@ -4596,7 +4596,7 @@ More old code to revisit and reactivate maybe.
      :n "q"
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
-
+*** Add prodigy npm start setup.
 *** one shortcut for all in-buffer semantic searches
 
 - Maybe ~SPC s s~ for "search symbol"?
