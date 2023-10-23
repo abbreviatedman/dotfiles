@@ -4624,7 +4624,10 @@ More old code to revisit and reactivate maybe.
   - ~counsel-imenu~ for prog mode
 
 *** Add Evil Embrace
-*** Look through [[https://github.com/patrickt/emacs][this repo]] for any basic customizations to the defaults you've missed (or other things!)
+*** Look through some other config repos for inspiration
+- [[https://github.com/patrickt/emacs]]
+- [[https://www.lucacambiaghi.com/vanilla-emacs/readme.html]]
+- [[https://config.daviwil.com/emacs]]
 *** make sure we're always fullscreened
 ~(add-to-list 'default-frame-alist '(fullscreen . maximized))~
 *** Set Up Debugging With Dap-Mode
