@@ -4645,6 +4645,8 @@ More old code to revisit and reactivate maybe.
      :n "q"
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
+*** Org vanilla C-c keybindings for clocking/timestamp management
+*** org evil keybindings for clocking
 *** add npm start prodigy command
 *** one shortcut for all in-buffer semantic searches
 
