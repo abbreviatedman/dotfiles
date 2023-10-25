@@ -31,14 +31,23 @@ I'm basing this new config on the Emacs from Scratch repo, which is a lot more s
 
 So that's where we started and where we're going. Let's look at some code!
 
+** Fixing Emacs Lisp
+
+I mean, I'm just adding lexical scope here. But it's an important change!
+
+#+NAME: lexical-binding
+#+begin_src emacs-lisp :lexical yes
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
 ** Literate Config Setup
 
 Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of commentary. The document you’re reading right now is an example of literate programming, often called a literate config when its purpose is configuring apps. All of the code blocks in this document are “tangled”, which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented… there’s always a reason for a block of code to exist. The documentation can’t fall behind the code—the documentation /is/ the code.
 
 You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, its code is automatically tangled to the appropriate code files. It’s pretty sweet!
 
-#+begin_src emacs-lisp
-  ;;; -*- lexical-binding: t -*-
+#+NAME: tangle-on-save
+#+begin_src emacs-lisp :lexical yes
   (defun efs--org-babel-tangle-config ()
     "Automatically tangle our Emacs.org config file when we save it. Credit to Emacs From Scratch for this one!"
     (when (string-equal (buffer-file-name)
@@ -54,7 +63,8 @@ You can read more on this subject… and I’ll probably write more. But in the 
 
 I usually want to see the startup log first, and I'm tired of manually switching to it.
 
-#+begin_src emacs-lisp
+#+NAME: start-with-messages
+#+begin_src emacs-lisp :lexical yes
   (switch-to-buffer "*Messages*")
 #+end_src
 
@@ -66,7 +76,8 @@ Emacs has a built in package manager, but it doesn't make it easy to automatical
 
 Let's install ~straight~.
 
-#+begin_src emacs-lisp
+#+NAME: bootstrap-straight
+#+begin_src emacs-lisp :lexical yes
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -83,20 +94,23 @@ Let's install ~straight~.
 
 And turn off the built-in package manager. (This needs to go in ~early-init.el~, but I can tangle it to there from this document with a header arg, which you can see if you're looking at this document as a raw ~org-mode~ file. If that sounds like a whole thing, well... it's also not terribly important detail! But I included it anyway! Not sure why!)
 
+#+NAME: turn-off-package
 #+begin_src emacs-lisp :tangle early-init.el
 (setq package-enable-at-startup nil)
 #+end_src
 
 Use ~straight~ to install ~use-package~, with a quick tweak to add its declarations to ~imenu~.
 
-#+begin_src emacs-lisp
+#+NAME: use-package-imenu-integration
+#+begin_src emacs-lisp :lexical yes
   (setq use-package-enable-imenu-support t)
   (straight-use-package 'use-package)
 #+end_src
 
 Tell ~use-package~ to install packages using ~straight~ whenever I declare a ~use-package~ block.
 
-#+begin_src emacs-lisp
+#+NAME: use-package-straight-integration
+#+begin_src emacs-lisp :lexical yes
 (use-package straight
   :custom
   (straight-use-package-by-default t))
@@ -114,7 +128,8 @@ The only extra step necessary is that, because this file is actually an org docu
 
 Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
 
-#+begin_src emacs-lisp
+#+NAME: start-emacs-server
+#+begin_src emacs-lisp :lexical yes
   (require 'server)
   (unless (server-running-p)
     (server-start))
@@ -124,7 +139,8 @@ Running an Emacs server means that every single Emacs frame (or "window" in oper
 
 Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: use-emacs-as-system-wide-editor-within-emacs-shells
+#+begin_src emacs-lisp :lexical yes
   (use-package with-editor
     :init
     (require 'compat)
@@ -143,7 +159,8 @@ This isn't a terribly important package, but it should be loaded before most oth
 
 TODO can we load this in another order?
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: remove-minor-modes-from-mode-line
+#+begin_src emacs-lisp :lexical yes
   (use-package diminish)
 #+end_src
 
@@ -157,7 +174,8 @@ Before we even get to the keybindings themselves, let's set up a good Vimmish sy
 
 We can use ~general-create-definer~ to define a pair of leader keys. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
 
-#+begin_src emacs-lisp
+#+NAME: define-leader-key
+#+begin_src emacs-lisp :lexical yes
   (use-package general
     :init
     (general-create-definer leader
@@ -170,7 +188,8 @@ This code defines a /function/ called ~leader~ that we can use from now on to de
 
 We can now very easily define another level of keybinding. We want ~SPC f~ to activate commands that have to do with files—thus the ~f~.
 
-#+begin_src emacs-lisp
+#+NAME: add-files-menu
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader "f" '(:ignore t :which-key "Files Menu")))
@@ -180,7 +199,8 @@ From now on, when you press the user presses the spacebar (or ~M-SPC~) and then 
 
 Let's define a few commands that open specific commonly accessed files as examples, and then bind them to keys using this system.
 
-#+begin_src emacs-lisp
+#+NAME:commands-for-common-file-access
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq org-directory "~/org-stuff")
@@ -217,7 +237,8 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
 
 I'm also mapping a new help command in a couple places, so that I can later remap ~C-h~ to deleting a character.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: menus
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq embark-help-key "C-S-h")
@@ -269,7 +290,8 @@ Let's see some examples!
 
 The following binds ~SPC f s~ to save a file. It's nice and mnemonic, as well as just three quick presses.
 
-#+begin_src emacs-lisp
+#+NAME: file-saving-keybinding
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader "fs" '(save-buffer :which-key "Save current buffer.")))
@@ -281,7 +303,8 @@ To see a good example of a menu with many commands in it, see the section on Hel
 
 You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's good not to bury it in a menu.
 
-#+begin_src emacs-lisp
+#+NAME: open-or-create-file-keybinding
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader "." '(find-file :which-key "Open or create file.")))
@@ -289,7 +312,8 @@ You don't always have to have commands in a deep hierarchy of sections. Here is 
 
 I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
 
-#+begin_src emacs-lisp
+#+NAME: common-emacs-keybindings
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (leader
@@ -303,7 +327,8 @@ I think you get the basics—as I did with learning and writing this section! Le
 
 And adding some buffer commands, including a custom one.
 
-#+begin_src emacs-lisp
+#+NAME: common-buffer-command-keybindings
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defconst crj--immortal-buffer-names '("*scratch*"
@@ -330,9 +355,12 @@ And adding some buffer commands, including a custom one.
 
 *** Or Maybe Redo Keybindings To Be More Readable?
 
-Check out this (useful!) keybinding.
+What makes keybindings readable?
 
-#+begin_src emacs-lisp :tangle no
+Well, check out this (useful!) keybinding:
+
+#+NAME: just-one-space-keybinding
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (:states 'insert
@@ -341,7 +369,8 @@ Check out this (useful!) keybinding.
 
 See the <S-backspace> mapping? Well, it took me a good while to find the right way to write shift-backspace in the same syntax as the rest of it, and in the process, I happened upon this alternate syntax:
 
-#+begin_src emacs-lisp
+#+NAME: just-one-space-alternate-keybinding
+#+begin_src emacs-lisp :tangle no :lexical yes
   (use-package emacs
     :general
     (:states 'insert
@@ -356,7 +385,8 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
 
 Which key shows you a constantly updating list of what keys you can press next and what commands or menus they'll activate. It's helpful when you can't remember a shortcut, or even just when you want to explore what commands are under a certain menu.
 
-#+begin_src emacs-lisp
+#+NAME: which-key
+#+begin_src emacs-lisp :lexical yes
   (use-package which-key
     :diminish 'which-key-mode
 
@@ -376,7 +406,8 @@ Which key shows you a constantly updating list of what keys you can press next a
 
 Searching a markup outline.
 
-#+begin_src emacs-lisp
+#+NAME: markup-search-keybinding
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader "m." '(consult-outline :which-key "Search markup outline.")))
@@ -384,7 +415,8 @@ Searching a markup outline.
 
 This is an Org Mode command, but it works everywhere!
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: markup-repair-numbered-list-keybinding
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :general
     (leader "ml" '(org-list-repair :which-key "Repair numbered list.")))
@@ -396,7 +428,8 @@ These abbreviations are a great tool for HTML, to the point where they're built 
 
 If you don't know at least the simple Emmet abbreviations, and you write HTML... man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: emmet-abbreviations
+#+begin_src emacs-lisp :lexical yes
   (use-package emmet-mode
     :ghook
     'sgml-mode-hook
@@ -421,13 +454,15 @@ As Emacs From Scratch put it:
 
 Org is built into Emacs, but you probably want the newest version.
 
-#+begin_src emacs-lisp
+#+NAME: newest-org-mode-version
+#+begin_src emacs-lisp :lexical yes
   (use-package org)
 #+end_src
 
 **** Basic Setup
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-basic-setup-1
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :init
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
@@ -456,7 +491,8 @@ Configuring how we manage our tasks using Org Mode.
 
 Some Evil keybindings for handling scheduling. Although I got used to the built-in keybindings enough that I may not use these that much!
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-scheduling-keybindings
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :general
     (leader
@@ -473,7 +509,8 @@ Some Evil keybindings for handling scheduling. Although I got used to the built-
 
 The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
 
-#+begin_src emacs-lisp
+#+NAME: org-mode-headings-search-keybinding
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :general
     (leader "m/" '(consult-org-heading :which-key "Search current headings.")))
@@ -483,7 +520,8 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 
 The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
-#+begin_src emacs-lisp
+#+NAME: org-mode-better-font-faces
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :init
     (defun my/buffer-face-mode-variable ()
@@ -558,7 +596,8 @@ Emacs' From Scratch's Commentary (this is one of the areas of my config I have e
 This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates. There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
 #+END_QUOTE
 
-#+begin_src emacs-lisp
+#+NAME: org-mode-basic-setup-2
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :init
     (setq org-link-descriptive nil)
@@ -590,7 +629,8 @@ Emacs From Scratch's commentary on this:
 [[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control. Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
 #+END_QUOTE
 
-#+begin_src emacs-lisp
+#+NAME: org-mode-nicer-bullets
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode)
     :custom
@@ -607,7 +647,8 @@ Org mode can export to other formats—probably its strongest feature.
 
 Most of this is pretty standard, but I also do have my own CSS to make exporting a little better. It's dead simple, and I'm sure I will change it if I start exporting to HTML more seriously.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-export-settings
+#+begin_src emacs-lisp :lexical yes
   (use-package org
     :init
     (setq org-html-special-string-regexps nil
@@ -624,7 +665,8 @@ Most of this is pretty standard, but I also do have my own CSS to make exporting
 
 Org doesn't have at least one format I like using: Github Flavored Markdown. So let's add that with a package.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-export-gfm
+#+begin_src emacs-lisp :lexical yes
   (use-package ox-gfm)
 #+end_src
 
@@ -632,7 +674,8 @@ Org doesn't have at least one format I like using: Github Flavored Markdown. So 
 
 Org Mode is great at exporting to other formats, but other formats usually don't export to Org. And there's no built-in way to do it, weirdly. So! Package time.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-import
+#+begin_src emacs-lisp :lexical yes
   (use-package org-pandoc-import
     :straight (:host github
                :repo "tecosaur/org-pandoc-import"
@@ -643,14 +686,16 @@ Org Mode is great at exporting to other formats, but other formats usually don't
 
 Literate programming for fun and profit. Or... at least, for fun.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-code-editing-and-evaluation
+#+begin_src emacs-lisp :lexical yes
   (use-package ob-racket
     :straight (:host github :repo "DEADB17/ob-racket"))
 
   (use-package emacs
     :init
-    (setq org-confirm-babel-evaluate nil
-          org-src-window-setup 'current-window)
+    (general-setq org-confirm-babel-evaluate nil
+                  org-src-window-setup 'current-window
+                  org-babel-default-header-args:elisp '((:lexical . "yes")))
 
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -697,7 +742,8 @@ Literate programming for fun and profit. Or... at least, for fun.
 
 **** Pomodoro Task Management
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-pomodoro
+#+begin_src emacs-lisp :lexical yes
   (use-package org-pomodoro
     :init
     (dolist (player-args-setting '(org-pomodoro-start-sound-args
@@ -741,7 +787,8 @@ Let's see if we can hit these quickly. We:
 
 And we're done at a mere 58 lines of code! (Though... again, I can probably simplify my little custom add-a-heading function.)
 
-#+begin_src emacs-lisp
+#+NAME: markdown-mode
+#+begin_src emacs-lisp :lexical yes
   (use-package markdown-mode
     :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
 
@@ -808,7 +855,8 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
 
 The ugly-but-fully-featured markup language.
 
-#+begin_src emacs-lisp
+#+NAME: html-mode
+#+begin_src emacs-lisp :lexical yes
   (use-package web-mode
     :commands (web-mode)
 
@@ -829,7 +877,8 @@ Info Mode is the special mode Emacs uses for manuals.
 
 Only making one change so far: removing the shadowing of my leader key.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: info-mode
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :after evil
     :init
@@ -845,7 +894,8 @@ Time to spend a vast amount of time thinking through Vim-style keybindings!
 
 Before we get to the Evil mode setup, this is a small function I wrote to transpose characters with one Vimmish atomic action. It's the first thing here in Evil Mode because, at some point, I want to get into why this is a very Vimmish function, since it might serve as a good introduction to this section.
 
-#+begin_src emacs-lisp
+#+NAME: evil-transpose-chars
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj-evil-transpose-chars ()
@@ -877,7 +927,8 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 
 A title-case operator!
 
-#+begin_src emacs-lisp
+#+NAME: evil-title-case-operator
+#+begin_src emacs-lisp :lexical yes
   (use-package evil
     :config
     (evil-define-operator evil-title-case (beg end type)
@@ -895,17 +946,15 @@ A title-case operator!
 
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using ~describe-variable~ to see what they do and what their possible values are!
 
-#+begin_src emacs-lisp
+#+NAME: evil-mode-configuration
+#+begin_src emacs-lisp :lexical yes
   (use-package evil
-    :diminish 'subword-mode
-
     :init
     (defun crj--escape-plus ()
       (evil-ex-nohighlight))
 
     (advice-add 'evil-force-normal-state :after #'crj--escape-plus)
 
-    (global-subword-mode)
     (setq evil-want-integration t
           evil-want-keybinding nil
           evil-ex-search-persistent-highlight t
@@ -950,7 +999,8 @@ This library provides Evil Mode bindings for non-standard buffers, e.g. Magit.
 
 I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more mnemonic to me. ~[m~ and ~]m~ move text up and down by lines, while ~[e~ and ~]e~ should navigate to errors. ~[l~ and ~]l~ I will set later to some Lisp manipulation commands.
 
-#+begin_src emacs-lisp
+#+NAME: evil-integration-for-third-party-packages
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-collection
     :diminish 'unimpaired
     :diminish 'evil-collection-unimpaired-mode
@@ -984,7 +1034,8 @@ This library adds some basic Evil bindings. In addition to the "key themes"" you
 
 Also added some good Evil-y movement bindings, as you can see at the bottom.
 
-#+begin_src emacs-lisp
+#+NAME: evil-org-mode-configuration
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-org
     :after (evil org)
 
@@ -1013,7 +1064,8 @@ Also added some good Evil-y movement bindings, as you can see at the bottom.
 
 Henrik Lissner's version may have some things I can grab if I want to play with them later. Not using the below block currently.
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+NAME: evil-org-mode-configuration-from-henrik-lissner-currently-disabled
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package evil-org
     :straight (evil-org-mode :type git :host github :repo "hlissner/evil-org-mode")
 
@@ -1054,11 +1106,11 @@ I'm still a /big/ fan of modal editing, since you spend so much time straight up
 
 Also included in generally surfacing more Emacsy insert-state commands:
 - some readline commands that aren't in actual Emacs, like ~kill-line~ and ~backwards-kill-sentence~ and (sometimes excluded) ~backward-kill-word~.
-- a nifty little unshortcutted function that deletes everything but one space before the cursor, super useful if you've got a bunch of accidental whitespace. Okay, it's only very /occasionally/ super useful, but I use it every couple of weeks and it's great.
 - ~zap-up-to-char~, the Emacsy equivalent of Evil's ~dt[char]~, is not currently keybound. (~zap-to-char~, Emacs' ~df[char]~, has a keybinding already.)
 - Backwards versions of those two zaps. I don't /love/ Emacs' way of doing this, which would be to use Control-dash to give the function a negative number, /then/ ~M-z~ to run the command. I'd rather just wrap the command, passing in a negative number, then set that to ~M-Z~.
 
-#+begin_src emacs-lisp
+#+NAME: emacs-in-vim-in-emacs
+#+begin_src emacs-lisp :lexical yes
   (use-package evil
     :init
     (defun crj-zap-to-char-backwards (arg char)
@@ -1103,7 +1155,6 @@ Also included in generally surfacing more Emacsy insert-state commands:
      "C-k" #'evil-delete-line
      "C-u" #'evil-delete-back-to-indentation
      "C-w" #'evil-delete-backward-word
-     "<S-backspace>" #'just-one-space
      "M-t" #'zap-up-to-char
      "M-Z" #'crj-zap-to-char-backwards
      "M-T" #'crj-zap-up-to-char-backwards))
@@ -1113,7 +1164,8 @@ Also included in generally surfacing more Emacsy insert-state commands:
 
 ~evil-goggles~ helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
 
-#+begin_src emacs-lisp
+#+NAME: evil-command-quick-visualization
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-goggles
     :diminish 'evil-goggles-mode
 
@@ -1133,7 +1185,8 @@ Also included in generally surfacing more Emacsy insert-state commands:
 
 This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
 
-#+begin_src emacs-lisp
+#+NAME: working-with-surrounding-text-in-evil
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-surround
     :after evil
 
@@ -1145,11 +1198,11 @@ This library is amazing for working with surrounding text. Changing double quote
 
 Really really great way to handle comments.
 
-#+begin_src emacs-lisp
+#+NAME: evil-style-commenting
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-nerd-commenter
     :after evil
 
-    :config
     :general
     ([remap comment-line] #'evilnc-comment-or-uncomment-lines)
     (:keymaps 'normal :prefix "g"
@@ -1169,7 +1222,8 @@ This is an invaluable command, especially since it's a motion I can combine with
 
 Being able to type ~SPC r i )~ to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
 
-#+begin_src emacs-lisp
+#+NAME: replace-with-clipboard-in-evil
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-replace-with-register
     :after evil
 
@@ -1181,7 +1235,8 @@ Being able to type ~SPC r i )~ to say "replace what's in these parens with what 
 
 Another efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
 
-#+begin_src emacs-lisp
+#+NAME: evil-motion-for-exchanging-text
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-exchange
     :after evil
 
@@ -1195,6 +1250,19 @@ I think I have a lot more to write here about how weird Evil's word motions are.
 
 In the meantime, here are some fixes!
 
+**** First, A Basic Fix
+
+Little words should include word "parts" in camelCase words, whether you're using Evil or not. This is a fix for that.
+
+#+NAME: subwords-as-words
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :diminish 'subword-mode
+
+    :init
+    (global-subword-mode))
+#+end_src
+
 **** Quick Word Deletion
 
 Some surprisingly useful motions I wrote one evening. They're like Evil's `x` and `X`, but for words!
@@ -1203,7 +1271,8 @@ Variations on these also come in handy quite often in Lisps (for which there are
 
 I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many other long-time Vim/Evil users—don't use the visual modes very often. (And I placed them far away on a distant binding for the rare times I do need them.)
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: quick-word-deletion
+#+begin_src emacs-lisp :lexical yes
   (use-package evil
     :init
     (defun crj-delete-current-word ()
@@ -1249,13 +1318,14 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
       "tV" '(evil-visual-line :which-key "Evil visual line state.")))
 #+end_src
 
-**** Better Words Movement
+**** Better Word Movement
 
 For reasons I'll go into someday, these ~evil-cleverparens~ word motions are just closer to what you mean when you think of a word than Evil's/Vim's built-in ones.
 
 Additionally, I'm binding the rarely-used ~H~ and ~L~ keys as additional forward/backward word motions, because they're somewhat in my muscle memory from the Lisp keybindings I currently use.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: better-word-movement
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-cleverparens
     :general
     (:states 'normal
@@ -1271,7 +1341,8 @@ Additionally, I'm binding the rarely-used ~H~ and ~L~ keys as additional forward
 
 Normally, Evil jumps between brackets with ~%~. Here's one library for opening that up to things like ~if~ and ~else~ and HTML opening/closing tags and anything else you can imagine/configure.
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: matching-more-delimiters
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-matchit
     :init
     (global-evil-matchit-mode 1))
@@ -1285,14 +1356,16 @@ Text Objects are a powerful concept in Vim/Evil. Let's add our own!
 
 This package gives you an Evil text object for XML/HTML attributes. It's helpful!
 
-#+begin_src emacs-lisp
+#+NAME: evil-text-object-for-html-attributes
+#+begin_src emacs-lisp :lexical yes
   (use-package exato
     :commands (evil-outer-xml-attr evil-inner-xml-attr))
 #+end_src
 
 **** Evil Argument Text Object
 
-#+begin_src emacs-lisp :lexical no
+#+NAME: evil-text-object-for-arguments
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-args
     :general
     (general-def evil-inner-text-objects-map
@@ -1305,7 +1378,8 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
 
 A surprisingly useful Evil text object for the entire buffer.
 
-#+begin_src emacs-lisp
+#+NAME: evil-text-object-for-entire-buffer
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-textobj-entire
     :after evil
 
@@ -1318,7 +1392,7 @@ A surprisingly useful Evil text object for the entire buffer.
 
 I'm pretty sure I'm going to find a use for this!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-textobj-between
     :straight (:host github
                :repo "tarao/evil-plugins"
@@ -1337,7 +1411,7 @@ Making it an official text object with an inner variant does, however, allow you
 
 And if you want the indentation or trailing whitespace, you can work with the outer variant. Or, again, just the standard work-on-a-line-by-default version of any command!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-textobj-line
     :init
     (setq evil-textobj-line-a-key "L"
@@ -1348,7 +1422,7 @@ And if you want the indentation or trailing whitespace, you can work with the ou
 
 Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search for that text. Very occasionally very useful!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-visualstar
     :after evil
 
@@ -1364,7 +1438,7 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
 
 Shows you the difference between two different bits of text. Another very occasionally very useful trick.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-quick-diff
     :after evil
 
@@ -1379,7 +1453,7 @@ Shows you the difference between two different bits of text. Another very occasi
 
 *** Evil Evaluating
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-extra-operator
     :general
     (leader
@@ -1390,7 +1464,7 @@ Shows you the difference between two different bits of text. Another very occasi
 
 *** Number Incrementing and Decrementing
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-numbers
     :general
     (:keymaps 'normal :prefix "g"
@@ -1409,7 +1483,7 @@ We'll use various ~consult~ commands to search through different sets of data.
 
 We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj-search-project (&optional dir initial)
@@ -1437,7 +1511,7 @@ We'll also use a custom command for searching text in project files, though it's
 
 And finally, since I do this search so often, it's got a quicker shortcut of ~SPC SPC~.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader "SPC" '(project-find-file :which-key "Find file within current project.")))
@@ -1447,7 +1521,7 @@ And finally, since I do this search so often, it's got a quicker shortcut of ~SP
 
 We can edit filtered results live with wgrep.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package wgrep
     :commands wgrep-change-to-wgrep-mode
 
@@ -1492,7 +1566,7 @@ We can edit filtered results live with wgrep.
 
 These are some sane defaults for the UI.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :diminish 'visual-line-mode
 
@@ -1513,7 +1587,7 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package sudo-edit
     :general
     (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
@@ -1581,7 +1655,7 @@ That guy's me, and you're welcome, and I'm sorry.
 
 Here are my font settings.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (defvar crj--fixed-pitch-font "Hack")
   (defvar crj--variable-pitch-coding-font "Input")
   (defvar crj--variable-pitch-font "IBM Plex Serif")
@@ -1618,7 +1692,7 @@ And a picture of what my setup actually looks like:
 
 **** Using Fixed Pitch In Some Buffers
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defface crj--monospace
@@ -1667,6 +1741,19 @@ And a picture of what my setup actually looks like:
       (add-hook hook #'crj--use-fixed-pitch)))
 #+end_src
 
+*** Whitespace
+
+Let's visualize it in prog mode so we get rid of it.
+
+(But please remember to keep whitespace removal its own separate commit so as not to pollute your diffs.)
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj--show-trailing-whitespace () (setq show-trailing-whitespace t))
+
+    (add-hook 'prog-mode-hook #'crj--show-trailing-whitespace))
+#+end_src
 
 *** Zooming Text
 
@@ -1678,7 +1765,7 @@ There are some edge cases here, though, so I'll probably be returning to it.
 
 First, some functions to zoom and reset one buffer:
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (defun crj-zoom-in (arg)
     "Incease text size in current buffer.
 
@@ -1701,7 +1788,7 @@ First, some functions to zoom and reset one buffer:
 
 From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the ~buffer-list~ and run the above functions in each.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
   ;; (defvar current-text-scale 0)
   ;; (defun crj-match-new-buffer-to-current-text-scale ()
@@ -1736,7 +1823,7 @@ This package, ~default-text-scale~, can handle things more robustly than the hom
 
 I'm not using it, but it's worth exploring at some point.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no :lexical yes
   (use-package default-text-scale
     :init (default-text-scale-mode))
 #+end_src
@@ -1747,7 +1834,7 @@ All of this is to say that the many many different ways you can manipulate and w
 
 Next, we make some keybindings for them.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader
@@ -1767,7 +1854,7 @@ There are other, similar libraries (I've heard Transient is even better), but I 
 
 We'll install Hydra, define its interface, and then put that hydra command in our keybindings.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package hydra
     :config
     (defhydra crj-hydra/text-zoom (:hint nil :color red)
@@ -1790,7 +1877,7 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
 
 This package makes scrolling big distances easier to follow by flashing the new line you've moved to.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package pulsar
     :init
     (setq pulsar-pulse t)
@@ -1847,7 +1934,7 @@ Sets up line numbers to be (almost) everywhere, just not in some terminal modes.
 
 I like to use relative line numbers, since they make line-wise work easier when using Evil Mode. Which I do.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq display-line-numbers-type 'relative
@@ -1875,7 +1962,7 @@ This next part is for making line numbers use a fixed pitch font. I like a varia
 
 And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq crj--line-number-faces '(line-number
@@ -1899,7 +1986,7 @@ And by setting line numbers to an absolute size, we also avoid having them incre
 
 When displaying code to others, it's often good to make the line numbers absolute. And hiding them can be nice sometimes, though if I'm doing that often, I should consider whether there are more modes I should turn line numbers off for.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj-cycle-line-numbers ()
@@ -1918,7 +2005,7 @@ The eternal struggle.
 
 (I'm referring of course to both the struggle between the two sides and the struggle between the user and Emacs.)
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq-default indent-tabs-mode nil))
@@ -1926,7 +2013,7 @@ The eternal struggle.
 
 **** General Indentation
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq-default standard-indent 2
@@ -1938,7 +2025,7 @@ The eternal struggle.
 
 Let's visualize our indentation!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package highlight-indent-guides
     :diminish 'highlight-indent-guides-mode
 
@@ -1950,7 +2037,7 @@ Let's visualize our indentation!
 
 *** Folding
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package vimish-fold)
   (use-package evil-vimish-fold
     :diminish 'evil-vimish-fold-mode
@@ -1958,6 +2045,15 @@ Let's visualize our indentation!
     :init
     (setq evil-vimish-fold-target-modes '(prog-mode text-mode))
     (global-evil-vimish-fold-mode))
+#+end_src
+
+*** Don't Show Me Bookmarks
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq bookmark-set-fringe-mark nil))
+
 #+end_src
 
 ** Applications
@@ -1968,7 +2064,7 @@ This section is for parts of Emacs that are well-integrated applications.
 
 I love this no-hassle don't-have-to-think-about-what-to-listen-to background music. I need need /need/ music to focus.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package eradio
     :init
     (setq eradio-channels '(("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
@@ -1985,7 +2081,7 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
 
 RSS might be a great technology? I'm only just getting into it with this package!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package elfeed
     :commands elfeed
 
@@ -2000,7 +2096,7 @@ RSS might be a great technology? I'm only just getting into it with this package
 
 **** Monitor System Processes With Proced
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader "apm" '(proced :which-key "Run system process manager.")))
@@ -2008,7 +2104,7 @@ RSS might be a great technology? I'm only just getting into it with this package
 
 **** Create and Monitor Custom Commands With Prodigy
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package prodigy
     :init
     (general-setq prodigy-completion-system 'default)
@@ -2045,7 +2141,7 @@ Org Agenda is an amazing application that can take task data from different sour
 
 We set up an agenda view, and then we set it as the easier-to-reach keybinding (~SPC aa~). The dashboard, which has a bunch of different potential views, is still available on ~SPC aA~.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj-is-sunday-monday-tuesday-wednesday-thursday (date)
@@ -2144,7 +2240,7 @@ Perhaps I'll set up Eshell and Eat sometime.
 
 Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package vterm
     :init
     (setq vterm-shell "/usr/sbin/zsh"
@@ -2184,7 +2280,7 @@ Of the many types of terminals in Emacs, Vterm is the most faithful to the stand
 
 Let's also use a wrapper around vterm that allows multiple terminals.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package multi-vterm
     :general
     (leader "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
@@ -2194,7 +2290,7 @@ Let's also use a wrapper around vterm that allows multiple terminals.
 
 Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/emacs/comments/17aekjs/how_to_autofill_asyncshellcommand_with_last/][a Reddit discussion I was in]] where we found a way to make the minibuffer prompt start with the last shell command. Some fun hacking!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj--auto-fill-shell-commands (args)
@@ -2226,7 +2322,7 @@ So you can wish everyone would leave you alone, but /within Emacs/.
 
 **** View Calendar
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package calfw)
 
   (use-package calfw-org
@@ -2253,7 +2349,7 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
 
 **** Google Calendar Setup
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq org-gcal-client-id (auth-source-pass-get
@@ -2297,7 +2393,7 @@ Only some minor settings changes from the basic setup.
 - Make the window setup a little tidier.
 - And add some shortcuts to both the general Magit menus and things I do more often, like clone and switch/create branches.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package magit
     :init
     (defun crj--set-up-git-commit-buffer ()
@@ -2346,7 +2442,7 @@ This is an annoying thing where I'm getting an error that ~seq-keep~ is not defi
 
 In the meantime, the workaround is to define ~seq-keep~ ourselves.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun seq-keep (function sequence)
@@ -2362,7 +2458,7 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
 
 ***** Our Cloud Save Function
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj-git-cloud-save ()
@@ -2389,14 +2485,16 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
       (let ((display-buffer-alist
              `((,shell-command-buffer-name-async display-buffer-no-window))))
         (async-shell-command
-         (format "git commit -m \"Update %s.\" && git push" (project-root (project-current t)))))))
+         (format
+          "git commit -m \"Update %s.\" && git push"
+          (project-root (project-current t)))))))
 #+end_src
 
 ***** Some Shortcuts For This Workflow
 
 Both the cloud save function above, as well as a simple git pull.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader
@@ -2412,7 +2510,7 @@ Forge stores its data in a SQLite database, so we need to install that first.
 
 This requires some Git configuration and storage of your credentials. See [[https://magit.vc/manual/forge/Getting-Started.html#Getting-Started][the Forge documentation]] for more details.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package sqlite3)
 
   (use-package forge
@@ -2425,7 +2523,7 @@ Yet Another Dotfiles Manager has been super helpful to managing my system config
 
 Let's integrate it with Magit!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (require 'tramp)
@@ -2459,7 +2557,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 5. Add icons.
 6. Set it up with an extra command to hide dotfiles.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :commands (dired dired-jump)
 
@@ -2531,7 +2629,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 *** Email with Mu4e
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
@@ -2544,7 +2642,7 @@ Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ foll
 
 And never confirm to open a symlinked file under source control, which you do a /lot/ when exploring Emacs packages.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defalias 'yes-or-no-p 'y-or-n-p)
@@ -2553,7 +2651,7 @@ And never confirm to open a symlinked file under source control, which you do a 
 
 Set Emacs to remember text copied to the system clipboard.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq save-interprogram-paste-before-kill t))
@@ -2562,7 +2660,7 @@ Set Emacs to remember text copied to the system clipboard.
 
 Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (recentf-mode 1)
@@ -2573,7 +2671,7 @@ Set Emacs to remember recent files, as well as update buffers if the file change
 
 Also remember our place in files.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (save-place-mode 1))
@@ -2581,7 +2679,7 @@ Also remember our place in files.
 
 A better Emacs kill command binding to kill the Emacs server as well.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
@@ -2591,7 +2689,7 @@ A better Emacs kill command binding to kill the Emacs server as well.
 
 Save backups of files, every 10 idle seconds, to a backups folder in our main emacs directory.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (auto-save-mode 1)
@@ -2603,13 +2701,13 @@ Save backups of files, every 10 idle seconds, to a backups folder in our main em
 
 Increase the size of the garbage collector.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (setq gc-cons-threshold (* 100 1000 1000))
 #+end_src
 
 Measure startup time using an excellent bit of code taken from Emacs From Scratch.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (defun efs/display-startup-time ()
     "Display how long it took to start Emacs."
     (message "Emacs loaded in %s with %d garbage collections."
@@ -2625,7 +2723,7 @@ Measure startup time using an excellent bit of code taken from Emacs From Scratc
 
 **** Save Minibuffer History
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package savehist
     :init
     (savehist-mode))
@@ -2637,7 +2735,7 @@ Not sure I'm using this right now, but it's an interesting idea!
 
 If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package mini-frame
     :disabled
     :init
@@ -2646,7 +2744,7 @@ If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~ver
 
 **** Navigate That History More Easily
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (general-def minibuffer-mode-map
@@ -2656,7 +2754,7 @@ If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~ver
 
 **** Allow Minibuffers Within Minibuffers
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq enable-recursive-minibuffers t))
@@ -2666,7 +2764,7 @@ If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~ver
 
 Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq echo-keystrokes 3))
@@ -2676,7 +2774,7 @@ Set the current keyboard shortcut I'm typing to only show up after 3 seconds of 
 
 Oooh.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
@@ -2695,6 +2793,25 @@ Oooh.
     (auth-source-pass-enable))
 #+end_src
 
+*** Don't Yell At Me So Much
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq warning-suppress-types '((comp))
+          ring-bell-function 'ignore))
+#+end_src
+
+*** Don't Mess With Custom System
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package
+    :init
+    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
+    (unless (file-exists-p custom-file)
+      (write-region "" nil custom-file)))
+#+end_src
+
 ** Color Theme
 
 *** Themes
@@ -2703,7 +2820,7 @@ Oooh.
 
 Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package modus-themes
     :config
     (setq modus-themes-italic-constructs t
@@ -2734,7 +2851,7 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
 Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package highlight-numbers
     :init
     (add-hook 'prog-mode-hook #'highlight-numbers-mode))
@@ -2755,7 +2872,7 @@ Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' b
 
 Only one so far is to automatically run =project-find-file= upon switching to a new project.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq project-switch-commands 'project-find-file))
@@ -2764,7 +2881,7 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 
 *** Project Keybindings
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
     (leader
@@ -2788,7 +2905,7 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 
 We'll go with spaces!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (indent-tabs-mode -1))
@@ -2796,12 +2913,15 @@ We'll go with spaces!
 
 ***** Column Length
 
-The default 70 is too low a number. I like 100, though this is arbitrary and /probably/ should be according to some accepted standard.
+The default 70 is too low a number. 80 is the standard.
 
-#+begin_src emacs-lisp :lexical no
+And let's visualize it!
+
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (setq-default fill-column 100))
+    (setq-default fill-column 80)
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 #+end_src
 
 ***** Whitespace Removal
@@ -2810,12 +2930,22 @@ This package removes whitespace from the ends of lines.
 
 Conveniently, it only does it on lines you've edited. This way, if you're working with version control, you don't have a huge diff every time you save a file.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package ws-butler
     :diminish 'ws-butler-mode
 
     :config
     (ws-butler-global-mode))
+#+end_src
+
+And this built-in command removes all blank lines at point except one. Repeating it removes that one as well.
+
+It seems handy, but since I'm not sure I'll remember the vanilla Emacs keybinding, I'm going to bind it to a more mnemonic (to me) leader keybinding of leader-m-w, for "markup whitespace"—markup kind of becoming "text" here, which is a bit of a concept creep, but… we'll see how that mnemonic feels.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (leader "mw" '(delete-blank-lines :which-key "Delete blank lines.")))
 #+end_src
 
 **** Undoing
@@ -2826,7 +2956,7 @@ Losing undos if you quit your editor is kind of a pain. Saving your undo history
 
 Undo Fu Session is my solution here—it's meant to work with the Undo Fu package, but works just fine with vanilla Emacs' undo system.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package undo-fu-session
     :init
     (undo-fu-session-global-mode)
@@ -2841,7 +2971,7 @@ Vundo (Visualize Undo) takes Emac's very powerful and /very/ unintuitive undo sy
 
 There are alternatives, but Vundo integrates nicely with Evil through the Evil Collection package, and also avoids changing anything about the actual undo system you use. Simple packages is better packages.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package vundo
     :general
     (leader "vu" '(vundo :which-key "Visualize undo.")))
@@ -2866,7 +2996,7 @@ I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great w
 
 Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-snipe
     :diminish 'evil-snipe-local-mode
 
@@ -2886,7 +3016,7 @@ Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and
 
 Avy config will be kept around for now, but I'm disabling it. Consider it "archived".
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package avy
     :disabled
     :init
@@ -2906,7 +3036,7 @@ are configured elsewhere!
 
 Thinking about giving this a try. It's a little less pretty than ~consult-org-heading~ when searching headings in org, but the latter's tailoring to Org means it loses the flexibility to work elsewhere. So let's give Imenu a try—it works in all files, whether markup or code.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq imenu-auto-rescan t
@@ -2925,7 +3055,7 @@ Thinking about giving this a try. It's a little less pretty than ~consult-org-he
 
  Its default keybindings are pretty good, except for unnecessarily shadowing one of my oft-used Emacs quick-editing commands in ~kill-word~ and not binding its most useful command at all, ~evil-multiedit-match-all~.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package evil-multiedit
     :config
     (evil-multiedit-default-keybinds)
@@ -2948,7 +3078,7 @@ Flyspell is an /amazing/ built-into-Emacs spell-checker.
 
 I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion without moving the cursor. Occasionally this is the wrong suggestion, in which case I can use the below ~C-:~ binding to choose from the full menu of options, including saving the word into my personal dictionary.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package flyspell
     :diminish 'flyspell-mode
 
@@ -2993,19 +3123,21 @@ Many experienced developers say auto-closing your brackets is counter-productive
 
 That said, I felt the same about using buffers as the main way to interact with text, but once I stopped relying on inefficient means like tabs, I saw how much better it was. And there are tons of other examples like that. So perhaps I'll someday see the light on this? We'll see!
 
-Also, for some reason, electric pair mode /occasionally/ tries to auto-close an angle bracket (~<~) in Org Mode, which I never want—angle brackets are the start of shortcuts for source blocks in Org Mode, and I don't want them auto-closed. So I've added a predicate to disable that auto-closing in Org Mode.
+Also, for some reason, electric pair mode does some weird stuff around auto-closing in Org mode—probably Org's fault, because it doesn't always play nicely with the rest of Emacs. So I've added a predicate to disable some problematic auto-closing there.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (defconst crj--electric-pair-char-and-mode-block-list '((org-mode . ?<)))
+    (defconst crj--electric-pair-char-and-mode-block-list '(
+                                                            (org-mode . "<\"")))
 
     (defun crj--should-avoid-auto-pairing-p (char)
       (and (assoc major-mode crj--electric-pair-char-and-mode-block-list)
-           (eq char (cdr (assoc major-mode crj--electric-pair-char-and-mode-block-list)))))
+           (seq-position
+            (cdr (assoc major-mode crj--electric-pair-char-and-mode-block-list))
+            char)))
 
     (setq electric-pair-inhibit-predicate #'crj--should-avoid-auto-pairing-p)
-
     (electric-pair-mode))
 #+end_src
 
@@ -3015,7 +3147,7 @@ This next library highlights the delimiters of the block the cursor is currently
 
 By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle visual indication as to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package highlight-parentheses
     :diminish 'highlight-parentheses-mode
 
@@ -3033,7 +3165,7 @@ The color choices aren't mine, but, rather, taken from the great Modus Themes, a
 
 The code above and below were fun coding challenges for me as I learn a bit more Lisp. There's some good learnings to be taken from how they work, from the use of ~`~ and ~,~ for evaluating code in a list to the way the ~dotimes~ loop works to the use of ~intern~ to convert a string to a Lisp symbol. Maybe you'll take something from them too!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package rainbow-delimiters
     :after modus-themes
 
@@ -3178,7 +3310,7 @@ After all that, I've moved on to other systems, so this is merely historical. Se
 
 After all that, I've moved on to other systems, so this is merely historical. See the Lispyville section below for mycurrent system!
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package paredit)
 
   (use-package evil-cleverparens
@@ -3299,7 +3431,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 - I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list, which is slightly more efficient on my weird keyboards than 0. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
 - Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package symex
     :disabled
 
@@ -3424,16 +3556,17 @@ You can see how I bind Lispyville commands below (though note that much of that 
 
 I'm also adding many Symex commands—again, avoiding shadowing most Evil bindings—which tend to be more lisp-tree-aware. For example, moving to the first or last symex at the current level, or acting on all remaining symexes in the current list—these are very useful when editing lisp! Check out [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] for a great visualization of what the Symex commands I'm adding actually do.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package lispy
     :init
-    (defun crj--start-lispy ()
-      (lispy-mode 1))
+    (defun crj--start-lisp-setup ()
+      (lispy-mode 1)
+      (symex-initialize))
 
     (general-add-hook '(emacs-lisp-mode-hook
                         clojure-mode-hook
                         racket-mode-hook)
-                      #'crj--start-lispy))
+                      #'crj--start-lisp-setup))
 
   (use-package lispyville
     :ghook 'lispy-mode-hook
@@ -3462,6 +3595,7 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      :states 'normal
      "g<" #'evil-shift-left
      "g>" #'evil-shift-right
+     "g|" #'evil-goto-column
      "[" nil
      "]" nil
      ";" nil)
@@ -3539,9 +3673,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 
     (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
 
-    :config
-    (symex-initialize)
-
     :general
     (:keymaps 'lispyville-mode-map
      :states 'normal
@@ -3564,11 +3695,16 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "M-y" #'symex-yank-remaining
      "C-'" #'symex-cycle-quote
      "C-," #'symex-cycle-unquote))
+
+  (use-package evil-cleverparens
+    :general
+    (general-def 'normal (evil-inner-text-objects-map evil-outer-text-objects-map)
+      "d" #'evil-cp-inner-defun))
 #+end_src
 
 ******** Code To Test Lisp-Editing Systems On
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   ;; (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
 
   ;; (defconst new-list '(:keyword-1 some-value
@@ -3606,7 +3742,7 @@ It's the greatest of languages, but Emacs has a couple of weird opinions of how 
 
 This bit of code from Fuco1 on GitHub overrides some of that indentation behavior.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj--lisp-indent-function (indent-point state)
@@ -3705,7 +3841,7 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
 
 Better go-to-definition function for Emacs Lisp.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package elisp-def
     :diminish 'elisp-def-mode
 
@@ -3730,13 +3866,13 @@ We can install the manual right into Emacs!
 
 This'll also give me a good opportunity to learn the Info Mode keybindings.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package sicp)
 #+end_src
 
 ****** Racket
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package geiser)
 
   (use-package geiser-racket)
@@ -3750,11 +3886,12 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
 
 ****** Clojure
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package clojure-mode
     :init
     (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.clj.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojurescript-mode))
     (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode)))
 
   (use-package clj-refactor)
@@ -3764,7 +3901,7 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
 
 ***** CSV
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package csv-mode)
 #+end_src
 
@@ -3777,7 +3914,7 @@ Only two things aren't easy to figure out here:
 1. ~rjsx-mode~ and ~flyspell-mode~ are /not/ friends, so we turn ~flyspell-mode~ off in JS files. See [[https://github.com/felipeochoa/rjsx-mode/issues/68][this bug]].
 2. The advice added to the ~rjsx-electric-gt~ function helps ~rjsx-mode~ to auto-close React JSX fragments. You can find [[https://github.com/felipeochoa/rjsx-mode/issues/112#issuecomment-773660200][the original code here]].
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq js-indent-level 2
@@ -3812,7 +3949,7 @@ Only two things aren't easy to figure out here:
 
 ***** TypeScript
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package typescript-mode
     :init
     (setq typescript-indent-level 2)
@@ -3823,7 +3960,7 @@ Only two things aren't easy to figure out here:
 
 ***** Using Prettier To Format Buffers
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package prettier
     :init
     (defun crj-prettify-js-org-src-block ()
@@ -3865,7 +4002,7 @@ Other apps now have this equivalent—the one people know most developers know t
 
 Set Emacs to only include commands that are relevant to the current "major mode" (what you would call a file type outside of Emacs).
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq read-extended-command-predicate #'command-completion-default-include-p))
@@ -3875,7 +4012,7 @@ Set Emacs to only include commands that are relevant to the current "major mode"
 
 Add icons!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package all-the-icons-completion
     :init
     (all-the-icons-completion-mode)
@@ -3890,7 +4027,7 @@ Vertico and Marginalia together make an amazing interface for minibuffer search.
 
 Marginalia gives you some more data in other columns in the list of results as you filter them. It's nice! Let's set it up!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package marginalia
     :general
     (:keymaps 'minibuffer-local-map
@@ -3922,7 +4059,7 @@ What we'll do is:
 
 Here that all is!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package vertico
     :straight
     (vertico :files (:defaults "extensions/*")
@@ -3961,7 +4098,7 @@ Here that all is!
 
 ***** Embark
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package embark
     :bind
     (("C-." . embark-act)
@@ -4044,7 +4181,7 @@ Here that all is!
 
 I have not dived into /how/ this code from the Embark author works, but it integrates the actions better with ~which-key~. This makes the Embark actions popup look great instead of ugly. Huzzah!
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package embark
     :init
     (defun embark-which-key-indicator ()
@@ -4102,7 +4239,7 @@ What it enables you to do is decide whether your search will be of:
 
 And that's not even all of them! Minibuffer searches are a /huge/ part of how you use Emacs, and Consult is just one of many ways to decide what to search through.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package consult
     :commands consult-line
 
@@ -4118,7 +4255,7 @@ Here's an example using the setup below. I can start typing the path of a file I
 
 Once you're used to this speedy filtering process, it /greatly/ cuts down on the time spent searching for whatever it is you want to do.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package orderless
     :init
     (defun crj--vertico-orderless-dispatch (pattern _index _total)
@@ -4165,7 +4302,7 @@ Sets up:
 - in-buffer completion
 - cool icons for same
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package corfu
     :straight
     (corfu :files (:defaults "extensions/*"))
@@ -4230,7 +4367,7 @@ Sets up:
 
 And an extra package for completing Org blocks.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package org-block-capf
     :straight (:host github :repo "xenodium/org-block-capf")
 
@@ -4241,7 +4378,8 @@ And an extra package for completing Org blocks.
 **** Hippie-Expand
 
 Hippie-expand is a nice complete-everything-in-buffer command. It can complete form almost any source!
-#+begin_src emacs-lisp :lexical no
+
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (global-set-key (kbd "M-/") #'hippie-expand))
@@ -4255,7 +4393,7 @@ My advice: don't use ~advice~. Don't be like me!
 
 Don't be like me.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package eglot
     :init
     (setq completion-category-overrides '((eglot (styles orderless))))
@@ -4274,7 +4412,9 @@ Don't be like me.
                    "--stdio"))
 
     :general
-    (leader "cc" '(eglot :which-key "Run eglot in project root.")))
+    (leader
+      "cc" '(eglot :which-key "Run eglot in project root.")
+      "cr" '(eglot-rename :which-key "Rename symbol in project.")))
 
   (use-package cape
     :after eglot
@@ -4291,7 +4431,7 @@ I also find it helpful to have a separate set of tab bindings for accepting Copi
 
 Note that this feature only works if you have a GitHub Copilot account. If you have one, you can login using the ~copilot-login~ command.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
 
@@ -4316,7 +4456,7 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 
 A great error-navigation library
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package flymake
     :diminish 'flymake-mode
 
@@ -4329,7 +4469,7 @@ A great error-navigation library
      "[e" '(flymake-goto-prev-error
             :which-key "Go to previous error."))
 
-    (leader "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
+    (leader "cX" '(flymake-show-project-diagnostics :which-key "Show project diagnostics.")))
 #+end_src
 
 ** AI
@@ -4338,7 +4478,7 @@ It's the robots!
 
 *** First, a simple function to get my password.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (defun crj--get-open-ai-api-key ()
     (auth-source-pass-get 'secret "ai/openai/key"))
 #+end_src
@@ -4347,7 +4487,7 @@ It's the robots!
 
 **** Main Bing Setup
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package websocket)
 
   (use-package async-await)
@@ -4399,7 +4539,7 @@ It's the robots!
 
 Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or opening a dedicated buffer with ~gptel~ command. Requires an OpenAI API key.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package gptel
     :init
     (setq gptel-api-key (crj--get-open-ai-api-key)))
@@ -4410,7 +4550,7 @@ Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or o
 
 This one opens a dedicated shell buffer for ChatGPT interactions.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package shell-maker
     :straight (:host github
                :repo "xenodium/chatgpt-shell"
@@ -4431,7 +4571,7 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
 
 Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (winner-mode 1)
@@ -4463,7 +4603,7 @@ A few more additions to the help menu:
 - ~embark-keybindings~ lets you search active keybindings, which is super sweet.
 - ~shortdoc-display-group~ will help you with built-in elisp functions
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package helpful
     :init
     (defun crj--set-elisp-lookup-function ()
@@ -4521,7 +4661,7 @@ A few more additions to the help menu:
 ** Utility Functions
 Making my life easier!
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (defun crj-cycle-setting (setting potential-values)
@@ -4555,7 +4695,7 @@ I've:
 - Merged the modeline and the minibuffer using the excellent Mini Modeline package. This gets you back some substantial screen estate, especially since the modeline is now on just the frame, not each individual window.
 - Merging with the minibuffer /also/ means that when you change the format to have no info, you're really hiding the modeline entirely. I do that by default, but I can toggle it back on if I need to.
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical yes
   (use-package mini-modeline
     :straight (:repo "kiennq/emacs-mini-modeline" :host github)
 
@@ -4601,7 +4741,7 @@ I've:
 This is a list of noweb references with a preliminary load order. Eventually I'll use this to actually tangle the code to the file.
 
 #+NAME: load-order
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   <<literate-config-setup>>
   <<start-with-messages>>
   <<package-system>>
@@ -4614,12 +4754,14 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** clean up config file and add better commentary
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
+*** configure hippie-expand
 *** snippets - skeleton or tempo or tempel or yasnippet??
+*** check org mode setups from other evil configs
 *** Save and kill buffer
 
 More old code to revisit and reactivate maybe.
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (setq crj/immortal-buffer-names '("*scratch*" "#emacs" "*Messages*" shell-command-buffer-name shell-command-buffer-name-async))
 
   (defun crj/kill-or-bury-current-buffer ()
@@ -4673,7 +4815,7 @@ Some code and docs to start with from Emacs From Scratch:
 
 [[https://emacs-lsp.github.io/dap-mode/][dap-mode]] is an excellent package for bringing rich debugging capabilities to Emacs via the [[https://microsoft.github.io/debug-adapter-protocol/][Debug Adapter Protocol]]. You should check out the [[https://emacs-lsp.github.io/dap-mode/page/configuration/][configuration docs]] to learn how to configure the debugger for your language. Also make sure to check out the documentation for the debug adapter to see what configuration parameters are available to use for your debug templates!
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no :lexical yes
   (use-package dap-mode
     Uncomment the config below if you want all UI panes to be hidden by default!
     :custom
@@ -4704,6 +4846,7 @@ Some code and docs to start with from Emacs From Scratch:
 - git-cloud-save
 - Evil word setup
 - Evil lisp setup
+- delete word/delete last word
 - Emacs in Vim in Emacs
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
 *** explore hippie-expand
@@ -4755,7 +4898,7 @@ new features to check out once you do:
 
 Anything useful here?
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package org
     :commands (org-capture org-agenda)
     :hook (org-mode . efs/org-mode-setup)
@@ -4900,7 +5043,7 @@ And another one for the other popular one!
 
 Some variables to check out:
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (setq indentation-to-check-out '(indent-tabs-mode
                                    tab-width
                                    markdown-list-indent-width
@@ -4909,7 +5052,7 @@ Some variables to check out:
 #+end_src
 *** make line numbers increase in size at a lower rate. This command could be useful:
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :lexical yes
   (defun crj--reset-line-number-height ()
     (set-face-attribute 'line-number nil :height crj--default-font-size))
 #+end_src
@@ -4926,7 +5069,7 @@ Would require that global-default-variable idea (or maybe reuse what exists?)
 
 Some sample code:
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (setq org-babel-default-header-args `((:results . "verbatim pp replace output")
                                         (:exports . "both")
                                         (:noweb . "strip-export")
@@ -4941,7 +5084,7 @@ Some sample code:
 
 I'll need to look this stuff over at some point. Particularly if I ever want to return to using snippets.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no :lexical yes
   snippet settings
 
   (defun crj--set-up-snippets ()
@@ -4964,7 +5107,7 @@ I'll need to look this stuff over at some point. Particularly if I ever want to 
 
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no :lexical yes
   (map! :i [C-tab] nil)
   (map! :i [C-tab] #'emmet-expand-line)
   (map! :map emmet-mode-keymap "<tab>" nil)
@@ -4973,7 +5116,7 @@ I'll need to look this stuff over at some point. Particularly if I ever want to 
 
 This looks like something I'll want to implement too.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no :lexical yes
   (defun toggle-eldoc-mode ()
     (interactive)
     (if eldoc-mode
@@ -4990,7 +5133,7 @@ This looks like something I'll want to implement too.
 
   Might be some useful Embark stuff here, since I'll be setting that up soon.
 
-  #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle no :lexical yes
     (use-package vertico
       :config
       embark act and resume completion
@@ -5007,7 +5150,7 @@ This looks like something I'll want to implement too.
 
 These might be useful Corfu settings? check them out once I get Eglot going?
 
-  #+begin_src emacs-lisp :tangle no
+  #+begin_src emacs-lisp :tangle no :lexical yes
     (use-package corfu
       :config
       (define-key corfu-map (kbd "M-g") #'corfu-quit)
@@ -5091,7 +5234,7 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 - https://ambrevar.xyz/emacs-eshell/index.html
 - https://ambrevar.xyz/emacs-eshell-versus-shell/index.html
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no :lexical yes
   (defun efs/configure-eshell ()
     ;; Save command history when commands are entered
     (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
@@ -5143,7 +5286,7 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 *** file management
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (setq! auto-save-default t)
   (setq backup-by-copying t      ; don't clobber symlinks
         backup-directory-alist '(("." . "~/.emacs.d/backups/"))    ; don't litter my fs tree
@@ -5163,7 +5306,7 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 Some old code to revisit and maybe put back into play!
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (defun crj--get-new-scratch-buffer-mode (previous-mode read-only-p desired-mode)
     (cond (desired-mode desired-mode)
           ((not read-only-p) previous-mode)
@@ -5258,7 +5401,7 @@ And ~e~ in any terminal should open file in Emacs buffer.
 
 Yup, more old code I used to use.
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (defun hydra-move-split-right-more (arg)
     "Move window split right by a hardcoded higher amount."
     (interactive "p")
@@ -5353,7 +5496,7 @@ Yup, more old code I used to use.
 
 I used to like this one! Would take some digging into Doom though to find the original code.
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (map! :leader
     (:prefix ("c" . "+code")
      :desc "Show diagnostics in buffer." :n "x" #'+default/diagnostics
@@ -5364,7 +5507,7 @@ I used to like this one! Would take some digging into Doom though to find the or
 
 A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I start spending lots of time in terms again.
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (require 'dwim-shell-commands)
 
   (defun crj/toggle-eshell-scrollback ()
@@ -5510,7 +5653,7 @@ A /lot/ of terminal stuff I used ot have set up. Definitely revisit this if I st
 
 This was occasionally useful, should be easy to get back
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (map! :n "zc" nil)
   (map! (:prefix "z"
          :desc "Open all folds."
@@ -5527,7 +5670,7 @@ This was occasionally useful, should be easy to get back
 
 Super easy to fix up for my current framework if I start checking out PRs again.
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (map! :leader (:prefix "g" :desc "Checkout pull request." :n "v" #'forge-checkout-pullreq))
 #+end_src
 
@@ -5535,7 +5678,7 @@ Super easy to fix up for my current framework if I start checking out PRs again.
 
 Some old Elisp code, might be useful?
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (defun crj/open-intro-to-elisp ()
     "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info
     node '(eintr)'), re-using the current window."
@@ -5576,7 +5719,7 @@ Some old Elisp code, might be useful?
 
 **** rename buffer with project name prefix
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (defun rename-buffer-with-project-name-prefix ()
     "Prompts the user to rename the buffer, supplying the project prefix."
     (interactive)
@@ -5588,7 +5731,7 @@ Some old Elisp code, might be useful?
 
 *** Check if THIS is a tangle we have natively now:
 
-#+begin_src emacs-lisp :lexical no :tangle no
+#+begin_src emacs-lisp :lexical yes :tangle no
   (defun org-babel-tangle-single-block (block-counter &optional only-this-block)
     "Collect the tangled source for current block.
   Return the list of block attributes needed by
