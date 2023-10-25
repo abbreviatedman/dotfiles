@@ -2817,6 +2817,16 @@ Conveniently, it only does it on lines you've edited. This way, if you're workin
     (ws-butler-global-mode))
 #+end_src
 
+And this built-in command removes all blank lines at point except one. Repeating it removes that one as well.
+
+It seems handy, but since I'm not sure I'll remember the vanilla Emacs keybinding, I'm going to bind it to a more mnemonic (to me) leader keybinding of leader-m-w, for "markup whitespace"—markup kind of becoming "text" here, which is a bit of a concept creep, but… we'll see how that mnemonic feels.
+
+#+begin_src emacs-lisp :lexical no
+  (use-package emacs
+    :general
+    (leader "mw" '(delete-blank-lines :which-key "Delete blank lines.")))
+#+end_src
+
 **** Undoing
 
 ***** Saving Undo History
