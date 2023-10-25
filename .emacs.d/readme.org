@@ -2860,12 +2860,15 @@ We'll go with spaces!
 
 ***** Column Length
 
-The default 70 is too low a number. I like 100, though this is arbitrary and /probably/ should be according to some accepted standard.
+The default 70 is too low a number. 80 is the standard.
 
-#+begin_src emacs-lisp :lexical no
+And let's visualize it!
+
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (setq-default fill-column 100))
+    (setq-default fill-column 80)
+    (global-display-fill-column-indicator-mode))
 #+end_src
 
 ***** Whitespace Removal
