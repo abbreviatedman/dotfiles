@@ -3517,13 +3517,14 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 #+begin_src emacs-lisp :lexical no
   (use-package lispy
     :init
-    (defun crj--start-lispy ()
-      (lispy-mode 1))
+    (defun crj--start-lisp-setup ()
+      (lispy-mode 1)
+      (symex-initialize))
 
     (general-add-hook '(emacs-lisp-mode-hook
                         clojure-mode-hook
                         racket-mode-hook)
-                      #'crj--start-lispy))
+                      #'crj--start-lisp-setup))
 
   (use-package lispyville
     :ghook 'lispy-mode-hook
@@ -3629,9 +3630,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
           (1+ (length result)))))
 
     (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
-
-    :config
-    (symex-initialize)
 
     :general
     (:keymaps 'lispyville-mode-map
