@@ -4720,6 +4720,7 @@ Some code and docs to start with from Emacs From Scratch:
 - git-cloud-save
 - Evil word setup
 - Evil lisp setup
+- delete word/delete last word
 - Emacs in Vim in Emacs
 *** redo this document to have load order at the bottom and re-organize the doc itself nicely
 *** explore hippie-expand
