@@ -710,6 +710,7 @@ Literate programming for fun and profit. Or... at least, for fun.
       (set player-args-setting "volume=15000"))
 
     (setq org-pomodoro-manual-break t
+          org-pomodoro-audio-player "/usr/sbin/sox"
           org-pomodoro-keep-killed-pomodoro-time t
           org-pomodoro-format "P%s"
           org-pomodoro-time-format "%m"
