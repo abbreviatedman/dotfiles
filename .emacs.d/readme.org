@@ -947,15 +947,12 @@ There are just a ton of variables here that finely set how Evil Mode is configur
 #+begin_src emacs-lisp
 #+NAME: evil-mode-configuration
   (use-package evil
-    :diminish 'subword-mode
-
     :init
     (defun crj--escape-plus ()
       (evil-ex-nohighlight))
 
     (advice-add 'evil-force-normal-state :after #'crj--escape-plus)
 
-    (global-subword-mode)
     (setq evil-want-integration t
           evil-want-keybinding nil
           evil-ex-search-persistent-highlight t
@@ -1251,6 +1248,19 @@ Another efficient text editing library. This one exchanges two bits of text in a
 I think I have a lot more to write here about how weird Evil's word motions are. We don't use them as often as other text objects, but while they're basic, I think the reason we avoid them is that there are some serious flaws in their design. Like I said, I'll write some more on them, for sure.
 
 In the meantime, here are some fixes!
+
+**** First, A Basic Fix
+
+Little words should include word "parts" in camelCase words, whether you're using Evil or not. This is a fix for that.
+
+#+NAME: subwords-as-words
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :diminish 'subword-mode
+
+    :init
+    (global-subword-mode))
+#+end_src
 
 **** Quick Word Deletion
 
