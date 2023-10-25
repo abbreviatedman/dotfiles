@@ -1740,6 +1740,19 @@ And a picture of what my setup actually looks like:
       (add-hook hook #'crj--use-fixed-pitch)))
 #+end_src
 
+*** Whitespace
+
+Let's visualize it in prog mode so we get rid of it.
+
+(But please remember to keep whitespace removal its own separate commit so as not to pollute your diffs.)
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj--show-trailing-whitespace () (setq show-trailing-whitespace t))
+
+    (add-hook 'prog-mode-hook #'crj--show-trailing-whitespace))
+#+end_src
 
 *** Zooming Text
 
@@ -2031,6 +2044,15 @@ Let's visualize our indentation!
     :init
     (setq evil-vimish-fold-target-modes '(prog-mode text-mode))
     (global-evil-vimish-fold-mode))
+#+end_src
+
+*** Don't Show Me Bookmarks
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq bookmark-set-fringe-mark nil))
+
 #+end_src
 
 ** Applications
@@ -2768,6 +2790,25 @@ Oooh.
   (use-package auth-source-pass
     :init
     (auth-source-pass-enable))
+#+end_src
+
+*** Don't Yell At Me So Much
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq warning-suppress-types '((comp))
+          ring-bell-function 'ignore))
+#+end_src
+
+*** Don't Mess With Custom System
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package
+    :init
+    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
+    (unless (file-exists-p custom-file)
+      (write-region "" nil custom-file)))
 #+end_src
 
 ** Color Theme
