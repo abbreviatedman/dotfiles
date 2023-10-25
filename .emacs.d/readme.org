@@ -3653,6 +3653,11 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "M-y" #'symex-yank-remaining
      "C-'" #'symex-cycle-quote
      "C-," #'symex-cycle-unquote))
+
+  (use-package evil-cleverparens
+    :general
+    (general-def 'normal (evil-inner-text-objects-map evil-outer-text-objects-map)
+      "d" #'evil-cp-inner-defun))
 #+end_src
 
 ******** Code To Test Lisp-Editing Systems On
