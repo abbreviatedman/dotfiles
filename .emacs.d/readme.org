@@ -31,6 +31,15 @@ I'm basing this new config on the Emacs from Scratch repo, which is a lot more s
 
 So that's where we started and where we're going. Let's look at some code!
 
+** Fixing Emacs Lisp
+
+I mean, I'm just adding lexical scope here. But it's an important change!
+
+#+NAME: lexical-binding
+#+begin_src emacs-lisp :lexical yes
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
 ** Literate Config Setup
 
 Literate programming is an approach where, instead of putting comments in code to explain things, we put code in the middle of commentary. The document you’re reading right now is an example of literate programming, often called a literate config when its purpose is configuring apps. All of the code blocks in this document are “tangled”, which means that they are copied from this document to a code file. The code file itself is rarely edited directly—instead, the code is edited here, along with its explanation. This ensures that any code in here is documented… there’s always a reason for a block of code to exist. The documentation can’t fall behind the code—the documentation /is/ the code.
@@ -38,7 +47,6 @@ Literate programming is an approach where, instead of putting comments in code t
 You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, its code is automatically tangled to the appropriate code files. It’s pretty sweet!
 
 #+begin_src emacs-lisp
-  ;;; -*- lexical-binding: t -*-
   (defun efs--org-babel-tangle-config ()
     "Automatically tangle our Emacs.org config file when we save it. Credit to Emacs From Scratch for this one!"
     (when (string-equal (buffer-file-name)
