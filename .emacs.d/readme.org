@@ -1106,7 +1106,6 @@ I'm still a /big/ fan of modal editing, since you spend so much time straight up
 
 Also included in generally surfacing more Emacsy insert-state commands:
 - some readline commands that aren't in actual Emacs, like ~kill-line~ and ~backwards-kill-sentence~ and (sometimes excluded) ~backward-kill-word~.
-- a nifty little unshortcutted function that deletes everything but one space before the cursor, super useful if you've got a bunch of accidental whitespace. Okay, it's only very /occasionally/ super useful, but I use it every couple of weeks and it's great.
 - ~zap-up-to-char~, the Emacsy equivalent of Evil's ~dt[char]~, is not currently keybound. (~zap-to-char~, Emacs' ~df[char]~, has a keybinding already.)
 - Backwards versions of those two zaps. I don't /love/ Emacs' way of doing this, which would be to use Control-dash to give the function a negative number, /then/ ~M-z~ to run the command. I'd rather just wrap the command, passing in a negative number, then set that to ~M-Z~.
 
@@ -1156,7 +1155,6 @@ Also included in generally surfacing more Emacsy insert-state commands:
      "C-k" #'evil-delete-line
      "C-u" #'evil-delete-back-to-indentation
      "C-w" #'evil-delete-backward-word
-     "<S-backspace>" #'just-one-space
      "M-t" #'zap-up-to-char
      "M-Z" #'crj-zap-to-char-backwards
      "M-T" #'crj-zap-up-to-char-backwards))
