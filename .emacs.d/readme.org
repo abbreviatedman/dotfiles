@@ -2805,7 +2805,7 @@ Oooh.
 *** Don't Mess With Custom System
 
 #+begin_src emacs-lisp :lexical yes
-  (use-package
+  (use-package emacs
     :init
     (setq custom-file "~/.emacs.d/emacs-custom-file.el")
     (unless (file-exists-p custom-file)
@@ -3697,6 +3697,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "C-," #'symex-cycle-unquote))
 
   (use-package evil-cleverparens
+    :commands (evil-cp-inner-defun)
+
     :general
     (general-def 'normal (evil-inner-text-objects-map evil-outer-text-objects-map)
       "d" #'evil-cp-inner-defun))
