@@ -3848,7 +3848,8 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
   (use-package clojure-mode
     :init
     (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.clj.*$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojurescript-mode))
     (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode)))
 
   (use-package clj-refactor)
