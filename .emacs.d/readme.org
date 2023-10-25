@@ -793,7 +793,8 @@ And another one where you set your own context:
     (pomm-mode-line-mode)
     (general-setq alert-default-style 'libnotify
                   pomm-audio-enabled t
-                  pomm-audio-player-executable "/var/sbin/play -v 0.01")
+                  pomm-audio-player-executable "/var/sbin/play -v 0.01"
+                  pomm-ask-before-work t)
 
     :general
     (leader "at" '(pomm :which-key "Activate Pomodoro interface.")))
