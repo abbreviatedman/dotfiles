@@ -742,6 +742,10 @@ Literate programming for fun and profit. Or... at least, for fun.
 
 **** Pomodoro Task Management
 
+Pomodoro is a great way to manage your tasks! Or I think it /would/ be if I ever committed to it…
+
+Here's a library that sets pomodoro timers and clocks your time on Org Mode tasks.
+
 #+NAME: org-mode-pomodoro
 #+begin_src emacs-lisp :lexical yes
   (use-package org-pomodoro
@@ -765,6 +769,19 @@ Literate programming for fun and profit. Or... at least, for fun.
 
     :general
     (leader "mcp" '(org-pomodoro :which-key "Toggle Org Pomodoro time tracking.")))
+#+end_src
+
+And another one where you set your own context:
+
+#+begin_src emacs-lisp :lexical no
+  (use-package pomm
+    :commands (pomm pomm-third-time pomm-mode-line-mode)
+
+    :init
+    (pomm-mode-line-mode)
+
+    :general
+    (leader "at" '(pomm :which-key "Activate Pomodoro interface.")))
 #+end_src
 
 *** Markdown
