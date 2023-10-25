@@ -355,7 +355,9 @@ And adding some buffer commands, including a custom one.
 
 *** Or Maybe Redo Keybindings To Be More Readable?
 
-Check out this (useful!) keybinding.
+What makes keybindings readable?
+
+Well, check out this (useful!) keybinding:
 
 #+begin_src emacs-lisp :tangle no
 #+NAME: just-one-space-keybinding
