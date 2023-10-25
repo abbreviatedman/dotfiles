@@ -155,13 +155,25 @@ Some of this is set in my terminal settings, but Emacs can also send commands to
 
 ** Cleaning Up The Modeline
 
-This isn't a terribly important package, but it should be loaded before most others, since it's going to be part of so many package configurations: removing the minor modes from the modeline.
+This package removes minor mode names from the mode line.
 
-TODO can we load this in another order?
+Some minor mode names make themselves /very/ hard to remove through some "clever" programming. Those configs are usually with their modes, but i"ve got a couple here I didn't feel like putting anywhere. So here they are.
+
+(I should probably move the org-src one to the org mode config, though.)
 
 #+NAME: remove-minor-modes-from-mode-line
 #+begin_src emacs-lisp :lexical yes
-  (use-package diminish)
+  (use-package diminish
+    :init
+    (defun crj--diminish-eldoc-mode ()
+      (diminish 'eldoc-mode))
+
+    (add-hook 'eldoc-mode-hook #'crj--diminish-eldoc-mode)
+
+    (defun crj--diminish-org-src-mode ()
+      (diminish 'org-src-mode))
+
+    (add-hook 'org-src-mode-hook #'crj--diminish-org-src-mode))
 #+end_src
 
 ** Keybindings
@@ -1057,6 +1069,8 @@ Also added some good Evil-y movement bindings, as you can see at the bottom.
 #+NAME: evil-org-mode-configuration
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-org
+    :diminish
+
     :after (evil org)
 
     :init
@@ -2164,6 +2178,11 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
+    (defun crj--shrink-org-agenda-modeline-name ()
+      (setq mode-name "Org Agenda"))
+
+    (add-hook 'org-agenda-finalize-hook #'crj--shrink-org-agenda-modeline-name)
+
     (defun crj-is-sunday-monday-tuesday-wednesday-thursday (date)
       "Return `t` if DATE is a Monday, Tuesday, Wednesday, or Thusday.
 
@@ -3581,6 +3600,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 
 #+begin_src emacs-lisp :lexical yes
   (use-package lispy
+    :diminish
+
     :init
     (defun crj--start-lisp-setup ()
       (lispy-mode 1)
@@ -3592,6 +3613,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
                       #'crj--start-lisp-setup))
 
   (use-package lispyville
+    :diminish
+
     :ghook 'lispy-mode-hook
 
     :init
@@ -3654,6 +3677,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "M" #'lispy-convolute))
 
   (use-package symex
+    :diminish
+
     :init
     (defun crj-delete-current-symex ()
       "Delete the current symex.
@@ -4746,13 +4771,14 @@ I've:
                                           mode-line-misc-info))
 
     (setq mini-modeline-face-attr nil)
-    (setq mini-modeline-r-format " ")
+    (setq mini-modeline-r-format crj--modeline-r-on-format)
 
     (defun crj-toggle-modeline ()
       (interactive)
-      (setq mini-modeline-r-format (if (eq mini-modeline-r-format crj--modeline-r-on-format)
-                                       " "
-                                     crj--modeline-r-on-format)))
+      (setq mini-modeline-r-format
+            (if (eq mini-modeline-r-format crj--modeline-r-on-format)
+                " "
+              crj--modeline-r-on-format)))
 
     (mini-modeline-mode t)
 
