@@ -2868,7 +2868,7 @@ And let's visualize it!
   (use-package emacs
     :init
     (setq-default fill-column 80)
-    (global-display-fill-column-indicator-mode))
+    (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode))
 #+end_src
 
 ***** Whitespace Removal
