@@ -4626,6 +4626,7 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** clean up config file and add better commentary
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
+*** configure hippie-expand
 *** snippets - skeleton or tempo or tempel or yasnippet??
 *** Save and kill buffer
 
