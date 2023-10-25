@@ -2388,7 +2388,9 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
       (let ((display-buffer-alist
              `((,shell-command-buffer-name-async display-buffer-no-window))))
         (async-shell-command
-         (format "git commit -m \"Update %s.\" && git push" (project-root (project-current t)))))))
+         (format
+          "git commit -m \"Update %s.\" && git push"
+          (project-root (project-current t)))))))
 #+end_src
 
 ***** Some Shortcuts For This Workflow
