@@ -47,6 +47,7 @@ Literate programming is an approach where, instead of putting comments in code t
 You can read more on this subject… and I’ll probably write more. But in the meantime: the function below simply ensures that any time this document is saved, its code is automatically tangled to the appropriate code files. It’s pretty sweet!
 
 #+begin_src emacs-lisp
+#+NAME: tangle-on-save
   (defun efs--org-babel-tangle-config ()
     "Automatically tangle our Emacs.org config file when we save it. Credit to Emacs From Scratch for this one!"
     (when (string-equal (buffer-file-name)
@@ -63,6 +64,7 @@ You can read more on this subject… and I’ll probably write more. But in the 
 I usually want to see the startup log first, and I'm tired of manually switching to it.
 
 #+begin_src emacs-lisp
+#+NAME: start-with-messages
   (switch-to-buffer "*Messages*")
 #+end_src
 
@@ -75,6 +77,7 @@ Emacs has a built in package manager, but it doesn't make it easy to automatical
 Let's install ~straight~.
 
 #+begin_src emacs-lisp
+#+NAME: bootstrap-straight
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -91,6 +94,7 @@ Let's install ~straight~.
 
 And turn off the built-in package manager. (This needs to go in ~early-init.el~, but I can tangle it to there from this document with a header arg, which you can see if you're looking at this document as a raw ~org-mode~ file. If that sounds like a whole thing, well... it's also not terribly important detail! But I included it anyway! Not sure why!)
 
+#+NAME: turn-off-package
 #+begin_src emacs-lisp :tangle early-init.el
 (setq package-enable-at-startup nil)
 #+end_src
@@ -98,6 +102,7 @@ And turn off the built-in package manager. (This needs to go in ~early-init.el~,
 Use ~straight~ to install ~use-package~, with a quick tweak to add its declarations to ~imenu~.
 
 #+begin_src emacs-lisp
+#+NAME: use-package-imenu-integration
   (setq use-package-enable-imenu-support t)
   (straight-use-package 'use-package)
 #+end_src
@@ -105,6 +110,7 @@ Use ~straight~ to install ~use-package~, with a quick tweak to add its declarati
 Tell ~use-package~ to install packages using ~straight~ whenever I declare a ~use-package~ block.
 
 #+begin_src emacs-lisp
+#+NAME: use-package-straight-integration
 (use-package straight
   :custom
   (straight-use-package-by-default t))
@@ -123,6 +129,7 @@ The only extra step necessary is that, because this file is actually an org docu
 Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
 
 #+begin_src emacs-lisp
+#+NAME: start-emacs-server
   (require 'server)
   (unless (server-running-p)
     (server-start))
@@ -133,6 +140,7 @@ Running an Emacs server means that every single Emacs frame (or "window" in oper
 Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: use-emacs-as-system-wide-editor-within-emacs-shells
   (use-package with-editor
     :init
     (require 'compat)
@@ -152,6 +160,7 @@ This isn't a terribly important package, but it should be loaded before most oth
 TODO can we load this in another order?
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: remove-minor-modes-from-mode-line
   (use-package diminish)
 #+end_src
 
@@ -166,6 +175,7 @@ Before we even get to the keybindings themselves, let's set up a good Vimmish sy
 We can use ~general-create-definer~ to define a pair of leader keys. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
 
 #+begin_src emacs-lisp
+#+NAME: define-leader-key
   (use-package general
     :init
     (general-create-definer leader
@@ -179,6 +189,7 @@ This code defines a /function/ called ~leader~ that we can use from now on to de
 We can now very easily define another level of keybinding. We want ~SPC f~ to activate commands that have to do with files—thus the ~f~.
 
 #+begin_src emacs-lisp
+#+NAME: add-files-menu
   (use-package emacs
     :general
     (leader "f" '(:ignore t :which-key "Files Menu")))
@@ -189,6 +200,7 @@ From now on, when you press the user presses the spacebar (or ~M-SPC~) and then 
 Let's define a few commands that open specific commonly accessed files as examples, and then bind them to keys using this system.
 
 #+begin_src emacs-lisp
+#+NAME:commands-for-common-file-access
   (use-package emacs
     :init
     (setq org-directory "~/org-stuff")
@@ -226,6 +238,7 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
 I'm also mapping a new help command in a couple places, so that I can later remap ~C-h~ to deleting a character.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: menus
   (use-package emacs
     :init
     (setq embark-help-key "C-S-h")
@@ -278,6 +291,7 @@ Let's see some examples!
 The following binds ~SPC f s~ to save a file. It's nice and mnemonic, as well as just three quick presses.
 
 #+begin_src emacs-lisp
+#+NAME: file-saving-keybinding
   (use-package emacs
     :general
     (leader "fs" '(save-buffer :which-key "Save current buffer.")))
@@ -290,6 +304,7 @@ To see a good example of a menu with many commands in it, see the section on Hel
 You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's good not to bury it in a menu.
 
 #+begin_src emacs-lisp
+#+NAME: open-or-create-file-keybinding
   (use-package emacs
     :general
     (leader "." '(find-file :which-key "Open or create file.")))
@@ -298,6 +313,7 @@ You don't always have to have commands in a deep hierarchy of sections. Here is 
 I think you get the basics—as I did with learning and writing this section! Let's throw a bunch of commonly-used universal Emacs keybindings together now!
 
 #+begin_src emacs-lisp
+#+NAME: common-emacs-keybindings
   (use-package emacs
     :init
     (leader
@@ -312,6 +328,7 @@ I think you get the basics—as I did with learning and writing this section! Le
 And adding some buffer commands, including a custom one.
 
 #+begin_src emacs-lisp
+#+NAME: common-buffer-command-keybindings
   (use-package emacs
     :init
     (defconst crj--immortal-buffer-names '("*scratch*"
@@ -341,6 +358,7 @@ And adding some buffer commands, including a custom one.
 Check out this (useful!) keybinding.
 
 #+begin_src emacs-lisp :tangle no
+#+NAME: just-one-space-keybinding
   (use-package emacs
     :general
     (:states 'insert
@@ -350,6 +368,7 @@ Check out this (useful!) keybinding.
 See the <S-backspace> mapping? Well, it took me a good while to find the right way to write shift-backspace in the same syntax as the rest of it, and in the process, I happened upon this alternate syntax:
 
 #+begin_src emacs-lisp
+#+NAME: just-one-space-alternate-keybinding
   (use-package emacs
     :general
     (:states 'insert
@@ -365,6 +384,7 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
 Which key shows you a constantly updating list of what keys you can press next and what commands or menus they'll activate. It's helpful when you can't remember a shortcut, or even just when you want to explore what commands are under a certain menu.
 
 #+begin_src emacs-lisp
+#+NAME: which-key
   (use-package which-key
     :diminish 'which-key-mode
 
@@ -385,6 +405,7 @@ Which key shows you a constantly updating list of what keys you can press next a
 Searching a markup outline.
 
 #+begin_src emacs-lisp
+#+NAME: markup-search-keybinding
   (use-package emacs
     :general
     (leader "m." '(consult-outline :which-key "Search markup outline.")))
@@ -393,6 +414,7 @@ Searching a markup outline.
 This is an Org Mode command, but it works everywhere!
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: markup-repair-numbered-list-keybinding
   (use-package org
     :general
     (leader "ml" '(org-list-repair :which-key "Repair numbered list.")))
@@ -405,6 +427,7 @@ These abbreviations are a great tool for HTML, to the point where they're built 
 If you don't know at least the simple Emmet abbreviations, and you write HTML... man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: emmet-abbreviations
   (use-package emmet-mode
     :ghook
     'sgml-mode-hook
@@ -430,6 +453,7 @@ As Emacs From Scratch put it:
 Org is built into Emacs, but you probably want the newest version.
 
 #+begin_src emacs-lisp
+#+NAME: newest-org-mode-version
   (use-package org)
 #+end_src
 
@@ -465,6 +489,7 @@ Configuring how we manage our tasks using Org Mode.
 Some Evil keybindings for handling scheduling. Although I got used to the built-in keybindings enough that I may not use these that much!
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-scheduling-keybindings
   (use-package org
     :general
     (leader
@@ -482,6 +507,7 @@ Some Evil keybindings for handling scheduling. Although I got used to the built-
 The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
 
 #+begin_src emacs-lisp
+#+NAME: org-mode-headings-search-keybinding
   (use-package org
     :general
     (leader "m/" '(consult-org-heading :which-key "Search current headings.")))
@@ -492,6 +518,7 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
 
 #+begin_src emacs-lisp
+#+NAME: org-mode-better-font-faces
   (use-package org
     :init
     (defun my/buffer-face-mode-variable ()
@@ -567,6 +594,7 @@ This section contains the basic configuration for ~org-mode~ plus the configurat
 #+END_QUOTE
 
 #+begin_src emacs-lisp
+#+NAME: org-mode-basic-setup-2
   (use-package org
     :init
     (setq org-link-descriptive nil)
@@ -599,6 +627,7 @@ Emacs From Scratch's commentary on this:
 #+END_QUOTE
 
 #+begin_src emacs-lisp
+#+NAME: org-mode-nicer-bullets
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode)
     :custom
@@ -616,6 +645,7 @@ Org mode can export to other formats—probably its strongest feature.
 Most of this is pretty standard, but I also do have my own CSS to make exporting a little better. It's dead simple, and I'm sure I will change it if I start exporting to HTML more seriously.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-export-settings
   (use-package org
     :init
     (setq org-html-special-string-regexps nil
@@ -633,6 +663,7 @@ Most of this is pretty standard, but I also do have my own CSS to make exporting
 Org doesn't have at least one format I like using: Github Flavored Markdown. So let's add that with a package.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-export-gfm
   (use-package ox-gfm)
 #+end_src
 
@@ -641,6 +672,7 @@ Org doesn't have at least one format I like using: Github Flavored Markdown. So 
 Org Mode is great at exporting to other formats, but other formats usually don't export to Org. And there's no built-in way to do it, weirdly. So! Package time.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-import
   (use-package org-pandoc-import
     :straight (:host github
                :repo "tecosaur/org-pandoc-import"
@@ -652,6 +684,7 @@ Org Mode is great at exporting to other formats, but other formats usually don't
 Literate programming for fun and profit. Or... at least, for fun.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-code-editing-and-evaluation
   (use-package ob-racket
     :straight (:host github :repo "DEADB17/ob-racket"))
 
@@ -706,6 +739,7 @@ Literate programming for fun and profit. Or... at least, for fun.
 **** Pomodoro Task Management
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-pomodoro
   (use-package org-pomodoro
     :init
     (dolist (player-args-setting '(org-pomodoro-start-sound-args
@@ -749,6 +783,7 @@ Let's see if we can hit these quickly. We:
 And we're done at a mere 58 lines of code! (Though... again, I can probably simplify my little custom add-a-heading function.)
 
 #+begin_src emacs-lisp
+#+NAME: markdown-mode
   (use-package markdown-mode
     :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
 
@@ -816,6 +851,7 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
 The ugly-but-fully-featured markup language.
 
 #+begin_src emacs-lisp
+#+NAME: html-mode
   (use-package web-mode
     :commands (web-mode)
 
@@ -837,6 +873,7 @@ Info Mode is the special mode Emacs uses for manuals.
 Only making one change so far: removing the shadowing of my leader key.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: info-mode
   (use-package emacs
     :after evil
     :init
@@ -853,6 +890,7 @@ Time to spend a vast amount of time thinking through Vim-style keybindings!
 Before we get to the Evil mode setup, this is a small function I wrote to transpose characters with one Vimmish atomic action. It's the first thing here in Evil Mode because, at some point, I want to get into why this is a very Vimmish function, since it might serve as a good introduction to this section.
 
 #+begin_src emacs-lisp
+#+NAME: evil-transpose-chars
   (use-package emacs
     :init
     (defun crj-evil-transpose-chars ()
@@ -885,6 +923,7 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 A title-case operator!
 
 #+begin_src emacs-lisp
+#+NAME: evil-title-case-operator
   (use-package evil
     :config
     (evil-define-operator evil-title-case (beg end type)
@@ -903,6 +942,7 @@ A title-case operator!
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using ~describe-variable~ to see what they do and what their possible values are!
 
 #+begin_src emacs-lisp
+#+NAME: evil-mode-configuration
   (use-package evil
     :diminish 'subword-mode
 
@@ -958,6 +998,7 @@ This library provides Evil Mode bindings for non-standard buffers, e.g. Magit.
 I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more mnemonic to me. ~[m~ and ~]m~ move text up and down by lines, while ~[e~ and ~]e~ should navigate to errors. ~[l~ and ~]l~ I will set later to some Lisp manipulation commands.
 
 #+begin_src emacs-lisp
+#+NAME: evil-integration-for-third-party-packages
   (use-package evil-collection
     :diminish 'unimpaired
     :diminish 'evil-collection-unimpaired-mode
@@ -992,6 +1033,7 @@ This library adds some basic Evil bindings. In addition to the "key themes"" you
 Also added some good Evil-y movement bindings, as you can see at the bottom.
 
 #+begin_src emacs-lisp
+#+NAME: evil-org-mode-configuration
   (use-package evil-org
     :after (evil org)
 
@@ -1021,6 +1063,7 @@ Also added some good Evil-y movement bindings, as you can see at the bottom.
 Henrik Lissner's version may have some things I can grab if I want to play with them later. Not using the below block currently.
 
 #+begin_src emacs-lisp :lexical no :tangle no
+#+NAME: evil-org-mode-configuration-from-henrik-lissner-currently-disabled
   (use-package evil-org
     :straight (evil-org-mode :type git :host github :repo "hlissner/evil-org-mode")
 
@@ -1066,6 +1109,7 @@ Also included in generally surfacing more Emacsy insert-state commands:
 - Backwards versions of those two zaps. I don't /love/ Emacs' way of doing this, which would be to use Control-dash to give the function a negative number, /then/ ~M-z~ to run the command. I'd rather just wrap the command, passing in a negative number, then set that to ~M-Z~.
 
 #+begin_src emacs-lisp
+#+NAME: emacs-in-vim-in-emacs
   (use-package evil
     :init
     (defun crj-zap-to-char-backwards (arg char)
@@ -1121,6 +1165,7 @@ Also included in generally surfacing more Emacsy insert-state commands:
 ~evil-goggles~ helps you to visualize the text object you just worked on. Particularly useful for Evil yanks.
 
 #+begin_src emacs-lisp
+#+NAME: evil-command-quick-visualization
   (use-package evil-goggles
     :diminish 'evil-goggles-mode
 
@@ -1141,6 +1186,7 @@ Also included in generally surfacing more Emacsy insert-state commands:
 This library is amazing for working with surrounding text. Changing double quotes to single, parens to square brackets, etc., and also wrapping and unwrapping: surround this line with square brackets, surround the surrounding curly brackets with parens, delete the surrounding curly brackets, and so on. Huge efficiency saver.
 
 #+begin_src emacs-lisp
+#+NAME: working-with-surrounding-text-in-evil
   (use-package evil-surround
     :after evil
 
@@ -1153,6 +1199,7 @@ This library is amazing for working with surrounding text. Changing double quote
 Really really great way to handle comments.
 
 #+begin_src emacs-lisp
+#+NAME: evil-style-commenting
   (use-package evil-nerd-commenter
     :after evil
 
@@ -1177,6 +1224,7 @@ This is an invaluable command, especially since it's a motion I can combine with
 Being able to type ~SPC r i )~ to say "replace what's in these parens with what I just copied to the kill ring" is amazingly efficient text editing.
 
 #+begin_src emacs-lisp
+#+NAME: replace-with-clipboard-in-evil
   (use-package evil-replace-with-register
     :after evil
 
@@ -1189,6 +1237,7 @@ Being able to type ~SPC r i )~ to say "replace what's in these parens with what 
 Another efficient text editing library. This one exchanges two bits of text in an extremely Evilly way.
 
 #+begin_src emacs-lisp
+#+NAME: evil-motion-for-exchanging-text
   (use-package evil-exchange
     :after evil
 
@@ -1211,6 +1260,7 @@ Variations on these also come in handy quite often in Lisps (for which there are
 I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many other long-time Vim/Evil users—don't use the visual modes very often. (And I placed them far away on a distant binding for the rare times I do need them.)
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: quick-word-deletion
   (use-package evil
     :init
     (defun crj-delete-current-word ()
@@ -1263,6 +1313,7 @@ For reasons I'll go into someday, these ~evil-cleverparens~ word motions are jus
 Additionally, I'm binding the rarely-used ~H~ and ~L~ keys as additional forward/backward word motions, because they're somewhat in my muscle memory from the Lisp keybindings I currently use.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: better-word-movement
   (use-package evil-cleverparens
     :general
     (:states 'normal
@@ -1279,6 +1330,7 @@ Additionally, I'm binding the rarely-used ~H~ and ~L~ keys as additional forward
 Normally, Evil jumps between brackets with ~%~. Here's one library for opening that up to things like ~if~ and ~else~ and HTML opening/closing tags and anything else you can imagine/configure.
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: matching-more-delimiters
   (use-package evil-matchit
     :init
     (global-evil-matchit-mode 1))
@@ -1293,6 +1345,7 @@ Text Objects are a powerful concept in Vim/Evil. Let's add our own!
 This package gives you an Evil text object for XML/HTML attributes. It's helpful!
 
 #+begin_src emacs-lisp
+#+NAME: evil-text-object-for-html-attributes
   (use-package exato
     :commands (evil-outer-xml-attr evil-inner-xml-attr))
 #+end_src
@@ -1300,6 +1353,7 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
 **** Evil Argument Text Object
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: evil-text-object-for-arguments
   (use-package evil-args
     :general
     (general-def evil-inner-text-objects-map
@@ -1313,6 +1367,7 @@ This package gives you an Evil text object for XML/HTML attributes. It's helpful
 A surprisingly useful Evil text object for the entire buffer.
 
 #+begin_src emacs-lisp
+#+NAME: evil-text-object-for-entire-buffer
   (use-package evil-textobj-entire
     :after evil
 
