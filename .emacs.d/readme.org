@@ -4286,7 +4286,9 @@ Don't be like me.
                    "--stdio"))
 
     :general
-    (leader "cc" '(eglot :which-key "Run eglot in project root.")))
+    (leader
+      "cc" '(eglot :which-key "Run eglot in project root.")
+      "cr" '(eglot-rename :which-key "Rename symbol in project.")))
 
   (use-package cape
     :after eglot
