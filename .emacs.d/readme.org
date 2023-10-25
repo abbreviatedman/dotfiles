@@ -1317,7 +1317,7 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
       "tV" '(evil-visual-line :which-key "Evil visual line state.")))
 #+end_src
 
-**** Better Words Movement
+**** Better Word Movement
 
 For reasons I'll go into someday, these ~evil-cleverparens~ word motions are just closer to what you mean when you think of a word than Evil's/Vim's built-in ones.
 
