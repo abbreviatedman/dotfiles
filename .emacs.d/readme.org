@@ -462,6 +462,7 @@ Org is built into Emacs, but you probably want the newest version.
 **** Basic Setup
 
 #+begin_src emacs-lisp :lexical no
+#+NAME: org-mode-basic-setup-1
   (use-package org
     :init
     (advice-add 'org-refile :after 'org-save-all-org-buffers)
