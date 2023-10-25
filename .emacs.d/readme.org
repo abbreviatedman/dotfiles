@@ -4252,6 +4252,7 @@ And an extra package for completing Org blocks.
 **** Hippie-Expand
 
 Hippie-expand is a nice complete-everything-in-buffer command. It can complete form almost any source!
+
 #+begin_src emacs-lisp :lexical no
   (use-package emacs
     :init
