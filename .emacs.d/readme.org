@@ -4608,6 +4608,8 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 
 ** Config Changes Todos
 *** restclient.el and ob-restclient
+*** add evil-undo to v/V keybindings
+*** make v/V work with WORDs
 *** clean up config file and add better commentary
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
