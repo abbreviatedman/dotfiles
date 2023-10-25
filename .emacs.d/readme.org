@@ -2421,15 +2421,14 @@ Only some minor settings changes from the basic setup.
       (copilot-mode -1))
 
     (add-hook 'git-commit-mode-hook 'crj--set-up-git-commit-buffer)
-    (setq evil-collection-magit-want-horizontal-movement t)
+    (general-setq evil-collection-magit-want-horizontal-movement t
+                  magit-bury-buffer-function #'magit-restore-window-configuration
+                  magit-no-confirm nil
+                  magit-display-buffer-function
+                  #'magit-display-buffer-fullframe-status-v1)
 
-    :commands magit-status
-
-    :custom
-    (magit-display-buffer-function
-     #'magit-display-buffer-same-window-except-diff-v1)
-
-    (magit-no-confirm nil)
+    :commands
+    magit-status
 
     :general
     (general-def
@@ -2454,6 +2453,10 @@ Only some minor settings changes from the basic setup.
       "gm" '(magit-dispatch :which-key "Show Git HUD.")
       "gb" '(magit-branch-or-checkout :which-key "Switch or create Git branch.")
       "gc" '(magit-clone :which-key "Git clone.")))
+
+  (use-package browse-at-remote
+    :general
+    (leader "gr" '(browse-at-remote :which-key "Browse repo's remote.")))
 #+end_src
 
 **** Magit Error Workaround
