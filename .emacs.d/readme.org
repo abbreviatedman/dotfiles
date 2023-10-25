@@ -4343,7 +4343,7 @@ A great error-navigation library
      "[e" '(flymake-goto-prev-error
             :which-key "Go to previous error."))
 
-    (leader "cX" '(flymake-show-project-diagnostics :which-key "Describe variable.")))
+    (leader "cX" '(flymake-show-project-diagnostics :which-key "Show project diagnostics.")))
 #+end_src
 
 ** AI
