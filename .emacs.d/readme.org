@@ -707,7 +707,9 @@ Literate programming for fun and profit. Or... at least, for fun.
     :init
     (general-setq org-confirm-babel-evaluate nil
                   org-src-window-setup 'current-window
-                  org-babel-default-header-args:elisp '((:lexical . "yes")))
+                  org-babel-default-header-args:elisp '((:lexical . "yes"))
+                  org-edit-src-turn-on-auto-save t
+                  org-src-ask-before-returning-to-edit-buffer nil)
 
     (org-babel-do-load-languages
      'org-babel-load-languages
