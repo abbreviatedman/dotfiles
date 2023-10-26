@@ -2577,6 +2577,8 @@ Yet Another Dotfiles Manager has been super helpful to managing my system config
 
 Let's integrate it with Magit!
 
+Only major change here is that I was experiencing some modeline issues with yadm buffers, so I turned the modeline off upon entering. Seems like too minor an issue to spend much time fixing, but maybe I will at some point.
+
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
