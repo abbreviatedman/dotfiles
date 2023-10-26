@@ -3127,15 +3127,32 @@ Thinking about giving this a try. It's a little less pretty than ~consult-org-he
 
 **** Spell-Check With Flyspell
 
-Flyspell is an /amazing/ built-into-Emacs spell-checker.
+Flyspell is an /amazing/ built-into-Emacs spell-checker. And I have a ton of custom behavior in this section to make it even better.
 
-~flyspell-correct~ makes it even better with a quick command to correct the last word. You can correct your spelling /so/ easily without losing your flow in the slightest bit.
+I use the built-in binding of ~flyspell-auto-correct-previous-word~ for autocorrecting to the first suggestion without moving the cursor. It really feels like magic to correct a previous misspelling while continuing to write, all without missing a beat!
 
-I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion without moving the cursor. Occasionally this is the wrong suggestion, in which case I can use the below ~C-:~ binding to choose from the full menu of options, including saving the word into my personal dictionary.
+I get the same behavior for auto-adding the previous typo to my dictionary with a custom function.
+
+If the first auto-correction wasn't what you wanted, the default behavior of cycling through the corrections is pretty slow—Flyspell doesn't have a great algorithm for choosing the order of suggestions—in which case I can use the below custom function to undo any previous auto-correction if applicable (so we have a misspelled word again) and choose from the full list interactively.
+
+There's also going rapidly back without having to re-enter the keybinding, choosing from the selection each time, which can be achieved with an argument to ~flyspell-correct-wrapper~, so I've written and bound another custom function for doing that. This makes correcting multiple words /very/ fast (as soon as you're done correcting one, it jumps to the next), and /still/ restores the point afterwards.
+
+This is all such a wonderful workflow.
+
+That said, I have a couple minor quibbles I'll probably never get around to totally fixing:
+
+- I /occasionally/ have to refresh spelling the visible window or entire buffer, as it doesn't always update if I undo correcting a word, It doesn't happen often, but it happens often enough that I'm adding a binding here for spell-checking those regions.
+- Currently, my choices are between a kind of ugly popup for candidates right where I want them, or a better interface but one at the bottom of my screen, taking my eyes away from the action. I /could/ improve the popup's look if I stopped doing weird things with the font, true—but it would still be a bit ugly, and decidedly less ergonomic (I can't for example type in a correction in the popup). I'm sticking with the popup for now, since not-breaking-the-workflow is crucial.
+
+Still, those are minor quibbles. Overall, this is an /amazing/ spell-checking system.
+
+Which is good, as I make a /lot/ of spelling errors.
 
 #+begin_src emacs-lisp :lexical yes
   (use-package flyspell
     :diminish 'flyspell-mode
+
+    :after evil
 
     :demand t
 
@@ -3143,19 +3160,80 @@ I use the built-in binding of ~C-;~ for autocorrecting to the first suggestion w
     (defun crj--turn-on-flyspell ()
       (flyspell-mode 1))
 
+    (defun crj-spellcheck-visible-window ()
+      "Runs the spellchecker on the visible part of the window."
+      (interactive)
+      (flyspell-region (window-start) (window-end)))
+
+    (defun crj-flyspell-add-previous-word-to-dictionary ()
+      "Add the previous \"misspelled\" word to the dictionary."
+      (interactive)
+      (save-excursion
+        (evil-prev-flyspell-error)
+        (let ((current-location (point))
+              (word (flyspell-get-word)))
+          (when word
+            (flyspell-do-correct
+             'save
+             nil
+             (car word)
+             current-location
+             (cadr word)
+             (caddr word)
+             current-location)
+            (message (format "%s saved to dictionary." (car word)))))))
+
     (add-hook 'text-mode-hook #'crj--turn-on-flyspell)
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
     (add-hook 'git-commit-mode-hook #'crj--turn-on-flyspell)
-    (setq ispell-program-name "hunspell")
+    (general-setq ispell-program-name "hunspell")
 
     :config
     (ispell-set-spellchecker-params)
     (ispell-hunspell-add-multi-dic "en_US,en_CA,en_AU,en_GB,es_ES")
-    (ispell-change-dictionary "en_US,en_CA,en_AU,en_GB,es_ES" t))
+    (ispell-change-dictionary "en_US,en_CA,en_AU,en_GB,es_ES" t)
+
+    :general
+    (leader
+      "bs" #'(crj-spellcheck-visible-window :which-key "Spellcheck visible window.")
+      "bS" #'(flyspell-buffer :which-key "Spellcheck whole buffer."))
+
+    ('(insert normal emacs)
+     "C-M-;" #'crj-flyspell-add-previous-word-to-dictionary))
 
   (use-package flyspell-correct
-    :general (:states '(insert normal emacs)
-              "C-:" #'flyspell-correct-wrapper))
+    :init
+    (defun crj-flyspell-correct-with-rapid-mode ()
+      "Correct multiple words in a row."
+      (interactive)
+      (let ((current-prefix-arg '(4)))
+        (call-interactively 'flyspell-correct-wrapper)))
+
+    (defun crj-flyspell-correct-dwim ()
+      "Correct previous word using candidate selection, first undoing any previous
+  auto-correct.
+
+  Inspired by alphapapa's function here:
+
+  https://github.com/d12frosted/flyspell-correct/issues/30"
+      (interactive)
+      ;; If we've already auto-corrected, undo it.
+      (when (equal flyspell-previous-command #'flyspell-auto-correct-previous-word)
+        (progn
+          (save-excursion
+            (undo))
+          (crj-spellcheck-visible-window)))
+
+      ;; Either way, select a correction candidate.
+      (call-interactively 'flyspell-correct-wrapper))
+
+    :general
+    ('(insert normal emacs)
+     "C-:" #'crj-flyspell-correct-dwim
+     "C-M-:" #'crj-flyspell-correct-with-rapid-mode))
+
+  (use-package flyspell-correct-popup
+    :after flyspell-correct)
 #+end_src
 
 *** Coding
