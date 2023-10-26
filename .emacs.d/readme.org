@@ -3992,6 +3992,35 @@ Better go-to-definition function for Emacs Lisp.
      "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
 
+******* Pretty Lambda Symbols
+
+This code turns the string "lambda" into the string "λ". Which is cool!
+
+I'm still not sure how I feel about it—it makes the code shorter and more readable, at the cost of having the text you see not actually being the text you can edit. For example, if I put the point at the end of "λ" and go to delete a character backwards, I get "lambd", and that's... disorienting and weird and non-intuitive. It can break you out of your flow. (This is why WYSIWIG editors like MS Word and Google Docs are kind of terrible.)
+
+That said, it IS cool and readable and short, so I'm giving it a tentative go.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj--set-up-elisp-prettify-mode ()
+      "Converts \"lambda\" into \"λ\" visually.
+
+  Noe that this does /not/ actually change the underlying text—just how it's displayed
+  in the buffer.
+
+  This is the only ligature I like enough to take the editability hit.
+
+  An iconic symbol for a homoiconic language."
+      (setq-local prettify-symbols-alist '(("lambda" . 955)))
+      (prettify-symbols-mode))
+
+    (general-add-hook '(emacs-lisp-mode-hook
+                        ielm-mode-hook
+                        org-mode-hook)
+                      #'crj--set-up-elisp-prettify-mode))
+#+end_src
+
 ****** Scheme
 
 I want to give learning Scheme a shot!
