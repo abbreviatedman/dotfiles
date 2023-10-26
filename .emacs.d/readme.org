@@ -2763,8 +2763,12 @@ Increase the size of the garbage collector.
     (setq gc-cons-threshold (* 100 1000 1000)))
 #+end_src
 
+Haven't seen this used yet, but it seems a no-brainer to enable it for any package that can take advantage of it.
 
 #+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (repeat-mode 1))
 #+end_src
 
 *** Minibuffers
