@@ -745,7 +745,7 @@ Literate programming for fun and profit. Or... at least, for fun.
     ('normal
      :keymaps 'org-mode-map
      :prefix "SPC"
-      "c'" #'(org-edit-special :which-key "Edit code block in its major mode."))
+     "c'" #'(org-edit-special :which-key "Edit code block in its major mode."))
 
     (:keymaps 'org-mode-map
      :states '(normal emacs visual insert motion)
