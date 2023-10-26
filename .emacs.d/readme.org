@@ -2084,14 +2084,18 @@ Let's visualize our indentation!
 
 *** Folding
 
-#+begin_src emacs-lisp :lexical yes
-  (use-package vimish-fold)
-  (use-package evil-vimish-fold
-    :diminish 'evil-vimish-fold-mode
+Folding code is sometimes useful. Lots of people swear by it!
 
-    :init
-    (setq evil-vimish-fold-target-modes '(prog-mode text-mode))
-    (global-evil-vimish-fold-mode))
+#+begin_src emacs-lisp :lexical yes
+  (use-package fold-this)
+
+  (use-package evil-extra-operator
+    :after fold-this
+
+    :general
+    ('normal
+     "gs" #'(evil-operator-fold :which-key "Fold operator.")
+     "gS" #'(fold-this-unfold-all :which-key "Unfold all folds.")))
 #+end_src
 
 *** Don't Show Me Bookmarks
