@@ -1725,11 +1725,6 @@ Here are my font settings.
     (set-face-attribute 'variable-pitch nil
                         :font crj--variable-pitch-font
                         :height 1.0
-                        :weight 'regular)
-
-    (set-face-attribute 'popup-face nil
-                        :font crj--fixed-pitch-font
-                        :height 1.0
                         :weight 'regular))
 #+end_src
 
