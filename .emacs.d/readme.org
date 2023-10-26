@@ -4813,13 +4813,26 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 
 ** Config Changes Todos
 *** restclient.el and ob-restclient
+*** snippets - skeleton or tempo or tempel or yasnippet??
 *** add evil-undo to v/V keybindings
 *** make v/V work with WORDs
-*** clean up config file and add better commentary
+*** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
+
+Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (firefox) or user scripts (floorp) to get going:
+
+#+begin_src javascript :tangle no
+  document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.keyCode === /*desired key code*/) {
+          e.stopPropagation();
+      }
+  }, true);
+#+end_src
+
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
+*** clean up config file and add better commentary
+*** understand jump list better
 *** configure hippie-expand
-*** snippets - skeleton or tempo or tempel or yasnippet??
 *** check org mode setups from other evil configs
 *** Save and kill buffer
 
