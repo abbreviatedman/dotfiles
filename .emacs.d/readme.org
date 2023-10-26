@@ -2758,7 +2758,9 @@ Save backups of files, every 10 idle seconds, to a backups folder in our main em
 Increase the size of the garbage collector.
 
 #+begin_src emacs-lisp :lexical yes
-  (setq gc-cons-threshold (* 100 1000 1000))
+  (use-package emacs
+    :init
+    (setq gc-cons-threshold (* 100 1000 1000)))
 #+end_src
 
 
