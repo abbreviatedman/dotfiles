@@ -2761,18 +2761,8 @@ Increase the size of the garbage collector.
   (setq gc-cons-threshold (* 100 1000 1000))
 #+end_src
 
-Measure startup time using an excellent bit of code taken from Emacs From Scratch.
 
 #+begin_src emacs-lisp :lexical yes
-  (defun efs/display-startup-time ()
-    "Display how long it took to start Emacs."
-    (message "Emacs loaded in %s with %d garbage collections."
-             (format "%.2f seconds"
-                     (float-time
-                      (time-subtract after-init-time before-init-time)))
-             gcs-done))
-
-  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
 
 *** Minibuffers
