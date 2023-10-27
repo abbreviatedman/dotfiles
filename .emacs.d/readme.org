@@ -675,7 +675,7 @@ Most of this is pretty standard, but I also do have my own CSS to make exporting
 
 ***** Org Export to GFM
 
-Org doesn't have at least one format I like using: Github Flavored Markdown. So let's add that with a package.
+Org is missing at least one format I like using: Github Flavored Markdown. So let's add that with a package.
 
 #+NAME: org-mode-export-gfm
 #+begin_src emacs-lisp :lexical yes
