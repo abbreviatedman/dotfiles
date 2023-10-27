@@ -1,4 +1,4 @@
-#+title: Colin Jaffe's Literate Emacs Configuration
+#+TITLE: Colin Jaffe's Literate Emacs Configuration
 #+PROPERTY: header-args:emacs-lisp :mkdirp yes :tangle init.el :padline yes
 
 * Colin Jaffe's Literate Config
@@ -2708,6 +2708,10 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 For backwards compatibility, Emacs hasn't changed its defaults for a looooong time, requiring folks to either keep really weird settings they don't even know exist or write the same boilerplate code that everyone else does to get some sane defaults.
 
 This is that boilerplate code.
+
+Feel free to check out any of these variables—if you're in Emacs, the full documentation on each one is a keypress away! They range from minor tweaks (what format to use for disambiguating files with the same names) to kind-of-important good-neighbor rules for playing well with other programs (saving the system clipboard into Emacs' powerful clipboard system, or reloading buffers if another program changes the file it's visiting) to correcting some really poorly thought out decisions (like adding or changing or deleting code from your Emacs config file if you change variables through the graphical Customize system).
+
+Either way, marvel at the fact that the Emacs maintainers have stubbornly held onto backwards compatibility from a program that is about to hit /forty years old/. That's a /lot/ of backwards to be compatible with! So… maybe we should be lucky it's just /one/ block of boilerplate code needed, given the number of holes we need to plug in the hull of this creaky single-threaded old vessel.
 
 #+NAME: set-sane-defaults
 #+begin_src emacs-lisp :lexical yes
