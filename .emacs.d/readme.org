@@ -2720,6 +2720,7 @@ This is that boilerplate code.
                   auto-save-timeout 10
                   auto-save-no-message t
                   backup-by-copying t
+                  ediff-window-setup-function 'ediff-setup-windows-plain
                   frame-inhibit-implied-resize t
                   backup-directory-alist `(("." . ,(concat user-emacs-directory "/backups")))
                   gc-cons-threshold (* 100 1000 1000)
