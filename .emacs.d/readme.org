@@ -59,15 +59,6 @@ You can read more on this subject… and I’ll probably write more. But in the 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs--org-babel-tangle-config)))
 #+end_src
 
-** Start With Messages
-
-I usually want to see the startup log first, and I'm tired of manually switching to it.
-
-#+NAME: start-with-messages
-#+begin_src emacs-lisp :lexical yes
-  (switch-to-buffer "*Messages*")
-#+end_src
-
 ** Package System
 
 Getting Emacs users' awesome libraries (called "packages") into Emacs.
@@ -1612,6 +1603,15 @@ We can edit filtered results live with wgrep.
 #+end_src
 
 ** Look and Feel
+
+*** Let's always start Emacs with our config file.
+
+That's this file, as of now!
+
+#+NAME: start-with-config-file
+#+begin_src emacs-lisp :lexical yes
+  (crj-open-literate-config-file)
+#+end_src
 
 *** Basic UI Configuration
 
