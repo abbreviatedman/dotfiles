@@ -1632,7 +1632,7 @@ These are some sane defaults for the UI.
           visible-bell t))
 #+end_src
 
-If you're just getting started in Emacs, the menu bar might be helpful so you can remove the ~(menu-bar-mode -1)~ line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the ~describe~ functions, ~which-key~, and, when you et there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
+If you're just getting started in Emacs, the menu bar might be helpful so you can remove the ~(menu-bar-mode -1)~ line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the ~describe~ functions, ~which-key~, and, when you get there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
 
 *** File Management
 
@@ -1813,6 +1813,8 @@ Zooming in and out in Emacs is... tricky. Part of this is because fonts in gener
 Still, I've got a /pretty/ good system for zooming fonts up and down, here. It's split into zooming per-buffer and zooming globally, depending on your needs. It's easy to zoom more or less for fine-grained refinement, while also being easy to zoom by huge amounts in one go with a count.
 
 There are some edge cases here, though, so I'll probably be returning to it.
+
+NOTE: Emacs 29 has global zooming in and out, so hopefully I won't need this code anymore! Now back to your regularly scheduled code.
 
 First, some functions to zoom and reset one buffer:
 
