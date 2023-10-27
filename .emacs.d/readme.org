@@ -767,7 +767,7 @@ Pomodoro is a great way to manage your tasks! Or I think it /would/ be if I ever
 
 Here's a library that sets pomodoro timers and clocks your time on Org Mode tasks.
 
-#+NAME: org-mode-pomodoro
+#+NAME: org-task-pomodoro-timer
 #+begin_src emacs-lisp :lexical yes
   (use-package org-pomodoro
     :init
@@ -794,6 +794,7 @@ Here's a library that sets pomodoro timers and clocks your time on Org Mode task
 
 And another one where you set your own context:
 
+#+NAME: pomodoro-timer
 #+begin_src emacs-lisp :lexical no
   (use-package pomm
     :commands (pomm pomm-third-time pomm-mode-line-mode)
@@ -1436,6 +1437,7 @@ A surprisingly useful Evil text object for the entire buffer.
 
 I'm pretty sure I'm going to find a use for this!
 
+#+NAME: evil-text-object-between-two-characters
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-textobj-between
     :straight (:host github
@@ -1455,6 +1457,7 @@ Making it an official text object with an inner variant does, however, allow you
 
 And if you want the indentation or trailing whitespace, you can work with the outer variant. Or, again, just the standard work-on-a-line-by-default version of any command!
 
+#+NAME: evil-text-object-for-line
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-textobj-line
     :init
@@ -1466,6 +1469,7 @@ And if you want the indentation or trailing whitespace, you can work with the ou
 
 Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search for that text. Very occasionally very useful!
 
+#+NAME: evil-search-from-visual-mode
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-visualstar
     :after evil
@@ -1482,6 +1486,7 @@ Allows you to select some text in Visual State and then hit ~*~ or ~#~ to search
 
 Shows you the difference between two different bits of text. Another very occasionally very useful trick.
 
+#+NAME: evil-diff-operator
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-quick-diff
     :after evil
@@ -1497,6 +1502,7 @@ Shows you the difference between two different bits of text. Another very occasi
 
 *** Evil Evaluating
 
+#+NAME: evil-evaluation-operator
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-extra-operator
     :general
@@ -1508,6 +1514,7 @@ Shows you the difference between two different bits of text. Another very occasi
 
 *** Number Incrementing and Decrementing
 
+#+NAME: evil-number-operators
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-numbers
     :general
