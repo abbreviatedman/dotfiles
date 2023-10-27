@@ -2701,83 +2701,34 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
     (require 'mu4e))
 #+end_src
 
-** Under The Hood
+** Fixing Assorted Decrepit Defaults
 
-Always confirm with a quick ~y~ or ~n~ instead of requiring a ~yes~ or ~no~ followed by ~RET~.
+For backwards compatibility, Emacs hasn't changed its defaults for a looooong time, requiring folks to either keep really weird settings they don't even know exist or write the same boilerplate code that everyone else does to get some sane defaults.
 
-And never confirm to open a symlinked file under source control, which you do a /lot/ when exploring Emacs packages.
+This is that boilerplate code.
 
+#+NAME: set-sane-defaults
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
+    (general-setq vc-follow-symlinks t
+                  save-interprogram-paste-before-kill t
+                  recentf-max-saved-items 50
+                  global-auto-revert-non-file-buffers t
+                  auto-save-timeout 10
+                  auto-save-no-message t
+                  backup-by-copying t
+                  frame-inhibit-implied-resize t
+                  backup-directory-alist `(("." . ,(concat user-emacs-directory "/backups")))
+                  gc-cons-threshold (* 100 1000 1000)
+                  uniquify-buffer-name-style 'forward
+                  load-prefer-newer t)
     (defalias 'yes-or-no-p 'y-or-n-p)
-    (setq vc-follow-symlinks t))
-#+end_src
-
-Set Emacs to remember text copied to the system clipboard.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq save-interprogram-paste-before-kill t))
-
-#+end_src
-
-Set Emacs to remember recent files, as well as update buffers if the file changes on disk.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
+    (repeat-mode 1)
     (recentf-mode 1)
-    (setq recentf-max-saved-items 50)
     (global-auto-revert-mode 1)
-    (setq global-auto-revert-non-file-buffers t))
-#+end_src
-
-Also remember our place in files.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (save-place-mode 1))
-#+end_src
-
-A better Emacs kill command binding to kill the Emacs server as well.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :general
-    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
-
-    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
-#+end_src
-
-Save backups of files, every 10 idle seconds, to a backups folder in our main emacs directory.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (auto-save-mode 1)
-    (setq auto-save-timeout 10
-          auto-save-no-message t
-          backup-directory-alist
-          `(("." . ,(concat user-emacs-directory "/backups")))))
-#+end_src
-
-Increase the size of the garbage collector.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq gc-cons-threshold (* 100 1000 1000)))
-#+end_src
-
-Haven't seen this used yet, but it seems a no-brainer to enable it for any package that can take advantage of it.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (repeat-mode 1))
+    (save-place-mode 1)
+    (auto-save-mode 1))
 #+end_src
 
 *** Minibuffers
