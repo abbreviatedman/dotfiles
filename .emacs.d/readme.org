@@ -2378,6 +2378,18 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
       "&" #'(async-shell-command :which-key "Run an asynchronous shell command.")))
 #+end_src
 
+**** Use ZSH And The Right Shell Variables
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package exec-path-from-shell
+    :config
+    (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+      (add-to-list 'exec-path-from-shell-variables var))
+    (when (or (memq window-system '(mac ns x))
+              (daemonp))
+      (exec-path-from-shell-initialize)))
+#+end_src
+
 *** Calendar
 
 So you can wish everyone would leave you alone, but /within Emacs/.
