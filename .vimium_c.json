@@ -1,7 +1,7 @@
 {
 	"name": "Vimium C",
-	"@time": "10/30/2023, 10:00:23 AM",
-	"time": 1698674423634,
+	"@time": "10/30/2023, 12:37:16 PM",
+	"time": 1698683836861,
 	"environment": {
 		"extension": "1.99.995",
 		"platform": "linux",
@@ -32,6 +32,10 @@
 		{
 			"passKeys": "",
 			"pattern": ":https://replit.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://assessments.hired.com/"
 		}
 	],
 	"grabBackFocus": true,
@@ -42,7 +46,8 @@
 		"map J nextTab",
 		"map K previousTab",
 		"map W moveTabToNewWindow",
-		"map gw moveTabToNextWindow",
+		"map gw moveTabToNextWindow last",
+		"map gW moveTabToNextWindow",
 		"map gx closeTabsOnRight",
 		"map gX closeOtherTabs",
 		"map <a-s-f> LinkHints.activateOpenInNewForegroundTab",
@@ -66,6 +71,6 @@
 	"linkHintCharacters": "asdfgqwertzxcvb",
 	"searchUrl": "https://duckduckgo.com/?q=$s DuckDuckGo",
 	"smoothScroll": false,
-	"ignoreCapsLock": 2,
-	"vimSync": true
+	"vimSync": true,
+	"ignoreCapsLock": 2
 }
