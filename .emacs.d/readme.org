@@ -2478,8 +2478,8 @@ Only some minor settings changes from the basic setup.
     (general-setq evil-collection-magit-want-horizontal-movement t
                   magit-bury-buffer-function #'magit-restore-window-configuration
                   magit-no-confirm nil
-                  magit-display-buffer-function
-                  #'magit-display-buffer-fullframe-status-v1)
+                  magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1
+                  forge-add-default-bindings nil)
 
     :commands
     magit-status
@@ -2591,7 +2591,8 @@ This requires some Git configuration and storage of your credentials. See [[http
   (use-package sqlite3)
 
   (use-package forge
-    :after magit)
+    :after (magit sqlite3)
+    :demand t)
 #+end_src
 
 **** YADM Integration
