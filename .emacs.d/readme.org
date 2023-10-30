@@ -3587,7 +3587,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
       (if symex-mode
           (run-with-timer 0.25 nil #'symex-mode-interface)))
 
-    (dolist (mode-name '(lisp-interaction-mode emacs-lisp-mode inferior-emacs-lisp-mode racket-mode racket-repl-mode clojure-mode clojurescript-mode clojurec-mode lisp-mode slime-repl-mode sly-mrepl-mode scheme-mode arc-mode))
+    (dolist (mode-name '(lisp-interaction-mode emacs-lisp-mode ielm-mode racket-mode racket-repl-mode clojure-mode clojurescript-mode clojurec-mode lisp-mode slime-repl-mode sly-mrepl-mode scheme-mode arc-mode))
       (let ((mode-hook (intern (concat (symbol-name mode-name)
                                        "-hook"))))
         (add-hook mode-hook 'symex-mode)))
