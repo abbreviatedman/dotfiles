@@ -2413,9 +2413,9 @@ Although I'm exploring ways to cut out Google entirely from my life, my work use
 There are a /lot/ of moving parts with ~org-gcal~, those parts are continuously evolving, and the parts are poorly documented. But here's some issues I've encountered:
 
 - The client-id and ~client-secret~ are each pulled from the sources listed in ~org-gcal~'s readme originally, but I'm keeping them... well, I'm not saying here, but you (Colin) can figure it out when you need to set up a new machine.
-- Once I have them on a new machine, I put them in ~password-store~ (aka ~pass~) and, below, pull them out with ~auth-source-pass-get~. This is a way to keep them out of the repo.
+- Once I have them on a new machine, I put them in my ~.authinfo~  file (encrypting it to ~.authinfo.gpg~ with ~epa-decrypt-file~) and, below, pull them out with ~crj--get-netrc-info~. This is a way to keep them out of the repo.
 - The ~org-gcal-fetch-file-alist~ is a list of calendars to pull from. The first item in the pair is Google Calendar's id of the calendar (which seems to just be the associated email for the basic personal calendar), and the second is the file to put it in. I have a separate file for each calendar.
-- For now, ~gnupg~ appears to have a bug that requires you to downgrade it to ~2.4~. If you run into an erro, this /may/ be the issue.
+- For now, ~gnupg~ appears to have a bug that requires you to downgrade it to ~2.4~. If you run into an error, this /may/ be the issue.
 - I don't yet fully understand the interweaving auth systems in effect, but for now, when setting this up in Arch/i3wm, you /do/ want to use the ~gnome-keyring-daemon~ to "save the password in the keyring".
 - And also for now, you do NOT want to check the box for killing the pstore buffer, and you'll do better if you quit Emacs, save that buffer, and then restart Emacs.
 
@@ -2808,20 +2808,24 @@ Oooh.
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
+    (defun crj--get-netrc-info (host field)
+      "Get FIELD for HOST from the netrc file."
+      (netrc-get (netrc-machine (netrc-parse (expand-file-name "~/.authinfo.gpg")) host) field))
+
+    (general-setq auth-sources '("~/.authinfo.gpg")
           plstore-cache-passphrase-for-symmetric-encryption t)
 
     (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
 
   (use-package ssh-agency
     :init
-    (setq ssh-agency-askpass nil))
+    (general-setq ssh-agency-askpass nil))
 
-  (use-package password-store)
+  ;; (use-package password-store)
 
-  (use-package auth-source-pass
-    :init
-    (auth-source-pass-enable))
+  ;; (use-package auth-source-pass
+  ;;   :init
+  ;;   (auth-source-pass-enable))
 #+end_src
 
 *** Don't Yell At Me So Much
@@ -4622,13 +4626,6 @@ A great error-navigation library
 
 It's the robots!
 
-*** First, a simple function to get my password.
-
-#+begin_src emacs-lisp :lexical yes
-  (defun crj--get-open-ai-api-key ()
-    (auth-source-pass-get 'secret "ai/openai/key"))
-#+end_src
-
 *** Bing Chat
 
 **** Main Bing Setup
@@ -4688,7 +4685,7 @@ Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or o
 #+begin_src emacs-lisp :lexical yes
   (use-package gptel
     :init
-    (setq gptel-api-key (crj--get-open-ai-api-key)))
+    (setq gptel-api-key (crj--get-netrc-info "ai.openai.key" "password")))
 #+end_src
 
 
@@ -4710,7 +4707,7 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
                :files ("chatgpt-shell.el"))
 
     :custom
-    ((chatgpt-shell-openai-key (crj--get-open-ai-api-key))))
+    ((chatgpt-shell-openai-key (crj--get-netrc-info "ai.openai.key" "password"))))
 #+end_src
 
 ** Window Management
