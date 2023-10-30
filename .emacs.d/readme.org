@@ -2658,7 +2658,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
   (use-package dired-hacks
     :init
-    (general-add-hook 'dired-mode-hook '(dired-collapse-mode))
+    (general-add-hook 'dired-mode-hook #'dired-collapse-mode)
 
     (defun dired-collapse-jump ()
     "Jump to the first parent directory with more than one file.
@@ -2748,7 +2748,12 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
     (recentf-mode 1)
     (global-auto-revert-mode 1)
     (save-place-mode 1)
-    (auto-save-mode 1))
+    (auto-save-mode 1)
+
+    :general
+    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
+
+    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
 *** Minibuffers
