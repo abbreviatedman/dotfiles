@@ -2709,7 +2709,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 *** Email with Mu4e
 
-#+begin_src emacs-lisp :lexical yes
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package emacs
     :init
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
