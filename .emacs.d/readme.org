@@ -5850,14 +5850,6 @@ This was occasionally useful, should be easy to get back
            :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
 #+end_src
 
-*** Forge PRs
-
-Super easy to fix up for my current framework if I start checking out PRs again.
-
-#+begin_src emacs-lisp :lexical yes :tangle no
-  (map! :leader (:prefix "g" :desc "Checkout pull request." :n "v" #'forge-checkout-pullreq))
-#+end_src
-
 *** Elisp
 
 Some old Elisp code, might be useful?
