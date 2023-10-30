@@ -2595,6 +2595,17 @@ This requires some Git configuration and storage of your credentials. See [[http
     :demand t)
 #+end_src
 
+**** Code Review
+
+This offers a pretty good interface for GitHub Pull Requests.
+
+#+begin_src emacs-lisp :lexical yes
+   (use-package code-review
+  )
+#+end_src
+
+An alternate way to do with Forge on its own is to use ~forge-checkout-pullreq~ to create a local branch for the PR. Then you can switch to the branch the PR is to (maybe ~develop~ or ~main~) and merge the local branch in. Then push.
+
 **** YADM Integration
 
 Yet Another Dotfiles Manager has been super helpful to managing my system configurations. It's a wrapper around Git that makes it easy to manage your dotfiles in a Git repo, and then use that repo to manage your dotfiles on a new machine.
