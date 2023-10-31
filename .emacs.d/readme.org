@@ -2085,6 +2085,7 @@ The eternal struggle.
 
 (I'm referring of course to both the struggle between the two sides and the struggle between the user and Emacs.)
 
+#+name: spaces-over-tabs
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2093,6 +2094,7 @@ The eternal struggle.
 
 **** General Indentation
 
+#+name: indentation-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2105,6 +2107,7 @@ The eternal struggle.
 
 Let's visualize our indentation!
 
+#+name: visualize-indentation-level
 #+begin_src emacs-lisp :lexical yes
   (use-package highlight-indent-guides
     :diminish 'highlight-indent-guides-mode
@@ -2119,6 +2122,7 @@ Let's visualize our indentation!
 
 Folding code is sometimes useful. Lots of people swear by it!
 
+#+name: folding-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package fold-this)
 
@@ -2133,6 +2137,7 @@ Folding code is sometimes useful. Lots of people swear by it!
 
 *** Don't Show Me Bookmarks
 
+#+name: disable-bookmark-visualization
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2148,6 +2153,7 @@ This section is for parts of Emacs that are well-integrated applications.
 
 I love this no-hassle don't-have-to-think-about-what-to-listen-to background music. I need need /need/ music to focus.
 
+#+name: internet-radio-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package eradio
     :init
@@ -2165,6 +2171,7 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
 
 RSS might be a great technology? I'm only just getting into it with this package!
 
+#+name: rss-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package elfeed
     :commands elfeed
@@ -2180,6 +2187,7 @@ RSS might be a great technology? I'm only just getting into it with this package
 
 **** Monitor System Processes With Proced
 
+#+name: process-editor-binding
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -2188,6 +2196,7 @@ RSS might be a great technology? I'm only just getting into it with this package
 
 **** Create and Monitor Custom Commands With Prodigy
 
+#+name: process-manager-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package prodigy
     :init
@@ -2225,6 +2234,7 @@ Org Agenda is an amazing application that can take task data from different sour
 
 We set up an agenda view, and then we set it as the easier-to-reach keybinding (~SPC aa~). The dashboard, which has a bunch of different potential views, is still available on ~SPC aA~.
 
+#+name: org-agenda-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2329,6 +2339,7 @@ Perhaps I'll set up Eshell and Eat sometime.
 
 Of the many types of terminals in Emacs, Vterm is the most faithful to the standard terminal emulator. Note that this does not mean it's the best, but it /does/ work the way folks expect if they're used to the standard terminal emulator experience.
 
+#+name: vterm-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package vterm
     :init
@@ -2369,6 +2380,7 @@ Of the many types of terminals in Emacs, Vterm is the most faithful to the stand
 
 Let's also use a wrapper around vterm that allows multiple terminals.
 
+#+name: use-multiple-vterminals-simultaneously
 #+begin_src emacs-lisp :lexical yes
   (use-package multi-vterm
     :general
@@ -2379,6 +2391,7 @@ Let's also use a wrapper around vterm that allows multiple terminals.
 
 Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/emacs/comments/17aekjs/how_to_autofill_asyncshellcommand_with_last/][a Reddit discussion I was in]] where we found a way to make the minibuffer prompt start with the last shell command. Some fun hacking!
 
+#+name: auto-fill-previous-shell-command
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2411,6 +2424,7 @@ So you can wish everyone would leave you alone, but /within Emacs/.
 
 **** View Calendar
 
+#+name: better-calendar-view
 #+begin_src emacs-lisp :lexical yes
   (use-package calfw)
 
@@ -2438,6 +2452,7 @@ I hope to document a clear and simple way to set this up in the future (perhaps 
 
 **** Google Calendar Setup
 
+#+name: google-calendar-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2482,6 +2497,7 @@ Only some minor settings changes from the basic setup.
 - Make the window setup a little tidier.
 - And add some shortcuts to both the general Magit menus and things I do more often, like clone and switch/create branches.
 
+#+name: magit-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package magit
     :init
@@ -2534,6 +2550,7 @@ This is an annoying thing where I'm getting an error that ~seq-keep~ is not defi
 
 In the meantime, the workaround is to define ~seq-keep~ ourselves.
 
+#+name: fix-magit-bug
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2550,6 +2567,8 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
 
 ***** Our Cloud Save Function
 
+
+#+name: git-as-cloud-save-feature
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2586,6 +2605,7 @@ Somewhere Linus Torvalds is crying, but, when you aren't really working on a ser
 
 Both the cloud save function above, as well as a simple git pull.
 
+#+name: git-as-cloud-save-bindings
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -2602,6 +2622,7 @@ Forge stores its data in a SQLite database, so we need to install that first.
 
 This requires some Git configuration and storage of your credentials. See [[https://magit.vc/manual/forge/Getting-Started.html#Getting-Started][the Forge documentation]] for more details.
 
+#+name: magit-forge-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package sqlite3)
 
@@ -2617,6 +2638,7 @@ Let's integrate it with Magit!
 
 Only major change here is that I was experiencing some modeline issues with yadm buffers, so I turned the modeline off upon entering. Seems like too minor an issue to spend much time fixing, but maybe I will at some point.
 
+#+name: yadm-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2651,6 +2673,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 5. Add icons.
 6. Set it up with an extra command to hide dotfiles.
 
+#+name: dired-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :commands (dired dired-jump)
@@ -2723,6 +2746,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 *** Email with Mu4e
 
+#+name: disabled-mu4e-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2769,6 +2793,7 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
 
 **** Save Minibuffer History
 
+#+save-minibuffer-history
 #+begin_src emacs-lisp :lexical yes
   (use-package savehist
     :init
@@ -2781,6 +2806,7 @@ Not sure I'm using this right now, but it's an interesting idea!
 
 If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
 
+#+name: disabled-minibuffer-at-top-of-frame-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package mini-frame
     :disabled
@@ -2790,6 +2816,7 @@ If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~ver
 
 **** Navigate That History More Easily
 
+#+name: better-minibuffer-history-navigation
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -2800,6 +2827,7 @@ If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~ver
 
 **** Allow Minibuffers Within Minibuffers
 
+#+name: use-recursive-minibuffers
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2810,6 +2838,7 @@ If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~ver
 
 Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
 
+#+name: show-pressed-keys-with-delay
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2820,6 +2849,7 @@ Set the current keyboard shortcut I'm typing to only show up after 3 seconds of 
 
 Oooh.
 
+#+name: password-security-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2841,6 +2871,7 @@ Oooh.
 
 *** Don't Yell At Me So Much
 
+#+name: quiet-emacs-don't-be-so-loud
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2850,6 +2881,7 @@ Oooh.
 
 *** Don't Mess With Custom System
 
+#+name: customization-file-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2866,6 +2898,7 @@ Oooh.
 
 Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
 
+#+name: theme-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package modus-themes
     :config
@@ -2897,6 +2930,7 @@ Modus Operandi is a fantastic theme for readability and accessibility, and even 
 
 Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 
+#+name: highlight-more-syntax
 #+begin_src emacs-lisp :lexical yes
   (use-package highlight-numbers
     :init
@@ -2918,6 +2952,7 @@ Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' b
 
 Only one so far is to automatically run =project-find-file= upon switching to a new project.
 
+#+name: project-initial-action
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2927,6 +2962,7 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 
 *** Project Keybindings
 
+#+name: project-keybindings
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -2951,6 +2987,7 @@ Only one so far is to automatically run =project-find-file= upon switching to a 
 
 We'll go with spaces!
 
+#+name: ensure-spaces-over-tabs
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2963,6 +3000,7 @@ The default 70 is too low a number. 80 is the standard.
 
 And let's visualize it!
 
+#+name: column-guide-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2976,6 +3014,7 @@ This package removes whitespace from the ends of lines.
 
 Conveniently, it only does it on lines you've edited. This way, if you're working with version control, you don't have a huge diff every time you save a file.
 
+#+name: remove-whitespace-errors
 #+begin_src emacs-lisp :lexical yes
   (use-package ws-butler
     :diminish 'ws-butler-mode
@@ -2988,6 +3027,7 @@ And this built-in command removes all blank lines at point except one. Repeating
 
 It seems handy, but since I'm not sure I'll remember the vanilla Emacs keybinding, I'm going to bind it to a more mnemonic (to me) leader keybinding of leader-m-w, for "markup whitespace"—markup kind of becoming "text" here, which is a bit of a concept creep, but… we'll see how that mnemonic feels.
 
+#+name: deleting-blank-lines-bindings
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -3002,6 +3042,7 @@ Losing undos if you quit your editor is kind of a pain. Saving your undo history
 
 Undo Fu Session is my solution here—it's meant to work with the Undo Fu package, but works just fine with vanilla Emacs' undo system.
 
+#+name: undo-persistence
 #+begin_src emacs-lisp :lexical yes
   (use-package undo-fu-session
     :init
@@ -3017,6 +3058,7 @@ Vundo (Visualize Undo) takes Emac's very powerful and /very/ unintuitive undo sy
 
 There are alternatives, but Vundo integrates nicely with Evil through the Evil Collection package, and also avoids changing anything about the actual undo system you use. Simple packages is better packages.
 
+#+name: undo-visualization
 #+begin_src emacs-lisp :lexical yes
   (use-package vundo
     :general
@@ -3042,6 +3084,7 @@ I find that Evil-Snipe—an unfortunately named port of Vim-Sneak—is a great w
 
 Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and I've missed it, and I'm only sorry I've taking this long to get to it.
 
+#+name: evil-snipe-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-snipe
     :diminish 'evil-snipe-local-mode
@@ -3062,6 +3105,7 @@ Basically, it's a supercharged version of Vim's ~f~ command. It's fantastic, and
 
 Avy config will be kept around for now, but I'm disabling it. Consider it "archived".
 
+#+name: disabled-avy-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package avy
     :disabled
@@ -3082,6 +3126,7 @@ are configured elsewhere!
 
 Thinking about giving this a try. It's a little less pretty than ~consult-org-heading~ when searching headings in org, but the latter's tailoring to Org means it loses the flexibility to work elsewhere. So let's give Imenu a try—it works in all files, whether markup or code.
 
+#+name: semantic-section-search
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -3101,6 +3146,7 @@ Thinking about giving this a try. It's a little less pretty than ~consult-org-he
 
  Its default keybindings are pretty good, except for unnecessarily shadowing one of my oft-used Emacs quick-editing commands in ~kill-word~ and not binding its most useful command at all, ~evil-multiedit-match-all~.
 
+ #+name: multi-cursors
 #+begin_src emacs-lisp :lexical yes
   (use-package evil-multiedit
     :config
@@ -3139,6 +3185,7 @@ Still, those are minor quibbles. Overall, this is an /amazing/ spell-checking sy
 
 Which is good, as I make a /lot/ of spelling errors.
 
+#+name: spelling-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package flyspell
     :diminish 'flyspell-mode
@@ -3249,6 +3296,7 @@ That said, I felt the same about using buffers as the main way to interact with 
 
 Also, for some reason, electric pair mode does some weird stuff around auto-closing in Org mode—probably Org's fault, because it doesn't always play nicely with the rest of Emacs. So I've added a predicate to disable some problematic auto-closing there.
 
+#+name: auto-closing-delimiters
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -3271,6 +3319,7 @@ This next library highlights the delimiters of the block the cursor is currently
 
 By default, it helps you see the blocks from your cursor to four delimiters outwards, but I find the next library we'll use a better fit for a larger-scale visual guide. Still, it's good to have a subtle visual indication as to exactly how deep you are currently, which is why I'm using a light Modus Theme color and it's matching light background.
 
+#+name: highlighting-surrounding-delimiters
 #+begin_src emacs-lisp :lexical yes
   (use-package highlight-parentheses
     :diminish 'highlight-parentheses-mode
@@ -3289,6 +3338,7 @@ The color choices aren't mine, but, rather, taken from the great Modus Themes, a
 
 The code above and below were fun coding challenges for me as I learn a bit more Lisp. There's some good learnings to be taken from how they work, from the use of ~`~ and ~,~ for evaluating code in a list to the way the ~dotimes~ loop works to the use of ~intern~ to convert a string to a Lisp symbol. Maybe you'll take something from them too!
 
+#+name: more-helpful-delimiter-visualization
 #+begin_src emacs-lisp :lexical yes
   (use-package rainbow-delimiters
     :after modus-themes
@@ -3345,6 +3395,7 @@ I'll have to give this more of a go, but it really seems like Vim's "big word" m
 
 Take this JavaScript, for example:
 
+#+word-movement-example
 #+begin_src javascript :tangle no
   function greet({name}) {
     return `Hello, ${name}!`
@@ -3434,6 +3485,7 @@ After all that, I've moved on to other systems, so this is merely historical. Se
 
 After all that, I've moved on to other systems, so this is merely historical. See the Lispyville section below for mycurrent system!
 
+#+name: disabled-initial-evil-lisp-system
 #+begin_src emacs-lisp :lexical yes :tangle no
   (use-package paredit)
 
@@ -3555,6 +3607,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 - I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list, which is slightly more efficient on my weird keyboards than 0. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
 - Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
+  #+name: disabled-symex-library-setup
 #+begin_src emacs-lisp :lexical yes :tangle no
   (use-package symex
     :disabled
@@ -3680,6 +3733,7 @@ You can see how I bind Lispyville commands below (though note that much of that 
 
 I'm also adding many Symex commands—again, avoiding shadowing most Evil bindings—which tend to be more lisp-tree-aware. For example, moving to the first or last symex at the current level, or acting on all remaining symexes in the current list—these are very useful when editing lisp! Check out [[https://countvajhula.com/2021/09/25/the-animated-guide-to-symex/][The Animated Guide To Symex]] for a great visualization of what the Symex commands I'm adding actually do.
 
+#+name: evil-lisp-editing-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package lispy
     :diminish
@@ -3836,6 +3890,7 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 
 ******** Code To Test Lisp-Editing Systems On
 
+#+name: elisp-playground
 #+begin_src emacs-lisp :lexical yes
   ;; (+ 1 2 (+ 3 4 5) (+ 6 7 8) (+ 9 10) 11 12)
 
@@ -3874,6 +3929,7 @@ It's the greatest of languages, but Emacs has a couple of weird opinions of how 
 
 This bit of code from Fuco1 on GitHub overrides some of that indentation behavior.
 
+#+name: better-lisp-indentation-function
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -3973,6 +4029,7 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
 
 Better go-to-definition function for Emacs Lisp.
 
+#+name: better-emacs-lisp-documentation-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package elisp-def
     :diminish 'elisp-def-mode
@@ -3994,6 +4051,7 @@ I'm still not sure how I feel about it—it makes the code shorter and more read
 
 That said, it IS cool and readable and short, so I'm giving it a tentative go.
 
+#+name: prettify-emacs-lisp-buffers
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -4027,12 +4085,14 @@ We can install the manual right into Emacs!
 
 This'll also give me a good opportunity to learn the Info Mode keybindings.
 
+#+name: lisp-textbook-as-manual
 #+begin_src emacs-lisp :lexical yes
   (use-package sicp)
 #+end_src
 
 ****** Racket
 
+#+name: racket-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package geiser)
 
@@ -4047,6 +4107,7 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
 
 ****** Clojure
 
+#+name: setup-for-clojure/clojure-script
 #+begin_src emacs-lisp :lexical yes
   (use-package clojure-mode
     :init
@@ -4062,6 +4123,7 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
 
 ***** CSV
 
+#+name: csv-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package csv-mode)
 #+end_src
@@ -4075,6 +4137,7 @@ Only two things aren't easy to figure out here:
 1. ~rjsx-mode~ and ~flyspell-mode~ are /not/ friends, so we turn ~flyspell-mode~ off in JS files. See [[https://github.com/felipeochoa/rjsx-mode/issues/68][this bug]].
 2. The advice added to the ~rjsx-electric-gt~ function helps ~rjsx-mode~ to auto-close React JSX fragments. You can find [[https://github.com/felipeochoa/rjsx-mode/issues/112#issuecomment-773660200][the original code here]].
 
+#+name: javascript-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -4110,6 +4173,7 @@ Only two things aren't easy to figure out here:
 
 ***** TypeScript
 
+#+name: typescript-mode-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package typescript-mode
     :init
@@ -4121,6 +4185,7 @@ Only two things aren't easy to figure out here:
 
 ***** Using Prettier To Format Buffers
 
+#+name: formatting-code-in-buffer
 #+begin_src emacs-lisp :lexical yes
   (use-package prettier
     :init
@@ -4163,6 +4228,7 @@ Other apps now have this equivalent—the one people know most developers know t
 
 Set Emacs to only include commands that are relevant to the current "major mode" (what you would call a file type outside of Emacs).
 
+#+name: filter-commands-by-relevance
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -4173,6 +4239,7 @@ Set Emacs to only include commands that are relevant to the current "major mode"
 
 Add icons!
 
+#+name: nice-icons-for-the-minubuffer
 #+begin_src emacs-lisp :lexical yes
   (use-package all-the-icons-completion
     :init
@@ -4188,6 +4255,7 @@ Vertico and Marginalia together make an amazing interface for minibuffer search.
 
 Marginalia gives you some more data in other columns in the list of results as you filter them. It's nice! Let's set it up!
 
+#+name: extra-info-in-the-minibuffer
 #+begin_src emacs-lisp :lexical yes
   (use-package marginalia
     :general
@@ -4220,6 +4288,7 @@ What we'll do is:
 
 Here that all is!
 
+#+name: minibuffer-selection-interface
 #+begin_src emacs-lisp :lexical yes
   (use-package vertico
     :straight
@@ -4259,6 +4328,7 @@ Here that all is!
 
 ***** Embark
 
+#+name: contextual-actions
 #+begin_src emacs-lisp :lexical yes
   (use-package embark
     :bind
@@ -4342,6 +4412,7 @@ Here that all is!
 
 I have not dived into /how/ this code from the Embark author works, but it integrates the actions better with ~which-key~. This makes the Embark actions popup look great instead of ugly. Huzzah!
 
+#+name: contextual-action-prettification
 #+begin_src emacs-lisp :lexical yes
   (use-package embark
     :init
@@ -4400,6 +4471,7 @@ What it enables you to do is decide whether your search will be of:
 
 And that's not even all of them! Minibuffer searches are a /huge/ part of how you use Emacs, and Consult is just one of many ways to decide what to search through.
 
+#+name: data-set-collections
 #+begin_src emacs-lisp :lexical yes
   (use-package consult
     :commands consult-line
@@ -4410,12 +4482,13 @@ And that's not even all of them! Minibuffer searches are a /huge/ part of how yo
 
 **** Minibuffer Search Filtering
 
-The Orderless package is powerful and fascinating. It decides the data you're searching is filtered as you type, and you can even search in different ways in the same search.
+The Orderless package is powerful and fascinating. It decides how the data you're searching is filtered as you type, and you can even search in different ways in the same search.
 
 Here's an example using the setup below. I can start typing the path of a file I want to open in a minibuffer search, then notice that most of the results are in a directory I want to exclude. So I type in a ~!~ (a pretty universal developer symbol for "not" and the name of that directory, and those results are filtered out. Then I realize I want the path to begin with the home directory, excluding everything in the ~/usr~ and ~/tmp~ and such directories. So I type ~^~ (developer for "starts with") and ~~~ (the alias for the home directory). Finally, I want only JavaScript files, so I type ~$~ (developer for "ends with") and then type ~js~, and boom!
 
 Once you're used to this speedy filtering process, it /greatly/ cuts down on the time spent searching for whatever it is you want to do.
 
+#+name: search-filtering-syntax
 #+begin_src emacs-lisp :lexical yes
   (use-package orderless
     :init
@@ -4463,6 +4536,7 @@ Sets up:
 - in-buffer completion
 - cool icons for same
 
+#+name: in-buffer-completion
 #+begin_src emacs-lisp :lexical yes
   (use-package corfu
     :straight
@@ -4528,6 +4602,7 @@ Sets up:
 
 And an extra package for completing Org blocks.
 
+#+name: complete-org-block-names
 #+begin_src emacs-lisp :lexical yes
   (use-package org-block-capf
     :straight (:host github :repo "xenodium/org-block-capf")
@@ -4538,8 +4613,11 @@ And an extra package for completing Org blocks.
 
 **** Hippie-Expand
 
-Hippie-expand is a nice complete-everything-in-buffer command. It can complete form almost any source!
+Hippie-expand is a nice complete-everything-in-buffer command. It can complete from almost any source!
 
+now I just need to get used to using it and unlock its power…
+
+#+name: complete-from-buffer-words
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -4554,6 +4632,7 @@ My advice: don't use ~advice~. Don't be like me!
 
 Don't be like me.
 
+#+name: language-servers
 #+begin_src emacs-lisp :lexical yes
   (use-package eglot
     :init
@@ -4592,6 +4671,7 @@ I also find it helpful to have a separate set of tab bindings for accepting Copi
 
 Note that this feature only works if you have a GitHub Copilot account. If you have one, you can login using the ~copilot-login~ command.
 
+#+name: copiot-ai-integration
 #+begin_src emacs-lisp :lexical yes
   (use-package copilot
     :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
@@ -4617,6 +4697,7 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 
 A great error-navigation library
 
+#+name: error-navigation
 #+begin_src emacs-lisp :lexical yes
   (use-package flymake
     :diminish 'flymake-mode
