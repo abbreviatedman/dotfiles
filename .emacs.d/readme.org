@@ -2418,6 +2418,18 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
       "&" #'(async-shell-command :which-key "Run an asynchronous shell command.")))
 #+end_src
 
+**** Use ZSH And The Right Shell Variables
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package exec-path-from-shell
+    :config
+    (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+      (add-to-list 'exec-path-from-shell-variables var))
+    (when (or (memq window-system '(mac ns x))
+              (daemonp))
+      (exec-path-from-shell-initialize)))
+#+end_src
+
 *** Calendar
 
 So you can wish everyone would leave you alone, but /within Emacs/.
@@ -2442,9 +2454,9 @@ Although I'm exploring ways to cut out Google entirely from my life, my work use
 There are a /lot/ of moving parts with ~org-gcal~, those parts are continuously evolving, and the parts are poorly documented. But here's some issues I've encountered:
 
 - The client-id and ~client-secret~ are each pulled from the sources listed in ~org-gcal~'s readme originally, but I'm keeping them... well, I'm not saying here, but you (Colin) can figure it out when you need to set up a new machine.
-- Once I have them on a new machine, I put them in ~password-store~ (aka ~pass~) and, below, pull them out with ~auth-source-pass-get~. This is a way to keep them out of the repo.
+- Once I have them on a new machine, I put them in my ~.authinfo~  file (encrypting it to ~.authinfo.gpg~ with ~epa-decrypt-file~) and, below, pull them out with ~crj--get-netrc-info~. This is a way to keep them out of the repo.
 - The ~org-gcal-fetch-file-alist~ is a list of calendars to pull from. The first item in the pair is Google Calendar's id of the calendar (which seems to just be the associated email for the basic personal calendar), and the second is the file to put it in. I have a separate file for each calendar.
-- For now, ~gnupg~ appears to have a bug that requires you to downgrade it to ~2.4~. If you run into an erro, this /may/ be the issue.
+- For now, ~gnupg~ appears to have a bug that requires you to downgrade it to ~2.4~. If you run into an error, this /may/ be the issue.
 - I don't yet fully understand the interweaving auth systems in effect, but for now, when setting this up in Arch/i3wm, you /do/ want to use the ~gnome-keyring-daemon~ to "save the password in the keyring".
 - And also for now, you do NOT want to check the box for killing the pstore buffer, and you'll do better if you quit Emacs, save that buffer, and then restart Emacs.
 
@@ -2509,8 +2521,8 @@ Only some minor settings changes from the basic setup.
     (general-setq evil-collection-magit-want-horizontal-movement t
                   magit-bury-buffer-function #'magit-restore-window-configuration
                   magit-no-confirm nil
-                  magit-display-buffer-function
-                  #'magit-display-buffer-fullframe-status-v1)
+                  magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1
+                  forge-add-default-bindings nil)
 
     :commands
     magit-status
@@ -2627,8 +2639,20 @@ This requires some Git configuration and storage of your credentials. See [[http
   (use-package sqlite3)
 
   (use-package forge
-    :after magit)
+    :after (magit sqlite3)
+    :demand t)
 #+end_src
+
+**** Code Review
+
+This offers a pretty good interface for GitHub Pull Requests.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package code-review
+    :straight (:host github :repo "phelrine/code-review"))
+#+end_src
+
+An alternate way to do with Forge on its own is to use ~forge-checkout-pullreq~ to create a local branch for the PR. Then you can switch to the branch the PR is to (maybe ~develop~ or ~main~) and merge the origin branch in. Then push to the remote. This closes the PR.
 
 **** YADM Integration
 
@@ -2694,8 +2718,9 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
      [remap dired-up-directory] #'dired-single-up-directory))
 
   (use-package dired-hacks
+    :disabled
     :init
-    (general-add-hook 'dired-mode-hook '(dired-collapse-mode))
+    (general-add-hook 'dired-mode-hook #'dired-collapse-mode)
 
     (defun dired-collapse-jump ()
     "Jump to the first parent directory with more than one file.
@@ -2747,7 +2772,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 *** Email with Mu4e
 
 #+name: disabled-mu4e-setup
-#+begin_src emacs-lisp :lexical yes
+#+begin_src emacs-lisp :lexical yes :tangle no
   (use-package emacs
     :init
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
@@ -2786,7 +2811,12 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
     (recentf-mode 1)
     (global-auto-revert-mode 1)
     (save-place-mode 1)
-    (auto-save-mode 1))
+    (auto-save-mode 1)
+
+    :general
+    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
+
+    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
 #+end_src
 
 *** Minibuffers
@@ -2853,20 +2883,24 @@ Oooh.
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (setq auth-sources '("~/.netrc" "~/.authinfo.gpg")
+    (defun crj--get-netrc-info (host field)
+      "Get FIELD for HOST from the netrc file."
+      (netrc-get (netrc-machine (netrc-parse (expand-file-name "~/.authinfo.gpg")) host) field))
+
+    (general-setq auth-sources '("~/.authinfo.gpg")
           plstore-cache-passphrase-for-symmetric-encryption t)
 
     (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
 
   (use-package ssh-agency
     :init
-    (setq ssh-agency-askpass nil))
+    (general-setq ssh-agency-askpass nil))
 
-  (use-package password-store)
+  ;; (use-package password-store)
 
-  (use-package auth-source-pass
-    :init
-    (auth-source-pass-enable))
+  ;; (use-package auth-source-pass
+  ;;   :init
+  ;;   (auth-source-pass-enable))
 #+end_src
 
 *** Don't Yell At Me So Much
@@ -4035,7 +4069,7 @@ Better go-to-definition function for Emacs Lisp.
     :diminish 'elisp-def-mode
 
     :init
-    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+    (dolist (hook '(emacs-lisp-mode-hook inferior-emacs-lisp-mode-hook))
       (add-hook hook #'elisp-def-mode))
 
     :general
@@ -4068,7 +4102,7 @@ That said, it IS cool and readable and short, so I'm giving it a tentative go.
       (prettify-symbols-mode))
 
     (general-add-hook '(emacs-lisp-mode-hook
-                        ielm-mode-hook
+                        inferior-emacs-lisp-mode-hook
                         org-mode-hook)
                       #'crj--set-up-elisp-prettify-mode))
 #+end_src
@@ -4718,14 +4752,6 @@ A great error-navigation library
 
 It's the robots!
 
-*** First, a simple function to get my password.
-
-#+name: open-ai-api-key-helper
-#+begin_src emacs-lisp :lexical yes
-  (defun crj--get-open-ai-api-key ()
-    (auth-source-pass-get 'secret "ai/openai/key"))
-#+end_src
-
 *** Bing Chat
 
 **** Main Bing Setup
@@ -4787,7 +4813,7 @@ Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or o
 #+begin_src emacs-lisp :lexical yes
   (use-package gptel
     :init
-    (setq gptel-api-key (crj--get-open-ai-api-key)))
+    (setq gptel-api-key (crj--get-netrc-info "ai.openai.key" "password")))
 #+end_src
 
 
@@ -4810,7 +4836,7 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
                :files ("chatgpt-shell.el"))
 
     :custom
-    ((chatgpt-shell-openai-key (crj--get-open-ai-api-key))))
+    ((chatgpt-shell-openai-key (crj--get-netrc-info "ai.openai.key" "password"))))
 #+end_src
 
 ** Window Management
@@ -5936,14 +5962,6 @@ This was occasionally useful, should be easy to get back
            :desc "Switch to PascalCase" :n "C" #'string-inflection-camelcase
            :desc "Switch to snake_case" :n "s" #'string-inflection-underscore
            :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
-#+end_src
-
-*** Forge PRs
-
-Super easy to fix up for my current framework if I start checking out PRs again.
-
-#+begin_src emacs-lisp :lexical yes :tangle no
-  (map! :leader (:prefix "g" :desc "Checkout pull request." :n "v" #'forge-checkout-pullreq))
 #+end_src
 
 *** Elisp

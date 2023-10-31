@@ -17,8 +17,8 @@
 	followTags = true
 [gitlab]
 	user = abbreviatedman
-[include]
-	path = ~/.private.gitconfig
+# [include]
+	# path = ~/.private.gitconfig
 [github]
 	user = abbreviatedman
 [branch]
