@@ -4621,6 +4621,7 @@ It's the robots!
 
 *** First, a simple function to get my password.
 
+#+name: open-ai-api-key-helper
 #+begin_src emacs-lisp :lexical yes
   (defun crj--get-open-ai-api-key ()
     (auth-source-pass-get 'secret "ai/openai/key"))
@@ -4630,6 +4631,7 @@ It's the robots!
 
 **** Main Bing Setup
 
+#+name: bing-chat-integration
 #+begin_src emacs-lisp :lexical yes
   (use-package websocket)
 
@@ -4682,6 +4684,7 @@ It's the robots!
 
 Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or opening a dedicated buffer with ~gptel~ command. Requires an OpenAI API key.
 
+#+name: gpt-integration
 #+begin_src emacs-lisp :lexical yes
   (use-package gptel
     :init
@@ -4693,6 +4696,7 @@ Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or o
 
 This one opens a dedicated shell buffer for ChatGPT interactions.
 
+#+name: gpt-shell-integration
 #+begin_src emacs-lisp :lexical yes
   (use-package shell-maker
     :straight (:host github
@@ -4714,6 +4718,7 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
 
 Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
 
+#+name: improve-window-management
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :after evil
@@ -4749,6 +4754,7 @@ A few more additions to the help menu:
 - ~embark-keybindings~ lets you search active keybindings, which is super sweet.
 - ~shortdoc-display-group~ will help you with built-in elisp functions
 
+#+name: improve-documentation-lookup
 #+begin_src emacs-lisp :lexical yes
   (use-package helpful
     :init
@@ -4807,6 +4813,7 @@ A few more additions to the help menu:
 ** Utility Functions
 Making my life easier!
 
+#+name: cycle-settings-helper
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -4841,6 +4848,7 @@ I've:
 - Merged the modeline and the minibuffer using the excellent Mini Modeline package. This gets you back some substantial screen estate, especially since the modeline is now on just the frame, not each individual window.
 - Merging with the minibuffer /also/ means that when you change the format to have no info, you're really hiding the modeline entirely. I do that by default, but I can toggle it back on if I need to.
 
+#+name: move-modeline-into-echo-area
 #+begin_src emacs-lisp :lexical yes
   (use-package mini-modeline
     :straight (:repo "kiennq/emacs-mini-modeline" :host github)
@@ -4887,7 +4895,7 @@ I've:
 
 This is a list of noweb references with a preliminary load order. Eventually I'll use this to actually tangle the code to the file.
 
-#+NAME: load-order
+#+name: load-order
 #+begin_src emacs-lisp :lexical yes :tangle no
   <<literate-config-setup>>
   <<start-with-messages>>
