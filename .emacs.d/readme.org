@@ -2668,6 +2668,7 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
      [remap dired-up-directory] #'dired-single-up-directory))
 
   (use-package dired-hacks
+    :disabled
     :init
     (general-add-hook 'dired-mode-hook #'dired-collapse-mode)
 
