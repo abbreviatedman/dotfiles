@@ -1535,6 +1535,7 @@ We'll use various ~consult~ commands to search through different sets of data.
 
 We'll also use a custom command for searching text in project files, though it's got a TODO to make it worth having the custom command at all. Consider it a placeholder for now, until such sanity checks are more of a priority.
 
+#+name: search-project-feature
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -1563,6 +1564,7 @@ We'll also use a custom command for searching text in project files, though it's
 
 And finally, since I do this search so often, it's got a quicker shortcut of ~SPC SPC~.
 
+#+name: find-file-in-project-binding
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -1573,6 +1575,7 @@ And finally, since I do this search so often, it's got a quicker shortcut of ~SP
 
 We can edit filtered results live with wgrep.
 
+#+name: edit-across-project
 #+begin_src emacs-lisp :lexical yes
   (use-package wgrep
     :commands wgrep-change-to-wgrep-mode
@@ -1627,6 +1630,7 @@ That's this file, as of now!
 
 These are some sane defaults for the UI.
 
+#+name: basic-ui-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :diminish 'visual-line-mode
@@ -1648,6 +1652,7 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
 
+#+edit-file-with-sudo-privileges
 #+begin_src emacs-lisp :lexical yes
   (use-package sudo-edit
     :general
@@ -1716,6 +1721,7 @@ That guy's me, and you're welcome, and I'm sorry.
 
 Here are my font settings.
 
+#+name: font-values
 #+begin_src emacs-lisp :lexical yes
   (defvar crj--fixed-pitch-font "Hack")
   (defvar crj--variable-pitch-coding-font "Input")
@@ -1753,6 +1759,7 @@ And a picture of what my setup actually looks like:
 
 **** Using Fixed Pitch In Some Buffers
 
+#+name: enabling-fixed-pitch
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -1808,6 +1815,7 @@ Let's visualize it in prog mode so we get rid of it.
 
 (But please remember to keep whitespace removal its own separate commit so as not to pollute your diffs.)
 
+#+name: show-trailing-whitespace-in-code
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -1828,6 +1836,7 @@ NOTE: Emacs 29 has global zooming in and out, so hopefully I won't need this cod
 
 First, some functions to zoom and reset one buffer:
 
+#+name: custom-zoom-text-functions
 #+begin_src emacs-lisp :lexical yes
   (defun crj-zoom-in (arg)
     "Incease text size in current buffer.
@@ -1851,6 +1860,7 @@ First, some functions to zoom and reset one buffer:
 
 From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the ~buffer-list~ and run the above functions in each.
 
+#+name: custom-global-zoom-text-functions
 #+begin_src emacs-lisp :lexical yes
   ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
   ;; (defvar current-text-scale 0)
@@ -1886,6 +1896,7 @@ This package, ~default-text-scale~, can handle things more robustly than the hom
 
 I'm not using it, but it's worth exploring at some point.
 
+#+name: disabled-text-scale-package
 #+begin_src emacs-lisp :tangle no :lexical yes
   (use-package default-text-scale
     :init (default-text-scale-mode))
@@ -1897,6 +1908,7 @@ All of this is to say that the many many different ways you can manipulate and w
 
 Next, we make some keybindings for them.
 
+#+name: text-zoom-bindings
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -1917,6 +1929,7 @@ There are other, similar libraries (I've heard Transient is even better), but I 
 
 We'll install Hydra, define its interface, and then put that hydra command in our keybindings.
 
+#+name: zoom-text-hydra
 #+begin_src emacs-lisp :lexical yes
   (use-package hydra
     :config
@@ -1940,6 +1953,7 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
 
 This package makes scrolling big distances easier to follow by flashing the new line you've moved to.
 
+#+name: pulse-line-on-big-jumps
 #+begin_src emacs-lisp :lexical yes
   (use-package pulsar
     :init
@@ -1997,6 +2011,7 @@ Sets up line numbers to be (almost) everywhere, just not in some terminal modes.
 
 I like to use relative line numbers, since they make line-wise work easier when using Evil Mode. Which I do.
 
+#+name: line-number-settings
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2025,6 +2040,7 @@ This next part is for making line numbers use a fixed pitch font. I like a varia
 
 And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
 
+#+name: make-line-numbers-fixed-pitch
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -2049,6 +2065,7 @@ And by setting line numbers to an absolute size, we also avoid having them incre
 
 When displaying code to others, it's often good to make the line numbers absolute. And hiding them can be nice sometimes, though if I'm doing that often, I should consider whether there are more modes I should turn line numbers off for.
 
+#+name: cycle-line-numbers
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
