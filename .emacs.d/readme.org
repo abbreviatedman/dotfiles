@@ -3258,9 +3258,10 @@ Which is good, as I make a /lot/ of spelling errors.
              current-location)
             (message (format "%s saved to dictionary." (car word)))))))
 
-    (add-hook 'text-mode-hook #'crj--turn-on-flyspell)
+    (general-add-hook
+     '(text-mode-hook org-mode-hook git-commit-mode-hook)
+     #'crj--turn-on-flyspell)
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-    (add-hook 'git-commit-mode-hook #'crj--turn-on-flyspell)
     (general-setq ispell-program-name "hunspell")
 
     :config
@@ -3274,6 +3275,7 @@ Which is good, as I make a /lot/ of spelling errors.
       "bS" #'(flyspell-buffer :which-key "Spellcheck whole buffer."))
 
     ('(insert normal emacs)
+     "C-;" #'flyspell-auto-correct-previous-word
      "C-M-;" #'crj-flyspell-add-previous-word-to-dictionary))
 
   (use-package flyspell-correct
