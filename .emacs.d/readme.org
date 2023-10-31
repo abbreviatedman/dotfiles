@@ -5070,6 +5070,7 @@ More old code to revisit and reactivate maybe.
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
 *** restclient.el and ob-restclient
+*** add function/binding to start most recent radio station
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
 *** add evil-undo to v/V keybindings
