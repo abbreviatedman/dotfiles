@@ -1316,10 +1316,11 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
 
   It's `evil-delete-char', but for words!"
       (interactive "p")
-      (evil-forward-word-begin 1 t)
-      (crj-delete-previous-word count))
+      (dotimes (_ count)
+        (evil-forward-word-begin 1 t)
+        (crj-delete-previous-word 1)))
 
-    (defun crj-delete-previous-word (count)
+    (defun crj-delete-previous-word (&optional count)
       "Delete previous word.
 
   It's `evil-delete-backward-char', but for words!
@@ -1331,17 +1332,17 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
   At some point I'll see if the edge cases come up often enough to be a problem,
   in which case this will get refactored."
       (interactive "p")
-      (when (eolp))
-      (when (and (crj--point-is-past-start-of-thing-p 'word)
+      (when (and (crj--point-is-past-start-of-thing-p 'symbol)
                  (not (eolp)))
         (evil-backward-WORD-begin))
-      (let ((current-word-start (point)))
-        (evil-backward-WORD-begin)
-        (evil-delete (point) current-word-start))
-      (when (crj--point-is-past-start-of-thing-p 'word)
-        (or (re-search-forward "\\_<\\sw+\\_>" nil t)
-            (re-search-backward "\\_<\\sw+\\_>" nil t))
-        (goto-char (match-beginning 0))))
+      (dotimes (_ count)
+        (let ((current-word-start (point)))
+          (evil-backward-WORD-begin)
+          (evil-delete (point) current-word-start)
+          (when (crj--point-is-past-start-of-thing-p 'symbol)
+            (or (re-search-forward "\\_<\\sw+\\_>" nil t)
+                (re-search-backward "\\_<\\sw+\\_>" nil t))
+            (goto-char (match-beginning 0))))))
 
     (defun crj--point-is-past-start-of-thing-p (thing)
       "Returns whether point is past start of THING.
