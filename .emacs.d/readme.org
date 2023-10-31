@@ -1311,28 +1311,37 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
 #+begin_src emacs-lisp :lexical yes
   (use-package evil
     :init
-    (defun crj-delete-current-word ()
+    (defun crj-delete-current-word (count)
       "Delete current word.
 
-  It's `evil-delete-char', but for words!
+  It's `evil-delete-char', but for words!"
+      (interactive "p")
+      (evil-forward-word-begin 1 t)
+      (crj-delete-previous-word count))
 
-  This one's a bit hacky and probably has a ton of edge cases—most obviously,
-  this won't work if it's the last word in the document.
-
-  At some point I'll see if the edge cases ever really come up, in which case
-  this will get refactored."
-      (interactive)
-      (evil-forward-word-begin)
-      (crj-delete-previous-word))
-
-    (defun crj-delete-previous-word ()
+    (defun crj-delete-previous-word (count)
       "Delete previous word.
 
-  It's `evil-delete-backward-char', but for words!"
-      (interactive)
+  It's `evil-delete-backward-char', but for words!
+
+  This one's a bit hacky and probably has a ton of edge cases—I should probably
+  fix its issue with punctuation—but that is what you get when you're not working
+  semantically enough.
+
+  At some point I'll see if the edge cases come up often enough to be a problem,
+  in which case this will get refactored."
+      (interactive "p")
+      (when (eolp))
+      (when (and (crj--point-is-past-start-of-thing-p 'word)
+                 (not (eolp)))
+        (evil-backward-WORD-begin))
+      (let ((current-word-start (point)))
+        (evil-backward-WORD-begin)
+        (evil-delete (point) current-word-start))
       (when (crj--point-is-past-start-of-thing-p 'word)
-        (evil-backward-word-begin))
-      (evil-delete-backward-word))
+        (or (re-search-forward "\\_<\\sw+\\_>" nil t)
+            (re-search-backward "\\_<\\sw+\\_>" nil t))
+        (goto-char (match-beginning 0))))
 
     (defun crj--point-is-past-start-of-thing-p (thing)
       "Returns whether point is past start of THING.
@@ -4889,7 +4898,6 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** restclient.el and ob-restclient
 *** snippets - skeleton or tempo or tempel or yasnippet??
 *** add evil-undo to v/V keybindings
-*** make v/V work with WORDs
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
 Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (firefox) or user scripts (floorp) to get going:
