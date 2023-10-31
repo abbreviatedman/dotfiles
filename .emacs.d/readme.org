@@ -5065,6 +5065,8 @@ More old code to revisit and reactivate maybe.
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
 *** restclient.el and ob-restclient
+*** add regular evil-WORD to text objects, maybe on o or O
+But first, catalog the differences between o/x/a/W and see which ones you need.
 *** add evil-undo to v/V keybindings
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
