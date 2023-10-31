@@ -4895,34 +4895,9 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 #+end_src
 
 ** Config Changes Todos
-*** restclient.el and ob-restclient
 *** snippets - skeleton or tempo or tempel or yasnippet??
-*** add evil-undo to v/V keybindings
-*** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
-
-Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (firefox) or user scripts (floorp) to get going:
-
-#+begin_src javascript :tangle no
-  document.addEventListener('keydown', function(e) {
-      if (e.ctrlKey && e.keyCode === /*desired key code*/) {
-          e.stopPropagation();
-      }
-  }, true);
-#+end_src
-*** look into whether jinx is a better spell-checker
-Could have:
-- camelCase correction!
-- better speed
-- no manual rechecking necessary
-*** or wcheck
-*** also possibly changing backend and thinking about camelCase corrections
-But probably not, since there are better ways to avoid typos in programming languages than a spellchecker!
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
-*** clean up config file and add better commentary
-*** understand jump list better
-*** configure hippie-expand
-*** check org mode setups from other evil configs
 *** Save and kill buffer
 
 More old code to revisit and reactivate maybe.
@@ -4956,8 +4931,32 @@ More old code to revisit and reactivate maybe.
      :n "q"
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
+*** restclient.el and ob-restclient
+*** add evil-undo to v/V keybindings
+*** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
+
+Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (firefox) or user scripts (floorp) to get going:
+
+#+begin_src javascript :tangle no
+  document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.keyCode === /*desired key code*/) {
+          e.stopPropagation();
+      }
+  }, true);
+#+end_src
+*** look into whether jinx is a better spell-checker
+Could have:
+- camelCase correction!
+- better speed
+- no manual rechecking necessary
+*** or wcheck
+*** also possibly changing backend and thinking about camelCase corrections
+But probably not, since there are better ways to avoid typos in programming languages than a spellchecker!
+*** clean up config file and add better commentary
+*** understand jump list better
+*** configure hippie-expand
+*** check org mode setups from other evil configs
 *** Org vanilla C-c keybindings for clocking/timestamp management
-*** org evil keybindings for clocking
 *** add npm start prodigy command
 *** one shortcut for all in-buffer semantic searches
 
