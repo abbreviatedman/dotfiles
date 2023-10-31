@@ -2158,14 +2158,21 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
 #+begin_src emacs-lisp :lexical yes
   (use-package eradio
     :init
-    (setq eradio-channels '(("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
-                            ("LO FLY Radio" . "http://64.20.39.8:8421/listen.pls?sid=1&t=.pls")
+    (general-setq eradio-channels '(("LO FLY Radio" . "http://64.20.39.8:8421/listen.pls?sid=1&t=.pls")
+                            ("SomaFM - Fluid" . "https://somafm.com/fluid.pls")
                             ("SomaFM - Groove Salad." . "https://somafm.com/groovesalad.pls")
                             ("SomaFM - Secret Agent" . "https://somafm.com/secretagent.pls")))
+
+    (defun crj-play-station-dwim ()
+      "Plays either the default station or the last station selected"
+      (interactive)
+      (eradio-play (or eradio-current-channel (cdar eradio-channels))))
+
     :general
     (leader
-      "amr" '(eradio-play :which-key "Play internet radio.")
-      "amR" '(eradio-stop :which-key "Stop playing internet radio.")))
+      "amr" '(crj-play-station-dwim :which-key "Play default internet radio.")
+      "amR" '(eradio-stop :which-key "Stop playing internet radio.")
+      "am C-r" '(eradio-play :which-key "Select radio station and play it.")))
 #+end_src
 
 *** RSS with Elfeed
