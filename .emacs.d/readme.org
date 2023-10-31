@@ -872,6 +872,7 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
   (use-package edit-indirect)
 
   (use-package evil-markdown
+    :diminish
     :straight (:host github
                :repo "Somelauw/evil-markdown")
 
