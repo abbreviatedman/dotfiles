@@ -2621,6 +2621,7 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
       (add-to-list 'exec-path-from-shell-variables var))
     (when (or (memq window-system '(mac ns x))
               (daemonp))
+    (general-setq exec-path-from-shell-arguments nil)
       (exec-path-from-shell-initialize)))
 #+end_src
 
