@@ -3343,6 +3343,33 @@ Settings for... coding.
 
 **** General
 
+***** Debugging
+
+I will learn real debugging at some point, but in the meantime, here are two quick help commands.
+
+- I can use ~crj--get-backtrace~ in a function to get a rough idea of who's calling it.
+- Toggling the Elisp debugger on is a better tool if we're producing an atual error. Thoguh also, again, I need to learn real debugging.
+
+#+name: set-up-debugging
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj--get-backtrace ()
+      "Gets the calling function."
+      (let ((n 0)
+            frame
+            func)
+        (while (setq frame (backtrace-frame n))
+          (setq n (1+ n))
+          (setq func frame)
+          (when func (message "Function: %s" func)))))
+
+    :general
+    (leader
+      "cd" #'(toggle-debug-on-error
+              :which-key "Toggle debugging on Elisp errors.")))
+#+end_src
+
 ***** Coding Block Delimiters
 
 Sometimes simply called "parens" or "brackets", delimiters are a big part of coding. This is particularly true in Lisp languages, but even the indentation-for-delimiting-code-blocks Python benefits from handling them well.
