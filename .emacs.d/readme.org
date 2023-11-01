@@ -5045,44 +5045,14 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** snippets - skeleton or tempo or tempel or yasnippet??
 *** remove repeat from Symex movement commands
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
-*** Save and kill buffer
-
-More old code to revisit and reactivate maybe.
-
-#+begin_src emacs-lisp :lexical yes :tangle no
-  (setq crj/immortal-buffer-names '("*scratch*" "#emacs" "*Messages*" shell-command-buffer-name shell-command-buffer-name-async))
-
-  (defun crj/kill-or-bury-current-buffer ()
-    (interactive)
-    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
-        (bury-buffer)
-      (kill-buffer (current-buffer))))
-
-  (defun crj/save-and-kill-or-bury-current-buffer ()
-    (interactive)
-    (save-buffer)
-    (if (member (buffer-name (current-buffer)) crj/immortal-buffer-names)
-        (bury-buffer)
-      (kill-buffer (current-buffer))))
-
-  (map! :leader
-    (:prefix ("b" . "+buffer")
-     :desc "Save file and close buffer."
-     :n "q"
-     #'crj/save-and-kill-or-bury-current-buffer
-     :desc "Kill buffer."
-     :n "d"
-     #'crj/kill-or-bury-current-buffer)
-    (:prefix ("f" . "+file")
-     :desc "Save file and close buffer."
-     :n "q"
-     #'crj/save-and-kill-or-bury-current-buffer))
-#+end_src
 *** restclient.el and ob-restclient
 *** add function/binding to start most recent radio station
+*** Fix why flyspell doesn't show up in org mode
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
+*** look into popper for popup buffers
 *** add evil-undo to v/V keybindings
+*** change font in org mode blocks to coding font
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
 Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (firefox) or user scripts (floorp) to get going:
@@ -5094,12 +5064,15 @@ Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (fir
       }
   }, true);
 #+end_src
+*** wrap lispyville-prettify (~=~) in a motion that dedents all the way first
 *** look into whether jinx is a better spell-checker
 Could have:
 - camelCase correction!
 - better speed
 - no manual rechecking necessary
 *** or wcheck
+*** Move backtrace function to debugger section
+*** learn debugger
 *** also possibly changing backend and thinking about camelCase corrections
 But probably not, since there are better ways to avoid typos in programming languages than a spellchecker!
 *** clean up config file and add better commentary
@@ -5979,43 +5952,6 @@ This was occasionally useful, should be easy to get back
            :desc "Switch to PascalCase" :n "C" #'string-inflection-camelcase
            :desc "Switch to snake_case" :n "s" #'string-inflection-underscore
            :desc "Switch to kebab-case" :n "k" #'string-inflection-kebab-case))))
-#+end_src
-
-*** Elisp
-
-Some old Elisp code, might be useful?
-
-#+begin_src emacs-lisp :lexical yes :tangle no
-  (defun crj/open-intro-to-elisp ()
-    "Open the manual for \"An Introduction to Programming in Emacs Lisp\" (Info
-    node '(eintr)'), re-using the current window."
-    (interactive)
-    (info "eintr")
-    (delete-other-windows))
-
-  (defun crj/open-elisp-reference-manual ()
-    "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node
-    '(elisp)'), re-using the current window."
-    (interactive)
-    (info "elisp")
-    (delete-other-windows))
-
-  (map!
-   :leader
-   (:prefix "o"
-    :n "l" #'crj/open-elisp-reference-manual
-    :n "L" #'crj/open-intro-to-elisp))
-
-  ;;; Evaluating Elisp
-
-  (map! :leader :n "e" #'+eval:region)
-  (map! :leader :n "E" #'+eval:replace-region)
-
-  (map!
-   :leader
-   (:prefix ("t" . "Toggle")
-    :desc "debug during elisp errors."
-    :n "B" #'toggle-debug-on-error))
 #+end_src
 
 *** check if org tangle now does what you want from your Doom Emacs config
