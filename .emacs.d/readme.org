@@ -5144,7 +5144,6 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 [[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** restclient.el and ob-restclient
 *** add function/binding to start most recent radio station
-*** Fix why flyspell doesn't show up in org mode
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
 *** look into popper for popup buffers
@@ -5168,10 +5167,9 @@ Could have:
 - better speed
 - no manual rechecking necessary
 *** or wcheck
-*** Move backtrace function to debugger section
-*** learn debugger
 *** also possibly changing backend and thinking about camelCase corrections
 But probably not, since there are better ways to avoid typos in programming languages than a spellchecker!
+*** learn debugger
 *** clean up config file and add better commentary
 *** understand jump list better
 *** configure hippie-expand
