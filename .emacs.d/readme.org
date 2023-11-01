@@ -4111,6 +4111,33 @@ Better go-to-definition function for Emacs Lisp.
      "gd" '(elisp-def :which-key "Go to definition.")))
 #+end_src
 
+******* Emacs Lisp Resource Links
+
+#+name: emacs-lisp-resources
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj-open-intro-to-elisp ()
+      "Open the tutorial for \"An Introduction to Programming in Emacs Lisp\" (Info
+      node '(eintr)'), re-using the current window."
+      (interactive)
+      (info "eintr")
+      (delete-other-windows))
+
+    (defun crj-open-elisp-reference-manual ()
+      "Open the manual for the \"GNU Emacs Lisp Reference Manual\" (Info node
+      '(elisp)'), re-using the current window."
+      (interactive)
+      (info "elisp")
+      (delete-other-windows))
+
+    :general
+    (:keymaps 'crj-emacs-lisp-help-map
+     "t" #'(crj-open-intro-to-elisp :which-key "Open Emacs Lisp tutorial.")
+     "m" #'(crj-open-elisp-reference-manual
+            :which-key "Open Emacs Lisp Reference Manual.")))
+#+end_src
+
 ******* Pretty Lambda Symbols
 
 This code turns the string "lambda" into the string "λ". Which is cool!
