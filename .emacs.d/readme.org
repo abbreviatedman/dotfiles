@@ -338,7 +338,7 @@ I think you get the basics—as I did with learning and writing this section! Le
       "y" '(consult-yank-from-kill-ring :which-key "Select from clipboard history.")))
 #+end_src
 
-And adding some buffer commands, including a custom one.
+And adding some buffer commands, including some custom ones.
 
 #+name: common-buffer-command-keybindings
 #+begin_src emacs-lisp :lexical yes
@@ -358,12 +358,22 @@ And adding some buffer commands, including a custom one.
           (bury-buffer)
         (kill-buffer (current-buffer))))
 
+    (defun crj-save-and-kill-or-bury-current-buffer ()
+      "Save and then kill the current buffer.
+
+  Or bury it if it's a buffer we shouldn't kill."
+      (interactive)
+      (save-buffer)
+      (crj-kill-or-bury-current-buffer))
+
     :general
     (leader
-      "bd" '(crj-kill-or-bury-current-buffer :which-key "Kill buffer.")
-      "bz" '(bury-buffer :which-key "Bury buffer.")
-      "br" '(revert-buffer :which-key "Revert buffer.")
-      "bW" '(kill-buffer-and-window :which-key "Kill buffer and close window.")))
+      "bz" #'(bury-buffer :which-key "Bury buffer.")
+      "br" #'(revert-buffer :which-key "Revert buffer.")
+      "bW" #'(kill-buffer-and-window :which-key "Kill buffer and close window.")
+      "bd " #'(crj-kill-or-bury-current-buffer :which-key " Kill buffer.")
+      "bq" #'(crj-save-and-kill-or-bury-current-buffer :which-key "Save and kill buffer.")
+      "fq" #'(crj-save-and-kill-or-bury-current-buffer :which-key "Save and kill buffer.")))
 #+end_src
 
 *** Or Maybe Redo Keybindings To Be More Readable?
