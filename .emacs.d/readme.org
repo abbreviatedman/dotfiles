@@ -4948,6 +4948,8 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
 
 ** Window Management
 
+*** Window Configuration
+
 Emacs has windows, which are more like what you would call a "pane" anywhere else. Evil has some great keybindings, but they're on ~C-w~, and I also want them on my leader keys.
 
 #+name: improve-window-management
@@ -4960,10 +4962,11 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
           evil-vsplit-window-right t)
 
     :general
-    (leader
-      "wd" '(evil-window-delete :which-key "Close window.")
-      "wB" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
-      "wu" '(winner-undo :which-key "Undo last window setup change.")))
+    (:keymaps 'evil-window-map
+      "d" '(evil-window-delete :which-key "Close window.")
+      "B" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
+      "u" '(winner-undo :which-key "Undo last window setup change.")))
+#+end_src
 #+end_src
 
 ** Improving Help Commands With Helpful
