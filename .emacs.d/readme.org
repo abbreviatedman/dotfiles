@@ -872,6 +872,7 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
   (use-package edit-indirect)
 
   (use-package evil-markdown
+    :diminish
     :straight (:host github
                :repo "Somelauw/evil-markdown")
 
@@ -2885,7 +2886,9 @@ Oooh.
     :init
     (defun crj--get-netrc-info (host field)
       "Get FIELD for HOST from the netrc file."
-      (netrc-get (netrc-machine (netrc-parse (expand-file-name "~/.authinfo.gpg")) host) field))
+      (let* ((file (netrc-parse (expand-file-name "~/.authinfo.gpg")))
+             (machine (netrc-machine file host)))
+        (netrc-get machine field)))
 
     (general-setq auth-sources '("~/.authinfo.gpg")
           plstore-cache-passphrase-for-symmetric-encryption t)
@@ -3255,9 +3258,10 @@ Which is good, as I make a /lot/ of spelling errors.
              current-location)
             (message (format "%s saved to dictionary." (car word)))))))
 
-    (add-hook 'text-mode-hook #'crj--turn-on-flyspell)
+    (general-add-hook
+     '(text-mode-hook org-mode-hook git-commit-mode-hook)
+     #'crj--turn-on-flyspell)
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-    (add-hook 'git-commit-mode-hook #'crj--turn-on-flyspell)
     (general-setq ispell-program-name "hunspell")
 
     :config
@@ -3271,6 +3275,7 @@ Which is good, as I make a /lot/ of spelling errors.
       "bS" #'(flyspell-buffer :which-key "Spellcheck whole buffer."))
 
     ('(insert normal emacs)
+     "C-;" #'flyspell-auto-correct-previous-word
      "C-M-;" #'crj-flyspell-add-previous-word-to-dictionary))
 
   (use-package flyspell-correct
@@ -5065,6 +5070,9 @@ More old code to revisit and reactivate maybe.
      #'crj/save-and-kill-or-bury-current-buffer))
 #+end_src
 *** restclient.el and ob-restclient
+*** add function/binding to start most recent radio station
+*** add regular evil-WORD to text objects, maybe on o or O
+But first, catalog the differences between o/x/a/W and see which ones you need.
 *** add evil-undo to v/V keybindings
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
