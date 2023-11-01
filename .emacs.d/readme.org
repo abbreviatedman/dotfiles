@@ -3962,9 +3962,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
         (symex--execute-tree-move (symex-make-move -1 0)))
       (symex-delete-backwards 1))
 
-    (general-setq symex-highlight-p nil
-                  symex-quote-prefix-list (list "'" "#'" "`"))
-
     (defun crj--symex-remaining-length-but-using-save-excursion ()
       "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
 
@@ -3980,6 +3977,9 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
           (1+ (length result)))))
 
     (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
+
+    (general-setq symex-highlight-p nil
+                  symex-quote-prefix-list (list "'" "#'" "`"))
 
     :general
     (:keymaps 'lispyville-mode-map
