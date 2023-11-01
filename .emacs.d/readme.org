@@ -892,6 +892,14 @@ Literate programming for fun and profit. Or... at least, for fun.
      "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block.")
      "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block."))
 
+    (leader
+      :keymaps 'org-src-mode-map
+      "c'" #'(org-edit-src-exit :which-key "Finish editing source block."))
+
+    (leader
+     :keymaps 'org-mode-map
+      "c'" #'(org-edit-special :which-key "Edit code block in its major mode."))
+
     (:keymaps 'org-mode-map
      "C-c n" '(org-babel-next-src-block :which-key "Go to next source block.")
      "C-c p" '(org-babel-previous-src-block :which-key "Go to previous source block."))
@@ -899,11 +907,6 @@ Literate programming for fun and profit. Or... at least, for fun.
     ('normal
      :keymaps 'org-mode-map
      "RET" #'org-ctrl-c-ctrl-c)
-
-    ('normal
-     :keymaps 'org-mode-map
-     :prefix "SPC"
-     "c'" #'(org-edit-special :which-key "Edit code block in its major mode."))
 
     (:keymaps 'org-mode-map
      :states '(normal emacs visual insert motion)
