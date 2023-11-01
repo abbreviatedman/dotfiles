@@ -2,6 +2,8 @@
 # ~/.bashrc
 #
 
+export BASH_ENV=$HOME/.env.sh
+
 [[ $- != *i* ]] && return
 
 colors() {
