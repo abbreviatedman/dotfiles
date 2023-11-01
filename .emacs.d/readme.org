@@ -348,7 +348,6 @@ And adding some buffer commands, including some custom ones.
                                            "#emacs"
                                            "*Messages*"
                                            shell-command-buffer-name shell-command-buffer-name-async))
-
     (defun crj-kill-or-bury-current-buffer ()
       "Kill the current buffer.
 
@@ -2635,7 +2634,7 @@ So you can wish everyone would leave you alone, but /within Emacs/.
     (leader "acv" '(cfw:open-org-calendar :which-key "View calendar.")))
 #+end_src
 
-**** Google Calendar Integration
+**** Google Calendar
 
 Although I'm exploring ways to cut out Google entirely from my life, my work uses Google Calendar, so I need to be able to see it. This is a way to do that.
 
