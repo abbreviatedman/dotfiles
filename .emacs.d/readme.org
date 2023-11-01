@@ -240,11 +240,17 @@ I'll add to this section every time I have a new menu to add to the hierarchy.
 
 I'm also mapping a new help command in a couple places, so that I can later remap ~C-h~ to deleting a character.
 
+Additionally, the help map is kind of special, as it has a good vanilla keybinding I sometimes use. So I bind things on the help-map, as well as creating a sub-menu and binding it on there.
+
 #+name: menus
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (setq embark-help-key "C-S-h")
+
+    (defconst crj-emacs-lisp-help-map
+      (make-sparse-keymap)
+      "A keymap for Emacs Lisp help commands.")
 
     :general
     ("C-S-h" 'help-command)
@@ -272,7 +278,11 @@ I'm also mapping a new help command in a couple places, so that I can later rema
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
       "ai" '(:ignore t :which-key "AI menu.")
-      "aib" '(:ignore t :which-key "Bing Chat menu.")))
+      "aib" '(:ignore t :which-key "Bing Chat menu."))
+
+    (:keymaps 'help-map
+     "E" #'(:prefix-command crj-emacs-lisp-help-map
+            :which-key "Emacs Lisp Help menu.")))
 #+end_src
 
 *** General Emacs' Keybindings
@@ -4929,19 +4939,19 @@ A few more additions to the help menu:
     (:states 'normal
      "K" #'crj-lookup-next-symbol)
 
-    (leader
-      "hv" '(helpful-variable :which-key "Describe variable.")
-      "hp" '(find-library :which-key "Find Elisp library.")
-      "hy" '(shortdoc-display-group :which-key "Elisp documentation.")
-      "hB" '(embark-bindings  :which-key "Search active keybindings.")
-      "hf" '(helpful-callable :which-key "Describe function.")
-      "hF" '(describe-face :which-key "Describe face.")
-      "hk" '(helpful-key :which-key "Describe key.")
-      "hx" '(helpful-command :which-key "Describe command.")
-      "hW" '(woman :which-key "Search for manual page.")
-      "hg" '(customize-group :which-key "Search for customize group.")
-      "hm" '(consult-minor-mode-menu :which-key "Search through minor modes.")
-      "hM" '(describe-mode :which-key "Describe currently active modes."))
+    (:keymaps 'help-map
+      "v" '(helpful-variable :which-key "Describe variable.")
+      "p" '(find-library :which-key "Find Elisp library.")
+      "y" '(shortdoc-display-group :which-key "Elisp documentation.")
+      "B" '(embark-bindings  :which-key "Search active keybindings.")
+      "f" '(helpful-callable :which-key "Describe function.")
+      "F" '(describe-face :which-key "Describe face.")
+      "k" '(helpful-key :which-key "Describe key.")
+      "x" '(helpful-command :which-key "Describe command.")
+      "W" '(woman :which-key "Search for manual page.")
+      "g" '(customize-group :which-key "Search for customize group.")
+      "m" '(consult-minor-mode-menu :which-key "Search through minor modes.")
+      "M" '(describe-mode :which-key "Describe currently active modes."))
 
     ([remap describe-function] #'helpful-callable)
     ([remap describe-command] #'helpful-command)
