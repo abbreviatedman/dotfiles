@@ -423,13 +423,159 @@ Which key shows you a constantly updating list of what keys you can press next a
           which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL")))
 #+end_src
 
+** Fixing Assorted Decrepit Defaults
+
+For backwards compatibility, Emacs hasn't changed its defaults for a looooong time, requiring folks to either keep really weird settings they don't even know exist or write the same boilerplate code that everyone else does to get some sane defaults.
+
+This is that boilerplate code.
+
+Feel free to check out any of these variables—if you're in Emacs, the full documentation on each one is a keypress away! They range from minor tweaks (what format to use for disambiguating files with the same names) to kind-of-important good-neighbor rules for playing well with other programs (saving the system clipboard into Emacs' powerful clipboard system, or reloading buffers if another program changes the file it's visiting) to correcting some really poorly thought out decisions (like adding or changing or deleting code from your Emacs config file if you change variables through the graphical Customize system).
+
+Either way, marvel at the fact that the Emacs maintainers have stubbornly held onto backwards compatibility from a program that is about to hit /forty years old/. That's a /lot/ of backwards to be compatible with! So… maybe we should be lucky it's just /one/ block of boilerplate code needed, given the number of holes we need to plug in the hull of this creaky single-threaded old vessel.
+
+#+name: set-sane-defaults
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (general-setq vc-follow-symlinks t
+                  save-interprogram-paste-before-kill t
+                  recentf-max-saved-items 50
+                  global-auto-revert-non-file-buffers t
+                  auto-save-timeout 10
+                  auto-save-no-message t
+                  backup-by-copying t
+                  ediff-window-setup-function 'ediff-setup-windows-plain
+                  frame-inhibit-implied-resize t
+                  backup-directory-alist `(("." . ,(concat user-emacs-directory "/backups")))
+                  gc-cons-threshold (* 100 1000 1000)
+                  uniquify-buffer-name-style 'forward
+                  load-prefer-newer t)
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    (repeat-mode 1)
+    (recentf-mode 1)
+    (global-auto-revert-mode 1)
+    (save-place-mode 1)
+    (auto-save-mode 1)
+
+    :general
+    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
+
+    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
+#+end_src
+
+*** Minibuffers
+
+**** Save Minibuffer History
+
+#+save-minibuffer-history
+#+begin_src emacs-lisp :lexical yes
+  (use-package savehist
+    :init
+    (savehist-mode))
+#+end_src
+
+**** Put Minibuffer at the top of the frame?
+
+Not sure I'm using this right now, but it's an interesting idea!
+
+If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
+
+#+name: disabled-minibuffer-at-top-of-frame-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package mini-frame
+    :disabled
+    :init
+    (mini-frame-mode))
+#+end_src
+
+**** Navigate That History More Easily
+
+#+name: better-minibuffer-history-navigation
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (general-def minibuffer-mode-map
+      "C-p" #'previous-line-or-history-element
+      "C-n" #'next-line-or-history-element))
+#+end_src
+
+**** Allow Minibuffers Within Minibuffers
+
+#+name: use-recursive-minibuffers
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq enable-recursive-minibuffers t))
+#+end_src
+
+**** Don't Show Keyboard Shortcuts Immediately
+
+Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
+
+#+name: show-pressed-keys-with-delay
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq echo-keystrokes 3))
+#+end_src
+
+*** Secrets
+
+They're secrets. Oooh, exciting!
+
+#+name: password-security-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (require 'epa-file)
+    (setq epg-pinentry-mode 'loopback)
+
+    (defun crj--get-netrc-info (host field)
+      "Get FIELD for HOST from the netrc file."
+      (let* ((file (netrc-parse (expand-file-name "~/.authinfo.gpg")))
+             (machine (netrc-machine file host)))
+        (netrc-get machine field)))
+
+    (general-setq auth-sources '("~/.authinfo.gpg")
+                  plstore-cache-passphrase-for-symmetric-encryption t)
+
+    (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
+
+  (use-package ssh-agency
+    :defer t
+
+    :init
+    (general-setq ssh-agency-askpass nil))
+#+end_src
+
+*** Don't Yell At Me So Much
+
+#+name: quiet-emacs-don't-be-so-loud
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq warning-suppress-types '((comp))
+          ring-bell-function 'ignore))
+#+end_src
+
+*** Don't Mess With Custom System
+
+#+name: customization-file-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
+    (unless (file-exists-p custom-file)
+      (write-region "" nil custom-file)))
+#+end_src
+
 ** Markup Documents
 
 *** General Markup Settings
 
 Searching a markup outline.
 
-#+NAME: markup-search-keybinding
+#+name: markup-search-keybinding
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :general
@@ -2803,153 +2949,6 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
     :init
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
     (require 'mu4e))
-#+end_src
-
-** Fixing Assorted Decrepit Defaults
-
-For backwards compatibility, Emacs hasn't changed its defaults for a looooong time, requiring folks to either keep really weird settings they don't even know exist or write the same boilerplate code that everyone else does to get some sane defaults.
-
-This is that boilerplate code.
-
-Feel free to check out any of these variables—if you're in Emacs, the full documentation on each one is a keypress away! They range from minor tweaks (what format to use for disambiguating files with the same names) to kind-of-important good-neighbor rules for playing well with other programs (saving the system clipboard into Emacs' powerful clipboard system, or reloading buffers if another program changes the file it's visiting) to correcting some really poorly thought out decisions (like adding or changing or deleting code from your Emacs config file if you change variables through the graphical Customize system).
-
-Either way, marvel at the fact that the Emacs maintainers have stubbornly held onto backwards compatibility from a program that is about to hit /forty years old/. That's a /lot/ of backwards to be compatible with! So… maybe we should be lucky it's just /one/ block of boilerplate code needed, given the number of holes we need to plug in the hull of this creaky single-threaded old vessel.
-
-#+NAME: set-sane-defaults
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (general-setq vc-follow-symlinks t
-                  save-interprogram-paste-before-kill t
-                  recentf-max-saved-items 50
-                  global-auto-revert-non-file-buffers t
-                  auto-save-timeout 10
-                  auto-save-no-message t
-                  backup-by-copying t
-                  ediff-window-setup-function 'ediff-setup-windows-plain
-                  frame-inhibit-implied-resize t
-                  backup-directory-alist `(("." . ,(concat user-emacs-directory "/backups")))
-                  gc-cons-threshold (* 100 1000 1000)
-                  uniquify-buffer-name-style 'forward
-                  load-prefer-newer t)
-    (defalias 'yes-or-no-p 'y-or-n-p)
-    (repeat-mode 1)
-    (recentf-mode 1)
-    (global-auto-revert-mode 1)
-    (save-place-mode 1)
-    (auto-save-mode 1)
-
-    :general
-    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
-
-    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
-#+end_src
-
-*** Minibuffers
-
-**** Save Minibuffer History
-
-#+save-minibuffer-history
-#+begin_src emacs-lisp :lexical yes
-  (use-package savehist
-    :init
-    (savehist-mode))
-#+end_src
-
-**** Put Minibuffer at the top of the frame?
-
-Not sure I'm using this right now, but it's an interesting idea!
-
-If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
-
-#+name: disabled-minibuffer-at-top-of-frame-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package mini-frame
-    :disabled
-    :init
-    (mini-frame-mode))
-#+end_src
-
-**** Navigate That History More Easily
-
-#+name: better-minibuffer-history-navigation
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :general
-    (general-def minibuffer-mode-map
-      "C-p" #'previous-line-or-history-element
-      "C-n" #'next-line-or-history-element))
-#+end_src
-
-**** Allow Minibuffers Within Minibuffers
-
-#+name: use-recursive-minibuffers
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq enable-recursive-minibuffers t))
-#+end_src
-
-**** Don't Show Keyboard Shortcuts Immediately
-
-Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
-
-#+name: show-pressed-keys-with-delay
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq echo-keystrokes 3))
-#+end_src
-
-*** Secrets
-
-Oooh.
-
-#+name: password-security-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (defun crj--get-netrc-info (host field)
-      "Get FIELD for HOST from the netrc file."
-      (let* ((file (netrc-parse (expand-file-name "~/.authinfo.gpg")))
-             (machine (netrc-machine file host)))
-        (netrc-get machine field)))
-
-    (general-setq auth-sources '("~/.authinfo.gpg")
-          plstore-cache-passphrase-for-symmetric-encryption t)
-
-    (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
-
-  (use-package ssh-agency
-    :init
-    (general-setq ssh-agency-askpass nil))
-
-  ;; (use-package password-store)
-
-  ;; (use-package auth-source-pass
-  ;;   :init
-  ;;   (auth-source-pass-enable))
-#+end_src
-
-*** Don't Yell At Me So Much
-
-#+name: quiet-emacs-don't-be-so-loud
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq warning-suppress-types '((comp))
-          ring-bell-function 'ignore))
-#+end_src
-
-*** Don't Mess With Custom System
-
-#+name: customization-file-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
-    (unless (file-exists-p custom-file)
-      (write-region "" nil custom-file)))
 #+end_src
 
 ** Color Theme
