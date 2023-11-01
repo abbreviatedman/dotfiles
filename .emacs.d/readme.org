@@ -1788,15 +1788,6 @@ We can edit filtered results live with wgrep.
 
 ** Look and Feel
 
-*** Let's always start Emacs with our config file.
-
-That's this file, as of now!
-
-#+name: start-with-config-file
-#+begin_src emacs-lisp :lexical yes
-  (crj-open-literate-config-file)
-#+end_src
-
 *** Popup Buffers
 
 I like to switch to be able to close popup buffers easily.
@@ -4970,6 +4961,14 @@ Emacs has windows, which are more like what you would call a "pane" anywhere els
       "B" '(kill-buffer-and-window :which-key "Kill buffer and close window.")
       "u" '(winner-undo :which-key "Undo last window setup change.")))
 #+end_src
+
+*** Start Initial Window With Config File
+
+That's this file, as of now!
+
+#+name: start-with-config-file
+#+begin_src emacs-lisp :lexical yes
+  (crj-open-literate-config-file)
 #+end_src
 
 ** Improving Help Commands With Helpful
