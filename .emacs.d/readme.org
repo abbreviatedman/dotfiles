@@ -862,6 +862,7 @@ Literate programming for fun and profit. Or... at least, for fun.
 
   (use-package emacs
     :init
+    (require 'org-tempo)
     (general-setq org-confirm-babel-evaluate nil
                   org-src-window-setup 'current-window
                   org-babel-default-header-args:elisp '((:lexical . "yes"))
