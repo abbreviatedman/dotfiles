@@ -3918,6 +3918,28 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
     :diminish
 
     :init
+    ;; There's probably a way to generalize these with some advice and a loop...
+    ;; but it works, and there aren't many of them.
+    (defun crj-symex-go-forward-without-repeat (count)
+      "Go forward a symex, but with repeat off."
+      (interactive "p")
+      (evil-without-repeat (symex-go-forward count)))
+
+    (defun crj-symex-go-backward-without-repeat (count)
+      "Go backward a symex, but with repeat off."
+      (interactive "p")
+      (evil-without-repeat (symex-go-backward count)))
+
+    (defun crj-symex-goto-first-without-repeat ()
+      "Go to the first symex, but with repeat off."
+      (interactive)
+      (evil-without-repeat (symex-goto-first)))
+
+    (defun crj-symex-goto-last-without-repeat ()
+      "Go to the last symex, but with repeat off."
+      (interactive)
+      (evil-without-repeat (symex-goto-last)))
+
     (defun crj-delete-current-symex ()
       "Delete the current symex.
 
@@ -3962,16 +3984,16 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
     :general
     (:keymaps 'lispyville-mode-map
      :states 'normal
-     "H" #'symex-go-backward
-     "L" #'symex-go-forward
+     "H" #'crj-symex-go-backward-without-repeat
+     "L" #'crj-symex-go-forward-without-repeat
      "v" #'crj-delete-current-symex
      "V" #'crj-delete-previous-symex
      "{" #'symex-join-lines
      "}" #'symex-append-newline
      "(" #'symex-collapse-remaining
      ")" #'symex-unfurl-remaining
-     "-" #'symex-goto-first
-     "+" #'symex-goto-last
+     "-" #'crj-symex-goto-first-without-repeat
+     "+" #'crj-symex-goto-last-without-repeat
      "M-o" #'symex-open-line-after
      "M-O" #'symex-open-line-before
      "M-s" #'symex-delete
@@ -5140,8 +5162,6 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 
 ** Config Changes Todos
 *** snippets - skeleton or tempo or tempel or yasnippet??
-*** remove repeat from Symex movement commands
-[[https://github.com/noctuid/evil-guide#command-properties][see here for how to do it I think!]]
 *** restclient.el and ob-restclient
 *** add function/binding to start most recent radio station
 *** add regular evil-WORD to text objects, maybe on o or O
