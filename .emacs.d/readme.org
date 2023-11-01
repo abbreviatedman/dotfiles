@@ -2491,33 +2491,29 @@ There are a /lot/ of moving parts with ~org-gcal~, those parts are continuously 
 
 I hope to document a clear and simple way to set this up in the future (perhaps I could practice in a VM?), but for now: this is what I've got.
 
-**** Google Calendar Setup
-
 #+name: google-calendar-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (setq org-gcal-client-id (auth-source-pass-get
-                              'secret
-                              "cal/org-gcal/ac/client-id")
+    (defun crj-org-gcal-fetch ()
+      "Fetch org-gcal events with variables set correctly."
+      (interactive)
+      (setq org-gcal-client-id (crj--get-netrc-info "cal.org-gcal.ac" "login")
+            org-gcal-client-secret (crj--get-netrc-info "cal.org-gcal.ac" "password")
+            org-gcal-fetch-file-alist '(("colin@anniecannons.com"
+                                         .
+                                         "~/org-stuff/gcal/anniecannons.org")))
+      (org-gcal-fetch))
 
-          org-gcal-client-secret (auth-source-pass-get
-                                  'secret
-                                  "cal/org-gcal/ac/client-secret")
-
-          org-gcal-fetch-file-alist '(("colin@anniecannons.com"
-                                       .
-                                       "~/org-stuff/gcal/anniecannons.org"))))
-
-  (use-package org-gcal
-    :straight (:host github :repo "kidd/org-gcal.el")
-
-    :init
-    (require 'epa-file)
-    (setq epg-pinentry-mode 'loopback)
 
     :general
-    (leader "acgf" '(org-gcal-fetch :which-key "Fetch Gcal events.")))
+
+    (leader "acgf" '(crj-org-gcal-fetch :which-key "Fetch Gcal events.")))
+
+  (use-package org-gcal
+    :defer t
+
+    :straight (:host github :repo "kidd/org-gcal.el"))
 #+end_src
 
 *** Version Control With Magit
@@ -4873,8 +4869,10 @@ Interact with ChatGPT, either by sending text to query it with ~gptel-send~ or o
 #+name: gpt-integration
 #+begin_src emacs-lisp :lexical yes
   (use-package gptel
-    :init
-    (setq gptel-api-key (crj--get-netrc-info "ai.openai.key" "password")))
+    :defer t
+
+    :custom
+    (gptel-api-key (crj--get-netrc-info "ai.openai.key" "password")))
 #+end_src
 
 
@@ -4892,12 +4890,15 @@ This one opens a dedicated shell buffer for ChatGPT interactions.
   (use-package chatgpt-shell
     :requires shell-maker
 
+    :defer t
+
     :straight (:host github
                :repo "xenodium/chatgpt-shell"
                :files ("chatgpt-shell.el"))
 
     :custom
-    ((chatgpt-shell-openai-key (crj--get-netrc-info "ai.openai.key" "password"))))
+    (chatgpt-shell-openai-key
+     (crj--get-netrc-info "ai.openai.key" "password")))
 #+end_src
 
 ** Window Management
