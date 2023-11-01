@@ -1793,6 +1793,24 @@ That's this file, as of now!
   (crj-open-literate-config-file)
 #+end_src
 
+*** Popup Buffers
+
+I like to switch to be able to close popup buffers easily.
+
+This first part will switch us to the Messages buffer in the same window (usually waht I want), so I can bury the buffer again easily with ~q~.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj-switch-to-messages ()
+      (interactive)
+      (switch-to-buffer "*Messages*"))
+
+    :general
+    (:prefix-map 'help-map
+     "e" #'(crj-switch-to-messages :which-key "Switch to messages buffer.")))
+#+end_src
+
 *** Basic UI Configuration
 
 These are some sane defaults for the UI.
