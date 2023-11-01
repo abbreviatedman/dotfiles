@@ -5163,11 +5163,9 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 ** Config Changes Todos
 *** snippets - skeleton or tempo or tempel or yasnippet??
 *** restclient.el and ob-restclient
-*** add function/binding to start most recent radio station
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
 *** look into popper for popup buffers
-*** add evil-undo to v/V keybindings
 *** change font in org mode blocks to coding font
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
