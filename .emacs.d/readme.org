@@ -3922,8 +3922,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
   FUNC should be an interactive command that you want to call while preserving the Evil
   'dot' command for the previous motion.
 
-  Is 'not dot' a good name for this function? Probably not! But I think it's clever and
-  short enough to one-line in a lambda and goshdarnit it's my config."
+  Is 'not dot' a good name for this function? Probably not! But I think it's clever, and
+  short enough to one-line in a lambda, and goshdarnit it's my config."
       (evil-without-repeat (call-interactively func)))
 
     (defun crj-delete-current-symex ()
