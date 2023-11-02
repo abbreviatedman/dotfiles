@@ -3977,8 +3977,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      :states 'normal
      "H" #'(lambda () (interactive) (!. #'symex-go-backward))
      "L" #'(lambda () (interactive) (!. #'symex-go-forward))
-     "-" #'(lambda () (interactive) (!. 'symex-goto-first))
-     "+" #'(lambda () (interactive) (!. 'symex-goto-last))
+     "-" #'(lambda () (interactive) (!. #'symex-goto-first))
+     "+" #'(lambda () (interactive) (!. #'symex-goto-last))
      "v" #'crj-delete-current-symex
      "V" #'crj-delete-previous-symex
      "{" #'symex-join-lines
