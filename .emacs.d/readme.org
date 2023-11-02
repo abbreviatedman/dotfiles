@@ -2851,7 +2851,9 @@ Only major change here is that I was experiencing some modeline issues with yadm
   This is here due to an issue I'm having with Magit on one machine."
       (let ((display-buffer-alist
              `((,shell-command-buffer-name-async display-buffer-no-window))))
-        (async-shell-command (format "yadm %s" command))))
+        (async-shell-command (format "yadm %s" command)))
+      (when (string= (buffer-name) "magit: abbreviatedman")
+        (magit-refresh-all)))
 
     (require 'tramp)
     (add-to-list 'tramp-methods
