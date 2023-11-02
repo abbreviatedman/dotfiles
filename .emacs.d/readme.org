@@ -3854,7 +3854,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
        c-u
        prettify
        text-objects
-       ;; the below makes motions like ~w~ affect words (and subwords in subword mode), while motions like ~W~ affect atoms
+       ;; the below makes motions like ~w~ affect words (and subwords in subword
+       ;; mode), while motions like ~W~ affect atoms
        (atom-motions t)
        commentary
        slurp/barf-cp
@@ -3876,14 +3877,18 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "]" nil
      ";" nil)
 
-    (:keymaps '(evil-inner-text-objects-map evil-operator-state-map evil-visual-state-map)
+    (:keymaps '(evil-inner-text-objects-map
+                evil-operator-state-map
+                evil-visual-state-map)
      :states 'normal
      "a" #'lispyville-inner-atom
      "x" #'lispyville-inner-sexp
      "l" #'lispyville-inner-list
      "s" #'lispyville-inner-string)
 
-    (:keymaps '(evil-outer-text-objects-map evil-operator-state-map evil-visual-state-map)
+    (:keymaps '(evil-outer-text-objects-map
+                evil-operator-state-map
+                evil-visual-state-map)
      :states 'normal
      "a" #'lispyville-outer-atom
      "x" #'lispyville-outer-sexp
@@ -3960,7 +3965,9 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
         (let ((result (symex-execute-traversal symex--traversal-goto-last)))
           (1+ (length result)))))
 
-    (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
+    (advice-add 'symex--remaining-length
+                :override
+                #'crj--symex-remaining-length-but-using-save-excursion)
 
     (general-setq symex-highlight-p nil
                   symex-quote-prefix-list (list "'" "#'" "`"))
