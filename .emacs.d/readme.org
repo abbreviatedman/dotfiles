@@ -2524,7 +2524,7 @@ Of the many types of terminals in Emacs, Vterm is the most faithful to the stand
 #+begin_src emacs-lisp :lexical yes
   (use-package vterm
     :init
-    (setq vterm-shell "/usr/sbin/zsh"
+    (setq vterm-shell "/bin/zsh"
           vterm-always-compile-module t
           vterm-max-scrollback 100000)
 
@@ -2609,17 +2609,19 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
       (setq-local comint-process-echoes t))
 
     (add-hook 'shell-mode-hook #'crj--set-up-zsh-shell-mode)
+    (setenv "SHELL" "/bin/zsh")
     (general-setq explicit-shell-file-name "/bin/zsh"
                   shell-file-name "zsh"
                   exlicit-zsh-args '("--login" "--interactive")))
 #+end_src
+
 #+name: set-shell-variables
 #+begin_src emacs-lisp :lexical yes
   (use-package exec-path-from-shell
     :config
+    (general-setq exec-path-from-shell-arguments nil)
     (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
       (add-to-list 'exec-path-from-shell-variables var))
-    (general-setq exec-path-from-shell-arguments nil)
     (when (memq window-system '(mac ns x))
       (exec-path-from-shell-initialize)))
 #+end_src
