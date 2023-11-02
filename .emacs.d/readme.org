@@ -2878,7 +2878,7 @@ Only major change here is that I was experiencing some modeline issues with yadm
                    (tramp-remote-shell "/bin/sh")
                    (tramp-remote-shell-args ("-c"))))
 
-    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+    ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
     (defun crj-yadm-magit-status ()
       (interactive)
