@@ -713,6 +713,7 @@ I'm using a modified version of that function, which I've adapted slightly for m
       ;; use a variable pitch font for prose
       (variable-pitch-mode 1)
       (diminish 'variable-pitch-mode)
+      (diminish 'buffer-face-mode)
       ;; use bullet points for unordered lists
       (font-lock-add-keywords 'org-mode
                               '(("^ +\\([-*]\\) "
