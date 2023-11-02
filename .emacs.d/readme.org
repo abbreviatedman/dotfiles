@@ -3908,8 +3908,6 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      "M-l" #'lispyville-drag-forward
      "U" #'lispyville-backward-up-list
      "_" #'lispy-raise-sexp
-     "(" #'lispyville-previous-opening
-     ")" #'lispyville-next-closing
      "&" #'lispy-join
      "|" #'lispy-split
      "M" #'lispy-convolute))
@@ -3918,27 +3916,15 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
     :diminish
 
     :init
-    ;; There's probably a way to generalize these with some advice and a loop...
-    ;; but it works, and there aren't many of them.
-    (defun crj-symex-go-forward-without-repeat (count)
-      "Go forward a symex, but with repeat off."
-      (interactive "p")
-      (evil-without-repeat (symex-go-forward count)))
+    (defun !. (func)
+      "Call FUNC interactively without adding it to the repeat list.
 
-    (defun crj-symex-go-backward-without-repeat (count)
-      "Go backward a symex, but with repeat off."
-      (interactive "p")
-      (evil-without-repeat (symex-go-backward count)))
+  FUNC should be an interactive command that you want to call while preserving the Evil
+  'dot' command for the previous motion.
 
-    (defun crj-symex-goto-first-without-repeat ()
-      "Go to the first symex, but with repeat off."
-      (interactive)
-      (evil-without-repeat (symex-goto-first)))
-
-    (defun crj-symex-goto-last-without-repeat ()
-      "Go to the last symex, but with repeat off."
-      (interactive)
-      (evil-without-repeat (symex-goto-last)))
+  Is 'not dot' a good name for this function? Probably not! But I think it's clever and
+  short enough to one-line in a lambda and goshdarnit it's my config."
+      (evil-without-repeat (call-interactively func)))
 
     (defun crj-delete-current-symex ()
       "Delete the current symex.
@@ -3962,21 +3948,14 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
         (symex--execute-tree-move (symex-make-move -1 0)))
       (symex-delete-backwards 1))
 
-    (defun crj--symex-remaining-length-but-using-save-excursion ()
-      "This is an advising function for overriding the original `symex-remaining-length' function. It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
+    (defun crj--use-save-excursion (func)
+      "Run the command FUNC with save excursion instead of Symex's version.
 
-    There are probably better fixes!
+  It just replaces `symex-save-excursion' with regular `save-excursion', since Symex's version appears to not be known to Emacs for some reason.
 
-    Here's the original doc-string:
-
-    Compute the remaining length of the current symex.
-
-    This should be done via DSL computation semantics at some point."
-      (save-excursion
-        (let ((result (symex-execute-traversal symex--traversal-goto-last)))
-          (1+ (length result)))))
-
-    (advice-add 'symex--remaining-length :override #'crj--symex-remaining-length-but-using-save-excursion)
+  There are probably better fixes!"
+      (let ((symex-save-excursion #'save-excursion))
+        (call-interactively func)))
 
     (general-setq symex-highlight-p nil
                   symex-quote-prefix-list (list "'" "#'" "`"))
@@ -3984,23 +3963,21 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
     :general
     (:keymaps 'lispyville-mode-map
      :states 'normal
-     "H" #'crj-symex-go-backward-without-repeat
-     "L" #'crj-symex-go-forward-without-repeat
+     "H" #'(lambda () (interactive) (!. #'symex-go-backward))
+     "L" #'(lambda () (interactive) (!. #'symex-go-forward))
      "v" #'crj-delete-current-symex
      "V" #'crj-delete-previous-symex
      "{" #'symex-join-lines
      "}" #'symex-append-newline
      "(" #'symex-collapse-remaining
      ")" #'symex-unfurl-remaining
-     "-" #'crj-symex-goto-first-without-repeat
-     "+" #'crj-symex-goto-last-without-repeat
+     "-" #'(lambda () (interactive) (!. 'symex-goto-first))
+     "+" #'(lambda () (interactive) (!. 'symex-goto-last))
      "M-o" #'symex-open-line-after
      "M-O" #'symex-open-line-before
-     "M-s" #'symex-delete
-     "M-S" #'symex-delete-backwards
-     "M-d" #'symex-delete-remaining
-     "M-c" #'symex-change-remaining
-     "M-y" #'symex-yank-remaining
+     "M-d" #'(lambda () (interactive) (crj--use-save-excursion #'symex-delete-remaining))
+     "M-c" #'(lambda () (interactive) (crj--use-save-excursion #'symex-change-remaining))
+     "M-y" #'(lambda () (interactive) (crj--use-save-excursion #'symex-yank-remaining))
      "C-'" #'symex-cycle-quote
      "C-," #'symex-cycle-unquote))
 
