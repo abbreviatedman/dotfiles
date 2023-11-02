@@ -227,7 +227,7 @@ Let's define a few commands that open specific commonly accessed files as exampl
     (leader
       "fc" '(crj-open-literate-config-file :which-key "Open literate config file.")
       "ft" '(crj-open-task-list :which-key "Open task list file.")
-      "fq" '(crj-open-quick-note-file :which-key "Open quick notes file.")))
+      "fn" '(crj-open-quick-note-file :which-key "Open quick notes file.")))
 #+end_src
 
 Now it's not much code to add fairly complex keybindings, and once we get ~which-key~ installed, they'll be discoverable as well!
