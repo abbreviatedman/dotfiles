@@ -5147,8 +5147,8 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** restclient.el and ob-restclient
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
+*** fix magit digit-count bindings
 *** look into popper for popup buffers
-*** change font in org mode blocks to coding font
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
 Here's some JS that we could try using tampermonkey(chrome) or greasemonkey (firefox) or user scripts (floorp) to get going:
@@ -5408,11 +5408,8 @@ Anything useful here?
 
 #+end_src
 
-*** add bindings for org deadlines and schedules
-
-*** add bindings for org-mode-src block movement
+*** add evil bindings for org-mode-src block movement
 ~[b~ and ~]b~?
-
 *** redo font size to be calculated based on resolution
 
 *** add way to run other Emacs with same init directory to check our init... maybe starting a different server, or a serverless Emacs?
@@ -5433,6 +5430,7 @@ Some variables to check out:
                                    evil-shift-width
                                    css-indent-offset))
 #+end_src
+
 *** make line numbers increase in size at a lower rate. This command could be useful:
 
 #+begin_src emacs-lisp :lexical yes
@@ -5659,8 +5657,6 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 *** rewrite symex section copy
 
-*** switch to msgs buffer cmd
-
 *** targets
 
 *** evil show ex digraphs
@@ -5863,16 +5859,13 @@ Yup, more old code I used to use.
 
 *** search online
 
-*** open file at point
-
 *** org character marker toggle
 
 *** ibuffer filters
 
 *** jest mode
 
-*** create wttrin library
-
+*** create wttrin library or biome FE
 *** eglot get info on symbol
 
 *** show flymake project diagnostics
