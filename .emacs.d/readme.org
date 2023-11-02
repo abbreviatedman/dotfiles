@@ -2872,10 +2872,10 @@ Only major change here is that I was experiencing some modeline issues with yadm
       "gdd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")
       "gdf" '((lambda () (interactive) (crj--yadm-shell-command "fetch"))
               :which-key "YADM fetch.")
-      "gdF" '((lambda () (interactive) (crj--yadm-shell-command "pull")
-                :which-key "YADM pull."))
-      "gdp" '((lambda () (interactive) (crj--yadm-shell-command "push")
-                :which-key "YADM push."))))
+      "gdF" '((lambda () (interactive) (crj--yadm-shell-command "pull"))
+              :which-key "YADM pull.")
+      "gdp" '((lambda () (interactive) (crj--yadm-shell-command "push"))
+              :which-key "YADM push.")))
 #+end_src
 
 *** Dired
