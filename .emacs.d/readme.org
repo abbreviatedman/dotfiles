@@ -1895,14 +1895,15 @@ Here are my font settings.
 
 #+name: font-values
 #+begin_src emacs-lisp :lexical yes
-  (defvar crj--fixed-pitch-font "Hack")
-  (defvar crj--variable-pitch-coding-font "Input")
-  (defvar crj--variable-pitch-font "IBM Plex Serif")
-  (defvar crj--coding-font crj--variable-pitch-coding-font)
-  (defvar crj--emoji-font "Noto Color Emoji")
-  (defvar crj--default-font-size 110)
-
   (use-package emacs
+    :init
+    (defvar crj--fixed-pitch-font "Hack")
+    (defvar crj--variable-pitch-coding-font "Input")
+    (defvar crj--variable-pitch-font "IBM Plex Serif")
+    (defvar crj--coding-font crj--variable-pitch-coding-font)
+    (defvar crj--emoji-font "Noto Color Emoji")
+    (defvar crj--default-font-size 110)
+
     :config
     (when (member "Noto Color Emoji" (font-family-list))
       (set-fontset-font
