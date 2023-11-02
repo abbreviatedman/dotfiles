@@ -277,7 +277,6 @@ Additionally, the help map is kind of special, as it has a good vanilla keybindi
       "ap" '(:ignore t :which-key "Process management menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
-      "gd" '(:ignore t :which-key "YADM menu.")
       "ai" '(:ignore t :which-key "AI menu.")
       "aib" '(:ignore t :which-key "Bing Chat menu."))
 
@@ -2859,27 +2858,6 @@ Only major change here is that I was experiencing some modeline issues with yadm
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
-    (defun crj--yadm-shell-command (command)
-      "Perform the given yadm COMMAND.
-
-  This is here due to an issue I'm having with Magit on one machine."
-      (let* ((password (read-passwd "SSH Password: "))
-             (buffer-name "* YADM Output *")
-             (display-buffer-alist `((,buffer-name display-buffer-no-window)))
-             (process (start-process
-                       (format "yadm %s" command)
-                       buffer-name
-                       "yadm"
-                       command)))
-        (process-send-string process (format "%s\n" password))
-        (set-process-sentinel
-         process
-         (lambda (_process event)
-           (when (and
-                  (string-match event "finished")
-                  (string= (buffer-name) "magit: abbreviatedman"))
-             (magit-refresh-all))))))
-
     (require 'tramp)
     (add-to-list 'tramp-methods
                  '("yadm"
@@ -2893,18 +2871,12 @@ Only major change here is that I was experiencing some modeline issues with yadm
 
     (defun crj-yadm-magit-status ()
       (interactive)
-       (setq mini-modeline-r-format '(" "))
-       (magit-status "/yadm::"))
+      (setq mini-modeline-r-format '(" "))
+      (magit-status "/yadm::"))
 
     :general
     (leader
-      "gdd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")
-      "gdf" '((lambda () (interactive) (crj--yadm-shell-command "fetch"))
-              :which-key "YADM fetch.")
-      "gdF" '((lambda () (interactive) (crj--yadm-shell-command "pull"))
-              :which-key "YADM pull.")
-      "gdp" '((lambda () (interactive) (crj--yadm-shell-command "push"))
-              :which-key "YADM push.")))
+      "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
 #+end_src
 
 *** Dired
