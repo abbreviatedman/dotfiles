@@ -2601,6 +2601,18 @@ Added some evil bindings, and did a weird thing from [[https://www.reddit.com/r/
 
 **** Use ZSH And The Right Shell Variables
 
+#+name: set-up-zsh
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj--set-up-zsh-shell-mode ()
+      (setq-local comint-process-echoes t))
+
+    (add-hook 'shell-mode-hook #'crj--set-up-zsh-shell-mode)
+    (general-setq explicit-shell-file-name "/bin/zsh"
+                  shell-file-name "zsh"
+                  exlicit-zsh-args '("--login" "--interactive")))
+#+end_src
 #+name: set-shell-variables
 #+begin_src emacs-lisp :lexical yes
   (use-package exec-path-from-shell
