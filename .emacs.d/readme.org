@@ -277,6 +277,7 @@ Additionally, the help map is kind of special, as it has a good vanilla keybindi
       "ap" '(:ignore t :which-key "Process management menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
+      "gd" '(:ignore t :which-key "YADM menu.")
       "ai" '(:ignore t :which-key "AI menu.")
       "aib" '(:ignore t :which-key "Bing Chat menu."))
 
@@ -2842,6 +2843,14 @@ Only major change here is that I was experiencing some modeline issues with yadm
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
+    (defun crj--yadm-shell-command (command)
+      "Perform the given yadm COMMAND.
+
+  This is here due to an issue I'm having with Magit on one machine."
+      (let ((display-buffer-alist
+             `((,shell-command-buffer-name-async display-buffer-no-window))))
+        (async-shell-command (format "yadm %s" command))))
+
     (require 'tramp)
     (add-to-list 'tramp-methods
                  '("yadm"
@@ -2859,7 +2868,14 @@ Only major change here is that I was experiencing some modeline issues with yadm
        (magit-status "/yadm::"))
 
     :general
-    (leader "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
+    (leader
+      "gdd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")
+      "gdf" '((lambda () (interactive) (crj--yadm-shell-command "fetch"))
+              :which-key "YADM fetch.")
+      "gdF" '((lambda () (interactive) (crj--yadm-shell-command "pull")
+                :which-key "YADM pull."))
+      "gdp" '((lambda () (interactive) (crj--yadm-shell-command "push")
+                :which-key "YADM push."))))
 #+end_src
 
 *** Dired
