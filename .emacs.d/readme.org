@@ -3988,9 +3988,9 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
      ")" #'symex-unfurl-remaining
      "M-o" #'symex-open-line-after
      "M-O" #'symex-open-line-before
-     "M-d" #'(lambda () (interactive) (crj--use-save-excursion #'symex-delete-remaining))
-     "M-c" #'(lambda () (interactive) (crj--use-save-excursion #'symex-change-remaining))
-     "M-y" #'(lambda () (interactive) (crj--use-save-excursion #'symex-yank-remaining))
+     "M-d" #'symex-delete-remaining
+     "M-c" #'symex-change-remaining
+     "M-y" #'symex-yank-remaining
      "C-'" #'symex-cycle-quote
      "C-," #'symex-cycle-unquote))
 
