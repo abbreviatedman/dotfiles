@@ -1966,7 +1966,7 @@ And a picture of what my setup actually looks like:
       (buffer-face-mode t))
 
     ;; Hooks for modes I want to use fixed pitch in.
-    (setq crj--fixed-pitch-mode-hooks
+    (defconst crj--fixed-pitch-mode-hooks
           '(vterm-mode-hook
             calendar-mode-hook
             proced-mode-hook
