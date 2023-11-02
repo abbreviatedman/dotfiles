@@ -2863,11 +2863,22 @@ Only major change here is that I was experiencing some modeline issues with yadm
       "Perform the given yadm COMMAND.
 
   This is here due to an issue I'm having with Magit on one machine."
-      (let ((display-buffer-alist
-             `((,shell-command-buffer-name display-buffer-no-window))))
-        (shell-command (format "yadm %s" command)))
-      (when (string= (buffer-name) "magit: abbreviatedman")
-        (magit-refresh-all)))
+      (let* ((password (read-passwd "SSH Password: "))
+             (buffer-name "* YADM Output *")
+             (display-buffer-alist `((,buffer-name display-buffer-no-window)))
+             (process (start-process
+                       (format "yadm %s" command)
+                       buffer-name
+                       "yadm"
+                       command)))
+        (process-send-string process (format "%s\n" password))
+        (set-process-sentinel
+         process
+         (lambda (_process event)
+           (when (and
+                  (string-match event "finished")
+                  (string= (buffer-name) "magit: abbreviatedman"))
+             (magit-refresh-all))))))
 
     (require 'tramp)
     (add-to-list 'tramp-methods
