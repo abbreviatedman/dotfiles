@@ -686,74 +686,66 @@ The search results for ~consult-org-heading~ are fantastic, as you can search th
 
 **** Org Mode Better Font Faces
 
-The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+I will clean this up someday, but it's /mostly/ cleaned up now from the Emacs From Scratch folks.
 
-#+name: org-mode-better-font-faces
+I really like a lot of what they did here to make Org Mode pretty, but not /too/ pretty. As they describe it:
+
+#+begin_quote
+The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+#+end_quote
+
+Oh, and it also replaces ~-~ in unordered lists with actual bullets, like so: ~‣~.
+
+Niiiiice.
+
+I'm using a modified version of that function, which I've adapted slightly for my needs—the main difference being my insistence on using a variable pitch coding font.
+
+#+name: org-mode-font-faces
 #+begin_src emacs-lisp :lexical yes
   (use-package org
     :init
-    (defun my/buffer-face-mode-variable ()
-      "Set font to a variable width (proportional) fonts in current buffer."
-      (interactive)
-      (setq buffer-face-mode-face '(:family crj--variable-pitch-font
-                                    :height 1.0
-                                    :width normal))
-
-      (buffer-face-mode))
-
-    (defun my/set-general-faces-org ()
-      (my/buffer-face-mode-variable)
-      (setq line-spacing 0.1
-            org-pretty-entities t
-            org-startup-indented t
-            org-adapt-indentation nil)
-      (variable-pitch-mode +1)
-      (diminish 'buffer-face-mode)
+    (defun crj--set-up-org-mode ()
+      (general-setq line-spacing 0.1
+                    org-pretty-entities t
+                    org-startup-indented t
+                    org-adapt-indentation nil)
+      ;; use a variable pitch font for prose
+      (variable-pitch-mode 1)
       (diminish 'variable-pitch-mode)
-      (mapc
-       (lambda (face) ;; Other fonts that require it are set to fixed-pitch.
-         (set-face-attribute face nil :inherit 'fixed-pitch))
-       (list 'org-block
-             'org-table
-             'org-verbatim
-             'org-block-begin-line
-             'org-block-end-line
-             'org-meta-line
-             'org-date
-             'org-drawer
-             'org-property-value
-             'org-special-keyword
-             'org-document-info-keyword))
-      (mapc ;; This sets the fonts to a smaller size
-       (lambda (face)
-         (set-face-attribute face nil :height 0.8))
-       (list 'org-document-info-keyword
-             'org-block-begin-line
-             'org-block-end-line
-             'org-meta-line
-             'org-drawer
-             'org-property-value
-             )))
-
-    (defun efs/org-font-setup ()
-      ;; Replace list hyphen with dot
+      ;; use bullet points for unordered lists
       (font-lock-add-keywords 'org-mode
-                              '(("^ *\\([-]\\) "
-                                 (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+                              '(("^ +\\([-*]\\) "
+                                 0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "‣")))))
+      ;; Most non-prose faces should use a variable-width coding font. See my fonts section for more.
+      (mapc (lambda (face)
+              (set-face-attribute face nil :font crj--coding-font))
+            (list 'org-block
+                  'org-formula
+                  'org-code
+                  'org-block-begin-line
+                  'org-date
+                  'org-meta-line
+                  'org-drawer
+                  'org-checkbox
+                  'org-property-value
+                  'org-block-end-line
+                  'org-document-info-keyword
+                  'org-special-keyword
+                  'org-verbatim))
+      ;; Except for tables—they should be fixed pitch for alignment.
+      (set-face-attribute 'org-table nil :font crj--fixed-pitch-font)
+      ;; And a few faces should be a smaller size. Your eyes should glide
+      ;; right by them.
+      (mapc (lambda (face)
+              (set-face-attribute face nil :height 0.8))
+            (list 'org-document-info-keyword
+                  'org-block-begin-line
+                  'org-block-end-line
+                  'org-meta-line
+                  'org-drawer
+                  'org-property-value)))
 
-      ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-      (set-face-attribute 'org-block nil    :foreground nil :font crj--coding-font)
-      (set-face-attribute 'org-table nil    :font crj--coding-font)
-      (set-face-attribute 'org-formula nil  :font crj--coding-font)
-      (set-face-attribute 'org-code nil     :font crj--coding-font)
-      (set-face-attribute 'org-table nil    :font crj--coding-font)
-      (set-face-attribute 'org-verbatim nil :font crj--coding-font)
-      (set-face-attribute 'org-special-keyword nil :font crj--coding-font)
-      (set-face-attribute 'org-meta-line nil :font crj--coding-font)
-      (set-face-attribute 'org-checkbox nil  :font crj--coding-font))
-
-    (add-hook 'org-mode-hook #'my/set-general-faces-org))
-
+    (add-hook 'org-mode-hook #'crj--set-up-org-mode))
 #+end_src
 
 **** Basic Config
