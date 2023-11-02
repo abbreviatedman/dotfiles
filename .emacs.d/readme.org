@@ -5436,6 +5436,79 @@ Anything useful here?
 ~[b~ and ~]b~?
 *** redo font size to be calculated based on resolution
 
+Some code that might help:
+
+#+begin_src emacs-lisp :lexical yes :tangle no
+    ;; some useful code to work off when adjusting font sizes at some point
+
+    ;; the below is from here:
+    ;; https://www.reddit.com/r/emacs/comments/qoslj5/automatic_text_size_adjustment_per_display/
+
+  (defun td/adapt-font-size (&optional frame)
+    (let* ((attrs (frame-monitor-attributes frame))
+           (size (alist-get 'mm-size attrs))
+           (geometry (alist-get 'geometry attrs))
+           (ppi (/ (caddr geometry) (/ (car size) 25.4))))
+      (message "PPI: %s" ppi)
+      (if (> ppi 120)
+          (set-face-attribute 'default frame :height 150)
+        (set-face-attribute 'default frame :height 140))))
+
+  (add-function :after after-focus-change-function #'td/adapt-font-size)
+  (add-hook 'after-make-frame-functions #'td/adapt-font-size)
+
+    ;; the below is from here:
+    ;; https://www.reddit.com/r/emacs/comments/dpc2aj/readjusting_fontsize_according_to_monitor/
+
+  ;; ;; Font size adjustment
+  (defun hoagie-adjust-font-size (frame)
+    "Inspired by https://emacs.stackexchange.com/a/44930/17066. FRAME is ignored.
+  If I let Windows handle DPI everything looks blurry."
+    ;; Using display names is unreliable...switched to checking the resolution
+    (let* ((attrs (frame-monitor-attributes)) ;; gets attribs for current frame
+           (monitor-name (cdr (fourth attrs)))
+           (width-mm (second (third attrs)))
+           (width-px (fourth (first attrs)))
+           (size 13))       ;; default for first screen at work
+      (when (eq width-px 2560) ;; middle display at work
+        (setq size 11))
+      (when (eq width-px 1920) ;; laptop screen
+        (setq size 12))
+      (when (eq 531 width-mm)
+        (setq size 9)) ;; External monitor at home
+      (when (eq 1095 width-mm)
+        (setq size 15))                                    ;; television
+      (when (eq (length (display-monitor-attributes-list)) 1) ;; override everything if no external monitors!
+        (setq size 10))
+      (set-frame-font (format "Consolas %s" size))))
+
+  (add-hook 'window-size-change-functions #'hoagie-adjust-font-size)
+
+  (defun my/dpi (monitor-attrs)
+    "Calculate screen resolution in dpi from monitor-attrs."
+    ;; after https://www.reddit.com/r/emacs/comments/dpc2aj/comment/f5u684e/
+    (* 25.4                               ; mm per in
+       (/ (float (apply 'max (cdr (cdr (cdr (assoc 'geometry monitor-attrs)))))) ; dots
+          (apply 'max (cdr (assoc 'mm-size monitor-attrs))))))
+                                          ; per mm
+  (defun my/set-face-height (&optional h)
+    "Set face height in real-world points."
+    ;; face height is set in units of 1/10 pt = 1/720 in = 25.4/720 mm
+    ;; assumes that set-face-attribute only notices resolution of the primary
+    (interactive "p")
+    (let ((primary (car (display-monitor-attributes-list)))
+          (point-size (pcase h ('() 14) (1 14) (_ h))))
+      (dolist (monitor (display-monitor-attributes-list))
+        (dolist (frame (cdr (assoc 'frames monitor)))
+          (let ((scale (/ (my/dpi monitor)
+                          (my/dpi primary))))
+            (set-face-attribute 'default frame :height
+                                (round (* point-size 10 scale))))))))
+
+    ;; there's also this package, might be fun to play with it and get a minor mode going!
+    ;; https://github.com/WJCFerguson/textsize/
+#+end_src
+
 *** add way to run other Emacs with same init directory to check our init... maybe starting a different server, or a serverless Emacs?
 *** shortcut to toggle eldoc-mode
 
