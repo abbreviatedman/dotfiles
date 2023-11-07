@@ -4836,8 +4836,8 @@ Note that this feature only works if you have a GitHub Copilot account. If you h
 
     :general
     (leader
-      "tc" '(global-copilot-mode :which-key "Toggle copilot globally.")
-      "tC" '(copilot-mode :which-key "Toggle copilot for current buffer."))
+      "tC" '(global-copilot-mode :which-key "Toggle copilot globally.")
+      "tc" '(copilot-mode :which-key "Toggle copilot for current buffer."))
 
     (:keymaps 'copilot-mode-map
      "M-RET" #'copilot-accept-completion
