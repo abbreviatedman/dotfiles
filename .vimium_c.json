@@ -1,7 +1,7 @@
 {
 	"name": "Vimium C",
-	"@time": "10/30/2023, 12:37:16 PM",
-	"time": 1698683836861,
+	"@time": "11/7/2023, 2:16:54 PM",
+	"time": 1699384614232,
 	"environment": {
 		"extension": "1.99.995",
 		"platform": "linux",
@@ -36,6 +36,14 @@
 		{
 			"passKeys": "",
 			"pattern": ":https://assessments.hired.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://www.turtlediary.com/"
+		},
+		{
+			"passKeys": "",
+			"pattern": ":https://www.typingclub.com/"
 		}
 	],
 	"grabBackFocus": true,
