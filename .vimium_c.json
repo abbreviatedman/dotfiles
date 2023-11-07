@@ -1,6 +1,6 @@
 {
-	"name": "Vimium C",
 	"@time": "11/7/2023, 2:16:54 PM",
+	"name": "Vimium C",
 	"time": 1699384614232,
 	"environment": {
 		"extension": "1.99.995",
@@ -11,7 +11,8 @@
 		{
 			"passKeys": "",
 			"pattern": ":https://appacademy.github.io/",
-			"pattern": ":https://my.guideline.com/"
+			"pattern": ":https://my.guideline.com/",
+			"pattern": ":https://appacademy.github.io/"
 		},
 		{
 			"passKeys": "",
@@ -36,19 +37,9 @@
 		{
 			"passKeys": "",
 			"pattern": ":https://assessments.hired.com/"
-		},
-		{
-			"passKeys": "",
-			"pattern": ":https://www.turtlediary.com/"
-		},
-		{
-			"passKeys": "",
-			"pattern": ":https://www.typingclub.com/"
 		}
 	],
 	"grabBackFocus": true,
-	"hideHud": true,
-	"keyLayout": 20,
 	"keyMappings": [
 		"#!no-check",
 		"map J nextTab",
@@ -74,11 +65,13 @@
 		"map zf LinkHints.activateFocus",
 		"map ; passNextKey",
 		"map <a-z> LinkHints.activateOpenInNewForegroundTab",
-		""
+		"map <a-h> Vomnibar.activateHistory",
+		"map <a-s-h> Vomnibar.activateHistoryInNewTab"
 	],
 	"linkHintCharacters": "asdfgqwertzxcvb",
 	"searchUrl": "https://duckduckgo.com/?q=$s DuckDuckGo",
 	"smoothScroll": false,
 	"vimSync": true,
-	"ignoreCapsLock": 2
+	"ignoreCapsLock": 2,
+	"userDefinedCss": ".LH { font-size: 1.5em }"
 }
