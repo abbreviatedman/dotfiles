@@ -2740,6 +2740,7 @@ Only some minor settings changes from the basic setup.
       "gg" '(magit-status :which-key "Launch Git interface.")
       "gm" '(magit-dispatch :which-key "Show Git HUD.")
       "gb" '(magit-branch-or-checkout :which-key "Switch or create Git branch.")
+      "gi" '(magit-init :which-key "Initialize a Git repo.")
       "gc" '(magit-clone :which-key "Git clone.")))
 
   (use-package browse-at-remote
