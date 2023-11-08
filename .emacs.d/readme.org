@@ -1523,8 +1523,8 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
       "V" #'crj-delete-previous-word)
 
     (leader
-      "tv" '(evil-visual-char :which-key "Evil visual state.")
-      "tV" '(evil-visual-line :which-key "Evil visual line state.")))
+      "vv" '(evil-visual-char :which-key "Evil visual state.")
+      "vV" '(evil-visual-line :which-key "Evil visual line state.")))
 #+end_src
 
 **** Better Word Movement
