@@ -5086,14 +5086,14 @@ Making my life easier!
   (use-package emacs
     :preface
     (defun crj--point-is-past-start-of-thing-p (thing)
-    "Returns whether point is past start of THING.
+      "Returns whether point is past start of THING.
 
       For what THING can be, see `thing-at-point'.
 
       This function answers the age-old question:
 
       \"Was I just in the middle of something?\""
-    (not (eq (point) (car (bounds-of-thing-at-point thing)))))
+      (not (eq (point) (car (bounds-of-thing-at-point thing)))))
 
     (defun crj--point-offset-from-start-of-word ()
       "Gets where the point is in the word.
@@ -5102,10 +5102,10 @@ Making my life easier!
   the start of the word. This number can be passed to forward-char to get you back
   to the character you were at before."
       (let ((start-of-word (if (looking-at "\\_<")
-                              (point)
-                            (save-excursion
-                              (evil-backward-WORD-begin)
-                              (point)))))
+                               (point)
+                             (save-excursion
+                               (evil-backward-WORD-begin)
+                               (point)))))
         (- (point) start-of-word)))
 
     (defun crj-cycle-setting (setting potential-values)
