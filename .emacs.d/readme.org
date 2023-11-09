@@ -4273,11 +4273,20 @@ This'll also give me a good opportunity to learn the Info Mode keybindings.
   (use-package cider)
 #+end_src
 
-***** CSV
+***** Data Formats
+
+****** CSV
 
 #+name: csv-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package csv-mode)
+#+end_src
+
+****** JSON
+
+#+name: json-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package json-mode)
 #+end_src
 
 ***** JavaScript
