@@ -1473,54 +1473,46 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
 #+name: quick-word-deletion
 #+begin_src emacs-lisp :lexical yes
   (use-package evil
-    :init
-    (defun crj-delete-current-word (count)
-      "Delete current word.
+    :preface
+    (defun crj-delete-current-word ()
+      "Delete the current word under the cursor.
 
-  It's `evil-delete-char', but for words!"
-      (interactive "p")
-      (dotimes (_ count)
-        (evil-forward-word-begin 1 t)
-        (crj-delete-previous-word 1)))
+  Should also delete whitespace intelligently and refuse to go past line boundaries."
+      (interactive)
+      (let* ((last-word-p (save-excursion
+                            (evil-forward-WORD-end)
+                            (evil-eolp)))
+             (start (if (looking-at "\\_<")
+                        (point)
+                      (save-excursion (evil-backward-WORD-begin) (point))))
+             (end (save-excursion (if last-word-p
+                                      (progn (end-of-line) (point))
+                                    (evil-forward-WORD-begin)
+                                    (point)))))
+        (delete-region start end)
+        (when last-word-p
+          (delete-char -1)
+          (evil-backward-WORD-begin))))
 
-    (defun crj-delete-previous-word (&optional count)
-      "Delete previous word.
+    (defun crj-delete-previous-word ()
+      "Delete the word before the cursor.
 
-  It's `evil-delete-backward-char', but for words!
-
-  This one's a bit hacky and probably has a ton of edge cases—I should probably
-  fix its issue with punctuation—but that is what you get when you're not working
-  semantically enough.
-
-  At some point I'll see if the edge cases come up often enough to be a problem,
-  in which case this will get refactored."
-      (interactive "p")
-      (when (and (crj--point-is-past-start-of-thing-p 'symbol)
-                 (not (eolp)))
-        (evil-backward-WORD-begin))
-      (dotimes (_ count)
-        (let ((current-word-start (point)))
-          (evil-backward-WORD-begin)
-          (evil-delete (point) current-word-start)
-          (when (crj--point-is-past-start-of-thing-p 'symbol)
-            (or (re-search-forward "\\_<\\sw+\\_>" nil t)
-                (re-search-backward "\\_<\\sw+\\_>" nil t))
-            (goto-char (match-beginning 0))))))
-
-    (defun crj--point-is-past-start-of-thing-p (thing)
-      "Returns whether point is past start of THING.
-
-  For what THING can be, see `thing-at-point'.
-
-  This function answers the age-old question:
-
-  \"Was I just in the middle of something?\""
-      (not (eq (point) (car (bounds-of-thing-at-point thing)))))
+  Should also delete whitespace intelligently and refuse to go past line boundaries."
+      (interactive)
+      (let ((offset (crj--point-offset-from-start-of-word)))
+        (unless (looking-at "\\_<")
+          (evil-backward-WORD-begin))
+        (unless (save-excursion
+                  (skip-chars-backward " \t")
+                  (bolp))
+          (evil-backward-WORD-begin))
+        (delete-current-word)
+        (forward-char offset)))
 
     :general
     (:states 'normal
-      "v"  #'crj-delete-current-word
-      "V" #'crj-delete-previous-word)
+     "v" #'crj-delete-current-word
+     "V" #'crj-delete-previous-word)
 
     (leader
       "vv" '(evil-visual-char :which-key "Evil visual state.")
@@ -3960,9 +3952,11 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
   Symex Mode maintains the point at the start of a symex, so this function
   adjusts for more uncertainty of where point is."
       (interactive)
-      (when (crj--point-is-past-start-of-thing-p 'sexp)
-        (symex--execute-tree-move (symex-make-move -1 0)))
-      (symex-delete-backwards 1))
+      (let ((offset (crj--point-offset-from-start-of-word)))
+        (when (crj--point-is-past-start-of-thing-p 'sexp)
+          (symex--execute-tree-move (symex-make-move -1 0)))
+        (symex-delete-backwards 1)
+        (forward-char offset)))
 
     (defun crj--symex-remaining-length-but-using-save-excursion ()
       "Count the remaining symexes at the current level, but using `save-excursion.'
@@ -5081,7 +5075,30 @@ Making my life easier!
 #+name: cycle-settings-helper
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
-    :init
+    :preface
+    (defun crj--point-is-past-start-of-thing-p (thing)
+    "Returns whether point is past start of THING.
+
+      For what THING can be, see `thing-at-point'.
+
+      This function answers the age-old question:
+
+      \"Was I just in the middle of something?\""
+    (not (eq (point) (car (bounds-of-thing-at-point thing)))))
+
+    (defun crj--point-offset-from-start-of-word ()
+      "Gets where the point is in the word.
+
+  More specifically, it gives you the number of characters away the point is from
+  the start of the word. This number can be passed to forward-char to get you back
+  to the character you were at before."
+      (let ((start-of-word (if (looking-at "\\_<")
+                              (point)
+                            (save-excursion
+                              (evil-backward-WORD-begin)
+                              (point)))))
+        (- (point) start-of-word)))
+
     (defun crj-cycle-setting (setting potential-values)
       "Cycle SETTING through POTENTIAL-VALUES.
 
@@ -5089,7 +5106,8 @@ Making my life easier!
 
       POTENTIAL-VALUES is a list of values to cycle through.
 
-  This is a very useful helper function for use when cycling a setting through potential values.
+  This is a very useful helper function for use when cycling a setting through
+  potential values.
 
   See `crj-cycle-line-numbers' for an example usage."
       (let* ((i (cl-position (eval setting) potential-values))
