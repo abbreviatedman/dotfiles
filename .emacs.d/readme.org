@@ -3161,7 +3161,7 @@ It seems handy, but since I'm not sure I'll remember the vanilla Emacs keybindin
                       #'aas-activate-for-major-mode)
 
     (aas-set-snippets 'emacs-lisp-mode
-      "$led" '(tempel "(defun " p " (" p ")\n  \"" p "\"" n> r> ")")))
+      ";led" '(tempel "(defun " p " (" p ")\n  \"" p "\"" n> r> ")")))
 #+end_src
 
 **** Undoing
