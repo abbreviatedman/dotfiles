@@ -3111,6 +3111,59 @@ It seems handy, but since I'm not sure I'll remember the vanilla Emacs keybindin
     (leader "mw" '(delete-blank-lines :which-key "Delete blank lines.")))
 #+end_src
 
+**** Snippets
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package tempel
+    :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
+           ("M-*" . tempel-insert))
+
+    :init
+    ;; Setup completion at point
+    (defun tempel-setup-capf ()
+      ;; Add the Tempel Capf to `completion-at-point-functions'.
+      ;; `tempel-expand' only triggers on exact matches. Alternatively use
+      ;; `tempel-complete' if you want to see all matches, but then you
+      ;; should also configure `tempel-trigger-prefix', such that Tempel
+      ;; does not trigger too often when you don't expect it. NOTE: We add
+      ;; `tempel-expand' *before* the main programming mode Capf, such
+      ;; that it will be tried first.
+      (setq-local completion-at-point-functions
+                  (cons #'tempel-expand
+                        completion-at-point-functions)))
+
+    ;o-
+    (add-hook 'conf-mode-hook 'tempel-setup-capf)
+    (add-hook 'prog-mode-hook 'tempel-setup-capf)
+    (add-hook 'text-mode-hook 'tempel-setup-capf)
+
+    ;; Optionally make the Tempel templates available to Abbrev,
+    ;; either locally or globally. `expand-abbrev' is bound to C-x '.
+    ;; (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
+    ;; (global-tempel-abbrev-mode)
+    :general
+    ('insert
+     :keymaps 'tempel-map
+      "M-TAB" #'tempel-next))
+
+
+  ; a collection of templates
+  (use-package tempel-collection)
+
+  (use-package aas
+    :config
+    (defvar crj-global-templates '())
+    (defvar-local crj-buffer-local-templates '())
+    (add-to-list 'tempel-template-sources 'crj-buffer-local-templates)
+    (add-to-list 'tempel-template-sources 'crj-global-templates)
+    (general-add-hook '(emacs-lisp-mode-hook
+                        rjsx-mode-hook)
+                      #'aas-activate-for-major-mode)
+
+    (aas-set-snippets 'emacs-lisp-mode
+      "$led" '(tempel "(defun " p " (" p ")\n  \"" p "\"" n> r> ")")))
+#+end_src
+
 **** Undoing
 
 ***** Saving Undo History
@@ -4308,6 +4361,14 @@ Only two things aren't easy to figure out here:
           js2-strict-missing-semi-warning nil))
 
   (use-package rjsx-mode
+    :preface
+    (defconst js-const-var-snippet '("const " p " = " r>))
+
+    (defun crj--add-rjsx-template ()
+      (add-to-list 'crj-buffer-local-templates `(cv ,@js-const-var-snippet)))
+
+    (general-add-hook 'rjsx-mode-hook #'crj--add-rjsx-template)
+
     :gfhook #'turn-off-flyspell
 
     :init
@@ -4317,6 +4378,9 @@ Only two things aren't easy to figure out here:
     (add-to-list 'auto-mode-alist '("\\.ts\\'" . rjsx-mode))
 
     :config
+    (aas-set-snippets 'rjsx-mode
+      ";cv" (cons 'tempel js-const-var-snippet))
+
     (defun crj--rjsx-electric-gt-fragment-a (n)
       "Inserts matching JSX fragment.
 
