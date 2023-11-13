@@ -3161,12 +3161,11 @@ Coming soon: I'll put a snippet here that shows the Tempel/Tempo syntax, though 
       (add-to-list crj-buffer-local-templates `(dy ,@dy-snippet))
       (add-to-list crj-buffer-local-templates `(dtm ,@dtm-snippet)))
 
-
     (general-add-hook
      '(text-mode-hook prog-mode-hook)
      '(crj--add-fundamental-snippets aas-activate-for-major-mode))
 
-    (aas-set-snippets 'fundamental-mode
+    (aas-set-snippets 'text-mode
       ";dtd" (cons 'tempel dtd-snippet)
       ";dat" (cons 'tempel dat-snippet)
       ";dy" (cons 'tempel dy-snippet)
