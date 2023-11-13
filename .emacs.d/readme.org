@@ -4222,11 +4222,13 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
     (defconst fun-snippet '("(defun " p " (" p ")\n  \"" p "\"" n> r> ")"))
     (defconst fi-snippet '("(defun " p " (" p ")\n  \"" p "\"" n> "(interactive" p ")" n> r> ")"))
     (defconst lt-snippet '("(let ((" p "))" n> r> ")"))
+    (defconst ld-snippet '("(lambda (" p ") " r> ")"))
 
     (defun crj--add-elisp-template ()
       (add-to-list 'crj-buffer-local-templates `(fun ,@fun-snippet))
       (add-to-list 'crj-buffer-local-templates `(fi ,@fi-snippet))
-      (add-to-list 'crj-buffer-local-templates `(lt ,@lt-snippet)))
+      (add-to-list 'crj-buffer-local-templates `(lt ,@lt-snippet))
+      (add-to-list 'crj-buffer-local-templates `(ld ,@ld-snippet)))
 
     :init
     (general-add-hook 'emacs-lisp-mode-hook '(aas-activate-for-major-mode
@@ -4235,7 +4237,8 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
     (aas-set-snippets 'emacs-lisp-mode
       ";fun" (cons 'tempel fun-snippet)
       ";fi" (cons 'tempel fi-snippet)
-      ";lt" (cons 'tempel lt-snippet)))
+      ";lt" (cons 'tempel lt-snippet)
+      ";ld" (cons 'tempel ld-snippet)))
 #+end_src
 
 ******* Emacs Lisp Documentation Lookup
