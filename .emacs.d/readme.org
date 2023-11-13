@@ -113,60 +113,6 @@ This means that if you or I copy this configuration to another machine and launc
 
 The only extra step necessary is that, because this file is actually an org document, you'll have to run Emacs, tangle this file, and then restart Emacs. But such is the price of being literate(ly configured).
 
-** Emacs OS Integration
-
-*** Start The Emacs Server
-
-Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
-
-#+name: start-emacs-server
-#+begin_src emacs-lisp :lexical yes
-  (require 'server)
-  (unless (server-running-p)
-    (server-start))
-#+end_src
-
-*** Set It As The Default Editor
-
-Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
-
-#+name: use-emacs-as-system-wide-editor-within-emacs-shells
-#+begin_src emacs-lisp :lexical yes
-  (use-package with-editor
-    :init
-    (require 'compat)
-    (keymap-global-set "<remap> <async-shell-command>"
-                       #'with-editor-async-shell-command)
-    (keymap-global-set "<remap> <shell-command>"
-                       #'with-editor-shell-command)
-
-    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
-      (add-hook hook #'with-editor-export-editor)))
-#+end_src
-
-** Cleaning Up The Modeline
-
-This package removes minor mode names from the mode line.
-
-Some minor mode names make themselves /very/ hard to remove through some "clever" programming. Those configs are usually with their modes, but i"ve got a couple here I didn't feel like putting anywhere. So here they are.
-
-(I should probably move the org-src one to the org mode config, though.)
-
-#+name: remove-minor-modes-from-mode-line
-#+begin_src emacs-lisp :lexical yes
-  (use-package diminish
-    :init
-    (defun crj--diminish-eldoc-mode ()
-      (diminish 'eldoc-mode))
-
-    (add-hook 'eldoc-mode-hook #'crj--diminish-eldoc-mode)
-
-    (defun crj--diminish-org-src-mode ()
-      (diminish 'org-src-mode))
-
-    (add-hook 'org-src-mode-hook #'crj--diminish-org-src-mode))
-#+end_src
-
 ** Keybindings
 
 Like many Vimmers, I eventually realized that the things I personally liked about Vim were even more present in Emacs. This very much includes Vim keybindings, which are available through Evil Mode, In a lot of ways, Evil mode is /more Vim than Vim/. This is something I could argue at length, but... maybe not in this space. (Yet?)
@@ -420,6 +366,652 @@ Which key shows you a constantly updating list of what keys you can press next a
           which-key-sort-order #'which-key-prefix-then-key-order
           which-key-show-prefix nil
           which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL")))
+#+end_src
+
+** Look and Feel
+
+*** Fonts
+
+First, some definitions of the fonts I use. For Emacs in code, eventually, and for you—and future me!—in this document.
+
+My overly arcane setup includes /three/ fonts, all /very/ different in their style and usage.
+
+The font I see in Emacs as I write this text looks like this:
+
+[[./assets/variable-pitch.png]]
+
+That font is IBM Plex Serif, which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs—look at the capital "T" in the "The quick brown fox" line for an example. And, most relevantly, it's a "variable-pitch" font, which means that the characters vary in pitch (a.k.a. width). This is easiest to see in the "nnnnn" and "mmmmm" lines: the "n" line is much shorter than the "m" line because the latter character is wider than the former. This type of font is perfect for writing prose, where the letters are given the breathing room we're used to seeing them in.
+
+In my Emacs setup, this font is /only/ used in text and markup documents like Org Mode and Markdown, where I'm doing lots of classic writing and reading.
+
+The second font I use is Hack, which is a "fixed pitch" font—more often called a "monospace" font. Here is a similar font in a terminal:
+
+[[./assets/fixed-pitch.png]]
+
+Most people use a fixed-pitch font for code for several reasons, but we'll get to those in a second. The main feature of a fixed-pitch font is that the width doesn't vary. You'll notice in the sample above that the "nnnnn" and "mmmmm" lines are the same length. Having all characters be the exact same width makes alignment easier, which many developers use to keep similar columns of code lined up just so.
+
+The last font is Input, which is another variable pitch font, but one that's very, very different than most. You can see it in the Emacs terminal pictured below:
+
+[[./assets/variable-pitch-coding-font.png]]
+
+If you look closely at Input, it's variable-pitch, no question. The "mmmmm" line is longer than the "nnnnn" line, and the characters are generally less squished-in. Since developers swear by fixed-pitch coding fonts, no respected developer would use this font as a coding font.
+
+I am not a respected developer.
+
+I use Input for coding because when I head about a minority of developers using a variable pitch font for coding, I read up on it, and the few articles I read in defense of it were pretty convincing.
+
+See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~, characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
+
+But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a ~!~ or an ~n~ or an ~m~. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
+
+Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/.
+
+[[./assets/why-not-both.gif]]
+
+Why not a font that gives code symbols plenty of space to make them properly stand out for their syntactic meaning, without bizarrely deciding that alignment is more important than letter readability? Why not a font that makes /everything/ readable? When your wide letters like "m" and "w" and "c" are squished in while skinny letters like "t" and "l" and "i" are weirdly widened, what you get is a one-size-fits-all approach that prioritizes... nothing in particular. Except trying not to deprioritize anything.
+
+When reading and writing, priorities matter. You want symbols to be readable, because you /definitely/ don't want to miss them as you're reading the code, but you /also/ want to be able to read those function and variable names. A variable-pitch font designed carefully to create a great coding experience unsurprisingly beats a font that is designed simply /not/ to deprioritize symbols.
+
+There's actually even more to say about this than I thought going in, but I'll leave it here for now.
+
+So how do I use these fonts? Well, I still do use my fixed-pitch Hack font for a few places, where alignment can super matter. For files where the columns matter, like spreadsheets and tables, I still use them. I also use them for line numbers, so as to keep the left margin aligned. Otherwise, though, it's Input for coding, and IBM Plex Mono (my variable-pitch serif font) for writing.
+
+Final thing before I get to the code: yes, this is a lot of work for fonts. And I'm not even a font expert! I /do/ think readability matters quite a great deal. But I think there are two related elements of my character that have lead me down this path.
+
+The desire to make my system my own. To craft an app I can live in every day, that I can not only code in but write emails in and use to check the weather and browse the web and manage my local files and manage my cloud files and write blog posts and chat with friends and organize my life, and to /keep/ crafting that personalized app, spending a fair amount of my valuable time making the rest of my work time fun enough to get me through the day.
+
+But the other, and related reason, is that everyone likes to be a little different and weird and have opinions that make you feel smart, even if the end result is just that you have a bizarre font choice that on-lookers likely won't even notice.
+
+The desire to be just a bit of an iconoclast.
+
+[[./assets/iconoclast.gif]]
+
+It's important to make fun of yourself for doing so, but that doesn't change the fact that it feels /good/ to be that weird guy who always wears hats or learned Esperanto or decided Vim was somehow /too mainstream/.
+
+That guy's me, and you're welcome, and I'm sorry.
+
+Here are my font settings.
+
+#+name: font-values
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defvar crj--fixed-pitch-font "Hack")
+    (defvar crj--variable-pitch-coding-font "Input")
+    (defvar crj--variable-pitch-font "IBM Plex Serif")
+    (defvar crj--coding-font crj--variable-pitch-coding-font)
+    (defvar crj--emoji-font "Noto Color Emoji")
+    (defvar crj--default-font-size 110)
+
+    :config
+    (when (member "Noto Color Emoji" (font-family-list))
+      (set-fontset-font
+       "fontset-default" 'unicode
+       (font-spec :family "Noto Color Emoji")
+       nil
+       'prepend))
+
+    (set-face-attribute 'default nil
+                        :font crj--coding-font
+                        :height crj--default-font-size)
+
+    (set-face-attribute 'fixed-pitch nil
+                        :font crj--coding-font
+                        :height 1.0)
+
+    (set-face-attribute 'variable-pitch nil
+                        :font crj--variable-pitch-font
+                        :height 1.0
+                        :weight 'regular))
+#+end_src
+
+And a picture of what my setup actually looks like:
+
+[[./assets/font-setup-screenshot.png]]
+
+**** Using Fixed Pitch In Some Buffers
+
+#+name: enabling-fixed-pitch
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defface crj--monospace
+      '((t
+         :family "Hack"
+         :foundry unspecified
+         :width normal
+         :height 1.0
+         :weight normal
+         :slant normal
+         :foreground "#505050"
+         :distantForeground unspecified
+         :background "#f8f8f8"
+         :underline nil
+         :overline nil
+         :strike-through nil
+         :box nil
+         :inverse nil
+         :stipple nil
+         :font "Hack"
+         :fontset unspecified
+         :extend nil))
+
+      "Face for monospace fonts.")
+
+    (defun crj--use-fixed-pitch ()
+      "Make the current buffer use a fixed pitch.
+
+  Sometimes I really do want fixed-pitch for alignment, such as with terminals."
+      (interactive)
+      (set (make-local-variable 'buffer-face-mode-face) 'crj--monospace)
+      (buffer-face-mode t))
+
+    ;; Hooks for modes I want to use fixed pitch in.
+    (defconst crj--fixed-pitch-mode-hooks
+          '(vterm-mode-hook
+            calendar-mode-hook
+            proced-mode-hook
+            cfw:calendar-mode-hook
+            minibuffer-setup-hook
+            mu4e-headers-mode-hook
+            magit-log-mode-hook))
+
+    ;; Add the fixed-pitch function for each mode.
+    (dolist (hook crj--fixed-pitch-mode-hooks)
+      (add-hook hook #'crj--use-fixed-pitch)))
+#+end_src
+
+*** Color Theme
+
+**** Themes
+
+***** Modus Themes
+
+Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
+
+#+name: theme-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package modus-themes
+    :config
+    (setq modus-themes-italic-constructs t
+          modus-themes-bold-constructs t
+          modus-themes-org-blocks 'gray-background
+          modus-themes-completions (quote
+                                    ((matches . (intense background underline bold))
+                                     (selection . (accented intense bold))))
+
+          modus-themes-headings '((0 . (variable-pitch  1.8))
+                                  (1 . (variable-pitch  1.8))
+                                  (2 . (variable-pitch  1.6))
+                                  (3 . (variable-pitch  1.4))
+                                  (4 . (variable-pitch  1.2)))
+
+          modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
+
+    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
+      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
+
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme 'modus-operandi-deuteranopia :no-confirm))
+#+end_src
+
+**** Syntax Coloring
+
+***** Highlight Numbers And Quoted Symbols
+
+Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
+
+#+name: highlight-more-syntax
+#+begin_src emacs-lisp :lexical yes
+  (use-package highlight-numbers
+    :init
+    (add-hook 'prog-mode-hook #'highlight-numbers-mode))
+
+  (use-package highlight-quoted
+    :init
+    (add-hook 'prog-mode-hook #'highlight-quoted-mode))
+
+#+end_src
+
+*** Popup Buffers
+
+I like to switch to be able to close popup buffers easily.
+
+This first part will switch us to the Messages buffer in the same window (usually waht I want), so I can bury the buffer again easily with ~q~.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj-switch-to-messages ()
+      (interactive)
+      (switch-to-buffer "*Messages*"))
+
+    :general
+    (:prefix-map 'help-map
+     "e" #'(crj-switch-to-messages :which-key "Switch to messages buffer.")))
+#+end_src
+
+*** Basic UI Configuration
+
+These are some sane defaults for the UI.
+
+#+name: basic-ui-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :diminish 'visual-line-mode
+
+    :init
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (menu-bar-mode -1)
+    (global-visual-line-mode 1)
+    (set-fringe-mode 10)
+    (setq inhibit-startup-message t
+          visible-bell t))
+#+end_src
+
+If you're just getting started in Emacs, the menu bar might be helpful so you can remove the ~(menu-bar-mode -1)~ line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the ~describe~ functions, ~which-key~, and, when you get there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
+
+*** File Management
+
+There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
+
+#+edit-file-with-sudo-privileges
+#+begin_src emacs-lisp :lexical yes
+  (use-package sudo-edit
+    :general
+    (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
+#+end_src
+
+*** Whitespace
+
+Let's visualize it in prog mode so we get rid of it.
+
+(But please remember to keep whitespace removal its own separate commit so as not to pollute your diffs.)
+
+#+name: show-trailing-whitespace-in-code
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj--show-trailing-whitespace () (setq show-trailing-whitespace t))
+
+    (add-hook 'prog-mode-hook #'crj--show-trailing-whitespace))
+#+end_src
+
+*** Zooming Text
+
+Zooming in and out in Emacs is... tricky. Part of this is because fonts in general are tricky! And part of it is that Emacs gives you so much control over your fonts that there are a /lot/ of moving parts, making it trickier still. And the last part is that Emacs' font system is hugely unintuitive.
+
+Still, I've got a /pretty/ good system for zooming fonts up and down, here. It's split into zooming per-buffer and zooming globally, depending on your needs. It's easy to zoom more or less for fine-grained refinement, while also being easy to zoom by huge amounts in one go with a count.
+
+There are some edge cases here, though, so I'll probably be returning to it.
+
+NOTE: Emacs 29 has global zooming in and out, so hopefully I won't need this code anymore! Now back to your regularly scheduled code.
+
+First, some functions to zoom and reset one buffer:
+
+#+name: custom-zoom-text-functions
+#+begin_src emacs-lisp :lexical yes
+  (defun crj-zoom-in (arg)
+    "Incease text size in current buffer.
+
+  ARG is a count—increase the count to zoom in more."
+    (interactive "p")
+    (text-scale-increase arg))
+
+  (defun crj-zoom-out (arg)
+    "Decrease text size in current buffer.
+
+  ARG is a count—increase the count to zoom out more."
+    (interactive "p")
+    (text-scale-increase (* arg -1)))
+
+  (defun crj-zoom-reset ()
+    "Reset current buffer's text size to default."
+    (interactive)
+    (text-scale-increase 0))
+#+end_src
+
+From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the ~buffer-list~ and run the above functions in each.
+
+#+name: custom-global-zoom-text-functions
+#+begin_src emacs-lisp :lexical yes
+  ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
+  ;; (defvar current-text-scale 0)
+  ;; (defun crj-match-new-buffer-to-current-text-scale ()
+  ;;   (interactive)
+  ;;   (text-scale-increase 0)
+  ;;   (text-scale-increase text-scale-mode-amount))
+  ;; (add-hook 'after-set-visited-file-name-hook #'crj-match-new-buffer-to-current-text-scale)
+
+  (defun crj-zoom-in-all-buffers (arg)
+    "Zooms in on all current buffers."
+    (interactive "p")
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (crj-zoom-in arg))))
+
+  (defun crj-zoom-out-all-buffers (arg)
+    "Zooms out on all current buffers."
+    (interactive "p")
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (crj-zoom-out arg))))
+
+  (defun crj-zoom-reset-all-buffers ()
+    "Resets zoom for all current buffers to default level."
+    (interactive)
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (crj-zoom-reset))))
+#+end_src
+
+This package, ~default-text-scale~, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
+
+I'm not using it, but it's worth exploring at some point.
+
+#+name: disabled-text-scale-package
+#+begin_src emacs-lisp :tangle no :lexical yes
+  (use-package default-text-scale
+    :init (default-text-scale-mode))
+#+end_src
+
+But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
+
+All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. ~default-text-scale~ is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
+
+Next, we make some keybindings for them.
+
+#+name: text-zoom-bindings
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (leader
+      "zj" '(crj-zoom-in-all-buffers :which-key "Zoom in globally.")
+      "zk" '(crj-zoom-out-all-buffers :which-key "Zoom out globally.")
+      "zb" '(crj-zoom-reset-all-buffers :which-key "Reset zoom globally.")
+      "zJ" '(crj-zoom-in :which-key "Zoom in.")
+      "zK" '(crj-zoom-out :which-key "Zoom out.")
+      "zB" '(crj-zoom-reset :which-key "Reset zoom.")))
+#+end_src
+
+And finally, there's a special type of Emacs interface I don't use often, a third-party package called Hydra, that's perfect for an activity like zooming text. Once you've decided to zoom, you're entering a kind of session where you'll be entering related commands. You'll be zooming in a couple times, then zooming out if you've gone too far. And at that point that can even repeat, if you change your mind as to what zoom level you act~ally want. What Hydra does is enter an interface perfect for this kind of situation.
+
+With the below code, the user (almost definitely me!) can type ~SPC z z~, at which point, instead of entering complex keybindings, they can type ~j~ to zoom in, ~k~ to zoom out (these are meaningful letters to Vim users), do that as much as they want, and then get back to what they were doing by pressing ~escape~ or any other key that's not part of this system.
+
+There are other, similar libraries (I've heard Transient is even better), but I highly recommend an interface like this. It's fantastic.
+
+We'll install Hydra, define its interface, and then put that hydra command in our keybindings.
+
+#+name: zoom-text-hydra
+#+begin_src emacs-lisp :lexical yes
+  (use-package hydra
+    :config
+    (defhydra crj-hydra/text-zoom (:hint nil :color red)
+      "
+        Global zoom: _j_:zoom in, _k_:zoom out, _b_:reset
+        Buffer zoom: _J_:zoom in, _K_:zoom out, _B_:reset
+  "
+      ("J" crj-zoom-in)
+      ("K" crj-zoom-out)
+      ("B" crj-zoom-reset)
+      ("j" crj-zoom-in-all-buffers)
+      ("k" crj-zoom-out-all-buffers)
+      ("b" crj-zoom-reset-all-buffers))
+
+    :general
+    (leader "zz" '(crj-hydra/text-zoom/body :which-key "Zoom hydra interface.")))
+#+end_src
+
+*** Scrolling
+
+This package makes scrolling big distances easier to follow by flashing the new line you've moved to.
+
+#+name: pulse-line-on-big-jumps
+#+begin_src emacs-lisp :lexical yes
+  (use-package pulsar
+    :init
+    (setq pulsar-pulse t)
+    (setq pulsar-delay .01)
+    (setq pulsar-iterations 30)
+    (setq pulsar-face 'pulsar-generic)
+    :config
+    (setq crj--far-jumping-functions '(evil-scroll-up
+                                       evil-scroll-down
+                                       evil-goto-line
+                                       evil-beginend-prog-mode-goto-beginning
+                                       evil-beginend-prog-mode-goto-end
+                                       evil-beginend-org-mode-goto-beginning
+                                       evil-beginend-org-mode-goto-end
+                                       evil-beginend-dired-mode-goto-beginning
+                                       evil-beginend-dired-mode-goto-end
+                                       evil-beginend-message-mode-goto-beginning
+                                       evil-beginend-message-mode-goto-end
+                                       evil-beginend-org-agenda-mode-goto-beginning
+                                       evil-beginend-org-agenda-mode-goto-end
+                                       evil-beginend-compilation-mode-goto-beginning
+                                       evil-beginend-compilation-mode-goto-end
+                                       evil-beginend-magit-status-mode-goto-beginning
+                                       evil-beginend-magit-status-mode-goto-end
+                                       evil-beginend-magit-revision-mode-goto-beginning
+                                       evil-beginend-magit-revision-mode-goto-end
+                                       evil-goto-first-line
+                                       evil-goto-mark-line
+                                       evil-scroll-page-up
+                                       evil-scroll-page-down
+                                       bury-buffer
+                                       kill-buffer
+                                       crj--toggle-presentation-mode
+                                       delete-other-windows
+                                       winner-undo
+                                       evil-window-up
+                                       evil-window-down
+                                       evil-window-left
+                                       evil-window-right
+                                       evil-window-new
+                                       evil-window-vnew))
+
+    (dolist (function crj--far-jumping-functions)
+      (add-to-list 'pulsar-pulse-functions function))
+
+    (pulsar-global-mode 1))
+#+end_src
+
+*** Line Numbers
+
+**** Basic Line Number Settings
+
+Sets up line numbers to be (almost) everywhere, just not in some terminal modes.
+
+I like to use relative line numbers, since they make line-wise work easier when using Evil Mode. Which I do.
+
+#+name: line-number-settings
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq display-line-numbers-type 'relative
+          magit-disable-line-numbers nil
+          magit-section-disable-line-numbers nil)
+
+    (global-display-line-numbers-mode t)
+
+    (defun crj--turn-off-line-numbers ()
+      (display-line-numbers-mode 0))
+
+    (defconst crj--hooks-for-modes-without-line-numbers '(term-mode-hook
+                                                          vterm-mode-hook
+                                                          shell-mode-hook
+                                                          treemacs-mode-hook
+                                                          eshell-mode-hook))
+
+    (dolist (hook crj--hooks-for-modes-without-line-numbers)
+      (add-hook hook #'crj--turn-off-line-numbers)))
+#+end_src
+
+**** Make Line Numbers Use Fixed Pitch
+
+This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
+
+And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
+
+#+name: make-line-numbers-fixed-pitch
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq crj--line-number-faces '(line-number
+                                   line-number-current-line
+                                   line-number-major-tick
+                                   line-number-minor-tick))
+
+    (defun crj-make-line-number-face-monospace (&rest args)
+      "Makes line numbers monospace and fixes them in size."
+      (interactive)
+      (dolist (face crj--line-number-faces)
+        (set-face-attribute face nil
+                            :family crj--fixed-pitch-font
+                            :height 1.0))
+      args)
+
+    (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
+#+end_src
+
+**** Cycle Line Numbers
+
+When displaying code to others, it's often good to make the line numbers absolute. And hiding them can be nice sometimes, though if I'm doing that often, I should consider whether there are more modes I should turn line numbers off for.
+
+#+name: cycle-line-numbers
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (defun crj-cycle-line-numbers ()
+      (interactive)
+      (crj-cycle-setting 'display-line-numbers '(relative t nil)))
+
+    :general
+    (leader "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
+#+end_src
+
+*** Indentation
+
+**** Spaces Over Tabs
+
+The eternal struggle.
+
+(I'm referring of course to both the struggle between the two sides and the struggle between the user and Emacs.)
+
+#+name: spaces-over-tabs
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq-default indent-tabs-mode nil))
+#+end_src
+
+**** General Indentation
+
+#+name: indentation-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq-default standard-indent 2
+                  sh-basic-offset 2
+                  tab-width 2))
+#+end_src
+
+**** Visualize Indentation Level
+
+Let's visualize our indentation!
+
+#+name: visualize-indentation-level
+#+begin_src emacs-lisp :lexical yes
+  (use-package highlight-indent-guides
+    :diminish 'highlight-indent-guides-mode
+
+    :ghook 'prog-mode-hook
+
+    :custom
+    (highlight-indent-guides-method 'bitmap))
+#+end_src
+
+*** Folding
+
+Folding code is sometimes useful. Lots of people swear by it!
+
+#+name: folding-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package fold-this)
+
+  (use-package evil-extra-operator
+    :after fold-this
+
+    :general
+    ('normal
+     "gs" #'(evil-operator-fold :which-key "Fold operator.")
+     "gS" #'(fold-this-unfold-all :which-key "Unfold all folds.")))
+#+end_src
+
+*** Don't Show Me Bookmarks
+
+#+name: disable-bookmark-visualization
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq bookmark-set-fringe-mark nil))
+
+#+end_src
+
+** Emacs OS Integration
+
+*** Start The Emacs Server
+
+Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
+
+#+name: start-emacs-server
+#+begin_src emacs-lisp :lexical yes
+  (require 'server)
+  (unless (server-running-p)
+    (server-start))
+#+end_src
+
+*** Set It As The Default Editor
+
+Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
+
+#+name: use-emacs-as-system-wide-editor-within-emacs-shells
+#+begin_src emacs-lisp :lexical yes
+  (use-package with-editor
+    :init
+    (require 'compat)
+    (keymap-global-set "<remap> <async-shell-command>"
+                       #'with-editor-async-shell-command)
+    (keymap-global-set "<remap> <shell-command>"
+                       #'with-editor-shell-command)
+
+    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
+      (add-hook hook #'with-editor-export-editor)))
+#+end_src
+
+** Cleaning Up The Modeline
+
+This package removes minor mode names from the mode line.
+
+Some minor mode names make themselves /very/ hard to remove through some "clever" programming. Those configs are usually with their modes, but i"ve got a couple here I didn't feel like putting anywhere. So here they are.
+
+(I should probably move the org-src one to the org mode config, though.)
+
+#+name: remove-minor-modes-from-mode-line
+#+begin_src emacs-lisp :lexical yes
+  (use-package diminish
+    :init
+    (defun crj--diminish-eldoc-mode ()
+      (diminish 'eldoc-mode))
+
+    (add-hook 'eldoc-mode-hook #'crj--diminish-eldoc-mode)
+
+    (defun crj--diminish-org-src-mode ()
+      (diminish 'org-src-mode))
+
+    (add-hook 'org-src-mode-hook #'crj--diminish-org-src-mode))
 #+end_src
 
 ** Fixing Assorted Decrepit Defaults
@@ -1772,546 +2364,6 @@ We can edit filtered results live with wgrep.
       "C-c C-e" '(wdired-change-to-wdired-mode :which-key "Switch to writable search results.")))
 #+end_src
 
-** Look and Feel
-
-*** Popup Buffers
-
-I like to switch to be able to close popup buffers easily.
-
-This first part will switch us to the Messages buffer in the same window (usually waht I want), so I can bury the buffer again easily with ~q~.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (defun crj-switch-to-messages ()
-      (interactive)
-      (switch-to-buffer "*Messages*"))
-
-    :general
-    (:prefix-map 'help-map
-     "e" #'(crj-switch-to-messages :which-key "Switch to messages buffer.")))
-#+end_src
-
-*** Basic UI Configuration
-
-These are some sane defaults for the UI.
-
-#+name: basic-ui-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :diminish 'visual-line-mode
-
-    :init
-    (scroll-bar-mode -1)
-    (tool-bar-mode -1)
-    (tooltip-mode -1)
-    (menu-bar-mode -1)
-    (global-visual-line-mode 1)
-    (set-fringe-mode 10)
-    (setq inhibit-startup-message t
-          visible-bell t))
-#+end_src
-
-If you're just getting started in Emacs, the menu bar might be helpful so you can remove the ~(menu-bar-mode -1)~ line if you'd like to discover common commands. However, in terms of discovering things in Emacs, there are much better ways to do it, such as the ~describe~ functions, ~which-key~, and, when you get there, reading source code. The single best thing about Emacs is how completely effortless it is to peek at the source code for almost every single thing you can do here. Learn how to dive as far as you want into how something works, and you'll be able to grow in your knowledge at your own learning pace, whether it's slow and steady or voracious.
-
-*** File Management
-
-There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
-
-#+edit-file-with-sudo-privileges
-#+begin_src emacs-lisp :lexical yes
-  (use-package sudo-edit
-    :general
-    (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
-#+end_src
-
-*** Fonts
-
-First, some definitions of the fonts I use. For Emacs in code, eventually, and for you—and future me!—in this document.
-
-My overly arcane setup includes /three/ fonts, all /very/ different in their style and usage.
-
-The font I see in Emacs as I write this text looks like this:
-
-[[./assets/variable-pitch.png]]
-
-That font is IBM Plex Serif, which is a standard-style variable-pitch serif font. It's "serif" because it's /fancy/. If you look close, you can see that some of the letters have extra little curly bits, called serifs—look at the capital "T" in the "The quick brown fox" line for an example. And, most relevantly, it's a "variable-pitch" font, which means that the characters vary in pitch (a.k.a. width). This is easiest to see in the "nnnnn" and "mmmmm" lines: the "n" line is much shorter than the "m" line because the latter character is wider than the former. This type of font is perfect for writing prose, where the letters are given the breathing room we're used to seeing them in.
-
-In my Emacs setup, this font is /only/ used in text and markup documents like Org Mode and Markdown, where I'm doing lots of classic writing and reading.
-
-The second font I use is Hack, which is a "fixed pitch" font—more often called a "monospace" font. Here is a similar font in a terminal:
-
-[[./assets/fixed-pitch.png]]
-
-Most people use a fixed-pitch font for code for several reasons, but we'll get to those in a second. The main feature of a fixed-pitch font is that the width doesn't vary. You'll notice in the sample above that the "nnnnn" and "mmmmm" lines are the same length. Having all characters be the exact same width makes alignment easier, which many developers use to keep similar columns of code lined up just so.
-
-The last font is Input, which is another variable pitch font, but one that's very, very different than most. You can see it in the Emacs terminal pictured below:
-
-[[./assets/variable-pitch-coding-font.png]]
-
-If you look closely at Input, it's variable-pitch, no question. The "mmmmm" line is longer than the "nnnnn" line, and the characters are generally less squished-in. Since developers swear by fixed-pitch coding fonts, no respected developer would use this font as a coding font.
-
-I am not a respected developer.
-
-I use Input for coding because when I head about a minority of developers using a variable pitch font for coding, I read up on it, and the few articles I read in defense of it were pretty convincing.
-
-See, many developers will tell you that the big difference between the two types of fonts, besides alignment, is that a variable-pitch font doesn't give enough space to coding symbols like parentheses and curly brackets and ~!~ and ~:~ and ~/~, characters that a fixed-pitch font gives equal width to (because fixed-pitch fonts give /everything/ the same length) And it's true that if I try to write code in my prose font (see first sample!), it's much harder to make out the important-to-code characters.
-
-But variable-pitch fonts don't /have/ to give coding symbols short shrift. Look at the Input sample above—the coding characters are given plenty of width! You see, fixed-pitch fonts give everything the same width, whether it's a ~!~ or an ~n~ or an ~m~. In that way, they're making the decision that every character is equally important and needs the same amount of width. It's a shortcut solution, treating all characters the same to give coding characters with the space they need, but it's not making an actual /decision/ as to what to prioritize.
-
-Coding fonts should prioritize code symbols, and prose fonts should prioritize letters more. But /why not both/.
-
-[[./assets/why-not-both.gif]]
-
-Why not a font that gives code symbols plenty of space to make them properly stand out for their syntactic meaning, without bizarrely deciding that alignment is more important than letter readability? Why not a font that makes /everything/ readable? When your wide letters like "m" and "w" and "c" are squished in while skinny letters like "t" and "l" and "i" are weirdly widened, what you get is a one-size-fits-all approach that prioritizes... nothing in particular. Except trying not to deprioritize anything.
-
-When reading and writing, priorities matter. You want symbols to be readable, because you /definitely/ don't want to miss them as you're reading the code, but you /also/ want to be able to read those function and variable names. A variable-pitch font designed carefully to create a great coding experience unsurprisingly beats a font that is designed simply /not/ to deprioritize symbols.
-
-There's actually even more to say about this than I thought going in, but I'll leave it here for now.
-
-So how do I use these fonts? Well, I still do use my fixed-pitch Hack font for a few places, where alignment can super matter. For files where the columns matter, like spreadsheets and tables, I still use them. I also use them for line numbers, so as to keep the left margin aligned. Otherwise, though, it's Input for coding, and IBM Plex Mono (my variable-pitch serif font) for writing.
-
-Final thing before I get to the code: yes, this is a lot of work for fonts. And I'm not even a font expert! I /do/ think readability matters quite a great deal. But I think there are two related elements of my character that have lead me down this path.
-
-The desire to make my system my own. To craft an app I can live in every day, that I can not only code in but write emails in and use to check the weather and browse the web and manage my local files and manage my cloud files and write blog posts and chat with friends and organize my life, and to /keep/ crafting that personalized app, spending a fair amount of my valuable time making the rest of my work time fun enough to get me through the day.
-
-But the other, and related reason, is that everyone likes to be a little different and weird and have opinions that make you feel smart, even if the end result is just that you have a bizarre font choice that on-lookers likely won't even notice.
-
-The desire to be just a bit of an iconoclast.
-
-[[./assets/iconoclast.gif]]
-
-It's important to make fun of yourself for doing so, but that doesn't change the fact that it feels /good/ to be that weird guy who always wears hats or learned Esperanto or decided Vim was somehow /too mainstream/.
-
-That guy's me, and you're welcome, and I'm sorry.
-
-Here are my font settings.
-
-#+name: font-values
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (defvar crj--fixed-pitch-font "Hack")
-    (defvar crj--variable-pitch-coding-font "Input")
-    (defvar crj--variable-pitch-font "IBM Plex Serif")
-    (defvar crj--coding-font crj--variable-pitch-coding-font)
-    (defvar crj--emoji-font "Noto Color Emoji")
-    (defvar crj--default-font-size 110)
-
-    :config
-    (when (member "Noto Color Emoji" (font-family-list))
-      (set-fontset-font
-       "fontset-default" 'unicode
-       (font-spec :family "Noto Color Emoji")
-       nil
-       'prepend))
-
-    (set-face-attribute 'default nil
-                        :font crj--coding-font
-                        :height crj--default-font-size)
-
-    (set-face-attribute 'fixed-pitch nil
-                        :font crj--coding-font
-                        :height 1.0)
-
-    (set-face-attribute 'variable-pitch nil
-                        :font crj--variable-pitch-font
-                        :height 1.0
-                        :weight 'regular))
-#+end_src
-
-And a picture of what my setup actually looks like:
-
-[[./assets/font-setup-screenshot.png]]
-
-**** Using Fixed Pitch In Some Buffers
-
-#+name: enabling-fixed-pitch
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (defface crj--monospace
-      '((t
-         :family "Hack"
-         :foundry unspecified
-         :width normal
-         :height 1.0
-         :weight normal
-         :slant normal
-         :foreground "#505050"
-         :distantForeground unspecified
-         :background "#f8f8f8"
-         :underline nil
-         :overline nil
-         :strike-through nil
-         :box nil
-         :inverse nil
-         :stipple nil
-         :font "Hack"
-         :fontset unspecified
-         :extend nil))
-
-      "Face for monospace fonts.")
-
-    (defun crj--use-fixed-pitch ()
-      "Make the current buffer use a fixed pitch.
-
-  Sometimes I really do want fixed-pitch for alignment, such as with terminals."
-      (interactive)
-      (set (make-local-variable 'buffer-face-mode-face) 'crj--monospace)
-      (buffer-face-mode t))
-
-    ;; Hooks for modes I want to use fixed pitch in.
-    (defconst crj--fixed-pitch-mode-hooks
-          '(vterm-mode-hook
-            calendar-mode-hook
-            proced-mode-hook
-            cfw:calendar-mode-hook
-            minibuffer-setup-hook
-            mu4e-headers-mode-hook
-            magit-log-mode-hook))
-
-    ;; Add the fixed-pitch function for each mode.
-    (dolist (hook crj--fixed-pitch-mode-hooks)
-      (add-hook hook #'crj--use-fixed-pitch)))
-#+end_src
-
-*** Whitespace
-
-Let's visualize it in prog mode so we get rid of it.
-
-(But please remember to keep whitespace removal its own separate commit so as not to pollute your diffs.)
-
-#+name: show-trailing-whitespace-in-code
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (defun crj--show-trailing-whitespace () (setq show-trailing-whitespace t))
-
-    (add-hook 'prog-mode-hook #'crj--show-trailing-whitespace))
-#+end_src
-
-*** Zooming Text
-
-Zooming in and out in Emacs is... tricky. Part of this is because fonts in general are tricky! And part of it is that Emacs gives you so much control over your fonts that there are a /lot/ of moving parts, making it trickier still. And the last part is that Emacs' font system is hugely unintuitive.
-
-Still, I've got a /pretty/ good system for zooming fonts up and down, here. It's split into zooming per-buffer and zooming globally, depending on your needs. It's easy to zoom more or less for fine-grained refinement, while also being easy to zoom by huge amounts in one go with a count.
-
-There are some edge cases here, though, so I'll probably be returning to it.
-
-NOTE: Emacs 29 has global zooming in and out, so hopefully I won't need this code anymore! Now back to your regularly scheduled code.
-
-First, some functions to zoom and reset one buffer:
-
-#+name: custom-zoom-text-functions
-#+begin_src emacs-lisp :lexical yes
-  (defun crj-zoom-in (arg)
-    "Incease text size in current buffer.
-
-  ARG is a count—increase the count to zoom in more."
-    (interactive "p")
-    (text-scale-increase arg))
-
-  (defun crj-zoom-out (arg)
-    "Decrease text size in current buffer.
-
-  ARG is a count—increase the count to zoom out more."
-    (interactive "p")
-    (text-scale-increase (* arg -1)))
-
-  (defun crj-zoom-reset ()
-    "Reset current buffer's text size to default."
-    (interactive)
-    (text-scale-increase 0))
-#+end_src
-
-From there, I can use those to zoom in on all current buffers. These functions simply loop through all the buffers in the ~buffer-list~ and run the above functions in each.
-
-#+name: custom-global-zoom-text-functions
-#+begin_src emacs-lisp :lexical yes
-  ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
-  ;; (defvar current-text-scale 0)
-  ;; (defun crj-match-new-buffer-to-current-text-scale ()
-  ;;   (interactive)
-  ;;   (text-scale-increase 0)
-  ;;   (text-scale-increase text-scale-mode-amount))
-  ;; (add-hook 'after-set-visited-file-name-hook #'crj-match-new-buffer-to-current-text-scale)
-
-  (defun crj-zoom-in-all-buffers (arg)
-    "Zooms in on all current buffers."
-    (interactive "p")
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-        (crj-zoom-in arg))))
-
-  (defun crj-zoom-out-all-buffers (arg)
-    "Zooms out on all current buffers."
-    (interactive "p")
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-        (crj-zoom-out arg))))
-
-  (defun crj-zoom-reset-all-buffers ()
-    "Resets zoom for all current buffers to default level."
-    (interactive)
-    (dolist (buffer (buffer-list))
-      (with-current-buffer buffer
-        (crj-zoom-reset))))
-#+end_src
-
-This package, ~default-text-scale~, can handle things more robustly than the homegrown situation above, in that it change the font size for other existing "frames" (what every other program would call a window), and for new frames moving forward.
-
-I'm not using it, but it's worth exploring at some point.
-
-#+name: disabled-text-scale-package
-#+begin_src emacs-lisp :tangle no :lexical yes
-  (use-package default-text-scale
-    :init (default-text-scale-mode))
-#+end_src
-
-But since their solution causes the default font size to reset, along with every font that inherits from it, every time it hits a font size for the first time in an Emacs session, there's a slowdown where the screen goes blank for a jarring second. (Possibly exacerbated by how many disparate fonts I have going on—see the Fonts section below.) It also doesn't have the ability to take a count, though there's probably a way to wrap the functions to make that happen.
-
-All of this is to say that the many many different ways you can manipulate and work with multiple fonts in Emacs, across as many frames and buffers and windows as you've got open, makes zooming a bit of a complex mess. ~default-text-scale~ is the most powerful system I've seen for it, but... although external libraries by accomplished Emacs Lisp programmers are almost always better than what an okay-ish programmer like me can do, I think I'm going to stick with my simple and flexible system this time.
-
-Next, we make some keybindings for them.
-
-#+name: text-zoom-bindings
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :general
-    (leader
-      "zj" '(crj-zoom-in-all-buffers :which-key "Zoom in globally.")
-      "zk" '(crj-zoom-out-all-buffers :which-key "Zoom out globally.")
-      "zb" '(crj-zoom-reset-all-buffers :which-key "Reset zoom globally.")
-      "zJ" '(crj-zoom-in :which-key "Zoom in.")
-      "zK" '(crj-zoom-out :which-key "Zoom out.")
-      "zB" '(crj-zoom-reset :which-key "Reset zoom.")))
-#+end_src
-
-And finally, there's a special type of Emacs interface I don't use often, a third-party package called Hydra, that's perfect for an activity like zooming text. Once you've decided to zoom, you're entering a kind of session where you'll be entering related commands. You'll be zooming in a couple times, then zooming out if you've gone too far. And at that point that can even repeat, if you change your mind as to what zoom level you act~ally want. What Hydra does is enter an interface perfect for this kind of situation.
-
-With the below code, the user (almost definitely me!) can type ~SPC z z~, at which point, instead of entering complex keybindings, they can type ~j~ to zoom in, ~k~ to zoom out (these are meaningful letters to Vim users), do that as much as they want, and then get back to what they were doing by pressing ~escape~ or any other key that's not part of this system.
-
-There are other, similar libraries (I've heard Transient is even better), but I highly recommend an interface like this. It's fantastic.
-
-We'll install Hydra, define its interface, and then put that hydra command in our keybindings.
-
-#+name: zoom-text-hydra
-#+begin_src emacs-lisp :lexical yes
-  (use-package hydra
-    :config
-    (defhydra crj-hydra/text-zoom (:hint nil :color red)
-      "
-        Global zoom: _j_:zoom in, _k_:zoom out, _b_:reset
-        Buffer zoom: _J_:zoom in, _K_:zoom out, _B_:reset
-  "
-      ("J" crj-zoom-in)
-      ("K" crj-zoom-out)
-      ("B" crj-zoom-reset)
-      ("j" crj-zoom-in-all-buffers)
-      ("k" crj-zoom-out-all-buffers)
-      ("b" crj-zoom-reset-all-buffers))
-
-    :general
-    (leader "zz" '(crj-hydra/text-zoom/body :which-key "Zoom hydra interface.")))
-#+end_src
-
-*** Scrolling
-
-This package makes scrolling big distances easier to follow by flashing the new line you've moved to.
-
-#+name: pulse-line-on-big-jumps
-#+begin_src emacs-lisp :lexical yes
-  (use-package pulsar
-    :init
-    (setq pulsar-pulse t)
-    (setq pulsar-delay .01)
-    (setq pulsar-iterations 30)
-    (setq pulsar-face 'pulsar-generic)
-    :config
-    (setq crj--far-jumping-functions '(evil-scroll-up
-                                       evil-scroll-down
-                                       evil-goto-line
-                                       evil-beginend-prog-mode-goto-beginning
-                                       evil-beginend-prog-mode-goto-end
-                                       evil-beginend-org-mode-goto-beginning
-                                       evil-beginend-org-mode-goto-end
-                                       evil-beginend-dired-mode-goto-beginning
-                                       evil-beginend-dired-mode-goto-end
-                                       evil-beginend-message-mode-goto-beginning
-                                       evil-beginend-message-mode-goto-end
-                                       evil-beginend-org-agenda-mode-goto-beginning
-                                       evil-beginend-org-agenda-mode-goto-end
-                                       evil-beginend-compilation-mode-goto-beginning
-                                       evil-beginend-compilation-mode-goto-end
-                                       evil-beginend-magit-status-mode-goto-beginning
-                                       evil-beginend-magit-status-mode-goto-end
-                                       evil-beginend-magit-revision-mode-goto-beginning
-                                       evil-beginend-magit-revision-mode-goto-end
-                                       evil-goto-first-line
-                                       evil-goto-mark-line
-                                       evil-scroll-page-up
-                                       evil-scroll-page-down
-                                       bury-buffer
-                                       kill-buffer
-                                       crj--toggle-presentation-mode
-                                       delete-other-windows
-                                       winner-undo
-                                       evil-window-up
-                                       evil-window-down
-                                       evil-window-left
-                                       evil-window-right
-                                       evil-window-new
-                                       evil-window-vnew))
-
-    (dolist (function crj--far-jumping-functions)
-      (add-to-list 'pulsar-pulse-functions function))
-
-    (pulsar-global-mode 1))
-#+end_src
-
-*** Line Numbers
-
-**** Basic Line Number Settings
-
-Sets up line numbers to be (almost) everywhere, just not in some terminal modes.
-
-I like to use relative line numbers, since they make line-wise work easier when using Evil Mode. Which I do.
-
-#+name: line-number-settings
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq display-line-numbers-type 'relative
-          magit-disable-line-numbers nil
-          magit-section-disable-line-numbers nil)
-
-    (global-display-line-numbers-mode t)
-
-    (defun crj--turn-off-line-numbers ()
-      (display-line-numbers-mode 0))
-
-    (defconst crj--hooks-for-modes-without-line-numbers '(term-mode-hook
-                                                          vterm-mode-hook
-                                                          shell-mode-hook
-                                                          treemacs-mode-hook
-                                                          eshell-mode-hook))
-
-    (dolist (hook crj--hooks-for-modes-without-line-numbers)
-      (add-hook hook #'crj--turn-off-line-numbers)))
-#+end_src
-
-**** Make Line Numbers Use Fixed Pitch
-
-This next part is for making line numbers use a fixed pitch font. I like a variable pitch coding font, but line numbers get janky if they're not fixed pitch.
-
-And by setting line numbers to an absolute size, we also avoid having them increase in size with everything else. Ideally I would increase their size too when zooming, just at a lesser rate. But this is good enough for now.
-
-#+name: make-line-numbers-fixed-pitch
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq crj--line-number-faces '(line-number
-                                   line-number-current-line
-                                   line-number-major-tick
-                                   line-number-minor-tick))
-
-    (defun crj-make-line-number-face-monospace (&rest args)
-      "Makes line numbers monospace and fixes them in size."
-      (interactive)
-      (dolist (face crj--line-number-faces)
-        (set-face-attribute face nil
-                            :family crj--fixed-pitch-font
-                            :height 1.0))
-      args)
-
-    (add-hook 'emacs-startup-hook #'crj-make-line-number-face-monospace))
-#+end_src
-
-**** Cycle Line Numbers
-
-When displaying code to others, it's often good to make the line numbers absolute. And hiding them can be nice sometimes, though if I'm doing that often, I should consider whether there are more modes I should turn line numbers off for.
-
-#+name: cycle-line-numbers
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (defun crj-cycle-line-numbers ()
-      (interactive)
-      (crj-cycle-setting 'display-line-numbers '(relative t nil)))
-
-    :general
-    (leader "tl" '(crj-cycle-line-numbers :which-key "Cycle line numbers globally.")))
-#+end_src
-
-*** Indentation
-
-**** Spaces Over Tabs
-
-The eternal struggle.
-
-(I'm referring of course to both the struggle between the two sides and the struggle between the user and Emacs.)
-
-#+name: spaces-over-tabs
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq-default indent-tabs-mode nil))
-#+end_src
-
-**** General Indentation
-
-#+name: indentation-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq-default standard-indent 2
-                  sh-basic-offset 2
-                  tab-width 2))
-#+end_src
-
-**** Visualize Indentation Level
-
-Let's visualize our indentation!
-
-#+name: visualize-indentation-level
-#+begin_src emacs-lisp :lexical yes
-  (use-package highlight-indent-guides
-    :diminish 'highlight-indent-guides-mode
-
-    :ghook 'prog-mode-hook
-
-    :custom
-    (highlight-indent-guides-method 'bitmap))
-#+end_src
-
-*** Folding
-
-Folding code is sometimes useful. Lots of people swear by it!
-
-#+name: folding-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package fold-this)
-
-  (use-package evil-extra-operator
-    :after fold-this
-
-    :general
-    ('normal
-     "gs" #'(evil-operator-fold :which-key "Fold operator.")
-     "gS" #'(fold-this-unfold-all :which-key "Unfold all folds.")))
-#+end_src
-
-*** Don't Show Me Bookmarks
-
-#+name: disable-bookmark-visualization
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq bookmark-set-fringe-mark nil))
-
-#+end_src
-
 ** Applications
 
 This section is for parts of Emacs that are well-integrated applications.
@@ -2967,58 +3019,6 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
     (require 'mu4e))
 #+end_src
 
-** Color Theme
-
-*** Themes
-
-**** Modus Themes
-
-Modus Operandi is a fantastic theme for readability and accessibility, and even though I don't experience deuteranopia, I use the variant for those who do. Modus Operandi is about the uncoolest theme you can use, but... if you're using Emacs to be hip, you're doing it wrong.
-
-#+name: theme-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package modus-themes
-    :config
-    (setq modus-themes-italic-constructs t
-          modus-themes-bold-constructs t
-          modus-themes-org-blocks 'gray-background
-          modus-themes-completions (quote
-                                    ((matches . (intense background underline bold))
-                                     (selection . (accented intense bold))))
-
-          modus-themes-headings '((0 . (variable-pitch  1.8))
-                                  (1 . (variable-pitch  1.8))
-                                  (2 . (variable-pitch  1.6))
-                                  (3 . (variable-pitch  1.4))
-                                  (4 . (variable-pitch  1.2)))
-
-          modus-themes-common-palette-overrides modus-themes-preset-overrides-intense)
-
-    (dolist (face '(modus-themes-prose-code modus-themes-fixed-pitch))
-      (set-face-attribute face nil :family crj--fixed-pitch-font :height 1.0))
-
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme 'modus-operandi-deuteranopia :no-confirm))
-#+end_src
-
-*** Syntax Coloring
-
-**** Highlight Numbers And Quoted Symbols
-
-Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
-
-#+name: highlight-more-syntax
-#+begin_src emacs-lisp :lexical yes
-  (use-package highlight-numbers
-    :init
-    (add-hook 'prog-mode-hook #'highlight-numbers-mode))
-
-  (use-package highlight-quoted
-    :init
-    (add-hook 'prog-mode-hook #'highlight-quoted-mode))
-
-#+end_src
-
 ** Projects
 
 Although having such great ability to switch files and buffers obviates the need for so many other ways to navigate (like tabs or file trees), it's still nice to narrow that down to the concept of a project.
@@ -3129,13 +3129,7 @@ It seems handy, but since I'm not sure I'll remember the vanilla Emacs keybindin
     (defvar crj-global-templates '())
     (defvar-local crj-buffer-local-templates '())
     (add-to-list 'tempel-template-sources 'crj-buffer-local-templates)
-    (add-to-list 'tempel-template-sources 'crj-global-templates)
-    (general-add-hook '(emacs-lisp-mode-hook
-                        rjsx-mode-hook)
-                      #'aas-activate-for-major-mode)
-
-    (aas-set-snippets 'emacs-lisp-mode
-      ";led" '(tempel "(defun " p " (" p ")\n  \"" p "\"" n> r> ")")))
+    (add-to-list 'tempel-template-sources 'crj-global-templates))
 #+end_src
 
 **** Undoing
