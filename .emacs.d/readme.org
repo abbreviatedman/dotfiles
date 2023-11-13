@@ -5343,7 +5343,6 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 #+end_src
 
 ** Config Changes Todos
-*** snippets - [[https://github.com/minad/tempel][tempel]] and [[https://github.com/ymarco/auto-activating-snippest][auto-activating-snippets]]?
 *** restclient.el and ob-restclient
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
