@@ -5222,6 +5222,15 @@ Making my life easier!
 
 #+name: cycle-settings-helper
 #+begin_src emacs-lisp :lexical yes
+  (defun crj-get-mode-inheritance (mode)
+    "Gets a list of all modes the current mode derives from."
+    (interactive (list major-mode))
+    (defun iter (mode)
+      (and mode
+           (cons mode
+                 (iter (get mode 'derived-mode-parent)))))
+    (message "%s" (iter mode)))
+
   (use-package emacs
     :preface
     (defun crj--point-is-past-start-of-thing-p (thing)
