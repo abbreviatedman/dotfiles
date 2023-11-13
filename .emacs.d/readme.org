@@ -3119,57 +3119,50 @@ Tempel is based on the built-in Tempo snippet system, extending it and better in
 
 I'm using the templates from ~tempel-collection~, but I'll be slowly replacing those templates with my own, and, eventually, removing that dependency.
 
-I'm also playing with Auto-Activating Snippets, which is a neat system that can leverage Tempel (and other systems) to provide fast template expansion in buffer. The basic config below has a couple examples so you can see what I'm doing here, which is likely unnecessarily complicated - I define the snippet only once and add it to both the buffer-local templates for the mode I want them active in and the auto-activating-snippet (aas) templates for the mode.
+I'm also playing with Auto-Activating Snippets, which is a neat system that can leverage Tempel (and other systems) to provide fast template expansion in buffer. The basic config below has a couple examples so you can see what I'm doing here, which is likely unnecessarily complicated, but works. If you want examples of Tempel syntax, check out the JavaScript or Emacs Lisp sections (or the Tempel readme, which is spare but has examples).
 
-This enables me to type ~;dtd~ into any buffer and, without hitting any other keys, get that expanded into today's date. And if I can't remember the short name of "dtd" for "date today", I can use the shortcut I set here for ~tempel-insert~ to go through the completion menu and expand the snippet quickly that way.
+This dual system enables me to either type ~;dtd~ into any buffer and, without hitting any other keys, get that expanded into today's date or, if I can't remember the short name of "dtd" for "date today", I can use the shortcut I set here for ~tempel-insert~ to go through the completion menu and expand the snippet quickly that way.
 
-Adding a snippet requires /three/ different lines of code the way I'm doing this (defining the snippet, giving it to Tempel, and giving it to AAS), but at least the template definition only happens once, and while this /could/ be cleaned up into some kind of helper function to make the code shorter, that would likely take more time than it's worth. (Not that that's stopped me before…)
+Adding a snippet requires /three/ different lines of code the way I'm doing this (defining the snippet, giving it to Tempel, and giving it to AAS), but at least the template /definition/ only happens once, and while this /could/ be cleaned up into some kind of helper function to make the code shorter, that would likely take more time than it's worth. (Not that that's stopped me before…)
 
 Either way, I'm happy with the system so far!
-
-Coming soon: I'll put a snippet here that shows the Tempel/Tempo syntax, though you can see it in heavy work in the Emacs Lisp Snippets section.
 
 #+begin_src emacs-lisp :lexical yes
   (use-package tempel
     :preface
-    (defconst dtd-snippet '(format-time-string "%Y-%m-%d") "A snippet for adding today's date.")
-    (defconst dat-snippet '(format-time-string "<%Y-%0m-%0d %a %H:%0M>") "A snippet for adding the current date and time.")
-    (defconst dy-snippet '(format-time-string "<%Y-%0m-%0d %a>" (time-subtract nil (* 24 60 60)))  "A snippet for adding yesterday's date.")
-    (defconst dtm-snippet '(format-time-string "<%Y-%0m-%0d %a>" (time-add nil (* 24 60 60))) "A snippet for adding tomorrow's date.")
+    (defconst dtd-snippet '((format-time-string "%Y-%m-%d")) "A snippet for adding today's date.")
+    (defconst dat-snippet '((format-time-string "<%Y-%0m-%0d %a %H:%0M>")) "A snippet for adding the current date and time.")
+    (defconst dy-snippet '((format-time-string "<%Y-%0m-%0d %a>" (time-subtract nil (* 24 60 60)))) "A snippet for adding yesterday's date.")
+    (defconst dtm-snippet '((format-time-string "<%Y-%0m-%0d %a>" (time-add nil (* 24 60 60)))) "A snippet for adding tomorrow's date.")
+
+    (defvar crj-global-templates '())
+    (defvar-local crj-buffer-local-templates '())
+
+    (add-to-list 'crj-global-templates `(dtd ,@dtd-snippet))
+    (add-to-list 'crj-global-templates `(dat ,@dat-snippet))
+    (add-to-list 'crj-global-templates `(dy ,@dy-snippet))
+    (add-to-list 'crj-global-templates `(dtm ,@dtm-snippet))
+
+    :config
+    (add-to-list 'tempel-template-sources 'crj-global-templates)
+    (add-to-list 'tempel-template-sources 'crj-buffer-local-templates)
 
     :general
     (leader "is" #'tempel-insert)
     ('insert "M-i s" #'tempel-insert)
-    ('insert
-     :keymaps 'tempel-map
-     "M-TAB" #'tempel-next))
+    ('insert :keymaps 'tempel-map "M-TAB" #'tempel-next))
 
   (use-package tempel-collection)
 
   (use-package aas
     :config
-    (defvar crj-global-templates '())
-    (defvar-local crj-buffer-local-templates '())
-
-    (add-to-list 'tempel-template-sources 'crj-buffer-local-templates)
-    (add-to-list 'tempel-template-sources 'crj-global-templates)
-
-    (defun crj--add-fundamental-snippets ()
-      "Adds the snippets I want available everywhere."
-      (add-to-list crj-buffer-local-templates `(dtd ,@dtd-snippet))
-      (add-to-list crj-buffer-local-templates `(dat ,@dat-snippet))
-      (add-to-list crj-buffer-local-templates `(dy ,@dy-snippet))
-      (add-to-list crj-buffer-local-templates `(dtm ,@dtm-snippet)))
-
-    (general-add-hook
-     '(text-mode-hook prog-mode-hook)
-     '(crj--add-fundamental-snippets aas-activate-for-major-mode))
-
-    (aas-set-snippets 'text-mode
+    (aas-set-snippets 'global
       ";dtd" (cons 'tempel dtd-snippet)
       ";dat" (cons 'tempel dat-snippet)
       ";dy" (cons 'tempel dy-snippet)
-      ";dtm" (cons 'tempel dtm-snippet)))
+      ";dtm" (cons 'tempel dtm-snippet))
+
+    (aas-global-mode))
 #+end_src
 
 **** Undoing
@@ -4215,7 +4208,6 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
 
 ******* Emacs Lisp Snippets
 
-
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :preface
@@ -4231,8 +4223,8 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
       (add-to-list 'crj-buffer-local-templates `(ld ,@ld-snippet)))
 
     :init
-    (general-add-hook 'emacs-lisp-mode-hook '(aas-activate-for-major-mode
-                                              crj--add-elisp-template))
+    (general-add-hook 'emacs-lisp-mode-hook
+                      '(aas-activate-for-major-mode crj--add-elisp-template))
 
     (aas-set-snippets 'emacs-lisp-mode
       ";fun" (cons 'tempel fun-snippet)
