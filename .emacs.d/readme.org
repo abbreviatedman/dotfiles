@@ -49,7 +49,7 @@ You can read more on this subject… and I’ll probably write more. But in the 
 #+name: tangle-on-save
 #+begin_src emacs-lisp :lexical yes
   (defun efs--org-babel-tangle-config ()
-    "Automatically tangle our Emacs.org config file when we save it. Credit to Emacs From Scratch for this one!"
+    "Automatically tangle our readme.org config file when we save it. Credit to Emacs From Scratch for this one!"
     (when (string-equal (buffer-file-name)
                         (expand-file-name "readme.org" user-emacs-directory))
 
