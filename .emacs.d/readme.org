@@ -4407,7 +4407,7 @@ Only two things aren't easy to figure out here:
     (defconst me-snippet '("module.exports = " r>))
     (defconst ed-snippet '("export default" r>))
 
-    (defun crj--add-rjsx-template ()
+    (defun crj--add-rjsx-templates ()
       (add-to-list 'crj-buffer-local-templates `(cv ,@cv-snippet))
       (add-to-list 'crj-buffer-local-templates `(iff ,@iff-snippet))
       (add-to-list 'crj-buffer-local-templates `(iee ,@iee-snippet))
@@ -4425,7 +4425,7 @@ Only two things aren't easy to figure out here:
       (add-to-list 'crj-buffer-local-templates `(me ,@me-snippet))
       (add-to-list 'crj-buffer-local-templates `(ed ,@ed-snippet)))
 
-    (general-add-hook 'rjsx-mode-hook '(crj--add-rjsx-template
+    (general-add-hook 'rjsx-mode-hook '(crj--add-rjsx-templates
                                         aas-activate-for-major-mode))
 
     :gfhook #'turn-off-flyspell
