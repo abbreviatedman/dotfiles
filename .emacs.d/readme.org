@@ -1640,6 +1640,47 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
      "C-d" nil))
 #+end_src
 
+And some Markdown snippets.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package markdown-mode
+    :preface
+    (defconst h1-snippet '(& "# " q))
+    (defconst h2-snippet '(& "## " q))
+    (defconst h3-snippet '(& "### " q))
+    (defconst h4-snippet '(& "#### " q))
+    (defconst h5-snippet '(& "##### " q))
+    (defconst h6-snippet '(& "###### " q))
+    (defconst h7-snippet '(& "####### " q))
+    (defconst h8-snippet '(& "######## " q))
+
+    (defun crj--add-markdown-templates ()
+      "Adds markdown templates to markdown-mode for Tempel insertion."
+      (add-to-list 'crj-buffer-local-templates `(h1 ,@h1-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h2 ,@h2-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h3 ,@h3-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h4 ,@h4-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h5 ,@h5-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h6 ,@h6-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h7 ,@h7-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h8 ,@h8-snippet)))
+
+
+    (general-add-hook 'markdown-mode-hook '(crj--add-markdown-templates
+                                            aas-activate-for-major-mode))
+
+    :config
+    (aas-set-snippets 'markdown-mode
+      ";h1" (cons 'tempel h1-snippet)
+      ";h2" (cons 'tempel h2-snippet)
+      ";h3" (cons 'tempel h3-snippet)
+      ";h4" (cons 'tempel h4-snippet)
+      ";h5" (cons 'tempel h5-snippet)
+      ";h6" (cons 'tempel h6-snippet)
+      ";h7" (cons 'tempel h7-snippet)
+      ";h8" (cons 'tempel h8-snippet)))
+#+end_src
+
 *** HTML
 
 The ugly-but-fully-featured markup language.
