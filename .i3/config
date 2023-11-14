@@ -4,6 +4,7 @@
 # Maybe add xmodmap call here, if it's idempotent now.
 exec --no-startup-id xcape
 exec_always --no-startup-id xset r rate 1000
+exec_always --no-startup-id xmodmap ~/.Xmodmap
 
 # Set initial resolution
 exec --no-startup-id "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --off; sleep 3; nitrogen --restore"
