@@ -356,7 +356,7 @@ Which key shows you a constantly updating list of what keys you can press next a
 #+name: which-key
 #+begin_src emacs-lisp :lexical yes
   (use-package which-key
-    :diminish 'which-key-mode
+    :diminish
 
     :config
     (which-key-mode)
