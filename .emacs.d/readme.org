@@ -2052,8 +2052,9 @@ We set up an agenda view, and then we set it as the easier-to-reach keybinding (
 
 *** Terminals
 
-I'll configure other terminals soon! For now, just shell commands and Vterm.
-Perhaps I'll set up Eshell and Eat sometime.
+I'll configure other terminals soon! For now, just some basic settings for shell commands and Eshell and Vterm.
+
+Overall, I don't use terminals that often anymore—Emacs has better text-based interfaces.
 
 **** Vterm
 
@@ -2105,6 +2106,22 @@ Let's also use a wrapper around vterm that allows multiple terminals.
   (use-package multi-vterm
     :general
     (leader "av" '(multi-vterm :which-key "Open a Vterm terminal.")))
+#+end_src
+
+**** Eshell
+
+The greatest shell.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package eat
+    :init
+    (general-setq eat-term-name "xterm-256color")
+
+    :config
+    (evil-set-initial-state 'eat-mode 'insert)
+    (evil-set-initial-state 'eshell-mode 'insert)
+    (eat-eshell-mode)
+    (eat-eshell-visual-command-mode))
 #+end_src
 
 **** Shell Commands
