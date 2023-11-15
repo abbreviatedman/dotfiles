@@ -1160,562 +1160,6 @@ They're secrets. Oooh, exciting!
       (write-region "" nil custom-file)))
 #+end_src
 
-** Markup Documents
-
-*** General Markup Settings
-
-Searching a markup outline.
-
-#+name: markup-search-keybinding
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :general
-    (leader "m." '(consult-outline :which-key "Search markup outline.")))
-#+end_src
-
-This is an Org Mode command, but it works everywhere!
-
-#+name: markup-repair-numbered-list-keybinding
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :general
-    (leader "ml" '(org-list-repair :which-key "Repair numbered list.")))
-#+end_src
-
-*** Emmet Abbreviations
-
-These abbreviations are a great tool for HTML, to the point where they're built into many editors now. But not Emacs, so they're a package.
-
-If you don't know at least the simple Emmet abbreviations, and you write HTML... man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
-
-#+name: emmet-abbreviations
-#+begin_src emacs-lisp :lexical yes
-  (use-package emmet-mode
-    :ghook
-    'sgml-mode-hook
-    'css-mode-hook
-    'html-mode-hook
-    'web-mode-hook
-
-    :init
-    (setq emmet-move-cursor-between-quotes t
-          emmet-self-closing-tag-style " /"))
-#+end_src
-
-*** Org Mode
-
-As Emacs From Scratch put it:
-
-#+BEGIN_QUOTE
-[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
-#+END_QUOTE
-
-**** Install Newest Version
-
-Org is built into Emacs, but you probably want the newest version.
-
-#+name: newest-org-mode-version
-#+begin_src emacs-lisp :lexical yes
-  (use-package org)
-#+end_src
-
-**** Basic Setup
-
-#+name: org-mode-basic-setup-1
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :init
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-    (setq org-refile-use-outline-path t
-          org-link-descriptive nil
-          org-startup-folded 'show2levels
-          org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
-
-    (defun crj-refile-in-current-buffer ()
-      (interactive)
-      (let ((org-refile-use-outline-path t)
-            (org-refile-targets '((nil . (:maxlevel . 6)))))
-        (org-refile))))
-#+end_src
-
-**** Keybindings
-
-Let's make Org keybindings a bit better.
-
-***** Org Tasks
-
-Configuring how we manage our tasks using Org Mode.
-
-****** Scheduling
-
-Some Evil keybindings for handling scheduling. Although I got used to the built-in keybindings enough that I may not use these that much!
-
-#+name: org-mode-scheduling-keybindings
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :general
-    (leader
-      "mcs" '(org-schedule :which-key "Add schedule to headline.")
-      "mcd" '(org-deadline :which-key "Add deadline to headline.")
-      "mct" '(org-timestamp :which-key "Add timestamp to headline.")
-      "mck" '(org-timestamp-up :which-key "Increment timestamp portion at point.")
-      "mcj" '(org-timestamp-down :which-key "Decrement timestamp portion at point.")
-      "mcK" '(org-timestamp-up-day :which-key "Increment timestamp day portion.")
-      "mcJ" '(org-timestamp-down-day :which-key "Decrement timestamp day portion.")))
-#+end_src
-
-***** Searching Org Documents
-
-The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
-
-#+name: org-mode-headings-search-keybinding
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :general
-    (leader "m/" '(consult-org-heading :which-key "Search current headings.")))
-#+end_src
-
-**** Org Mode Better Font Faces
-
-I will clean this up someday, but it's /mostly/ cleaned up now from the Emacs From Scratch folks.
-
-I really like a lot of what they did here to make Org Mode pretty, but not /too/ pretty. As they describe it:
-
-#+begin_quote
-The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
-#+end_quote
-
-Oh, and it also replaces ~-~ in unordered lists with actual bullets, like so: ~‣~.
-
-Niiiiice.
-
-I'm using a modified version of that function, which I've adapted slightly for my needs—the main difference being my insistence on using a variable pitch coding font.
-
-#+name: org-mode-font-faces
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :init
-    (defun crj--set-up-org-mode ()
-      (general-setq line-spacing 0.1
-                    org-pretty-entities t
-                    org-startup-indented t
-                    org-adapt-indentation nil)
-      ;; use a variable pitch font for prose
-      (variable-pitch-mode 1)
-      (diminish 'variable-pitch-mode)
-      (diminish 'buffer-face-mode)
-      ;; use bullet points for unordered lists
-      (font-lock-add-keywords 'org-mode
-                              '(("^ +\\([-*]\\) "
-                                 0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "‣")))))
-      ;; Most non-prose faces should use a variable-width coding font. See my fonts section for more.
-      (mapc (lambda (face)
-              (set-face-attribute face nil :font crj--coding-font))
-            (list 'org-block
-                  'org-formula
-                  'org-code
-                  'org-block-begin-line
-                  'org-date
-                  'org-meta-line
-                  'org-drawer
-                  'org-checkbox
-                  'org-property-value
-                  'org-block-end-line
-                  'org-document-info-keyword
-                  'org-special-keyword
-                  'org-verbatim))
-      ;; Except for tables—they should be fixed pitch for alignment.
-      (set-face-attribute 'org-table nil :font crj--fixed-pitch-font)
-      ;; And a few faces should be a smaller size. Your eyes should glide
-      ;; right by them.
-      (mapc (lambda (face)
-              (set-face-attribute face nil :height 0.8))
-            (list 'org-document-info-keyword
-                  'org-block-begin-line
-                  'org-block-end-line
-                  'org-meta-line
-                  'org-drawer
-                  'org-property-value)))
-
-    (add-hook 'org-mode-hook #'crj--set-up-org-mode))
-#+end_src
-
-**** Basic Config
-
-Emacs' From Scratch's Commentary (this is one of the areas of my config I have edited but not rewritten):
-
-#+BEGIN_QUOTE
-This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates. There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
-#+END_QUOTE
-
-#+name: org-mode-basic-setup-2
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :init
-    (setq org-link-descriptive nil)
-
-    (defun crj--diminish-org-indent-mode ()
-      (diminish 'org-indent-mode))
-
-    (add-hook 'org-indent-mode-hook #'crj--diminish-org-indent-mode)
-
-    (defun efs/org-mode-setup ()
-      (org-indent-mode)
-      ;; (variable-pitch-mode 1)
-      (visual-line-mode 1))
-
-    (add-hook 'org-mode-hook #'efs/org-mode-setup)
-
-    :general
-    (:keymaps 'org-mode-map
-     :states '(normal insert)
-     "M-h" #'org-metaleft
-     "M-l" #'org-metaright))
-#+end_src
-
-**** Nicer Heading Bullets
-
-Emacs From Scratch's commentary on this:
-
-#+BEGIN_QUOTE
-[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control. Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
-#+END_QUOTE
-
-#+name: org-mode-nicer-bullets
-#+begin_src emacs-lisp :lexical yes :tangle no
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-#+end_src
-
-
-**** Org Exporting
-
-Org mode can export to other formats—probably its strongest feature.
-
-***** General Settings
-
-Most of this is pretty standard, but I also do have my own CSS to make exporting a little better. It's dead simple, and I'm sure I will change it if I start exporting to HTML more seriously.
-
-#+name: org-mode-export-settings
-#+begin_src emacs-lisp :lexical yes
-  (use-package org
-    :init
-    (setq org-html-special-string-regexps nil
-          org-html-postamble nil
-          org-export-with-date nil
-          org-export-with-section-numbers nil
-          org-export-with-toc nil
-          org-export-headline-levels 6
-          org-html-head-extra
-          "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>"))
-  #+end_src
-
-***** Org Export to GFM
-
-Org is missing at least one format I like using: Github Flavored Markdown. So let's add that with a package.
-
-#+name: org-mode-export-gfm
-#+begin_src emacs-lisp :lexical yes
-  (use-package ox-gfm)
-#+end_src
-
-***** Importing Into Org Mode
-
-Org Mode is great at exporting to other formats, but other formats usually don't export to Org. And there's no built-in way to do it, weirdly. So! Package time.
-
-#+name: org-mode-import
-#+begin_src emacs-lisp :lexical yes
-  (use-package org-pandoc-import
-    :straight (:host github
-               :repo "tecosaur/org-pandoc-import"
-               :files ("*.el" "filters" "preprocessors")))
-#+end_src
-
-**** Org Code Editing And Evaluation
-
-Literate programming for fun and profit. Or... at least, for fun.
-
-#+name: org-mode-code-editing-and-evaluation
-#+begin_src emacs-lisp :lexical yes
-  (use-package ob-racket
-    :straight (:host github :repo "DEADB17/ob-racket"))
-
-  (use-package emacs
-    :init
-    (require 'org-tempo)
-    (general-setq org-confirm-babel-evaluate nil
-                  org-src-window-setup 'current-window
-                  org-babel-default-header-args:elisp '((:lexical . "yes"))
-                  org-edit-src-turn-on-auto-save t
-                  org-src-ask-before-returning-to-edit-buffer nil)
-
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       ;; (sql-mode . t)
-       (racket . t)
-       ;; (python . t)
-       ;; (ipython . t)
-       ;; (bash . t)
-       ;; (sh . t)
-       ;; (js . t)
-       ;; (javascript . t)
-       ;; (sql . t)
-       ;; (go . t)
-       ))
-
-    :general
-    (:keymaps 'org-src-mode-map
-     "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
-     "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
-     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
-     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block.")
-     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block."))
-
-    (leader
-      :keymaps 'org-src-mode-map
-      "c'" #'(org-edit-src-exit :which-key "Finish editing source block."))
-
-    (leader
-     :keymaps 'org-mode-map
-      "c'" #'(org-edit-special :which-key "Edit code block in its major mode."))
-
-    (:keymaps 'org-mode-map
-     "C-c n" '(org-babel-next-src-block :which-key "Go to next source block.")
-     "C-c p" '(org-babel-previous-src-block :which-key "Go to previous source block."))
-
-    ('normal
-     :keymaps 'org-mode-map
-     "RET" #'org-ctrl-c-ctrl-c)
-
-    (:keymaps 'org-mode-map
-     :states '(normal emacs visual insert motion)
-     "C-c C-v k" '(org-babel-remove-result :which-key "Remove results block of current block.")
-     "C-c C-v C-k" '(org-babel-remove-result :which-key "Remove results block of current block.")
-     "C-c C-v K" '((lambda ()
-                     (interactive)
-                     (org-babel-remove-result-one-or-many t))
-                   :which-key "Remove results block of all blocks.")
-     "C-c C-v C-K" '((lambda ()
-                       (interactive)
-                       (org-babel-remove-result-one-or-many t))
-                     :which-key "Remove results block of all blocks.")))
-#+end_src
-
-**** Pomodoro Task Management
-
-Pomodoro is a great way to manage your tasks! Or I think it /would/ be if I ever committed to it…
-
-Here's a library that sets pomodoro timers and clocks your time on Org Mode tasks.
-
-#+name: org-task-pomodoro-timer
-#+begin_src emacs-lisp :lexical yes
-  (use-package org-pomodoro
-    :init
-    (dolist (player-args-setting '(org-pomodoro-start-sound-args
-                                   org-pomodoro-killed-sound-args
-                                   org-pomodoro-ticking-sound-args
-                                   org-pomodoro-finished-sound-args
-                                   org-pomodoro-overtime-sound-args
-                                   org-pomodoro-long-break-sound-args
-                                   org-pomodoro-short-break-sound-args))
-      (set player-args-setting "volume=15000"))
-
-    (setq org-pomodoro-manual-break t
-          org-pomodoro-audio-player "/usr/sbin/sox"
-          org-pomodoro-keep-killed-pomodoro-time t
-          org-pomodoro-format "P%s"
-          org-pomodoro-time-format "%m"
-          org-pomodoro-long-break-format "L~%s"
-          org-pomodoro-short-break-format "S~%s")
-
-    :general
-    (leader "mcp" '(org-pomodoro :which-key "Toggle Org Pomodoro time tracking.")))
-#+end_src
-
-And another one where you set your own context:
-
-#+name: pomodoro-timer
-#+begin_src emacs-lisp :lexical no
-  (use-package pomm
-    :commands (pomm pomm-third-time pomm-mode-line-mode)
-
-    :init
-    (pomm-mode-line-mode)
-    (general-setq alert-default-style 'libnotify
-                  pomm-audio-enabled t
-                  pomm-audio-player-executable "/var/sbin/play -v 0.01"
-                  pomm-ask-before-work t)
-
-    :general
-    (leader "at" '(pomm :which-key "Activate Pomodoro interface.")))
-#+end_src
-
-*** Markdown
-
-The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
-
-Now heavily customized!
-
-Let's see if we can hit these quickly. We:
-
-- set ~gfm-mode~ to be the main mode we use for Markdown files.
-- set Variable Pitch mode to run in Markdown buffers
-- set a bunch of markdown-mode's configuration variables you can check out yourself
-- make sure our fonts scale appropriately
-- add a command to add a new heading, similar to org mode's approach (should definitely be refactored at some point)
-- set my favorite JS mode to run for JS code blocks: RJSX Mode
-- allow promotion, demotion, and movement in insert state
-- Add ~edit-indirect~, a package that allows you to edit an embedded code block in a dedicated code-oriented buffer in Markdown buffers, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
-- Add some Evil keybindings with Evil Markdown Mode.
-
-And we're done at a mere 58 lines of code! (Though... again, I can probably simplify my little custom add-a-heading function.)
-
-#+name: markdown-mode
-#+begin_src emacs-lisp :lexical yes
-  (use-package markdown-mode
-    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
-
-    :gfhook #'variable-pitch-mode
-
-    :init
-    (setq markdown-indent-on-enter 'indent-and-new-item
-          markdown-list-indent-width 2
-          markdown-fontify-code-blocks-natively t
-          markdown-asymmetric-header t)
-
-    (defun crj-add-markdown-header ()
-      "Add a markdown header after the current one, at the same level."
-      (interactive)
-      (let ((level (crj--get-markdown-level)))
-        (when (thing-at-point-looking-at markdown-regex-header)
-          (forward-char))
-        (if (re-search-forward markdown-regex-header nil t)
-            (forward-line -1)
-          (goto-char (point-max)))
-        (markdown-insert-header level nil nil))
-      (when (featurep 'evil)
-        (evil-insert-state)))
-
-    (defun crj--get-markdown-level ()
-      "Helper function to get the current markdown heading level.
-
-  Used by `crj-add-markdown-header'"
-      (save-excursion
-        (unless (thing-at-point-looking-at markdown-regex-header)
-          (re-search-backward markdown-regex-header nil t))
-        (markdown-outline-level)))
-
-    :config
-    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode))
-
-    :general
-    (general-def 'insert markdown-mode-map
-      "M-l" #'markdown-demote
-      "M-h" #'markdown-promote
-      "M-k" #'markdown-move-up
-      "M-j" #'markdown-move-down)
-
-    (general-def '(insert normal) markdown-mode-map
-      "C-<return>" #'crj-add-markdown-header))
-
-  (use-package edit-indirect)
-
-  (use-package evil-markdown
-    :diminish
-    :straight (:host github
-               :repo "Somelauw/evil-markdown")
-
-    :after markdown-mode
-
-    :ghook ('(markdown-mode-hook gfm-mode-hook))
-
-    :general
-    (:keymaps 'evil-markdown-mode-map
-     :states '(insert emacs)
-     "C-d" nil))
-#+end_src
-
-And some Markdown snippets.
-
-#+begin_src emacs-lisp :lexical yes
-  (use-package markdown-mode
-    :preface
-    (defconst h1-snippet '(& "# " q))
-    (defconst h2-snippet '(& "## " q))
-    (defconst h3-snippet '(& "### " q))
-    (defconst h4-snippet '(& "#### " q))
-    (defconst h5-snippet '(& "##### " q))
-    (defconst h6-snippet '(& "###### " q))
-    (defconst h7-snippet '(& "####### " q))
-    (defconst h8-snippet '(& "######## " q))
-
-    (defun crj--add-markdown-templates ()
-      "Adds markdown templates to markdown-mode for Tempel insertion."
-      (add-to-list 'crj-buffer-local-templates `(h1 ,@h1-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h2 ,@h2-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h3 ,@h3-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h4 ,@h4-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h5 ,@h5-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h6 ,@h6-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h7 ,@h7-snippet))
-      (add-to-list 'crj-buffer-local-templates `(h8 ,@h8-snippet)))
-
-
-    (general-add-hook 'markdown-mode-hook '(crj--add-markdown-templates
-                                            aas-activate-for-major-mode))
-
-    :config
-    (aas-set-snippets 'markdown-mode
-      ";h1" (cons 'tempel h1-snippet)
-      ";h2" (cons 'tempel h2-snippet)
-      ";h3" (cons 'tempel h3-snippet)
-      ";h4" (cons 'tempel h4-snippet)
-      ";h5" (cons 'tempel h5-snippet)
-      ";h6" (cons 'tempel h6-snippet)
-      ";h7" (cons 'tempel h7-snippet)
-      ";h8" (cons 'tempel h8-snippet)))
-#+end_src
-
-*** HTML
-
-The ugly-but-fully-featured markup language.
-
-#+name: html-mode
-#+begin_src emacs-lisp :lexical yes
-  (use-package web-mode
-    :commands (web-mode)
-
-    :mode (("\\.html" . web-mode)
-           ("\\.htm" . web-mode)
-           ("\\.sgml\\'" . web-mode))
-
-    :config
-    (setq web-mode-markup-indent-offset 2
-          web-mode-css-indent-offset 2
-          web-mode-code-indent-offset 2
-          web-mode-comment-style 2))
-#+end_src
-
-*** Info Mode
-
-Info Mode is the special mode Emacs uses for manuals.
-
-Only making one change so far: removing the shadowing of my leader key.
-
-#+name: info-mode
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :after evil
-    :init
-    (define-key Info-mode-map (kbd "SPC") nil)
-    (evil-define-key 'normal Info-mode-map (kbd "SPC") nil))
-#+end_src
-
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
@@ -3058,41 +2502,6 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
     :init
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
     (require 'mu4e))
-#+end_src
-
-** Projects
-
-Although having such great ability to switch files and buffers obviates the need for so many other ways to navigate (like tabs or file trees), it's still nice to narrow that down to the concept of a project.
-
-Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' built-in =project.el= library.
-
-*** Project Customizations
-
-Only one so far is to automatically run =project-find-file= upon switching to a new project.
-
-#+name: project-initial-action
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq project-switch-commands 'project-find-file))
-
-#+end_src
-
-*** Project Keybindings
-
-#+name: project-keybindings
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :general
-    (leader
-      "pp" '(project-switch-project :which-key "Switch to new project.")
-      "pk" '(project-kill-buffers :which-key "Kill all current project buffers.")
-      "pa" '(project-remember-projects-under :which-key "Remember projects in and under directory.")
-      "p," '(project-switch-to-buffer :which-key "Switch buffers in current project.")
-      "pd" '(project-dired :which-key "Run dired in current project root.")
-      "p." '(project-find-file :which-key "Find file in current project.")
-      "p$" '(project-async-shell-command :which-key "Run command in current project root.")
-      "pr" '(project-forget-project :which-key "Forget project.")))
 #+end_src
 
 ** Text Editing
@@ -4565,6 +3974,597 @@ Only two things aren't easy to figure out here:
     (leader "bf" '(prettier-prettify :which-key "Format buffer."))
 
     (leader "mf" '(crj-prettify-js-org-src-block :which-key "Format markdown block.")))
+#+end_src
+
+** Markup Documents
+
+*** General Markup Settings
+
+Searching a markup outline.
+
+#+name: markup-search-keybinding
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (leader "m." '(consult-outline :which-key "Search markup outline.")))
+#+end_src
+
+This is an Org Mode command, but it works everywhere!
+
+#+name: markup-repair-numbered-list-keybinding
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :general
+    (leader "ml" '(org-list-repair :which-key "Repair numbered list.")))
+#+end_src
+
+*** Emmet Abbreviations
+
+These abbreviations are a great tool for HTML, to the point where they're built into many editors now. But not Emacs, so they're a package.
+
+If you don't know at least the simple Emmet abbreviations, and you write HTML... man, you're missing out. Check out the full docs, but here's [[https://docs.emmet.io/cheat-sheet/][a great Emmet cheat sheet]].
+
+#+name: emmet-abbreviations
+#+begin_src emacs-lisp :lexical yes
+  (use-package emmet-mode
+    :ghook
+    'sgml-mode-hook
+    'css-mode-hook
+    'html-mode-hook
+    'web-mode-hook
+
+    :init
+    (setq emmet-move-cursor-between-quotes t
+          emmet-self-closing-tag-style " /"))
+#+end_src
+
+*** Markdown
+
+The not-quite-as-good-as-Org-but-more-universally-spoken markup language.
+
+Now heavily customized!
+
+Let's see if we can hit these quickly. We:
+
+- set ~gfm-mode~ to be the main mode we use for Markdown files.
+- set Variable Pitch mode to run in Markdown buffers
+- set a bunch of markdown-mode's configuration variables you can check out yourself
+- make sure our fonts scale appropriately
+- add a command to add a new heading, similar to org mode's approach (should definitely be refactored at some point)
+- set my favorite JS mode to run for JS code blocks: RJSX Mode
+- allow promotion, demotion, and movement in insert state
+- Add ~edit-indirect~, a package that allows you to edit an embedded code block in a dedicated code-oriented buffer in Markdown buffers, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
+- Add some Evil keybindings with Evil Markdown Mode.
+
+And we're done at a mere 58 lines of code! (Though... again, I can probably simplify my little custom add-a-heading function.)
+
+#+name: markdown-mode
+#+begin_src emacs-lisp :lexical yes
+  (use-package markdown-mode
+    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
+
+    :gfhook #'variable-pitch-mode
+
+    :init
+    (setq markdown-indent-on-enter 'indent-and-new-item
+          markdown-list-indent-width 2
+          markdown-fontify-code-blocks-natively t
+          markdown-asymmetric-header t)
+
+    (defun crj-add-markdown-header ()
+      "Add a markdown header after the current one, at the same level."
+      (interactive)
+      (let ((level (crj--get-markdown-level)))
+        (when (thing-at-point-looking-at markdown-regex-header)
+          (forward-char))
+        (if (re-search-forward markdown-regex-header nil t)
+            (forward-line -1)
+          (goto-char (point-max)))
+        (markdown-insert-header level nil nil))
+      (when (featurep 'evil)
+        (evil-insert-state)))
+
+    (defun crj--get-markdown-level ()
+      "Helper function to get the current markdown heading level.
+
+  Used by `crj-add-markdown-header'"
+      (save-excursion
+        (unless (thing-at-point-looking-at markdown-regex-header)
+          (re-search-backward markdown-regex-header nil t))
+        (markdown-outline-level)))
+
+    :config
+    (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode))
+
+    :general
+    (general-def 'insert markdown-mode-map
+      "M-l" #'markdown-demote
+      "M-h" #'markdown-promote
+      "M-k" #'markdown-move-up
+      "M-j" #'markdown-move-down)
+
+    (general-def '(insert normal) markdown-mode-map
+      "C-<return>" #'crj-add-markdown-header))
+
+  (use-package edit-indirect)
+
+  (use-package evil-markdown
+    :diminish
+    :straight (:host github
+               :repo "Somelauw/evil-markdown")
+
+    :after markdown-mode
+
+    :ghook ('(markdown-mode-hook gfm-mode-hook))
+
+    :general
+    (:keymaps 'evil-markdown-mode-map
+     :states '(insert emacs)
+     "C-d" nil))
+#+end_src
+
+And some Markdown snippets.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package markdown-mode
+    :preface
+    (defconst h1-snippet '(& "# " q))
+    (defconst h2-snippet '(& "## " q))
+    (defconst h3-snippet '(& "### " q))
+    (defconst h4-snippet '(& "#### " q))
+    (defconst h5-snippet '(& "##### " q))
+    (defconst h6-snippet '(& "###### " q))
+    (defconst h7-snippet '(& "####### " q))
+    (defconst h8-snippet '(& "######## " q))
+
+    (defun crj--add-markdown-templates ()
+      "Adds markdown templates to markdown-mode for Tempel insertion."
+      (add-to-list 'crj-buffer-local-templates `(h1 ,@h1-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h2 ,@h2-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h3 ,@h3-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h4 ,@h4-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h5 ,@h5-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h6 ,@h6-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h7 ,@h7-snippet))
+      (add-to-list 'crj-buffer-local-templates `(h8 ,@h8-snippet)))
+
+
+    (general-add-hook 'markdown-mode-hook '(crj--add-markdown-templates
+                                            aas-activate-for-major-mode))
+
+    :config
+    (aas-set-snippets 'markdown-mode
+      ";h1" (cons 'tempel h1-snippet)
+      ";h2" (cons 'tempel h2-snippet)
+      ";h3" (cons 'tempel h3-snippet)
+      ";h4" (cons 'tempel h4-snippet)
+      ";h5" (cons 'tempel h5-snippet)
+      ";h6" (cons 'tempel h6-snippet)
+      ";h7" (cons 'tempel h7-snippet)
+      ";h8" (cons 'tempel h8-snippet)))
+#+end_src
+
+*** Org Mode
+
+As Emacs From Scratch put it:
+
+#+BEGIN_QUOTE
+[[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
+#+END_QUOTE
+
+**** Install Newest Version
+
+Org is built into Emacs, but you probably want the newest version.
+
+#+name: newest-org-mode-version
+#+begin_src emacs-lisp :lexical yes
+  (use-package org)
+#+end_src
+
+**** Basic Setup
+
+#+name: org-mode-basic-setup-1
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :init
+    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+    (setq org-refile-use-outline-path t
+          org-link-descriptive nil
+          org-startup-folded 'show2levels
+          org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
+
+    (defun crj-refile-in-current-buffer ()
+      (interactive)
+      (let ((org-refile-use-outline-path t)
+            (org-refile-targets '((nil . (:maxlevel . 6)))))
+        (org-refile))))
+#+end_src
+
+**** Keybindings
+
+Let's make Org keybindings a bit better.
+
+***** Org Tasks
+
+Configuring how we manage our tasks using Org Mode.
+
+****** Scheduling
+
+Some Evil keybindings for handling scheduling. Although I got used to the built-in keybindings enough that I may not use these that much!
+
+#+name: org-mode-scheduling-keybindings
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :general
+    (leader
+      "mcs" '(org-schedule :which-key "Add schedule to headline.")
+      "mcd" '(org-deadline :which-key "Add deadline to headline.")
+      "mct" '(org-timestamp :which-key "Add timestamp to headline.")
+      "mck" '(org-timestamp-up :which-key "Increment timestamp portion at point.")
+      "mcj" '(org-timestamp-down :which-key "Decrement timestamp portion at point.")
+      "mcK" '(org-timestamp-up-day :which-key "Increment timestamp day portion.")
+      "mcJ" '(org-timestamp-down-day :which-key "Decrement timestamp day portion.")))
+#+end_src
+
+***** Searching Org Documents
+
+The search results for ~consult-org-heading~ are fantastic, as you can search the entire path of headings. So we overwrite the ~consult-outline~ keybinding when we're in Org Mode.
+
+#+name: org-mode-headings-search-keybinding
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :general
+    (leader "m/" '(consult-org-heading :which-key "Search current headings.")))
+#+end_src
+
+**** Org Mode Better Font Faces
+
+I will clean this up someday, but it's /mostly/ cleaned up now from the Emacs From Scratch folks.
+
+I really like a lot of what they did here to make Org Mode pretty, but not /too/ pretty. As they describe it:
+
+#+begin_quote
+The ~efs/org-font-setup~ function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we're editing a document in ~org-mode~. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+#+end_quote
+
+Oh, and it also replaces ~-~ in unordered lists with actual bullets, like so: ~‣~.
+
+Niiiiice.
+
+I'm using a modified version of that function, which I've adapted slightly for my needs—the main difference being my insistence on using a variable pitch coding font.
+
+#+name: org-mode-font-faces
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :init
+    (defun crj--set-up-org-mode ()
+      (general-setq line-spacing 0.1
+                    org-pretty-entities t
+                    org-startup-indented t
+                    org-adapt-indentation nil)
+      ;; use a variable pitch font for prose
+      (variable-pitch-mode 1)
+      (diminish 'variable-pitch-mode)
+      (diminish 'buffer-face-mode)
+      ;; use bullet points for unordered lists
+      (font-lock-add-keywords 'org-mode
+                              '(("^ +\\([-*]\\) "
+                                 0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "‣")))))
+      ;; Most non-prose faces should use a variable-width coding font. See my fonts section for more.
+      (mapc (lambda (face)
+              (set-face-attribute face nil :font crj--coding-font))
+            (list 'org-block
+                  'org-formula
+                  'org-code
+                  'org-block-begin-line
+                  'org-date
+                  'org-meta-line
+                  'org-drawer
+                  'org-checkbox
+                  'org-property-value
+                  'org-block-end-line
+                  'org-document-info-keyword
+                  'org-special-keyword
+                  'org-verbatim))
+      ;; Except for tables—they should be fixed pitch for alignment.
+      (set-face-attribute 'org-table nil :font crj--fixed-pitch-font)
+      ;; And a few faces should be a smaller size. Your eyes should glide
+      ;; right by them.
+      (mapc (lambda (face)
+              (set-face-attribute face nil :height 0.8))
+            (list 'org-document-info-keyword
+                  'org-block-begin-line
+                  'org-block-end-line
+                  'org-meta-line
+                  'org-drawer
+                  'org-property-value)))
+
+    (add-hook 'org-mode-hook #'crj--set-up-org-mode))
+#+end_src
+
+**** Basic Config
+
+Emacs' From Scratch's Commentary (this is one of the areas of my config I have edited but not rewritten):
+
+#+BEGIN_QUOTE
+This section contains the basic configuration for ~org-mode~ plus the configuration for Org agendas and capture templates. There's a lot to unpack in here so I'd recommend watching the videos for [[https://youtu.be/VcgjTEa0kU4][Part 5]] and [[https://youtu.be/PNE-mgkZ6HM][Part 6]] for a full explanation.
+#+END_QUOTE
+
+#+name: org-mode-basic-setup-2
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :init
+    (setq org-link-descriptive nil)
+
+    (defun crj--diminish-org-indent-mode ()
+      (diminish 'org-indent-mode))
+
+    (add-hook 'org-indent-mode-hook #'crj--diminish-org-indent-mode)
+
+    (defun efs/org-mode-setup ()
+      (org-indent-mode)
+      ;; (variable-pitch-mode 1)
+      (visual-line-mode 1))
+
+    (add-hook 'org-mode-hook #'efs/org-mode-setup)
+
+    :general
+    (:keymaps 'org-mode-map
+     :states '(normal insert)
+     "M-h" #'org-metaleft
+     "M-l" #'org-metaright))
+#+end_src
+
+**** Nicer Heading Bullets
+
+Emacs From Scratch's commentary on this:
+
+#+BEGIN_QUOTE
+[[https://github.com/sabof/org-bullets][org-bullets]] replaces the heading stars in ~org-mode~ buffers with nicer looking characters that you can control. Another option for this is [[https://github.com/integral-dw/org-superstar-mode][org-superstar-mode]] which we may cover in a later video.
+#+END_QUOTE
+
+#+name: org-mode-nicer-bullets
+#+begin_src emacs-lisp :lexical yes :tangle no
+  (use-package org-bullets
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+#+end_src
+
+
+**** Org Exporting
+
+Org mode can export to other formats—probably its strongest feature.
+
+***** General Settings
+
+Most of this is pretty standard, but I also do have my own CSS to make exporting a little better. It's dead simple, and I'm sure I will change it if I start exporting to HTML more seriously.
+
+#+name: org-mode-export-settings
+#+begin_src emacs-lisp :lexical yes
+  (use-package org
+    :init
+    (setq org-html-special-string-regexps nil
+          org-html-postamble nil
+          org-export-with-date nil
+          org-export-with-section-numbers nil
+          org-export-with-toc nil
+          org-export-headline-levels 6
+          org-html-head-extra
+          "<style>.example::before {content: \"Results:\"; display: block; margin-bottom: 1em;}</style>"))
+  #+end_src
+
+***** Org Export to GFM
+
+Org is missing at least one format I like using: Github Flavored Markdown. So let's add that with a package.
+
+#+name: org-mode-export-gfm
+#+begin_src emacs-lisp :lexical yes
+  (use-package ox-gfm)
+#+end_src
+
+***** Importing Into Org Mode
+
+Org Mode is great at exporting to other formats, but other formats usually don't export to Org. And there's no built-in way to do it, weirdly. So! Package time.
+
+#+name: org-mode-import
+#+begin_src emacs-lisp :lexical yes
+  (use-package org-pandoc-import
+    :straight (:host github
+               :repo "tecosaur/org-pandoc-import"
+               :files ("*.el" "filters" "preprocessors")))
+#+end_src
+
+**** Org Code Editing And Evaluation
+
+Literate programming for fun and profit. Or... at least, for fun.
+
+#+name: org-mode-code-editing-and-evaluation
+#+begin_src emacs-lisp :lexical yes
+  (use-package ob-racket
+    :straight (:host github :repo "DEADB17/ob-racket"))
+
+  (use-package emacs
+    :init
+    (require 'org-tempo)
+    (general-setq org-confirm-babel-evaluate nil
+                  org-src-window-setup 'current-window
+                  org-babel-default-header-args:elisp '((:lexical . "yes"))
+                  org-edit-src-turn-on-auto-save t
+                  org-src-ask-before-returning-to-edit-buffer nil)
+
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       ;; (sql-mode . t)
+       (racket . t)
+       ;; (python . t)
+       ;; (ipython . t)
+       ;; (bash . t)
+       ;; (sh . t)
+       ;; (js . t)
+       ;; (javascript . t)
+       ;; (sql . t)
+       ;; (go . t)
+       ))
+
+    :general
+    (:keymaps 'org-src-mode-map
+     "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c C-c" '(org-edit-src-exit :which-key "Finish editing source block.")
+     "C-c k" '(org-edit-src-abort :which-key "Cancel editing source block.")
+     "C-c C-k" '(org-edit-src-abort :which-key "Cancel editing source block."))
+
+    (leader
+      :keymaps 'org-src-mode-map
+      "c'" #'(org-edit-src-exit :which-key "Finish editing source block."))
+
+    (leader
+     :keymaps 'org-mode-map
+      "c'" #'(org-edit-special :which-key "Edit code block in its major mode."))
+
+    (:keymaps 'org-mode-map
+     "C-c n" '(org-babel-next-src-block :which-key "Go to next source block.")
+     "C-c p" '(org-babel-previous-src-block :which-key "Go to previous source block."))
+
+    ('normal
+     :keymaps 'org-mode-map
+     "RET" #'org-ctrl-c-ctrl-c)
+
+    (:keymaps 'org-mode-map
+     :states '(normal emacs visual insert motion)
+     "C-c C-v k" '(org-babel-remove-result :which-key "Remove results block of current block.")
+     "C-c C-v C-k" '(org-babel-remove-result :which-key "Remove results block of current block.")
+     "C-c C-v K" '((lambda ()
+                     (interactive)
+                     (org-babel-remove-result-one-or-many t))
+                   :which-key "Remove results block of all blocks.")
+     "C-c C-v C-K" '((lambda ()
+                       (interactive)
+                       (org-babel-remove-result-one-or-many t))
+                     :which-key "Remove results block of all blocks.")))
+#+end_src
+
+**** Pomodoro Task Management
+
+Pomodoro is a great way to manage your tasks! Or I think it /would/ be if I ever committed to it…
+
+Here's a library that sets pomodoro timers and clocks your time on Org Mode tasks.
+
+#+name: org-task-pomodoro-timer
+#+begin_src emacs-lisp :lexical yes
+  (use-package org-pomodoro
+    :init
+    (dolist (player-args-setting '(org-pomodoro-start-sound-args
+                                   org-pomodoro-killed-sound-args
+                                   org-pomodoro-ticking-sound-args
+                                   org-pomodoro-finished-sound-args
+                                   org-pomodoro-overtime-sound-args
+                                   org-pomodoro-long-break-sound-args
+                                   org-pomodoro-short-break-sound-args))
+      (set player-args-setting "volume=15000"))
+
+    (setq org-pomodoro-manual-break t
+          org-pomodoro-audio-player "/usr/sbin/sox"
+          org-pomodoro-keep-killed-pomodoro-time t
+          org-pomodoro-format "P%s"
+          org-pomodoro-time-format "%m"
+          org-pomodoro-long-break-format "L~%s"
+          org-pomodoro-short-break-format "S~%s")
+
+    :general
+    (leader "mcp" '(org-pomodoro :which-key "Toggle Org Pomodoro time tracking.")))
+#+end_src
+
+And another one where you set your own context:
+
+#+name: pomodoro-timer
+#+begin_src emacs-lisp :lexical no
+  (use-package pomm
+    :commands (pomm pomm-third-time pomm-mode-line-mode)
+
+    :init
+    (pomm-mode-line-mode)
+    (general-setq alert-default-style 'libnotify
+                  pomm-audio-enabled t
+                  pomm-audio-player-executable "/var/sbin/play -v 0.01"
+                  pomm-ask-before-work t)
+
+    :general
+    (leader "at" '(pomm :which-key "Activate Pomodoro interface.")))
+#+end_src
+
+*** HTML
+
+The ugly-but-fully-featured markup language.
+
+#+name: html-mode
+#+begin_src emacs-lisp :lexical yes
+  (use-package web-mode
+    :commands (web-mode)
+
+    :mode (("\\.html" . web-mode)
+           ("\\.htm" . web-mode)
+           ("\\.sgml\\'" . web-mode))
+
+    :config
+    (setq web-mode-markup-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-comment-style 2))
+#+end_src
+
+*** Info Mode
+
+Info Mode is the special mode Emacs uses for manuals.
+
+Only making one change so far: removing the shadowing of my leader key.
+
+#+name: info-mode
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :after evil
+    :init
+    (define-key Info-mode-map (kbd "SPC") nil)
+    (evil-define-key 'normal Info-mode-map (kbd "SPC") nil))
+#+end_src
+
+** Projects
+
+Although having such great ability to switch files and buffers obviates the need for so many other ways to navigate (like tabs or file trees), it's still nice to narrow that down to the concept of a project.
+
+Although =projectile= is a popular 3rd-party package as well, we'll use Emacs' built-in =project.el= library.
+
+*** Project Customizations
+
+Only one so far is to automatically run =project-find-file= upon switching to a new project.
+
+#+name: project-initial-action
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq project-switch-commands 'project-find-file))
+
+#+end_src
+
+*** Project Keybindings
+
+#+name: project-keybindings
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (leader
+      "pp" '(project-switch-project :which-key "Switch to new project.")
+      "pk" '(project-kill-buffers :which-key "Kill all current project buffers.")
+      "pa" '(project-remember-projects-under :which-key "Remember projects in and under directory.")
+      "p," '(project-switch-to-buffer :which-key "Switch buffers in current project.")
+      "pd" '(project-dired :which-key "Run dired in current project root.")
+      "p." '(project-find-file :which-key "Find file in current project.")
+      "p$" '(project-async-shell-command :which-key "Run command in current project root.")
+      "pr" '(project-forget-project :which-key "Forget project.")))
 #+end_src
 
 ** Completion
