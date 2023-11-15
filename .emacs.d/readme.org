@@ -968,206 +968,6 @@ Folding code is sometimes useful. Lots of people swear by it!
 
 #+end_src
 
-** Emacs OS Integration
-
-*** Start The Emacs Server
-
-Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
-
-#+name: start-emacs-server
-#+begin_src emacs-lisp :lexical yes
-  (require 'server)
-  (unless (server-running-p)
-    (server-start))
-#+end_src
-
-*** Set It As The Default Editor
-
-Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
-
-#+name: use-emacs-as-system-wide-editor-within-emacs-shells
-#+begin_src emacs-lisp :lexical yes
-  (use-package with-editor
-    :init
-    (require 'compat)
-    (keymap-global-set "<remap> <async-shell-command>"
-                       #'with-editor-async-shell-command)
-    (keymap-global-set "<remap> <shell-command>"
-                       #'with-editor-shell-command)
-
-    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
-      (add-hook hook #'with-editor-export-editor)))
-#+end_src
-
-** Cleaning Up The Modeline
-
-This package removes minor mode names from the mode line.
-
-Some minor mode names make themselves /very/ hard to remove through some "clever" programming. Those configs are usually with their modes, but i"ve got a couple here I didn't feel like putting anywhere. So here they are.
-
-(I should probably move the org-src one to the org mode config, though.)
-
-#+name: remove-minor-modes-from-mode-line
-#+begin_src emacs-lisp :lexical yes
-  (use-package diminish
-    :init
-    (defun crj--diminish-eldoc-mode ()
-      (diminish 'eldoc-mode))
-
-    (add-hook 'eldoc-mode-hook #'crj--diminish-eldoc-mode)
-
-    (defun crj--diminish-org-src-mode ()
-      (diminish 'org-src-mode))
-
-    (add-hook 'org-src-mode-hook #'crj--diminish-org-src-mode))
-#+end_src
-
-** Fixing Assorted Decrepit Defaults
-
-For backwards compatibility, Emacs hasn't changed its defaults for a looooong time, requiring folks to either keep really weird settings they don't even know exist or write the same boilerplate code that everyone else does to get some sane defaults.
-
-This is that boilerplate code.
-
-Feel free to check out any of these variables—if you're in Emacs, the full documentation on each one is a keypress away! They range from minor tweaks (what format to use for disambiguating files with the same names) to kind-of-important good-neighbor rules for playing well with other programs (saving the system clipboard into Emacs' powerful clipboard system, or reloading buffers if another program changes the file it's visiting) to correcting some really poorly thought out decisions (like adding or changing or deleting code from your Emacs config file if you change variables through the graphical Customize system).
-
-Either way, marvel at the fact that the Emacs maintainers have stubbornly held onto backwards compatibility from a program that is about to hit /forty years old/. That's a /lot/ of backwards to be compatible with! So… maybe we should be lucky it's just /one/ block of boilerplate code needed, given the number of holes we need to plug in the hull of this creaky single-threaded old vessel.
-
-#+name: set-sane-defaults
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (general-setq vc-follow-symlinks t
-                  save-interprogram-paste-before-kill t
-                  recentf-max-saved-items 50
-                  global-auto-revert-non-file-buffers t
-                  auto-save-timeout 10
-                  auto-save-no-message t
-                  backup-by-copying t
-                  ediff-window-setup-function 'ediff-setup-windows-plain
-                  frame-inhibit-implied-resize t
-                  backup-directory-alist `(("." . ,(concat user-emacs-directory "/backups")))
-                  gc-cons-threshold (* 100 1000 1000)
-                  uniquify-buffer-name-style 'forward
-                  load-prefer-newer t)
-    (defalias 'yes-or-no-p 'y-or-n-p)
-    (repeat-mode 1)
-    (recentf-mode 1)
-    (global-auto-revert-mode 1)
-    (save-place-mode 1)
-    (auto-save-mode 1)
-
-    :general
-    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
-
-    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
-#+end_src
-
-*** Minibuffers
-
-**** Save Minibuffer History
-
-#+save-minibuffer-history
-#+begin_src emacs-lisp :lexical yes
-  (use-package savehist
-    :init
-    (savehist-mode))
-#+end_src
-
-**** Put Minibuffer at the top of the frame?
-
-Not sure I'm using this right now, but it's an interesting idea!
-
-If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
-
-#+name: disabled-minibuffer-at-top-of-frame-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package mini-frame
-    :disabled
-    :init
-    (mini-frame-mode))
-#+end_src
-
-**** Navigate That History More Easily
-
-#+name: better-minibuffer-history-navigation
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :general
-    (general-def minibuffer-mode-map
-      "C-p" #'previous-line-or-history-element
-      "C-n" #'next-line-or-history-element))
-#+end_src
-
-**** Allow Minibuffers Within Minibuffers
-
-#+name: use-recursive-minibuffers
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq enable-recursive-minibuffers t))
-#+end_src
-
-**** Don't Show Keyboard Shortcuts Immediately
-
-Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
-
-#+name: show-pressed-keys-with-delay
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq echo-keystrokes 3))
-#+end_src
-
-*** Secrets
-
-They're secrets. Oooh, exciting!
-
-#+name: password-security-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (require 'epa-file)
-    (setq epg-pinentry-mode 'loopback)
-
-    (defun crj--get-netrc-info (host field)
-      "Get FIELD for HOST from the netrc file."
-      (let* ((file (netrc-parse (expand-file-name "~/.authinfo.gpg")))
-             (machine (netrc-machine file host)))
-        (netrc-get machine field)))
-
-    (general-setq auth-sources '("~/.authinfo.gpg")
-                  plstore-cache-passphrase-for-symmetric-encryption t)
-
-    (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
-
-  (use-package ssh-agency
-    :defer t
-
-    :init
-    (general-setq ssh-agency-askpass nil))
-#+end_src
-
-*** Don't Yell At Me So Much
-
-#+name: quiet-emacs-don't-be-so-loud
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq warning-suppress-types '((comp))
-          ring-bell-function 'ignore))
-#+end_src
-
-*** Don't Mess With Custom System
-
-#+name: customization-file-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
-    (unless (file-exists-p custom-file)
-      (write-region "" nil custom-file)))
-#+end_src
-
 ** Evil Mode
 
 Time to spend a vast amount of time thinking through Vim-style keybindings!
@@ -1767,6 +1567,207 @@ Shows you the difference between two different bits of text. Another very occasi
     (:keymaps 'visual :prefix "g"
      "=" '(evil-numbers/inc-at-pt-incremental :which-key "Increment operator.")
      "-" '(evil-numbers/dec-at-pt-incremental :which-key "Decrement operator.")))
+#+end_src
+
+
+** Emacs OS Integration
+
+*** Start The Emacs Server
+
+Running an Emacs server means that every single Emacs frame (or "window" in operating system parlance) that you create isn't a new instance of Emacs, but belongs to the same Emacs as all the other frames. This makes opening a new Emacs frame lightning fast, reducing the cost of having lots of Emacs libraries and making the fact that Emacs initially takes 10 seconds to start up completely beside the point.
+
+#+name: start-emacs-server
+#+begin_src emacs-lisp :lexical yes
+  (require 'server)
+  (unless (server-running-p)
+    (server-start))
+#+end_src
+
+*** Set It As The Default Editor
+
+Some of this is set in my terminal settings, but Emacs can also send commands to the shell, and has (many) shells of its own. We want to make sure that Emacs is the default editor any time that happens.
+
+#+name: use-emacs-as-system-wide-editor-within-emacs-shells
+#+begin_src emacs-lisp :lexical yes
+  (use-package with-editor
+    :init
+    (require 'compat)
+    (keymap-global-set "<remap> <async-shell-command>"
+                       #'with-editor-async-shell-command)
+    (keymap-global-set "<remap> <shell-command>"
+                       #'with-editor-shell-command)
+
+    (dolist (hook '(shell-mode-hook eshell-mode-hook term-exec-hook vterm-mode-hook))
+      (add-hook hook #'with-editor-export-editor)))
+#+end_src
+
+** Cleaning Up The Modeline
+
+This package removes minor mode names from the mode line.
+
+Some minor mode names make themselves /very/ hard to remove through some "clever" programming. Those configs are usually with their modes, but i"ve got a couple here I didn't feel like putting anywhere. So here they are.
+
+(I should probably move the org-src one to the org mode config, though.)
+
+#+name: remove-minor-modes-from-mode-line
+#+begin_src emacs-lisp :lexical yes
+  (use-package diminish
+    :init
+    (defun crj--diminish-eldoc-mode ()
+      (diminish 'eldoc-mode))
+
+    (add-hook 'eldoc-mode-hook #'crj--diminish-eldoc-mode)
+
+    (defun crj--diminish-org-src-mode ()
+      (diminish 'org-src-mode))
+
+    (add-hook 'org-src-mode-hook #'crj--diminish-org-src-mode))
+#+end_src
+
+** Fixing Assorted Decrepit Defaults
+
+For backwards compatibility, Emacs hasn't changed its defaults for a looooong time, requiring folks to either keep really weird settings they don't even know exist or write the same boilerplate code that everyone else does to get some sane defaults.
+
+This is that boilerplate code.
+
+Feel free to check out any of these variables—if you're in Emacs, the full documentation on each one is a keypress away! They range from minor tweaks (what format to use for disambiguating files with the same names) to kind-of-important good-neighbor rules for playing well with other programs (saving the system clipboard into Emacs' powerful clipboard system, or reloading buffers if another program changes the file it's visiting) to correcting some really poorly thought out decisions (like adding or changing or deleting code from your Emacs config file if you change variables through the graphical Customize system).
+
+Either way, marvel at the fact that the Emacs maintainers have stubbornly held onto backwards compatibility from a program that is about to hit /forty years old/. That's a /lot/ of backwards to be compatible with! So… maybe we should be lucky it's just /one/ block of boilerplate code needed, given the number of holes we need to plug in the hull of this creaky single-threaded old vessel.
+
+#+name: set-sane-defaults
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (general-setq vc-follow-symlinks t
+                  save-interprogram-paste-before-kill t
+                  recentf-max-saved-items 50
+                  global-auto-revert-non-file-buffers t
+                  auto-save-timeout 10
+                  auto-save-no-message t
+                  backup-by-copying t
+                  ediff-window-setup-function 'ediff-setup-windows-plain
+                  frame-inhibit-implied-resize t
+                  backup-directory-alist `(("." . ,(concat user-emacs-directory "/backups")))
+                  gc-cons-threshold (* 100 1000 1000)
+                  uniquify-buffer-name-style 'forward
+                  load-prefer-newer t)
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    (repeat-mode 1)
+    (recentf-mode 1)
+    (global-auto-revert-mode 1)
+    (save-place-mode 1)
+    (auto-save-mode 1)
+
+    :general
+    ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
+
+    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
+#+end_src
+
+*** Minibuffers
+
+**** Save Minibuffer History
+
+#+save-minibuffer-history
+#+begin_src emacs-lisp :lexical yes
+  (use-package savehist
+    :init
+    (savehist-mode))
+#+end_src
+
+**** Put Minibuffer at the top of the frame?
+
+Not sure I'm using this right now, but it's an interesting idea!
+
+If I do use it, I'll want to swap Vertico's orientation, which /would/ make ~vertico-reverse~ feel less helpful, opening up ~vertico-flat~ and ~vertico-grid~ options...
+
+#+name: disabled-minibuffer-at-top-of-frame-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package mini-frame
+    :disabled
+    :init
+    (mini-frame-mode))
+#+end_src
+
+**** Navigate That History More Easily
+
+#+name: better-minibuffer-history-navigation
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (general-def minibuffer-mode-map
+      "C-p" #'previous-line-or-history-element
+      "C-n" #'next-line-or-history-element))
+#+end_src
+
+**** Allow Minibuffers Within Minibuffers
+
+#+name: use-recursive-minibuffers
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq enable-recursive-minibuffers t))
+#+end_src
+
+**** Don't Show Keyboard Shortcuts Immediately
+
+Set the current keyboard shortcut I'm typing to only show up after 3 seconds of inactivity. This is slightly longer than the ~which-key~ setting of 2 seconds, since I need to be /more/ lost to be unsure of what I just typed.
+
+#+name: show-pressed-keys-with-delay
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq echo-keystrokes 3))
+#+end_src
+
+*** Secrets
+
+They're secrets. Oooh, exciting!
+
+#+name: password-security-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (require 'epa-file)
+    (setq epg-pinentry-mode 'loopback)
+
+    (defun crj--get-netrc-info (host field)
+      "Get FIELD for HOST from the netrc file."
+      (let* ((file (netrc-parse (expand-file-name "~/.authinfo.gpg")))
+             (machine (netrc-machine file host)))
+        (netrc-get machine field)))
+
+    (general-setq auth-sources '("~/.authinfo.gpg")
+                  plstore-cache-passphrase-for-symmetric-encryption t)
+
+    (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
+
+  (use-package ssh-agency
+    :defer t
+
+    :init
+    (general-setq ssh-agency-askpass nil))
+#+end_src
+
+*** Don't Yell At Me So Much
+
+#+name: quiet-emacs-don't-be-so-loud
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq warning-suppress-types '((comp))
+          ring-bell-function 'ignore))
+#+end_src
+
+*** Don't Mess With Custom System
+
+#+name: customization-file-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
+    (unless (file-exists-p custom-file)
+      (write-region "" nil custom-file)))
 #+end_src
 
 ** Search
