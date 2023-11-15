@@ -918,6 +918,14 @@ The eternal struggle.
                   tab-width 2))
 #+end_src
 
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :after evil
+
+    :init
+    (general-setq evil-shift-width 2))
+#+end_src
+
 **** Visualize Indentation Level
 
 Let's visualize our indentation!
