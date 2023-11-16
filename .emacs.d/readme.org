@@ -471,6 +471,10 @@ And a picture of what my setup actually looks like:
 
 **** Using Fixed Pitch In Some Buffers
 
+Usually these are terminals, but alignment after non-whitespace characters does matter in /some/ languages, such as Lisps.
+
+A good Lisp example is this code block, where we define what modes we want to use fixed pitch for:
+
 #+name: fixed-pitch-modes
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
@@ -485,6 +489,21 @@ And a picture of what my setup actually looks like:
         mu4e-headers-mode-hook
         magit-log-mode-hook)))
 #+end_src
+
+When viewing the above code in this document in Org Mode in Emacs, my variable pitch coding font is displayed, and, because the ~'(~ takes up /slightly/ more space than two space characters, the first item in the list is not aligned with the rest of them. When viewing it in an actual Emacs Lisp buffer using a fixed pitch font (such as when I go to edit the block), they're all aligned.
+
+Any other programming language I've seen, this is a rare or non-existent case. It takes the language needing not just meaningful alignment (which most do for readability), but alignment after non-whitespace characters. Most languages, this is just for people who want to align their variables after a keyword, like so:
+
+#+begin_src javascript
+  const name = 'Colin';
+        age = 43;
+        hobby = "Just Emacs basically."
+#+end_src
+
+But Lisps are not most languages, and "rare or non-existent" cases are, instead, practically every line.
+
+Lisps - they're weird!™
+
 #+name: enabling-fixed-pitch-in-certain-modes
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
