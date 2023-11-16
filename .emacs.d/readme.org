@@ -148,7 +148,7 @@ From now on, when you press the user presses the spacebar (or ~M-SPC~) and then 
 
 Let's define a few commands that open specific commonly accessed files as examples, and then bind them to keys using this system.
 
-#+name:commands-for-common-file-access
+#+name: commands-for-common-file-access
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -337,7 +337,7 @@ Well, check out this (useful!) keybinding:
 
 See the <S-backspace> mapping? Well, it took me a good while to find the right way to write shift-backspace in the same syntax as the rest of it, and in the process, I happened upon this alternate syntax:
 
-#+name: just-one-space-alternate-keybinding
+#+name: alternate-keybinding-example
 #+begin_src emacs-lisp :tangle no :lexical yes
   (use-package emacs
     :general
@@ -494,7 +494,8 @@ When viewing the above code in this document in Org Mode in Emacs, my variable p
 
 Any other programming language I've seen, this is a rare or non-existent case. It takes the language needing not just meaningful alignment (which most do for readability), but alignment after non-whitespace characters. Most languages, this is just for people who want to align their variables after a keyword, like so:
 
-#+begin_src javascript
+#+name: javascript-indentation-alignment-example
+#+begin_src javascript :tangle no
   const name = 'Colin';
         age = 43;
         hobby = "Just Emacs basically."
@@ -601,6 +602,7 @@ I like to switch to be able to close popup buffers easily.
 
 This first part will switch us to the Messages buffer in the same window (usually waht I want), so I can bury the buffer again easily with ~q~.
 
+#+name: switch-to-messages
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -639,7 +641,7 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
 
-#+edit-file-with-sudo-privileges
+#+name: edit-file-with-sudo-privileges
 #+begin_src emacs-lisp :lexical yes
   (use-package sudo-edit
     :general
@@ -940,6 +942,7 @@ The eternal struggle.
                   tab-width 2))
 #+end_src
 
+#+name: evil-indentation-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :after evil
@@ -1690,7 +1693,7 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
 
 **** Save Minibuffer History
 
-#+save-minibuffer-history
+#+name: save-minibuffer-history
 #+begin_src emacs-lisp :lexical yes
   (use-package savehist
     :init
@@ -2134,6 +2137,7 @@ Let's also use a wrapper around vterm that allows multiple terminals.
 
 The greatest shell.
 
+#+name: eat-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package eat
     :init
@@ -2625,6 +2629,7 @@ Adding a snippet requires /three/ different lines of code the way I'm doing this
 
 Either way, I'm happy with the system so far!
 
+#+name: snippet-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package tempel
     :preface
@@ -3053,7 +3058,7 @@ I'll have to give this more of a go, but it really seems like Vim's "big word" m
 
 Take this JavaScript, for example:
 
-#+word-movement-example
+#+name: word-movement-example
 #+begin_src javascript :tangle no
   function greet({name}) {
     return `Hello, ${name}!`
@@ -3265,7 +3270,7 @@ Here are the broad strokes of the changes I'm making, and I recommend checking o
 - I tweaked a couple more /very/ minor things—things like using ~^~ for going to the first item in a list, which is slightly more efficient on my weird keyboards than 0. Feel free to check out the full keybinding config below if you want to dig into the very little tweaks.
 - Fixed a bug (which might be just a load-order or compilation issue) with a hacky advising function
 
-  #+name: disabled-symex-library-setup
+#+name: disabled-symex-library-setup
 #+begin_src emacs-lisp :lexical yes :tangle no
   (use-package symex
     :disabled
@@ -3706,6 +3711,7 @@ This bit of code from Fuco1 on GitHub overrides some of that indentation behavio
 
 ******* Emacs Lisp Snippets
 
+#+name: emacs-lisp-snippets
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :preface
@@ -4153,6 +4159,7 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
 
 And some Markdown snippets.
 
+#+name: markdown-snippets
 #+begin_src emacs-lisp :lexical yes
   (use-package markdown-mode
     :preface
