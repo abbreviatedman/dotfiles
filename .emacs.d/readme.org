@@ -2444,34 +2444,32 @@ Only major change here is that I was experiencing some modeline issues with yadm
 
 #+name: yadm-setup
 #+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :preface
-    (defun crj-yadm-magit-status ()
-      (interactive)
-      (setq mini-modeline-r-format '(" "))
-      (magit-status "/yadm::"))
+    (use-package emacs
+      :preface
+      (defun crj-yadm-magit-status ()
+        (interactive)
+        (setq mini-modeline-r-format '(" "))
+        (magit-status "/yadm::"))
 
-    (defun crj--turn-on-modeline-after-magit (orig-fun &rest args)
-      (apply orig-fun args)
-      (crj--turn-on-modeline))
+      (defun crj--turn-on-modeline-after-magit (orig-fun &rest args)
+        (apply orig-fun args)
+        (crj--turn-on-modeline))
 
-    :init
-    (require 'tramp)
+      :init
+      (require 'tramp)
+      (add-to-list 'tramp-methods
+                   '("yadm"
+                     (tramp-login-program "yadm")
+                     (tramp-login-args (("enter")))
+                     (tramp-login-env (("SHELL") ("/bin/sh")))
+                     (tramp-remote-shell "/bin/sh")
+                     (tramp-remote-shell-args ("-c"))))
 
-    (add-to-list 'tramp-methods
-                 '("yadm"
-                   (tramp-login-program "yadm")
-                   (tramp-login-args (("enter")))
-                   (tramp-login-env (("SHELL") ("/bin/sh")))
-                   (tramp-remote-shell "/bin/sh")
-                   (tramp-remote-shell-args ("-c"))))
+      (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
-    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
-    (advice-add 'magit-mode-bury-buffer :around #'crj--turn-on-modeline-after-magit)
-
-    :general
-    (leader
-      "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
+      :general
+      (leader
+        "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
 #+end_src
 
 *** Dired
@@ -5426,7 +5424,7 @@ I've:
 
     :diminish 'mini-modeline-mode
 
-    :preface
+    :init
     (defconst crj--modeline-r-on-format '("%e"
                                           mode-line-front-space
                                           mode-line-modified
@@ -5445,11 +5443,8 @@ I've:
 
                                           mode-line-misc-info))
 
-    (defun crj--turn-on-modeline ()
-      (setq mini-modeline-r-format crj--modeline-r-on-format))
-
-    (defun crj--turn-off-modeline ()
-      (setq mini-modeline-r-format " "))
+    (setq mini-modeline-face-attr nil)
+    (setq mini-modeline-r-format crj--modeline-r-on-format)
 
     (defun crj-toggle-modeline ()
       (interactive)
@@ -5459,7 +5454,7 @@ I've:
 
     :init
     (general-setq mini-modeline-face-attr nil
-          mini-modeline-r-format crj--modeline-r-on-format)
+                  mini-modeline-r-format crj--modeline-r-on-format)
 
     (mini-modeline-mode t)
 
