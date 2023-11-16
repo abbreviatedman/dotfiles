@@ -2440,7 +2440,7 @@ Yet Another Dotfiles Manager has been super helpful to managing my system config
 
 Let's integrate it with Magit!
 
-Only major change here is that I was experiencing some modeline issues with yadm buffers, so I turned the modeline off upon entering. Seems like too minor an issue to spend much time fixing, but maybe I will at some point.
+Only major change here is that I was experiencing some modeline issues with yadm buffers, so I turn the modeline off upon entering and back on on quit. Seems like too minor an issue to spend much time truly fixing, but maybe I will at some point. For now: hacking.
 
 #+name: yadm-setup
 #+begin_src emacs-lisp :lexical yes
@@ -2450,6 +2450,10 @@ Only major change here is that I was experiencing some modeline issues with yadm
       (interactive)
       (setq mini-modeline-r-format '(" "))
       (magit-status "/yadm::"))
+
+    (defun crj--turn-on-modeline-after-magit (orig-fun &rest args)
+      (apply orig-fun args)
+      (crj--turn-on-modeline))
 
     :init
     (require 'tramp)
@@ -2463,7 +2467,7 @@ Only major change here is that I was experiencing some modeline issues with yadm
                    (tramp-remote-shell-args ("-c"))))
 
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
-    (advice-add #'magit-mode-bury-buffer :after #'crj--turn-on-modeline)
+    (advice-add 'magit-mode-bury-buffer :around #'crj--turn-on-modeline-after-magit)
 
     :general
     (leader
@@ -5451,7 +5455,7 @@ I've:
       (interactive)
       (if (eq mini-modeline-r-format crj--modeline-r-on-format)
           (crj--turn-off-modeline)
-        crj--modeline-r-on-format))
+        (crj--turn-on-modeline)))
 
     :init
     (general-setq mini-modeline-face-attr nil
