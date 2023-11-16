@@ -2440,36 +2440,36 @@ Yet Another Dotfiles Manager has been super helpful to managing my system config
 
 Let's integrate it with Magit!
 
-Only major change here is that I was experiencing some modeline issues with yadm buffers, so I turn the modeline off upon entering and back on on quit. Seems like too minor an issue to spend much time truly fixing, but maybe I will at some point. For now: hacking.
+Only major change here is that I was experiencing some modeline issues with yadm buffers, so I turned the modeline off upon entering. Seems like too minor an issue to spend much time fixing, but maybe I will at some point.
 
 #+name: yadm-setup
 #+begin_src emacs-lisp :lexical yes
-    (use-package emacs
-      :preface
-      (defun crj-yadm-magit-status ()
-        (interactive)
-        (setq mini-modeline-r-format '(" "))
-        (magit-status "/yadm::"))
+  (use-package emacs
+    :preface
+    (defun crj-yadm-magit-status ()
+      (interactive)
+      (setq mini-modeline-r-format '(" "))
+      (magit-status "/yadm::"))
 
-      (defun crj--turn-on-modeline-after-magit (orig-fun &rest args)
-        (apply orig-fun args)
-        (crj--turn-on-modeline))
+    (defun crj--turn-on-modeline-after-magit (orig-fun &rest args)
+      (apply orig-fun args)
+      (crj--turn-on-modeline))
 
-      :init
-      (require 'tramp)
-      (add-to-list 'tramp-methods
-                   '("yadm"
-                     (tramp-login-program "yadm")
-                     (tramp-login-args (("enter")))
-                     (tramp-login-env (("SHELL") ("/bin/sh")))
-                     (tramp-remote-shell "/bin/sh")
-                     (tramp-remote-shell-args ("-c"))))
+    :init
+    (require 'tramp)
+    (add-to-list 'tramp-methods
+                 '("yadm"
+                   (tramp-login-program "yadm")
+                   (tramp-login-args (("enter")))
+                   (tramp-login-env (("SHELL") ("/bin/sh")))
+                   (tramp-remote-shell "/bin/sh")
+                   (tramp-remote-shell-args ("-c"))))
 
-      (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+    (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
 
-      :general
-      (leader
-        "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
+    :general
+    (leader
+      "gd" '(crj-yadm-magit-status :which-key "Launch Magit in YADM repo.")))
 #+end_src
 
 *** Dired
@@ -5450,7 +5450,7 @@ I've:
       (interactive)
       (if (eq mini-modeline-r-format crj--modeline-r-on-format)
           (crj--turn-off-modeline)
-        (crj--turn-on-modeline)))
+        crj--modeline-r-on-format))
 
     :init
     (general-setq mini-modeline-face-attr nil
