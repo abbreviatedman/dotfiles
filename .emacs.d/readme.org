@@ -598,9 +598,9 @@ Add a bit more splash of color by highlighting numbers and quoted Lisp symbols.
 
 *** Popup Buffers
 
-I like to switch to be able to close popup buffers easily.
+I like to be able to close quick popup buffers easily.
 
-This first part will switch us to the Messages buffer in the same window (usually waht I want), so I can bury the buffer again easily with ~q~.
+Right now, this section just has a switch-to-Messages-buffer function that uses the same window, so I can peek at a large section of it and then bury the buffer again easily with ~q~.
 
 #+name: switch-to-messages
 #+begin_src emacs-lisp :lexical yes
@@ -2136,6 +2136,10 @@ Let's also use a wrapper around vterm that allows multiple terminals.
 **** Eshell
 
 The greatest shell.
+
+Only configuration so far: adding EAT (Emulate A Terminal) for faster visual commands.
+
+I /might/ even start using non-Eshell EAT over Vterm. We'll see!
 
 #+name: eat-setup
 #+begin_src emacs-lisp :lexical yes
