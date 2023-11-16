@@ -1393,7 +1393,7 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
                   (skip-chars-backward " \t")
                   (bolp))
           (evil-backward-WORD-begin))
-        (delete-current-word)
+        (crj-delete-current-word)
         (forward-char offset)))
 
     :general
