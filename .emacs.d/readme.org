@@ -2445,8 +2445,15 @@ Only major change here is that I was experiencing some modeline issues with yadm
 #+name: yadm-setup
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
+    :preface
+    (defun crj-yadm-magit-status ()
+      (interactive)
+      (setq mini-modeline-r-format '(" "))
+      (magit-status "/yadm::"))
+
     :init
     (require 'tramp)
+
     (add-to-list 'tramp-methods
                  '("yadm"
                    (tramp-login-program "yadm")
@@ -2456,11 +2463,7 @@ Only major change here is that I was experiencing some modeline issues with yadm
                    (tramp-remote-shell-args ("-c"))))
 
     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
-
-    (defun crj-yadm-magit-status ()
-      (interactive)
-      (setq mini-modeline-r-format '(" "))
-      (magit-status "/yadm::"))
+    (advice-add #'magit-mode-bury-buffer :after #'crj--turn-on-modeline)
 
     :general
     (leader
@@ -5419,7 +5422,7 @@ I've:
 
     :diminish 'mini-modeline-mode
 
-    :init
+    :preface
     (defconst crj--modeline-r-on-format '("%e"
                                           mode-line-front-space
                                           mode-line-modified
@@ -5438,15 +5441,21 @@ I've:
 
                                           mode-line-misc-info))
 
-    (setq mini-modeline-face-attr nil)
-    (setq mini-modeline-r-format crj--modeline-r-on-format)
+    (defun crj--turn-on-modeline ()
+      (setq mini-modeline-r-format crj--modeline-r-on-format))
+
+    (defun crj--turn-off-modeline ()
+      (setq mini-modeline-r-format " "))
 
     (defun crj-toggle-modeline ()
       (interactive)
-      (setq mini-modeline-r-format
-            (if (eq mini-modeline-r-format crj--modeline-r-on-format)
-                " "
-              crj--modeline-r-on-format)))
+      (if (eq mini-modeline-r-format crj--modeline-r-on-format)
+          (crj--turn-off-modeline)
+        crj--modeline-r-on-format))
+
+    :init
+    (general-setq mini-modeline-face-attr nil
+          mini-modeline-r-format crj--modeline-r-on-format)
 
     (mini-modeline-mode t)
 
