@@ -5424,7 +5424,8 @@ I've:
 
     :diminish 'mini-modeline-mode
 
-    :init
+    :preface
+
     (defconst crj--modeline-r-on-format '("%e"
                                           mode-line-front-space
                                           mode-line-modified
@@ -5442,15 +5443,24 @@ I've:
                                             (format-mode-line mode-line-modes)))
 
                                           mode-line-misc-info))
+    (defun crj--turn-on-modeline ()
+      "Turn on the modeline."
+      (setq mini-modeline-r-format crj--modeline-r-on-format))
 
-    (setq mini-modeline-face-attr nil)
-    (setq mini-modeline-r-format crj--modeline-r-on-format)
+    (defun crj--turn-off-modeline ()
+      "Turn off the modeline."
+      (setq mini-modeline-r-format " "))
 
     (defun crj-toggle-modeline ()
       (interactive)
       (if (eq mini-modeline-r-format crj--modeline-r-on-format)
           (crj--turn-off-modeline)
-        crj--modeline-r-on-format))
+        (crj--turn-on-modeline)))
+
+    :init
+    (setq mini-modeline-face-attr nil)
+
+    (setq mini-modeline-r-format crj--modeline-r-on-format)
 
     :init
     (general-setq mini-modeline-face-attr nil
@@ -5460,7 +5470,6 @@ I've:
 
     :general
     (leader "tm" '(crj-toggle-modeline :which-key "Toggle modeline.")))
-
 #+end_src
 
 ** Putting It All Together
