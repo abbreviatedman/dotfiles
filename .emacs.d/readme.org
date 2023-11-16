@@ -471,7 +471,21 @@ And a picture of what my setup actually looks like:
 
 **** Using Fixed Pitch In Some Buffers
 
-#+name: enabling-fixed-pitch
+#+name: fixed-pitch-modes
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :preface
+    (defconst crj--fixed-pitch-mode-hooks
+      '(emacs-lisp-mode-hook
+        vterm-mode-hook
+        calendar-mode-hook
+        proced-mode-hook
+        cfw:calendar-mode-hook
+        minibuffer-setup-hook
+        mu4e-headers-mode-hook
+        magit-log-mode-hook)))
+#+end_src
+#+name: enabling-fixed-pitch-in-certain-modes
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
@@ -506,17 +520,6 @@ And a picture of what my setup actually looks like:
       (set (make-local-variable 'buffer-face-mode-face) 'crj--monospace)
       (buffer-face-mode t))
 
-    ;; Hooks for modes I want to use fixed pitch in.
-    (defconst crj--fixed-pitch-mode-hooks
-          '(vterm-mode-hook
-            calendar-mode-hook
-            proced-mode-hook
-            cfw:calendar-mode-hook
-            minibuffer-setup-hook
-            mu4e-headers-mode-hook
-            magit-log-mode-hook))
-
-    ;; Add the fixed-pitch function for each mode.
     (dolist (hook crj--fixed-pitch-mode-hooks)
       (add-hook hook #'crj--use-fixed-pitch)))
 #+end_src
