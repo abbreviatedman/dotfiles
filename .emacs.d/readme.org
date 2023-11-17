@@ -1376,17 +1376,21 @@ Little words should include word "parts" in camelCase words, whether you're usin
 
 **** Quick Word Deletion
 
-Some surprisingly useful motions I wrote one evening. They're like Evil's `x` and `X`, but for words!
+Some surprisingly useful motions I wrote one evening—and of course then proceeded to continue iterating on them constantly since. They're like Evil's ~x~ and ~X~, but for words! (And WORDS.)
 
-Variations on these also come in handy quite often in Lisps (for which there are symex-oriented versions somewhere below).
+I can't say how much faster editing feels when one key deletes words. It's probably not worth the time it took to code them and explain them… but it /does/ feel super fast now!
 
-I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many other long-time Vim/Evil users—don't use the visual modes very often. (And I placed them far away on a distant binding for the rare times I do need them.)
+I'm binding them to ~v~ and ~C-v~ for words and WORDS (with backwards versions using shift as well, mirroring ~x~/~X~). This takes away the visual mode bindings (which I've remapped onto leader key bindings)—this might seem heretical, but I—and many other long-time Vim/Evil users—don't use the visual modes very often.
+
+There are still /very much/ some edge cases with these functions, because this is not at all the proper way to code this. But I still haven't fully dived into creating Evil's text objects and motions—I think these motions would be a lot more cleanly implemented with those tools. Maybe someday!
+
+Variations on these also come in handy quite often in Lisps—in fact, these motions were inspired by Symex's versions, which also do brilliant things with indentation and whitespace to make deleting symbols and lists quick and seamless. My wrappers for the Symex versions are somewhere down in the Evil Lisp sections.
 
 #+name: quick-word-deletion
 #+begin_src emacs-lisp :lexical yes
   (use-package evil
     :preface
-    (defun crj-delete-current-word ()
+    (defun crj-delete-current-WORD ()
       "Delete the current word under the cursor.
 
   Should also delete whitespace intelligently and refuse to go past line boundaries."
@@ -1406,7 +1410,27 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
           (delete-char -1)
           (evil-backward-WORD-begin))))
 
-    (defun crj-delete-previous-word ()
+    (defun crj-delete-current-word ()
+      "Delete the current word under the cursor.
+
+  Should also delete whitespace intelligently and refuse to go past line boundaries."
+      (interactive)
+      (let* ((last-word-p (save-excursion
+                            (evil-forward-word-end)
+                            (evil-eolp)))
+             (start (if (looking-at "\\_<")
+                        (point)
+                      (save-excursion (evil-backward-word-begin) (point))))
+             (end (save-excursion (if last-word-p
+                                      (progn (end-of-line) (point))
+                                    (evil-forward-word-begin)
+                                    (point)))))
+        (delete-region start end)
+        (when last-word-p
+          (delete-char -1)
+          (evil-backward-word-begin))))
+
+    (defun crj-delete-previous-WORD ()
       "Delete the word before the cursor.
 
   Should also delete whitespace intelligently and refuse to go past line boundaries."
@@ -1418,17 +1442,35 @@ I'm binding them to ~v~ and ~V~, which is super weird I know, but I—and many o
                   (skip-chars-backward " \t")
                   (bolp))
           (evil-backward-WORD-begin))
+        (crj-delete-current-WORD)
+        (forward-char offset)))
+
+    (defun crj-delete-previous-word ()
+      "Delete the word before the cursor.
+
+  Should also delete whitespace intelligently and refuse to go past line boundaries."
+      (interactive)
+      (let ((offset (crj--point-offset-from-start-of-word)))
+        (unless (looking-at "\\_<")
+          (evil-backward-word-begin))
+        (unless (save-excursion
+                  (skip-chars-backward " \t")
+                  (bolp))
+          (evil-backward-word-begin))
         (crj-delete-current-word)
         (forward-char offset)))
 
     :general
-    (:states 'normal
+    ('normal
      "v" #'crj-delete-current-word
-     "V" #'crj-delete-previous-word)
+     "V" #'crj-delete-previous-word
+     "C-v" #'crj-delete-current-WORD
+     "C-S-v" #'crj-delete-previous-WORD)
 
     (leader
       "vv" '(evil-visual-char :which-key "Evil visual state.")
-      "vV" '(evil-visual-line :which-key "Evil visual line state.")))
+      "vV" '(evil-visual-line :which-key "Evil visual line state.")
+      "v C-v" '(evil-visual-block :which-key "Evil visual block state.")))
 #+end_src
 
 **** Better Word Movement
@@ -5492,13 +5534,6 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 
 ** Config Changes Todos
 *** fix LSP!
-*** add evil-word-delete and evil-word-delete
-Maybe:
-
-~v~ - evil-word-delete
-~C-v~ - evil-WORD-delete
-~V~ - evil-word-delete-backwards
-~C-V~ - evil-WORD-delete-backwards
 *** make evil-word-delete functions add deletions to kill ring
 *** restclient.el and ob-restclient
 *** add regular evil-WORD to text objects, maybe on o or O
