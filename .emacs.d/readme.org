@@ -5138,13 +5138,15 @@ A great error-navigation library
 
     :hook (prog-mode . flymake-mode)
 
+    :config
+    (general-setq flymake-show-diagnostics-at-end-of-line t)
+
     :general
     (:keymaps 'normal
      "]e" '(flymake-goto-next-error
             :which-key "Go to next error.")
      "[e" '(flymake-goto-prev-error
             :which-key "Go to previous error."))
-
     (leader "cX" '(flymake-show-project-diagnostics :which-key "Show project diagnostics.")))
 #+end_src
 
@@ -5489,9 +5491,21 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 #+end_src
 
 ** Config Changes Todos
+*** fix LSP!
+*** add evil-word-delete and evil-word-delete
+Maybe:
+
+~v~ - evil-word-delete
+~C-v~ - evil-WORD-delete
+~V~ - evil-word-delete-backwards
+~C-V~ - evil-WORD-delete-backwards
+*** make evil-word-delete functions add deletions to kill ring
 *** restclient.el and ob-restclient
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
+*** Add selection-previewing via library in Reddit
+*** add upcase-char (which is really upcase-next-char) to insert mode keybindings
+*** Get rid of template-collection
 *** fix magit digit-count bindings
 *** Put custom functions in :preface rather than :init
 *** look into popper for popup buffers
