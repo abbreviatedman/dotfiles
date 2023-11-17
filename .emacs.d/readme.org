@@ -2494,7 +2494,12 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
           dired-recursive-deletes 'always)
 
     (add-hook 'dired-mode-hook #'dired-omit-mode)
-    (add-hook 'dired-mode-hook #'dired-hide-details-mode))
+    (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+    :general
+    (:keymaps 'dired-mode-map
+     :states '(insert normal)
+     "C-M-u" nil))
 
   (use-package dired-single
     :general
