@@ -1032,7 +1032,9 @@ Before we get to the Evil mode setup, this is a small function I wrote to transp
 
 #+end_src
 
-A title-case operator!
+*** Working With Case Inside And Outside of Evil
+
+A custom title-case operator.
 
 #+name: evil-title-case-operator
 #+begin_src emacs-lisp :lexical yes
@@ -1049,6 +1051,15 @@ A title-case operator!
      "H" '(evil-title-case :which-key "Title-case operator.")))
 #+end_src
 
+And in Insert mode, let's bind the ~upcase-char~ command so I don't have to switch back to Normal mode to upcase the next character.
+
+#+name: insert-mode-upcase
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    ('insert
+     "C-~" #'upcase-char))
+#+end_src
 *** Evil Mode Setup
 
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using ~describe-variable~ to see what they do and what their possible values are!
@@ -5539,7 +5550,6 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
 *** Add selection-previewing via library in Reddit
-*** add upcase-char (which is really upcase-next-char) to insert mode keybindings
 *** Get rid of template-collection
 *** fix magit digit-count bindings
 *** Put custom functions in :preface rather than :init
