@@ -1060,6 +1060,7 @@ And in Insert mode, let's bind the ~upcase-char~ command so I don't have to swit
     ('insert
      "C-~" #'upcase-char))
 #+end_src
+
 *** Evil Mode Setup
 
 There are just a ton of variables here that finely set how Evil Mode is configured. Look at the definition of any of them using ~describe-variable~ to see what they do and what their possible values are!
@@ -5553,6 +5554,7 @@ But first, catalog the differences between o/x/a/W and see which ones you need.
 *** Get rid of template-collection
 *** fix magit digit-count bindings
 *** Put custom functions in :preface rather than :init
+*** fix persistent undo
 *** look into popper for popup buffers
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
