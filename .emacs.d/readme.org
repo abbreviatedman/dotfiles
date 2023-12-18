@@ -5192,9 +5192,6 @@ A great error-navigation library
 
     :hook (prog-mode . flymake-mode)
 
-    :config
-    (general-setq flymake-show-diagnostics-at-end-of-line t)
-
     :general
     (:keymaps 'normal
      "]e" '(flymake-goto-next-error
