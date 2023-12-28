@@ -21,7 +21,9 @@ exec --no-startup-id picom
 exec --no-startup-id syncthing -no-browser
 
 # Startup Programs
-exec emacs
+# no longer doing this because it was weirdly not idempotent on one machine
+# probably not doing it right in some way!
+# exec emacs
 
 # Set mod key (Mod1=<Alt>, Mod4=<Super>)
 set $mod Mod4
