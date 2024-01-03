@@ -21,7 +21,8 @@ exec --no-startup-id picom
 exec --no-startup-id syncthing -no-browser
 
 # Startup Programs
-# no longer doing this because it was weirdly not idempotent on one machine
+exec kitty
+# no longer using Emacs on startup because it was weirdly not idempotent on one machine
 # probably not doing it right in some way!
 # exec emacs
 
