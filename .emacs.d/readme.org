@@ -2616,12 +2616,180 @@ Dired is the fast and powerful file explorer in Emacs. Let's configure it! We'll
 
 *** Email with Mu4e
 
-#+name: disabled-mu4e-setup
-#+begin_src emacs-lisp :lexical yes :tangle no
+**** Intro
+Setting up email within Emacs can be... complicated. But worth it! Leveraging the power of Emacs in order to make email not horrible and maybe even Pretty Good is game-changing. Besides plugging email into the ecosystem of Emacs code, further multiplying everything by email and email by everything else, using your efficient, powerful, and /fun/ text editing paradigms in email makes writing emails effortless.
+
+There is a /lot/ more to configure here. Todos include:
+
+- HTML/Org translation
+- Opening messages in a browser if need be.
+- Opening links in browsers/eww.
+- Sending from Gmail accounts.
+
+  But! This basic setup appears to work.
+
+**** Setup
+
+We need the following software:
+
+***** Emacs (obviously)
+
+***** Mu4e
+
+Mu4e is Mail Utilities 4 Emacs, and includes Mail Utilities, or ~mu~.
+
+In this case, I've installed it from the Arch repos, which means I have to tell Emacs where to find it:
+
+#+name: mu4e-setup
+#+begin_src emacs-lisp :lexical yes
   (use-package emacs
     :init
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
     (require 'mu4e))
+#+end_src
+
+***** mbsync
+
+~mbsync~, also known as ~isync~, is for receiving mail.
+
+Honestly, I forget where I installed this from. Likely also from the Arch repos.
+
+It needs its own configuration file, below.
+
+The password evaluation line is likely overly complex, but it works. It's likely that I'd be better off without this security, but it's not /too/ bad to set up ~authinfo~ on a new machine.
+
+#+begin_src conf :tangle ~/.mbsyncrc
+  IMAPStore posteo-remote
+  Host posteo.de
+  Port 993
+  User abbreviatedman@posteo.net
+  PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.authinfo.gpg | awk '/machine posteo.de login abbreviatedman@posteo.net port 587 password/ {print $NF}'"
+  SSLType IMAPS
+  CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+  MaildirStore posteo-local
+  Path ~/.local/mail/posteo/abbreviatedman/
+  Inbox ~/.local/mail/posteo/abbreviatedman/INBOX
+  Subfolders Verbatim
+
+  Channel posteo
+  Far :posteo-remote:
+  Near :posteo-local:
+  Create Both
+  Expunge Both
+  Patterns *
+  SyncState *
+#+end_src
+
+***** MSMTP
+
+This is in charge of /sending/ email.
+
+I also forget where I got this one, and it's also likely from the Arch repos.
+
+Here's the configuration file for it, with the same overly complex password retrieval line.
+
+#+begin_src conf :tangle ~/.msmtprc
+  defaults
+  auth            on
+  protocol        smtp
+  tls_starttls    on
+  tls             on
+  tls_trust_file /etc/ssl/certs/ca-certificates.crt
+  logfile         ~/.msmtp.log
+
+  account         posteo
+  host            posteo.de
+  port            587
+  from            abbreviatedman@posteo.net
+  user            abbreviatedman@posteo.net
+  passwordeval  "gpg -q --for-your-eyes-only --no-tty -d ~/.authinfo.gpg | awk '/machine posteo.de login abbreviatedman@posteo.net port 587 password/ {print $NF}'"
+
+  account default : posteo
+#+end_src
+
+**** Configuring Mu4e
+
+***** Basic Config
+
+Now some user and server configuration. Some of this may be unnecessary—there's a whole host of people out there cobbling these configs together from each other, and throwing stuff at the wall until it works, so there's plenty of "maybe this will help?" lines in here.
+
+I will go through it all and remove unnecessary lines at some point!
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package mu4e)
+    :init
+  (setq send-mail-function #'smtpmail-send-it
+        message-send-mail-function 'message-send-mail-with-sendmail
+        message-sendmail-f-is-evil t
+        sendmail-program (executable-find "msmtp")
+        user-mail-address "abbreviatedman@posteo.net"
+        user-full-name "Colin Jaffe"
+        smtpmail-default-smtp-server "smtp.posteo.de"
+        smtpmail-smtp-server "posteo.de"
+        smtpmail-stream-type 'starttls
+        smtpmail-smtp-service 587
+        smtpmail-servers-requiring-authorization "*"
+        mu4e-get-mail-command "mbsync --all -c ~/.mbsyncrc"
+        smtpmail-smtp-user "abbreviatedman@posteo.net"
+        smtpmail-default-smtp-server "posteo.de"
+        smtpmail-smtp-service 587
+        smtpmail-use-gnutls t)
+#+end_src
+
+***** Directories
+
+Let's also set directories for where mail and attachments go. All directories need to exist already, and except for the attachment one, they're all subdirectories relative to the Path variable in the ~mbsyncrc~ file above.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package mu4e
+    :init
+    (setq mu4e-attachment-dir "~/Downloads"
+     mu4e-drafts-folder "/Drafts"
+     mu4e-trash-folder "/Trash"
+     mu4e-sent-folder "/Sent"))
+#+end_src
+
+***** A Mark-All-As-Read Command
+
+There are other minor adjustments I want to make, or previously made in earlier configs, but one change I cobbled together from somewhere that I needed to get in right away is a "mark all as read" command. It's just incredibly useful to do this with one key!
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package mu4e
+    :preface
+    (defun crj-mark-all-as-read ()
+      "Marks all visible messages as read.
+
+  Also updates the server to match."
+      (interactive)
+      (mu4e-headers-mark-for-each-if
+       '(read . nil)
+       (lambda (msg _param) t))
+      (mu4e-mark-execute-all t)
+      (mu4e-update-mail-and-index t))
+
+    :general
+    ('normal
+     :keymaps 'mu4e-headers-mode-map
+     "M" 'crj-mark-all-as-read))
+#+end_src
+
+***** HTML Messages
+
+Again, lots more needs to be added here (like viewing HTML messages in other browsers, or /writing/ HTML messages in Org format), but for now, this package is useful for sending HTML messages.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package org-mime)
+#+end_src
+
+***** Some Quality Of Life Improvements
+
+More to be added!
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package mu4e
+    :init
+    (setq mu4e-confirm-quit nil))
 #+end_src
 
 ** Text Editing
