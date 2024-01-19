@@ -2725,24 +2725,24 @@ Now some user and server configuration. Some of this may be unnecessary—there'
 I will go through it all and remove unnecessary lines at some point!
 
 #+begin_src emacs-lisp :lexical yes
-  (use-package mu4e)
+  (use-package mu4e
     :init
-  (setq send-mail-function #'smtpmail-send-it
-        message-send-mail-function 'message-send-mail-with-sendmail
-        message-sendmail-f-is-evil t
-        sendmail-program (executable-find "msmtp")
-        user-mail-address "abbreviatedman@posteo.net"
-        user-full-name "Colin Jaffe"
-        smtpmail-default-smtp-server "smtp.posteo.de"
-        smtpmail-smtp-server "posteo.de"
-        smtpmail-stream-type 'starttls
-        smtpmail-smtp-service 587
-        smtpmail-servers-requiring-authorization "*"
-        mu4e-get-mail-command "mbsync --all -c ~/.mbsyncrc"
-        smtpmail-smtp-user "abbreviatedman@posteo.net"
-        smtpmail-default-smtp-server "posteo.de"
-        smtpmail-smtp-service 587
-        smtpmail-use-gnutls t)
+    (setq send-mail-function #'smtpmail-send-it
+          message-send-mail-function 'message-send-mail-with-sendmail
+          message-sendmail-f-is-evil t
+          sendmail-program (executable-find "msmtp")
+          user-mail-address "abbreviatedman@posteo.net"
+          user-full-name "Colin Jaffe"
+          smtpmail-default-smtp-server "smtp.posteo.de"
+          smtpmail-smtp-server "posteo.de"
+          smtpmail-stream-type 'starttls
+          smtpmail-smtp-service 587
+          smtpmail-servers-requiring-authorization "*"
+          mu4e-get-mail-command "mbsync --all -c ~/.mbsyncrc"
+          smtpmail-smtp-user "abbreviatedman@posteo.net"
+          smtpmail-default-smtp-server "posteo.de"
+          smtpmail-smtp-service 587
+          smtpmail-use-gnutls t))
 #+end_src
 
 ***** Directories
