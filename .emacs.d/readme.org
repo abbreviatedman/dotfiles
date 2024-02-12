@@ -85,14 +85,14 @@ Let's install ~straight~.
 
 And turn off the built-in package manager. (This needs to go in ~early-init.el~, but I can tangle it to there from this document with a header arg, which you can see if you're looking at this document as a raw ~org-mode~ file. If that sounds like a whole thing, well... it's also not terribly important detail! But I included it anyway! Not sure why!)
 
-#+name: turn-off-package
+#+name: turn-off-package.el
 #+begin_src emacs-lisp :tangle early-init.el
 (setq package-enable-at-startup nil)
 #+end_src
 
 Use ~straight~ to install ~use-package~, with a quick tweak to add its declarations to ~imenu~.
 
-#+name: use-package-imenu-integration
+#+name: install-use-package
 #+begin_src emacs-lisp :lexical yes
   (setq use-package-enable-imenu-support t)
   (straight-use-package 'use-package)
@@ -121,7 +121,7 @@ Like many Vimmers, I eventually realized that the things I personally liked abou
 
 Before we even get to the keybindings themselves, let's set up a good Vimmish system here. ~general~ is a great system for setting up keybindings. It integrates very well with ~use-package~, ~evil~, and ~which-key~.
 
-We can use ~general-create-definer~ to define a pair of leader keys. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
+We can use ~general-create-definer~ to define a leader key. A leader key is a key you can press that begins a keybinding. We'll see some examples in a sec.
 
 #+name: define-leader-key
 #+begin_src emacs-lisp :lexical yes
@@ -144,16 +144,14 @@ We can now very easily define another level of keybinding. We want ~SPC f~ to ac
     (leader "f" '(:ignore t :which-key "Files Menu")))
 #+end_src
 
-From now on, when you press the user presses the spacebar (or ~M-SPC~) and then ~f~, they'll have access to any commands that follow. And when we put ~which-key~ in there momentarily, when they press ~SPC~ they'll get a menu that will show them that ~f~ leads to commands labeled "files", and if they press ~f~ they'll see a list of letters they can press next and the commands that each will activate.
+From now on, when the user presses the spacebar and then ~f~, they'll have access to any commands that follow. And when we put ~which-key~ in there momentarily, when they press ~SPC~ they'll get a menu that will show them that ~f~ leads to commands labeled "files", and if they press ~f~ they'll see a list of letters they can press next and the commands that each will activate.
 
 Let's define a few commands that open specific commonly accessed files as examples, and then bind them to keys using this system.
 
-#+name: commands-for-common-file-access
+#+name: commands-for-common-files
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
-    :init
-    (setq org-directory "~/org-stuff")
-
+    :preface
     (defun crj-open-literate-config-file ()
       "Open the literate config file in the user directory."
       (interactive)
@@ -168,6 +166,9 @@ Let's define a few commands that open specific commonly accessed files as exampl
       "Open the file used for quick notes."
       (interactive)
       (find-file (expand-file-name "quick-note.md" org-directory)))
+
+    :init
+    (setq org-directory "~/org-stuff")
 
     :general
     (leader
@@ -256,11 +257,7 @@ The following binds ~SPC f s~ to save a file. It's nice and mnemonic, as well as
     (leader "fs" '(save-buffer :which-key "Save current buffer.")))
 #+end_src
 
-The ~:prefix "SPC"~ tells ~general~ that this is a "leader key", a key that leads off a set of commands. ~:keymaps normal~ indicates that this is a command for "normal state"—which makes sense, because in a typing state like insert state, you want the spacebar to actually type a space! The next line, the ~"f"~ one, creates a sort of menu for further commands, which will (soon) include keybound commands that have to do with files (maybe copy and rename/move will go there, for example). The ~:which-key~ keyword in that and the following line, where we finally bind the ~save-buffer~ command, tells ~which-key~ (see the "Which Key" section below) how to label the menu and commands for discoverability.
-
-To see a good example of a menu with many commands in it, see the section on Helpful commands.
-
-You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's good not to bury it in a menu.
+You don't always have to have commands in a deep hierarchy of sections. Here is a simple-if-not-mnemonic ~SPC .~ for opening or creating a file. (And you can also launch ~dired~ with it!) This is such a common command that it's a good idea not to bury it in a menu.
 
 #+name: open-or-create-file-keybinding
 #+begin_src emacs-lisp :lexical yes
@@ -289,11 +286,12 @@ And adding some buffer commands, including some custom ones.
 #+name: common-buffer-command-keybindings
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
-    :init
+    :preface
     (defconst crj--immortal-buffer-names '("*scratch*"
                                            "#emacs"
                                            "*Messages*"
                                            shell-command-buffer-name shell-command-buffer-name-async))
+
     (defun crj-kill-or-bury-current-buffer ()
       "Kill the current buffer.
 
@@ -503,7 +501,7 @@ Any other programming language I've seen, this is a rare or non-existent case. I
 
 But Lisps are not most languages, and "rare or non-existent" cases are, instead, practically every line.
 
-Lisps - they're weird!™
+Lisps—they're weird!™
 
 #+name: enabling-fixed-pitch-in-certain-modes
 #+begin_src emacs-lisp :lexical yes
@@ -639,7 +637,7 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 *** File Management
 
-There will be more here someday, but for now, I got annoyed enough at the process for editing a file with elevated permissions needed, so:
+It's annoying when you edit a file, but when you go to save it, you realize you need to supply admin privileges. This is the perfect use case for having a keyboard shortcut—elevating Emacs to use sudo privileges without an easily memorized shortcut is a pain.
 
 #+name: edit-file-with-sudo-privileges
 #+begin_src emacs-lisp :lexical yes
@@ -647,6 +645,8 @@ There will be more here someday, but for now, I got annoyed enough at the proces
     :general
     (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
 #+end_src
+
+I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privileges, and the other is that when I'm told I can't save a file because of access privileges, I can say, "This is my machine and I can ~sudo~ all I want, so… F you!"
 
 *** Whitespace
 
@@ -1142,9 +1142,11 @@ I've reworked some of the ~evil-collection-unimpaired~ bindings to be a bit more
       "]e")
 
     (general-def '(normal visual motion) :prefix "["
+      "B" '(org-previous-block :which-key "Go to previous org block.")
       "m" '(evil-collection-unimpaired-move-text-up :which-key "Move text up.")
       "e" '(evil-collection-unimpaired-previous-error :which-key "Go to previous error."))
     (general-def '(normal visual motion) :prefix "]"
+      "B" '(org-next-block :which-key "Go to next org block.")
       "m" '(evil-collection-unimpaired-move-text-down :which-key "Move text down.")
       "e" '(evil-collection-unimpaired-next-error :which-key "Go to next error.")))
     #+end_src
@@ -5712,9 +5714,30 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 
 #+name: load-order
 #+begin_src emacs-lisp :lexical yes :tangle no
-  <<literate-config-setup>>
-  <<start-with-messages>>
-  <<package-system>>
+  <<lexical-binding>>
+  <<tangle-on-save>>
+  <<bootstrap-straight>>
+  <<turn-off-package.el>>
+  <<install-use-package>>
+  <<use-package-straight-integration>>
+  <<define-leader-key>>
+  <<add-files-menu>>
+  <<commands-for-opening-common-files>>
+  <<menus>>
+  <<file-saving-keybinding>>
+  <<open-or-create-file-keybinding>>
+  <<common-emacs-keybindings>>
+  <<common-buffer-command-keybindings>>
+  <<just-one-space-keybinding>>
+  <<which-key>>
+  <<font-values>>
+  <<fixed-pitch-modes>>
+  <<enabling-fixed-pitch-in-certain-modes>>
+  <<theme-setup>>
+  <<highlight-more-syntax>>
+  <<switch-to-messages>>
+  <<basic-ui-setup>>
+  <<edit-file-with-sudo-privileges>>
 #+end_src
 
 ** Config Changes Todos
