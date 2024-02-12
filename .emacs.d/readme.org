@@ -637,9 +637,7 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 *** File Management
 
-There will be more here someday, but for now:
-
-It's annoying when you edit a file, but when you go to save it, you realize you need to supply admin privileges. Elevating Emacs to use sudo privileges involves
+It's annoying when you edit a file, but when you go to save it, you realize you need to supply admin privileges. This is the perfect use case for having a keyboard shortcut—elevating Emacs to use sudo privileges without an easily memorized shortcut is a pain.
 
 #+name: edit-file-with-sudo-privileges
 #+begin_src emacs-lisp :lexical yes
@@ -647,6 +645,8 @@ It's annoying when you edit a file, but when you go to save it, you realize you 
     :general
     (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
 #+end_src
+
+I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privileges, and the other is that when I'm told I can't save a file because of access privileges, I can say, "This is my machine and I can ~sudo~ all I want, so… F you!"
 
 *** Whitespace
 
