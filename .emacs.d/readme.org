@@ -5737,6 +5737,7 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
   <<highlight-more-syntax>>
   <<switch-to-messages>>
   <<basic-ui-setup>>
+  <<edit-file-with-sudo-privileges>>
 #+end_src
 
 ** Config Changes Todos
