@@ -74,6 +74,7 @@ pop-kill-ring() {
 zle -N pop-kill-ring
 
 bindkey '\ey' pop-kill-ring
+bindkey -v
 
 # User configuration
 
