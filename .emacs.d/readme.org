@@ -207,6 +207,7 @@ Additionally, the help map is kind of special, as it has a good vanilla keybindi
       "w" '(evil-window-map :which-key "Window menu.")
       "m" '(:ignore t :which-key "Markup menu.")
       "mc" '(:ignore t :which-key "Markup clock menu.")
+      "ms" '(:ignore t :which-key "Markup source menu.")
       "i" '(:ignore t :which-key "Insert menu.")
       "ic" '(:ignore t :which-key "Insert cursor menu.")
       "l" '(:ignore t :which-key "Lisp menu.")
@@ -646,7 +647,7 @@ It's annoying when you edit a file, but when you go to save it, you realize you 
     (leader "fu" '(sudo-edit :which-key "Edit current file with sudo.")))
 #+end_src
 
-I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privileges, and the other is that when I'm told I can't save a file because of access privileges, I can say, "This is my machine and I can ~sudo~ all I want, so… F you!"
+I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privileges, and the other is that when I'm told I can't save a file because of access privileges, I can say, "This is my machine and I can ~sudo~ all I want, you jerk. FU."
 
 *** Whitespace
 
@@ -701,7 +702,9 @@ From there, I can use those to zoom in on all current buffers. These functions s
 
 #+name: custom-global-zoom-text-functions
 #+begin_src emacs-lisp :lexical yes
-  ;; I will add these eventually if I work further on the current-zoom-level-as-a-global-variable idea.
+  ;; I will add this part eventually if I work further on the
+  ;; current-zoom-level-as-a-global-variable idea.
+
   ;; (defvar current-text-scale 0)
   ;; (defun crj-match-new-buffer-to-current-text-scale ()
   ;;   (interactive)
@@ -4713,6 +4716,12 @@ Literate programming for fun and profit. Or... at least, for fun.
        ))
 
     :general
+    (leader
+      "msj" '(org-babel-next-src-block :which-key "Go to next source block")
+      "msk" '(org-babel-previous-src-block :which-key "Go to previous source block")
+      "msn" '(org-babel-next-src-block :which-key "Go to next source block")
+      "msp" '(org-babel-previous-src-block :which-key "Go to previous source block"))
+
     (:keymaps 'org-src-mode-map
      "C-c '" '(org-edit-src-exit :which-key "Finish editing source block.")
      "C-c c" '(org-edit-src-exit :which-key "Finish editing source block.")
