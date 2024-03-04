@@ -1972,6 +1972,37 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
       "aM C-r" '(eradio-play :which-key "Select radio station and play it.")))
 #+end_src
 
+*** Weather
+
+I check the weather frequently, so it's awfully nice to have it in Emacs.
+
+There are a few packages that do so, and I'm not super in love with any of them. Someday I may write my own. For now, this one will do!
+
+Only weird settings here are my (likely overly complex) list manipulation to get the default interface how I like it and defaulting to a non-Evil state.
+
+#+name: weather
+#+begin_src emacs-lisp :lexical yes
+  (use-package noaa
+    :init
+    (setq noaa-location "Brooklyn"
+          noaa-longitude -73.9
+          noaa-latitude 40.7)
+
+    :config
+    (evil-set-initial-state 'noaa-mode 'emacs)
+    (setq noaa-hourly-styles (reverse noaa-hourly-styles)
+          noaa-daily-styles (append (cdr noaa-daily-styles) (list (car noaa-daily-styles)))))
+#+end_src
+
+And let's get it into our Applications Menu!
+
+#+name: weather-app-bindings
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (leader "aw" '(noaa :which-key "Weather app.")))
+#+end_src
+
 *** RSS with Elfeed
 
 RSS might be a great technology? I'm only just getting into it with this package!
