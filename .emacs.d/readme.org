@@ -1990,8 +1990,8 @@ Only weird settings here are my (likely overly complex) list manipulation to get
 
     :config
     (evil-set-initial-state 'noaa-mode 'emacs)
-    (setq noaa-hourly-styles (reverse noaa-hourly-styles)
-          noaa-daily-styles (append (cdr noaa-daily-styles) (list (car noaa-daily-styles)))))
+    (setq noaa-hourly-styles (cdr noaa-hourly-styles)
+          noaa-daily-styles (cdr noaa-daily-styles)))
 #+end_src
 
 And let's get it into our Applications Menu!
