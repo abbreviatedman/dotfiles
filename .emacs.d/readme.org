@@ -5703,11 +5703,11 @@ Modeline is in pretty good shape, and hopefully I don't futz with it more.
 
 I've:
 
-- Removed most of the minor modes from showing up using Diminish, added way higher up there.
+- Removed many of the minor modes from showing up using Diminish, added way higher up there.
 - Configured what else shows up and doesn't with the ~crj--modeline-r-format~ variable below. Check the docstring of the variables it uses to learn what I've done.
 - Hacked the LSP info so it doesn't constantly report on lag, which is honestly more distracting than LSP lag itself. See the Eglot section for how I did this.
 - Merged the modeline and the minibuffer using the excellent Mini Modeline package. This gets you back some substantial screen estate, especially since the modeline is now on just the frame, not each individual window.
-- Merging with the minibuffer /also/ means that when you change the format to have no info, you're really hiding the modeline entirely. I do that by default, but I can toggle it back on if I need to.
+- Merging with the minibuffer /also/ means that when you change the format to have no info, you're really hiding the modeline entirely. I like the modeline, but sometimes I find it distracting.
 
 #+name: move-modeline-into-echo-area
 #+begin_src emacs-lisp :lexical yes
@@ -5750,14 +5750,8 @@ I've:
         (crj--turn-on-modeline)))
 
     :init
-    (setq mini-modeline-face-attr nil)
-
-    (setq mini-modeline-r-format crj--modeline-r-on-format)
-
-    :init
-    (general-setq mini-modeline-face-attr nil
-                  mini-modeline-r-format crj--modeline-r-on-format)
-
+    (general-setq mini-modeline-face-attr nil)
+    (crj--turn-on-modeline)
     (mini-modeline-mode t)
 
     :general
