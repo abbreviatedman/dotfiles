@@ -1981,9 +1981,9 @@ There are a few packages that do so, and I'm not super in love with any of them.
 Only settings here are:
 
 - setting a default location
-- removing the default display verbosities (I always want more than the highs and lows)
 - defaulting to a non-Evil state
 - choosing more legible text colors
+- removing the default display verbosity levels (I always want more than just the highs and lows)
 
 #+name: weather
 #+begin_src emacs-lisp :lexical yes
