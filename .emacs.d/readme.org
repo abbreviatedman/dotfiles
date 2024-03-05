@@ -1974,15 +1974,15 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
 
 *** Weather
 
-I check the weather frequently, so it's awfully nice to have it in Emacs.
+Weather is a perfect example of something that I check only maybe a couple times a day but is still worth having in Emacs. This allows me to pull it up and dismiss it effortlessly without missing a beat of what I'm currently doing. Plus, any time you can do a task /without/ switching to a browser or smartphone and hitting up a proprietary, ad-supported, privacy-invading monster, you should do that.
 
-There are a few packages that do so, and I'm not super in love with any of them. Someday I may write my own. For now, this one will do!
+There are a few packages that display weather forecasts in Emacs, but the ~noaa~ package can be easily configured to display all the info I want and only the info I want, and the API it his to get the data doesn't require a key.
 
 Only settings here are:
 
 - setting a default location
-- defaulting to a non-Evil state
-- choosing more legible text colors
+- defaulting to a non-Evil state to simplify using the interface
+- choosing more legible text colors for the weather display
 - removing the default display verbosity levels (I always want more than just the highs and lows)
 
 #+name: weather
