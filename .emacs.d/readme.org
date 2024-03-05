@@ -1978,15 +1978,30 @@ I check the weather frequently, so it's awfully nice to have it in Emacs.
 
 There are a few packages that do so, and I'm not super in love with any of them. Someday I may write my own. For now, this one will do!
 
-Only weird settings here are my (likely overly complex) list manipulation to get the default interface how I like it and defaulting to a non-Evil state.
+Only settings here are:
+
+- setting a default location
+- removing the default display verbosities (I always want more than the highs and lows)
+- defaulting to a non-Evil state
+- choosing more legible text colors
 
 #+name: weather
 #+begin_src emacs-lisp :lexical yes
   (use-package noaa
+    :preface
+    (defun crj--set-up-noaa-faces ()
+      (face-remap-add-relative 'noaa-face-short-forecast '(:inherit default))
+      (face-remap-add-relative 'noaa-face-temp
+                               `(:foreground ,(modus-themes-get-color-value 'blue-warmer t)))
+      (face-remap-add-relative 'noaa-face-date
+                               `(:foreground ,(modus-themes-get-color-value 'magenta-warmer t))))
+
     :init
     (setq noaa-location "Brooklyn"
           noaa-longitude -73.9
           noaa-latitude 40.7)
+
+    (add-hook 'noaa-mode-hook 'crj--set-up-noaa-faces)
 
     :config
     (evil-set-initial-state 'noaa-mode 'emacs)
