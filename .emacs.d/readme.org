@@ -2329,6 +2329,9 @@ So you can wish everyone would leave you alone, but /within Emacs/.
   (use-package calfw)
 
   (use-package calfw-org
+    :init
+    (setq cfw:org-agenda-schedule-args '(:deadline))
+
     :general
     (:keymaps 'cfw:org-schedule-map "RET" #'cfw:org-open-agenda-day)
 
