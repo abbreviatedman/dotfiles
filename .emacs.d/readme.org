@@ -2839,10 +2839,21 @@ There are other minor adjustments I want to make, or previously made in earlier 
 
 ***** HTML Messages
 
-Again, lots more needs to be added here (like viewing HTML messages in other browsers, or /writing/ HTML messages in Org format), but for now, this package is useful for sending HTML messages.
+Receiving and writing HTML messages!
 
 #+begin_src emacs-lisp :lexical yes
   (use-package org-mime)
+
+  (use-package org-msg
+    :init
+    (setq mail-user-agent 'mu4e-user-agent
+          org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
+          org-msg-startup "hidestars indent inlineimages"
+          org-msg-default-alternatives '((new text html)
+                                         (reply-to-html text html)
+                                         (reply-to-text text))
+          org-msg-convert-citation t)
+    (org-msg-mode))
 #+end_src
 
 ***** Some Quality Of Life Improvements
