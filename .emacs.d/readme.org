@@ -5808,16 +5808,56 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 #+end_src
 
 ** Config Changes Todos
+*** clean up config file and add better commentary
+*** ace link
+*** Look through EFS code still in here
+*** Look through Doom Emacs module code
+*** switch to Emacs 29
+new features to check out once you do:
+
+- built-in treesitter, use-package, eglot, and sqlite
+- built-in vc-use-package as a stripped down straight—probably keep using straight, though
+- switch init directories
+- improved help window bindings
+- pixel-scroll-precision-mode
+- new build options
+- better executable script settings
+- better Eshell over TRAMP
+- C-d will delete whole graphemes (i.e., emojis or other composite characters)
+- better handling of long lines
+- global font-size modification... maybe can get rid of my custom version! (or not if it can't handle the different fonts)
+- new bindings for find-library (??), which apparently already exists you can bind with (find-function-setup-keys)... actually it seems pretty useful!
+- new way to toggle between M-x and M-X, which seems pretty awesome
+- rename-visited-file!
+- delete-process
+- restart-emacs
+- set-message-functions for inhibiting messages
+- better emoji insertion!
+- help-window-keep-selected
+- help-quick keyboard cheatsheet
+- undelete-frame-mode!
+- highlight-confusing-reorderings
+- cycle-spacing for a more powerful just-one-space
+- show-paren-context-when-offscreen!
+- cusotmizable dired-omit-lines
+- elisp-eval-region-or-buffer!
+- scratch-buffer
+- char-fold options, which might work with evil search, and allow you to... search for similar characters?
+- proced-enable-color-flag!
+- string-edit (for elisp functions/packages)
+- define-key removal!
+- keymap-set commands!
+*** and upgrade packages
 *** fix LSP!
 *** make evil-word-delete functions add deletions to kill ring
 *** restclient.el and ob-restclient
 *** add regular evil-WORD to text objects, maybe on o or O
 But first, catalog the differences between o/x/a/W and see which ones you need.
+*** fix persistent undo
+*** fix magit digit-count bindings
 *** Add selection-previewing via library in Reddit
 *** Get rid of template-collection
-*** fix magit digit-count bindings
 *** Put custom functions in :preface rather than :init
-*** fix persistent undo
 *** look into popper for popup buffers
 *** override C-/ in ChatGPT and POSSIBLY C-k/C-u in Slack and (more likely since it's less useful) C-k in ChatGPT
 
@@ -5840,7 +5880,6 @@ Could have:
 *** also possibly changing backend and thinking about camelCase corrections
 But probably not, since there are better ways to avoid typos in programming languages than a spellchecker!
 *** learn debugger
-*** clean up config file and add better commentary
 *** understand jump list better
 *** configure hippie-expand
 *** check org mode setups from other evil configs
@@ -5905,42 +5944,6 @@ Some code and docs to start with from Emacs From Scratch:
 *** explore hippie-expand
 *** add general's tools like gsetq and general-add-hook to clean up my config code
 *** add filename cape to capfs
-*** switch to Emacs 29
-new features to check out once you do:
-
-- built-in treesitter, use-package, eglot, and sqlite
-- built-in vc-use-package as a stripped down straight—probably keep using straight, though
-- switch init directories
-- improved help window bindings
-- pixel-scroll-precision-mode
-- new build options
-- better executable script settings
-- better Eshell over TRAMP
-- C-d will delete whole graphemes (i.e., emojis or other composite characters)
-- better handling of long lines
-- global font-size modification... maybe can get rid of my custom version! (or not if it can't handle the different fonts)
-- new bindings for find-library (??), which apparently already exists you can bind with (find-function-setup-keys)... actually it seems pretty useful!
-- new way to toggle between M-x and M-X, which seems pretty awesome
-- rename-visited-file!
-- delete-process
-- restart-emacs
-- set-message-functions for inhibiting messages
-- better emoji insertion!
-- help-window-keep-selected
-- help-quick keyboard cheatsheet
-- undelete-frame-mode!
-- highlight-confusing-reorderings
-- cycle-spacing for a more powerful just-one-space
-- show-paren-context-when-offscreen!
-- cusotmizable dired-omit-lines
-- elisp-eval-region-or-buffer!
-- scratch-buffer
-- char-fold options, which might work with evil search, and allow you to... search for similar characters?
-- proced-enable-color-flag!
-- string-edit (for elisp functions/packages)
-- define-key removal!
-- keymap-set commands!
-
 *** think about putting the minibuffer selection at the top (mini-frame-mode)
 *** check out desktop-save-mode
 *** try Combobulate
@@ -6155,7 +6158,6 @@ Some code that might help:
     ;; https://github.com/WJCFerguson/textsize/
 #+end_src
 
-*** add way to run other Emacs with same init directory to check our init... maybe starting a different server, or a serverless Emacs?
 *** shortcut to toggle eldoc-mode
 
 *** make sure tabs are set correctly
@@ -6404,8 +6406,6 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
 
 *** evil show ex digraphs
 
-*** ace link
-
 *** file management
 
 #+begin_src emacs-lisp :lexical yes :tangle no
@@ -6504,12 +6504,6 @@ Some old code to revisit and maybe put back into play!
 
   (setq doom-scratch-dir "~/Documents/work/playground/")
 #+end_src
-
-*** mu4e
-
-*** Emacs as $EDITOR
-
-And ~e~ in any terminal should open file in Emacs buffer.
 
 *** Better window management
 
