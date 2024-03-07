@@ -4562,6 +4562,11 @@ Some Evil keybindings for handling scheduling. Although I got used to the built-
 #+begin_src emacs-lisp :lexical yes
   (use-package org
     :general
+    (:keymaps 'org-mode-map
+     :states '(normal insert)
+     "C-M-k" #'org-timestamp-up-day
+     "C-M-j" #'org-timestamp-down-day)
+
     (leader
       "mcs" '(org-schedule :which-key "Add schedule to headline.")
       "mcd" '(org-deadline :which-key "Add deadline to headline.")
