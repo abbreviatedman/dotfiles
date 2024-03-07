@@ -4566,10 +4566,10 @@ Some Evil keybindings for handling scheduling. Although I got used to the built-
       "mcs" '(org-schedule :which-key "Add schedule to headline.")
       "mcd" '(org-deadline :which-key "Add deadline to headline.")
       "mct" '(org-timestamp :which-key "Add timestamp to headline.")
-      "mck" '(org-timestamp-up :which-key "Increment timestamp portion at point.")
-      "mcj" '(org-timestamp-down :which-key "Decrement timestamp portion at point.")
-      "mcK" '(org-timestamp-up-day :which-key "Increment timestamp day portion.")
-      "mcJ" '(org-timestamp-down-day :which-key "Decrement timestamp day portion.")))
+      "mcK" '(org-timestamp-up :which-key "Increment timestamp portion at point.")
+      "mcJ" '(org-timestamp-down :which-key "Decrement timestamp portion at point.")
+      "mck" '(org-timestamp-up-day :which-key "Increment timestamp day portion.")
+      "mcj" '(org-timestamp-down-day :which-key "Decrement timestamp day portion.")))
 #+end_src
 
 ***** Searching Org Documents
