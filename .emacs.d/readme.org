@@ -5649,7 +5649,7 @@ A few more additions to the help menu:
       "F" '(describe-face :which-key "Describe face.")
       "k" '(helpful-key :which-key "Describe key.")
       "x" '(helpful-command :which-key "Describe command.")
-      "W" '(woman :which-key "Search for manual page.")
+      "W" '(consult-man :which-key "Search for manual page.")
       "g" '(customize-group :which-key "Search for customize group.")
       "m" '(consult-minor-mode-menu :which-key "Search through minor modes.")
       "M" '(describe-mode :which-key "Describe currently active modes."))
