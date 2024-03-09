@@ -668,7 +668,7 @@ The big picture here is a workflow in which you can either:
 
   But if you're opening the file tree for the first time, or switching projects, you would want a new file tree, which is what the first option is for.
 
-  The rest of this is some helpful functions (mostly from Doom) and some nice mappings (also mostly from Doom).
+  The rest of this is some helpful functions (mostly from Doom) and some nice keyboard shortcuts (also mostly from Doom).
 
   All for a feature I rarely use.
 
