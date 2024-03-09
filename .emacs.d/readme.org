@@ -653,7 +653,7 @@ I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privi
 
 **** File Tree
 
-Emacs users tend not to use a file tree, since we have Dired (under Applications in this file, since it really is a full app itself), which does the same thing plus a /lot/ more, without taking up screen estate. We also tend to use searches and completion to search files. In general, Emacs users would rather have something they can pull up and dismiss than something like a file tree, which tends to stick around and take up screen estate.
+Emacs users tend not to use a file tree, regarding it as an anti-pattern, an archaic idiom we have better and more modern phrases for. Emacs users would rather use something they can do real file-system work in, like Dired, or something that gets them the file they want unobtrusively and quickly, like searching for file names with powerful completion. A file tree is neither powerful nor fast, and it tends to stick around taking up screen estate long after you're using it if you're not mindful.
 
 Still, /occasionally/ I want to get a really quick overview of the file system, or switch files in a way that's easier for an onlooker to follow. In those cases, I use Neotree, configured here.
 
