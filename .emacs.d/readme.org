@@ -652,6 +652,109 @@ It's annoying when you edit a file, but when you go to save it, you realize you 
 I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privileges, and the other is that when I'm told I can't save a file because of access privileges, I can say, "This is my machine and I can ~sudo~ all I want, you jerk. FU."
 
 **** File Tree
+
+Emacs users tend not to use a file tree, since we have Dired (under Applications in this file, since it really is a full app itself), which does the same thing plus a /lot/ more. We also tend to use searches and completion to search files.
+
+Still, /occasionally/ I want to get a really quick overview of the file tree, or switch files in a way that's easier for an onlooker to follow. In those cases, I use Neotree.
+
+Currently, most of these Neotree configurations are via the fantastic Doom Emacs module for it. I'll be paring this down soon, though.
+
+I also added a quick hack to quit Neotree after opening a file or directory.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package neotree
+    :preface
+    (defun crj-open-item-and-close-neotree (&optional arg)
+      "Open an item and close Neotree.
+
+  This is just Neotree's open-item command, copy-and-pasted and followed by a call to `neotree-hide'.
+
+  Their command /ought/ to be able to be advised or wrapped, but I had to hack it because they made it a closure.
+
+  Jerks.
+
+  (Who made and maintain a fantastic file tree package.) "
+      (interactive " P")
+      (neo-global--select-window)
+      (neo-buffer--execute arg 'neo-open-file 'neo-open-dir)
+      (neotree-hide))
+
+    :commands
+    (neotree-show
+     neotree-hide
+     neotree-toggle
+     neotree-dir
+     neotree-find
+     neo-global--with-buffer
+     neo-global--window-exists-p)
+
+    :init
+    (general-setq neo-create-file-auto-open nil
+                  neo-auto-indent-point nil
+                  neo-autorefresh nil
+                  neo-mode-line-type 'none
+                  neo-window-width 30
+                  neo-show-updir-line nil
+                  neo-theme 'icons
+                  neo-banner-message nil
+                  neo-confirm-create-file #'off-p
+                  neo-confirm-create-directory #'off-p
+                  neo-show-hidden-files nil
+                  neo-keymap-style 'concise
+                  neo-show-hidden-files t
+                  neo-hidden-regexp-list
+                  '(;; vcs folders
+                    "^\\.\\(?:git\\|hg\\|svn\\)$"
+                    ;; compiled files
+                    "\\.\\(?:pyc\\|o\\|elc\\|lock\\|css.map\\|class\\)$"
+                    ;; generated files, caches or local pkgs
+                    "^\\(?:node_modules\\|vendor\\|.\\(project\\|cask\\|yardoc\\|sass-cache\\)\\)$"
+                    ;; org-mode folders
+                    "^\\.\\(?:sync\\|export\\|attach\\)$"
+                    ;; temp files
+                    "~$"
+                    "^#.*#$"))
+
+    ;; The cursor always sits at bol. The following two Doom Emacs functions are
+    ;; for changing that behavior so that the cursor is always on the first
+    ;; non-blank character on the line. these are not currently active, but I will
+    ;; be adapting them for a vanilla config soon.
+    ;; (add-hook! 'neo-enter-hook
+    ;;            (defun +neotree-fix-cursor-h (&rest _)
+    ;;              (with-current-buffer neo-global--buffer
+    ;;                (+neotree--indent-cursor-a))))
+
+    ;; (defadvice! +neotree--indent-cursor-a (&rest _)
+    ;;   :after '(neotree-next-line neotree-previous-line)
+    ;;   (beginning-of-line)
+    ;;   (skip-chars-forward " \t\r"))
+
+    :general
+    (leader "fT" '(neotree-toggle :which-key "Toggle file tree."))
+    (:states 'normal :keymaps 'neotree-mode-map
+      "RET" #'crj-open-item-and-close-neotree)
+    ;; last todo here: convert these key bindings to use :general, then see if you
+    ;; like them.
+    ;; (map! :map neotree-mode-map
+    ;;       :n [tab] (neotree-make-executor
+    ;;                 :dir-fn  #'neo-open-dir
+    ;;                 :file-fn #'neotree-quick-look)
+    ;;       :n "DEL" #'evil-window-prev
+    ;;       :n "n"   #'neotree-next-line
+    ;;       :n "p"   #'neotree-previous-line
+    ;;       :m "h"   #'+neotree/collapse-or-up
+    ;;       :m "l"   #'+neotree/expand-or-open
+    ;;       :n "J"   #'neotree-select-next-sibling-node
+    ;;       :n "K"   #'neotree-select-previous-sibling-node
+    ;;       :n "H"   #'neotree-select-up-node
+    ;;       :n "L"   #'neotree-select-down-node
+    ;;       :n "G"   #'evil-goto-line
+    ;;       :n "gg"  #'evil-goto-first-line
+    ;;       :n "v"   (neotree-make-executor :file-fn 'neo-open-file-vertical-split)
+    ;;       :n "s"   (neotree-make-executor :file-fn 'neo-open-file-horizontal-split))
+    )
+#+end_src
+
 *** Whitespace
 
 Let's visualize it in prog mode so we get rid of it.
