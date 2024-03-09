@@ -657,9 +657,22 @@ Emacs users tend not to use a file tree, since we have Dired (under Applications
 
 Still, /occasionally/ I want to get a really quick overview of the file tree, or switch files in a way that's easier for an onlooker to follow. In those cases, I use Neotree.
 
-Currently, most of these Neotree configurations are via the fantastic Doom Emacs module for it. I'll be paring this down soon, though.
+Much of this config comes from the fantastic Doom Emacs module for Neotree. I've pared it down, translated some to more a Vanilla config, and added some configuration elements of my own.
 
-I also added a quick hack to quit Neotree after opening a file or directory.
+The big picture here is a workflow in which you can either:
+
+- Find the current file in the file tree.
+- Or simply toggle the file tree off and on.
+
+  Most of the time you'll do the latter, toggling it off and on for a project, either to get a big-picture view of the current project's layout, or for on-lookers to watch you switch files to follow along.
+
+  But if you're opening the file tree for the first time, or switching projects, you would want a new file tree, which is what the first option is for.
+
+  The rest of this is some helpful functions (mostly from Doom) and some nice mappings (also mostly from Doom).
+
+  All for a feature I rarely use.
+
+  Emacs!
 
 #+begin_src emacs-lisp :lexical yes
   (use-package neotree
