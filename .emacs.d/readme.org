@@ -653,18 +653,18 @@ I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privi
 
 **** File Tree
 
-Emacs users tend not to use a file tree, since we have Dired (under Applications in this file, since it really is a full app itself), which does the same thing plus a /lot/ more. We also tend to use searches and completion to search files.
+Emacs users tend not to use a file tree, since we have Dired (under Applications in this file, since it really is a full app itself), which does the same thing plus a /lot/ more, without taking up screen estate. We also tend to use searches and completion to search files. In general, Emacs users would rather have something they can pull up and dismiss than something like a file tree, which tends to stick around and take up screen estate.
 
-Still, /occasionally/ I want to get a really quick overview of the file tree, or switch files in a way that's easier for an onlooker to follow. In those cases, I use Neotree.
+Still, /occasionally/ I want to get a really quick overview of the file system, or switch files in a way that's easier for an onlooker to follow. In those cases, I use Neotree, configured here.
 
-Much of this config comes from the fantastic Doom Emacs module for Neotree. I've pared it down, translated some to more a Vanilla config, and added some configuration elements of my own.
+Much of this config comes from the fantastic Doom Emacs module for Neotree. I've pared it down, translated some Doom-specific references to a more vanilla-Emacs config, and added some configuration elements of my own.
 
 The big picture here is a workflow in which you can either:
 
 - Find the current file in the file tree.
 - Or simply toggle the file tree off and on.
 
-  Most of the time you'll do the latter, toggling it off and on for a project, either to get a big-picture view of the current project's layout, or for on-lookers to watch you switch files to follow along.
+  Most of the time you'll do the latter, toggling it off and on for a project, either to get a big-picture view of the current project's layout for yourself or to give on-lookers a way to follow along.
 
   But if you're opening the file tree for the first time, or switching projects, you would want a new file tree, which is what the first option is for.
 
