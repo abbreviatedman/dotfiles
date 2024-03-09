@@ -673,11 +673,70 @@ I also added a quick hack to quit Neotree after opening a file or directory.
 
   Jerks.
 
-  (Who made and maintain a fantastic file tree package.) "
+  (Who made and maintain a fantastic file tree package.)"
       (interactive " P")
       (neo-global--select-window)
       (neo-buffer--execute arg 'neo-open-file 'neo-open-dir)
       (neotree-hide))
+
+    (defun doom-neotree-find-this-file ()
+      "Open the neotree window in the current project, and find the current file.
+
+  This command was lifted from Doom Emacs and modified for a vanilla config."
+      (interactive)
+      (let* ((path buffer-file-name)
+             (project (project-current nil))
+             (root (if project (project-root project)
+                     default-directory)))
+        (cond ((and (neo-global--window-exists-p)
+                    (get-buffer-window neo-buffer-name t))
+               (neotree-find path root)
+               (neotree-refresh))
+              ((not (and (neo-global--window-exists-p)
+                         (equal (file-truename (neo-global--with-buffer neo-buffer--start-node))
+                                (file-truename root))))
+               (neotree-dir root)
+               (neotree-find path root))
+              (t
+               (neotree-find path root)))))
+
+    (defun doom-neotree-collapse-or-up ()
+      "Collapse an expanded directory node or go to the parent node.
+
+  This command was taken from Doom Emacs' Neotree module and merely renamed."
+      (interactive)
+      (when-let (node (neo-buffer--get-filename-current-line))
+        (if (and (file-directory-p node)
+                 (neo-buffer--expanded-node-p node))
+            (doom-neotree--collapse)
+          (neotree-select-up-node))))
+
+    (defun doom-neotree--collapse ()
+      "Collapse a neotree node.
+
+  This function was taken from Doom Emacs' Neotree module and merely renamed."
+      (interactive)
+      (when-let (node (neo-buffer--get-filename-current-line))
+        (when (file-directory-p node)
+          (neo-buffer--set-expand node nil)
+          (neo-buffer--refresh t))
+        (when neo-auto-indent-point
+          (neo-point-auto-indent))))
+
+    (defun doom-neotree-expand-or-open ()
+      "Expand or open a neotree node.
+
+  This command was taken from Doom Emacs' Neotree module and merely renamed."
+      (interactive)
+      (when-let (node (neo-buffer--get-filename-current-line))
+        (cond ((file-directory-p node)
+               (neo-buffer--set-expand node t)
+               (neo-buffer--refresh t)
+               (when neo-auto-indent-point
+                 (forward-line)
+                 (neo-point-auto-indent)))
+              (t
+               (call-interactively #'neotree-enter)))))
 
     :commands
     (neotree-show
@@ -689,19 +748,15 @@ I also added a quick hack to quit Neotree after opening a file or directory.
      neo-global--window-exists-p)
 
     :init
-    (general-setq neo-create-file-auto-open nil
-                  neo-auto-indent-point nil
-                  neo-autorefresh nil
+    (general-setq neo-autorefresh t
                   neo-mode-line-type 'none
                   neo-window-width 30
                   neo-show-updir-line nil
                   neo-theme 'icons
-                  neo-banner-message nil
                   neo-confirm-create-file #'off-p
                   neo-confirm-create-directory #'off-p
                   neo-show-hidden-files nil
                   neo-keymap-style 'concise
-                  neo-show-hidden-files t
                   neo-hidden-regexp-list
                   '(;; vcs folders
                     "^\\.\\(?:git\\|hg\\|svn\\)$"
@@ -715,44 +770,27 @@ I also added a quick hack to quit Neotree after opening a file or directory.
                     "~$"
                     "^#.*#$"))
 
-    ;; The cursor always sits at bol. The following two Doom Emacs functions are
-    ;; for changing that behavior so that the cursor is always on the first
-    ;; non-blank character on the line. these are not currently active, but I will
-    ;; be adapting them for a vanilla config soon.
-    ;; (add-hook! 'neo-enter-hook
-    ;;            (defun +neotree-fix-cursor-h (&rest _)
-    ;;              (with-current-buffer neo-global--buffer
-    ;;                (+neotree--indent-cursor-a))))
-
-    ;; (defadvice! +neotree--indent-cursor-a (&rest _)
-    ;;   :after '(neotree-next-line neotree-previous-line)
-    ;;   (beginning-of-line)
-    ;;   (skip-chars-forward " \t\r"))
-
     :general
-    (leader "fT" '(neotree-toggle :which-key "Toggle file tree."))
+    (leader
+      "tf" '(neotree-toggle :which-key "Toggle file tree.")
+      "fT" '(doom-neotree-find-this-file :which-key "Open current file in file tree view."))
     (:states 'normal :keymaps 'neotree-mode-map
-      "RET" #'crj-open-item-and-close-neotree)
-    ;; last todo here: convert these key bindings to use :general, then see if you
-    ;; like them.
-    ;; (map! :map neotree-mode-map
-    ;;       :n [tab] (neotree-make-executor
-    ;;                 :dir-fn  #'neo-open-dir
-    ;;                 :file-fn #'neotree-quick-look)
-    ;;       :n "DEL" #'evil-window-prev
-    ;;       :n "n"   #'neotree-next-line
-    ;;       :n "p"   #'neotree-previous-line
-    ;;       :m "h"   #'+neotree/collapse-or-up
-    ;;       :m "l"   #'+neotree/expand-or-open
-    ;;       :n "J"   #'neotree-select-next-sibling-node
-    ;;       :n "K"   #'neotree-select-previous-sibling-node
-    ;;       :n "H"   #'neotree-select-up-node
-    ;;       :n "L"   #'neotree-select-down-node
-    ;;       :n "G"   #'evil-goto-line
-    ;;       :n "gg"  #'evil-goto-first-line
-    ;;       :n "v"   (neotree-make-executor :file-fn 'neo-open-file-vertical-split)
-    ;;       :n "s"   (neotree-make-executor :file-fn 'neo-open-file-horizontal-split))
-    )
+     "RET" #'crj-open-item-and-close-neotree
+     [tab] (neotree-make-executor
+             :dir-fn #'neo-open-dir
+             :file-fn #'neotree-quick-look)
+      "DEL" #'evil-window-prev
+      "n" #'neotree-next-line
+      "p" #'neotree-previous-line
+      "h" #'doom-neotree-collapse-or-up
+      "l" #'doom-neotree-expand-or-open
+      "J" #'neotree-select-next-sibling-node
+      "K" #'neotree-select-previous-sibling-node
+      "H" #'neotree-select-up-node
+      "L" #'neotree-select-down-node
+      "G" #'evil-goto-line
+      "gg" #'evil-goto-first-line
+      "v" (neotree-make-executor :file-fn 'neo-open-file-vertical-split)))
 #+end_src
 
 *** Whitespace
