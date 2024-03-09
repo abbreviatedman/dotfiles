@@ -672,7 +672,7 @@ The big picture here is a workflow in which you can either:
 
   All for a feature I rarely use.
 
-  Emacs!
+  Emacsing!
 
 #+begin_src emacs-lisp :lexical yes
   (use-package neotree
