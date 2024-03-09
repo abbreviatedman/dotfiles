@@ -638,6 +638,8 @@ If you're just getting started in Emacs, the menu bar might be helpful so you ca
 
 *** File Management
 
+**** Sudo Privileges
+
 It's annoying when you edit a file, but when you go to save it, you realize you need to supply admin privileges. This is the perfect use case for having a keyboard shortcut—elevating Emacs to use sudo privileges without an easily memorized shortcut is a pain.
 
 #+name: edit-file-with-sudo-privileges
@@ -649,6 +651,7 @@ It's annoying when you edit a file, but when you go to save it, you realize you 
 
 I remember the ~SPC-f-u~ shortcut two ways: one is that it's (f)ile (u)ser privileges, and the other is that when I'm told I can't save a file because of access privileges, I can say, "This is my machine and I can ~sudo~ all I want, you jerk. FU."
 
+**** File Tree
 *** Whitespace
 
 Let's visualize it in prog mode so we get rid of it.
