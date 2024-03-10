@@ -1904,7 +1904,9 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
     :general
     ([remap save-buffers-kill-terminal] #'save-buffers-kill-emacs)
 
-    (leader "qq" '(save-buffers-kill-emacs :which-key "Quit emacs.")))
+    (leader
+      "qq" '(save-buffers-kill-emacs :which-key "Quit Emacs.")
+      "qr" '(restart-emacs :which-key "Restart Emacs.")))
 #+end_src
 
 *** Minibuffers
