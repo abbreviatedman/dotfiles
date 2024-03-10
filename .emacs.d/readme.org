@@ -3865,6 +3865,8 @@ I'm also adding many Symex commands—again, avoiding shadowing most Evil bindin
 
 #+name: evil-lisp-editing-setup
 #+begin_src emacs-lisp :lexical yes
+  (use-package symex)
+
   (use-package lispy
     :diminish
 
