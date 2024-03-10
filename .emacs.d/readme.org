@@ -5976,7 +5976,7 @@ This is a list of noweb references with a preliminary load order. Eventually I'l
 *** ace link
 *** Look through EFS code still in here
 *** Look through Doom Emacs module code
-*** switch to Emacs 29
+*** DONE switch to Emacs 29
 new features to check out once you do:
 
 - built-in treesitter, use-package, eglot, and sqlite
