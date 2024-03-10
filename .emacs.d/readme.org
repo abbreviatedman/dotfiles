@@ -6011,6 +6011,14 @@ new features to check out once you do:
 - string-edit (for elisp functions/packages)
 - define-key removal!
 - keymap-set commands!
+*** Add alternate init directory with:
+- Evil
+- Vertico
+- Consult
+- Orderless
+- Corfu
+- Elisp Setup
+- Org-Babel
 *** and upgrade packages
 *** fix LSP!
 *** make evil-word-delete functions add deletions to kill ring
