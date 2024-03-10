@@ -789,9 +789,10 @@ The big picture here is a workflow in which you can either:
       "fT" '(doom-neotree-find-this-file :which-key "Open current file in file tree view."))
     (:states 'normal :keymaps 'neotree-mode-map
      "RET" #'crj-open-item-and-close-neotree
-     [tab] (neotree-make-executor
-             :dir-fn #'neo-open-dir
-             :file-fn #'neotree-quick-look)
+     ;; [tab] (neotree-make-executor
+     ;;         :dir-fn #'neo-open-dir
+     ;;         :file-fn #'neotree-quick-look)
+      ;; "v" (neotree-make-executor :file-fn 'neo-open-file-vertical-split)
       "DEL" #'evil-window-prev
       "n" #'neotree-next-line
       "p" #'neotree-previous-line
@@ -802,8 +803,7 @@ The big picture here is a workflow in which you can either:
       "H" #'neotree-select-up-node
       "L" #'neotree-select-down-node
       "G" #'evil-goto-line
-      "gg" #'evil-goto-first-line
-      "v" (neotree-make-executor :file-fn 'neo-open-file-vertical-split)))
+      "gg" #'evil-goto-first-line))
 #+end_src
 
 *** Whitespace
