@@ -998,6 +998,8 @@ Only odd-ish customization here is to temporarily set the pulse time higher when
           pulsar-iterations 60
           pulsar-face 'pulsar-generic)
 
+    (pulsar-global-mode 1)
+
     :config
     (setq crj--far-jumping-functions '(evil-scroll-up
                                        evil-scroll-down
@@ -1036,8 +1038,6 @@ Only odd-ish customization here is to temporarily set the pulse time higher when
 
     (dolist (func crj--far-jumping-functions)
       (add-to-list 'pulsar-pulse-functions func))
-
-    (pulsar-global-mode 1)
 
     :general
     (leader
