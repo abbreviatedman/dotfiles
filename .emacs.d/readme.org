@@ -1032,10 +1032,15 @@ Only odd-ish customization here is to temporarily set the pulse time higher when
                                        evil-window-new
                                        evil-window-vnew))
 
-    (dolist (function crj--far-jumping-functions)
-      (add-to-list 'pulsar-pulse-functions function))
+    (dolist (func crj--far-jumping-functions)
+      (add-to-list 'pulsar-pulse-functions func))
 
-    (pulsar-global-mode 1))
+    (pulsar-global-mode 1)
+
+    :general
+    (leader
+      "vp" '(crj-pulse-line :which-key "Highlight current line with pulsing.")
+      "vh" '(pulsar-highlight-dwim :which-key "Highlight current line or region.")))
 #+end_src
 
 *** Line Numbers
