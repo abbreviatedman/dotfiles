@@ -951,16 +951,51 @@ We'll install Hydra, define its interface, and then put that hydra command in ou
 
 *** Scrolling
 
+**** Scroll In Small Jumps Without Moving The Cursor
+
+These little functions use Evil to scroll the page a medium distance without moving the point, which can be useful.
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :preface
+    (defun crj-scroll-down-without-moving-point ()
+      "Scrolls window down without moving point."
+      (interactive)
+      (evil-scroll-line-down 7))
+
+    (defun crj-scroll-up-without-moving-point ()
+      "Scrolls window up without moving point."
+      (interactive)
+      (evil-scroll-line-up 7))
+
+    :general
+    (:states 'motion
+     "C-S-E" '(crj-scroll-down-without-moving-point :which-key "Scroll window down without moving point.")
+     "C-S-Y" '(crj-scroll-up-without-moving-point :which-key "Scroll window up without moving point.")))
+#+end_src
+
+**** Highlighting Lines When Jumping
+
 This package makes scrolling big distances easier to follow by flashing the new line you've moved to.
+
+Only odd-ish customization here is to temporarily set the pulse time higher when pulsing a line manually—I only want a slight pulse when just generally jumping around Emacs, but when I want to see (or show an onlooker) a particular line, it should highlight it longer.
 
 #+name: pulse-line-on-big-jumps
 #+begin_src emacs-lisp :lexical yes
   (use-package pulsar
+    :preface
+    (defun crj-pulse-line ()
+      (interactive)
+      "Highlight the current line with a pulsating effect."
+      (let ((pulsar-iterations 120))
+        (pulsar-pulse-line)))
+
     :init
-    (setq pulsar-pulse t)
-    (setq pulsar-delay .01)
-    (setq pulsar-iterations 30)
-    (setq pulsar-face 'pulsar-generic)
+    (setq pulsar-pulse t
+          pulsar-delay .01
+          pulsar-iterations 60
+          pulsar-face 'pulsar-generic)
+
     :config
     (setq crj--far-jumping-functions '(evil-scroll-up
                                        evil-scroll-down
