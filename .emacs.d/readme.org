@@ -332,7 +332,7 @@ Well, check out this (useful!) keybinding:
   (use-package emacs
     :general
     (:states 'insert
-     "<S-backspace>" #'just-one-space))
+     "<S-backspace>" #'cycle-spacing))
 #+end_src
 
 See the <S-backspace> mapping? Well, it took me a good while to find the right way to write shift-backspace in the same syntax as the rest of it, and in the process, I happened upon this alternate syntax:
