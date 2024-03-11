@@ -985,10 +985,12 @@ Only odd-ish customization here is to temporarily set the pulse time higher when
   (use-package pulsar
     :preface
     (defun crj-pulse-line ()
-      (interactive)
       "Highlight the current line with a pulsating effect."
-      (let ((pulsar-iterations 120))
-        (pulsar-pulse-line)))
+      (interactive)
+      (let ((old-pulse-length pulsar-iterations))
+        (setq pulsar-iterations 120)
+        (pulsar-pulse-line)
+        (setq pulsar-iterations old-pulse-length)))
 
     :init
     (setq pulsar-pulse t
