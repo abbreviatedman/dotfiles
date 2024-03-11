@@ -1925,6 +1925,8 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
     :init
     (general-setq vc-follow-symlinks t
                   save-interprogram-paste-before-kill t
+                  mouse-drag-mode-line-buffer t
+                  mouse-drag-and-drop-region-cross-program t
                   recentf-max-saved-items 50
                   global-auto-revert-non-file-buffers t
                   auto-save-timeout 10
@@ -1938,6 +1940,7 @@ Either way, marvel at the fact that the Emacs maintainers have stubbornly held o
                   load-prefer-newer t)
     (defalias 'yes-or-no-p 'y-or-n-p)
     (repeat-mode 1)
+    (pixel-scroll-precision-mode 1)
     (recentf-mode 1)
     (global-auto-revert-mode 1)
     (save-place-mode 1)
