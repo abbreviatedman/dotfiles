@@ -3183,6 +3183,25 @@ Either way, I'm happy with the system so far!
     (aas-global-mode))
 #+end_src
 
+**** Emojis
+
+Emacs 29 added emojis; before this many of us used one of a few quality libraries.
+
+The only emoji commands I really need is search, powered by my completion engines. Without the power of Vertico et al., it might make sense to use ~emoji-recent~, but completion surfaces recent picks first.
+
+I'm also playing with the emoji category function ~emoij-insert~, which has a cool transient-based interface for diving into emoji categories. Could be good for wen you know what /kind/ of emoji you want, but not which particular emoji it will be. Also good for discovery of new emojis. And what would we be without curiosity and the thrill of the new?
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :general
+    (leader
+      "ie" '(emoji-search :which-key "Insert emoji using search.")
+      "IE" '(emoji-insert :which-key "Insert emoji by category."))
+    (:states '(insert emacs)
+     "M-i e" '(emoji-search :which-key "Insert emoji using search.")
+     "M-i E" '(emoji-insert :which-key  "Insert emoji by category.")))
+#+end_src
+
 **** Undoing
 
 ***** Saving Undo History
