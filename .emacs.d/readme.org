@@ -6086,6 +6086,8 @@ new features to check out once you do:
 - Corfu
 - Elisp Setup
 - Org-Babel
+*** Add Tree-Sitter modes
+*** Improve Eldoc, possibly with ~elisp-eldoc-var-docstring-with-value~ or ~elisp-eldoc-var-docstring~
 *** and upgrade packages
 *** fix LSP!
 *** make evil-word-delete functions add deletions to kill ring
