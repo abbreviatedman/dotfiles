@@ -3552,6 +3552,18 @@ The code above and below were fun coding challenges for me as I learn a bit more
        :foreground (modus-themes-get-color-value (intern (concat "fg-heading-" (number-to-string (1+ num)))) t))))
 #+end_src
 
+****** Give Bracket Context
+
+This nice setting gives you some basic "breadcrumbs"—info about the context of your code.
+
+Possibly at some point I'll add a proper breadcrumbs function. We'll see!
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq show-paren-context-when-offscreen t))
+#+end_src
+
 **** Languages
 
 Configurations specific to certain languages.
