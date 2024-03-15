@@ -4804,8 +4804,8 @@ Some Evil keybindings for handling scheduling. Although I got used to the built-
     :general
     (:keymaps 'org-mode-map
      :states '(normal insert)
-     "C-M-k" #'org-timestamp-up-day
-     "C-M-j" #'org-timestamp-down-day)
+     "C-M-j" #'org-timestamp-up-day
+     "C-M-k" #'org-timestamp-down-day)
 
     (leader
       "mcs" '(org-schedule :which-key "Add schedule to headline.")
