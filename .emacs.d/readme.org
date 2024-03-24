@@ -2248,6 +2248,7 @@ RSS might be a great technology? I'm only just getting into it with this package
   (use-package emacs
     :custom
     (proced-enable-color-flag t)
+
     :general
     (leader "apm" '(proced :which-key "Run system process manager.")))
 #+end_src
