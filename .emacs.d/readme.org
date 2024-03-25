@@ -345,7 +345,7 @@ See the <S-backspace> mapping? Well, it took me a good while to find the right w
      [(shift backspace)] #'just-one-space))
 #+end_src
 
- It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via ~npm~ with ~npm i -g [package name]~ on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version—so with the previous example, you'd write the command in a document as ~npm install --global [package name]~.
+It's /not/ a short way to write it, but I'm agreeing more and more these days with the idea that short-hands are a real time-saver for when you're entering commands all by yourself (perfect example is installing something globally via ~npm~ with ~npm i -g [package name]~ on your own machine by yourself), but if something's in a document, where someone (even just you several weeks later) needs to read and understand it, it should have the long-hand version—so with the previous example, you'd write the command in a document as ~npm install --global [package name]~.
 
  So! Maybe this is how these mappings should be written? ~[(control d)]~ instead of ~"C-d"~? Maybe! Bears thinking about, for sure.
 
@@ -2246,6 +2246,9 @@ RSS might be a great technology? I'm only just getting into it with this package
 #+name: process-editor-binding
 #+begin_src emacs-lisp :lexical yes
   (use-package emacs
+    :custom
+    (proced-enable-color-flag t)
+
     :general
     (leader "apm" '(proced :which-key "Run system process manager.")))
 #+end_src
@@ -3550,6 +3553,18 @@ The code above and below were fun coding challenges for me as I learn a bit more
        :foreground (modus-themes-get-color-value (intern (concat "fg-heading-" (number-to-string (1+ num)))) t))))
 #+end_src
 
+****** Give Bracket Context
+
+This nice setting gives you some basic "breadcrumbs"—info about the context of your code.
+
+Possibly at some point I'll add a proper breadcrumbs function. We'll see!
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq show-paren-context-when-offscreen t))
+#+end_src
+
 **** Languages
 
 Configurations specific to certain languages.
@@ -4790,8 +4805,8 @@ Some Evil keybindings for handling scheduling. Although I got used to the built-
     :general
     (:keymaps 'org-mode-map
      :states '(normal insert)
-     "C-M-k" #'org-timestamp-up-day
-     "C-M-j" #'org-timestamp-down-day)
+     "C-M-j" #'org-timestamp-up-day
+     "C-M-k" #'org-timestamp-down-day)
 
     (leader
       "mcs" '(org-schedule :which-key "Add schedule to headline.")
@@ -6086,6 +6101,8 @@ new features to check out once you do:
 - Corfu
 - Elisp Setup
 - Org-Babel
+*** Add Tree-Sitter modes
+*** Improve Eldoc, possibly with ~elisp-eldoc-var-docstring-with-value~ or ~elisp-eldoc-var-docstring~
 *** and upgrade packages
 *** fix LSP!
 *** make evil-word-delete functions add deletions to kill ring
