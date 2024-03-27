@@ -2250,7 +2250,12 @@ RSS might be a great technology? I'm only just getting into it with this package
     (proced-enable-color-flag t)
 
     :general
-    (leader "apm" '(proced :which-key "Run system process manager.")))
+    (leader "apm" '(proced :which-key "Run system process manager."))
+    (:keymaps 'proced-mode-map
+     "C-c u" '(proced-toggle-auto-update :which-key "Toggle proced auto-updating.")
+     "C-c U" '(proced-update :which-key "Update proced data.")))
+
+
 #+end_src
 
 **** Create and Monitor Custom Commands With Prodigy
