@@ -2010,7 +2010,28 @@ Set the current keyboard shortcut I'm typing to only show up after 3 seconds of 
     (setq echo-keystrokes 3))
 #+end_src
 
-*** Secrets
+*** Don't Yell At Me So Much
+
+#+name: quiet-emacs-don't-be-so-loud
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq warning-suppress-types '((comp))
+          ring-bell-function 'ignore))
+#+end_src
+
+*** Don't Mess With Custom System
+
+#+name: customization-file-setup
+#+begin_src emacs-lisp :lexical yes
+  (use-package emacs
+    :init
+    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
+    (unless (file-exists-p custom-file)
+      (write-region "" nil custom-file)))
+#+end_src
+
+** Secrets
 
 They're secrets. Oooh, exciting!
 
@@ -2037,27 +2058,6 @@ They're secrets. Oooh, exciting!
 #+end_src
 
 
-
-*** Don't Yell At Me So Much
-
-#+name: quiet-emacs-don't-be-so-loud
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq warning-suppress-types '((comp))
-          ring-bell-function 'ignore))
-#+end_src
-
-*** Don't Mess With Custom System
-
-#+name: customization-file-setup
-#+begin_src emacs-lisp :lexical yes
-  (use-package emacs
-    :init
-    (setq custom-file "~/.emacs.d/emacs-custom-file.el")
-    (unless (file-exists-p custom-file)
-      (write-region "" nil custom-file)))
-#+end_src
 
 ** Search
 
