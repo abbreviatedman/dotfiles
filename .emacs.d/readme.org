@@ -2032,11 +2032,6 @@ They're secrets. Oooh, exciting!
 
     (setenv "SSH_ASKPASS" "x11-ssh-askpass"))
 
-  (use-package ssh-agency
-    :defer t
-
-    :init
-    (general-setq ssh-agency-askpass nil))
 
   (use-package keychain-environment
     :init

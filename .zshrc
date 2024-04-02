@@ -350,7 +350,7 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 
 
 # ssh
-keychain ~/.ssh/id_rsa
+keychain ~/.ssh/id_ed25519
 . ~/.keychain/${HOST}-sh
 . ~/.keychain/${HOST}-sh-gpg
 
