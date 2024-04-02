@@ -350,7 +350,9 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 
 
 # ssh
-eval `keychain --eval --agents ssh id_ed25519`
+keychain ~/.ssh/id_rsa
+. ~/.keychain/${HOST}-sh
+. ~/.keychain/${HOST}-sh-gpg
 
 [ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten ssh"
 
