@@ -2037,7 +2037,13 @@ They're secrets. Oooh, exciting!
 
     :init
     (general-setq ssh-agency-askpass nil))
+
+  (use-package keychain-environment
+    :init
+    (keychain-refresh-environment))
 #+end_src
+
+
 
 *** Don't Yell At Me So Much
 
