@@ -351,6 +351,7 @@ alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commi
 
 # ssh
 eval `keychain --eval --agents ssh id_ed25519`
+
 [ "$TERM" = "xterm-kitty" ] && alias ssh="kitty +kitten ssh"
 
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
