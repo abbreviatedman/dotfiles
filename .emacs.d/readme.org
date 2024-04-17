@@ -4640,6 +4640,7 @@ Let's see if we can hit these quickly. We:
 - set a bunch of markdown-mode's configuration variables you can check out yourself
 - make sure our fonts scale appropriately
 - add a command to add a new heading, similar to org mode's approach (should definitely be refactored at some point)
+- add a command to kill the quick note buffer
 - set my favorite JS mode to run for JS code blocks: RJSX Mode
 - allow promotion, demotion, and movement in insert state
 - Add ~edit-indirect~, a package that allows you to edit an embedded code block in a dedicated code-oriented buffer in Markdown buffers, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
@@ -4650,16 +4651,7 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
 #+name: markdown-mode
 #+begin_src emacs-lisp :lexical yes
   (use-package markdown-mode
-    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
-
-    :gfhook #'variable-pitch-mode
-
-    :init
-    (setq markdown-indent-on-enter 'indent-and-new-item
-          markdown-list-indent-width 2
-          markdown-fontify-code-blocks-natively t
-          markdown-asymmetric-header t)
-
+    :preface
     (defun crj-add-markdown-header ()
       "Add a markdown header after the current one, at the same level."
       (interactive)
@@ -4682,6 +4674,27 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
           (re-search-backward markdown-regex-header nil t))
         (markdown-outline-level)))
 
+    (defun crj-kill-quick-note ()
+      "Kills the quick-note text and frame.
+
+  Also saves it with its contents gone."
+      (interactive)
+      (kill-region (buffer-end -1) (buffer-end 1))
+      (save-buffer)
+      (delete-frame))
+
+    :mode
+    ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)
+
+    :gfhook
+    #'variable-pitch-mode
+
+    :init
+    (setq markdown-indent-on-enter 'indent-and-new-item
+          markdown-list-indent-width 2
+          markdown-fontify-code-blocks-natively t
+          markdown-asymmetric-header t)
+
     :config
     (add-to-list 'markdown-code-lang-modes '("javascript" . rjsx-mode))
 
@@ -4693,7 +4706,8 @@ And we're done at a mere 58 lines of code! (Though... again, I can probably simp
       "M-j" #'markdown-move-down)
 
     (general-def '(insert normal) markdown-mode-map
-      "C-<return>" #'crj-add-markdown-header))
+      "C-<return>" #'crj-add-markdown-header
+      "C-c k" #'crj-kill-quick-note))
 
   (use-package edit-indirect)
 
