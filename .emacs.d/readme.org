@@ -4707,7 +4707,8 @@ And we're done at a mere 74 lines of code! (Though... again, I can probably simp
 
     (general-def '(insert normal) markdown-mode-map
       "C-<return>" #'crj-add-markdown-header
-      "C-c k" #'crj-kill-quick-note))
+      "C-c k" #'crj-kill-quick-note
+      "C-c C-k" #'crj-kill-quick-note))
 
   (use-package edit-indirect)
 
