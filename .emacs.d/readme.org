@@ -4646,7 +4646,7 @@ Let's see if we can hit these quickly. We:
 - Add ~edit-indirect~, a package that allows you to edit an embedded code block in a dedicated code-oriented buffer in Markdown buffers, which is another, "Oh, cuuuute, it thinks it's Org Mode!" kind of feature.
 - Add some Evil keybindings with Evil Markdown Mode.
 
-And we're done at a mere 74 lines of code! (Though... again, I can probably simplify my little custom add-a-heading function.)
+And we're done at a mere 74 lines of code! (Though… again, I can probably simplify my little custom add-a-heading function.)
 
 #+name: markdown-mode
 #+begin_src emacs-lisp :lexical yes
