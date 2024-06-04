@@ -5101,7 +5101,7 @@ Here's a library that sets pomodoro timers and clocks your time on Org Mode task
                                    org-pomodoro-overtime-sound-args
                                    org-pomodoro-long-break-sound-args
                                    org-pomodoro-short-break-sound-args))
-      (set player-args-setting "volume=15000"))
+      (set player-args-setting "volume=45000"))
 
     (setq org-pomodoro-manual-break t
           org-pomodoro-audio-player "/usr/sbin/sox"
