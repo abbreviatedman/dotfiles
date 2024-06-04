@@ -221,7 +221,7 @@ Additionally, the help map is kind of special, as it has a good vanilla keybindi
       "v" '(:ignore t :which-key "Visualize menu.")
       "a" '(:ignore t :which-key "Applications menu.")
       "ac" '(:ignore t :which-key "Calendar menu.")
-      "aM" '(:ignore t :which-key "Music menu.")
+      "am" '(:ignore t :which-key "Music menu.")
       "ap" '(:ignore t :which-key "Process management menu.")
       "acg" '(:ignore t :which-key "Google Calendar menu.")
       "g" '(:ignore t :which-key "Git menu.")
@@ -2171,9 +2171,9 @@ I love this no-hassle don't-have-to-think-about-what-to-listen-to background mus
 
     :general
     (leader
-      "aMr" '(crj-play-station-dwim :which-key "Play default internet radio.")
-      "aMR" '(eradio-stop :which-key "Stop playing internet radio.")
-      "aM C-r" '(eradio-play :which-key "Select radio station and play it.")))
+      "amr" '(crj-play-station-dwim :which-key "Play default internet radio.")
+      "amR" '(eradio-stop :which-key "Stop playing internet radio.")
+      "am C-r" '(eradio-play :which-key "Select radio station and play it.")))
 #+end_src
 
 *** Weather
@@ -2982,7 +2982,7 @@ Here's the configuration file for it, with the same overly complex password retr
 #+begin_src emacs-lisp :lexical yes
   (use-package mu4e
     :general
-    (leader "am" '(mu4e :which-key "Launch email.")))
+    (leader "aM" '(mu4e :which-key "Launch email.")))
 #+end_src
 
 ***** Basic Config
