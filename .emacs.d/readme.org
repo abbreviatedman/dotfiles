@@ -969,8 +969,7 @@ These little functions use Evil to scroll the page a medium distance without mov
       (evil-scroll-line-up 7))
 
     :general
-    (:states 'motion
-     "C-S-E" '(crj-scroll-down-without-moving-point :which-key "Scroll window down without moving point.")
+    ("C-S-E" '(crj-scroll-down-without-moving-point :which-key "Scroll window down without moving point.")
      "C-S-Y" '(crj-scroll-up-without-moving-point :which-key "Scroll window up without moving point.")))
 #+end_src
 
