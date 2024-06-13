@@ -4449,12 +4449,13 @@ Only two things aren't easy to figure out here:
   (use-package rjsx-mode
     :preface
     (defconst cv-snippet '("const " p " = " r>))
+    (defconst rq-snippet '("const " p " = require(" r> ")"))
     (defconst iff-snippet '("if (" p ") {" n> r> n "}"))
     (defconst iee-snippet '("if (" p ") {" n> p n "} else { " n> q n "}"))
     (defconst iei-snippet '("if (" p ") {" n> p n "} else if (" p ") { " n> q n "}"))
     (defconst sw-snippet '("switch (" p ") {" n> "case " p ":" n> p n> "default:" n> q n "}"))
     (defconst wh-snippet '("while (" p ") {" n> q n "}"))
-    (defconst fr-snippet '("for (let i = 0; i =" p ".length; i++) {" n> q n "}"))
+    (defconst fr-snippet '("for (let i = 0; i < " p ".length; i++) {" n> q n "}"))
     (defconst fi-snippet '("for (const " p " in " p ") {" n> q n "}"))
     (defconst fo-snippet '("for (const " p " of " p ") {" n> q n "}"))
     (defconst js-fu-snippet '("function " p "(" p ") {" n> q n "}"))
@@ -4476,6 +4477,7 @@ Only two things aren't easy to figure out here:
 
     (defun crj--add-rjsx-templates ()
       (add-to-list 'crj-buffer-local-templates `(cv ,@cv-snippet))
+      (add-to-list 'crj-buffer-local-templates `(rq ,@rq-snippet))
       (add-to-list 'crj-buffer-local-templates `(iff ,@iff-snippet))
       (add-to-list 'crj-buffer-local-templates `(iee ,@iee-snippet))
       (add-to-list 'crj-buffer-local-templates `(iei ,@iei-snippet))
@@ -4517,6 +4519,7 @@ Only two things aren't easy to figure out here:
     :config
     (aas-set-snippets 'rjsx-mode
       ";cv" (cons 'tempel cv-snippet)
+      ";rq" (cons 'tempel rq-snippet)
       ";iff" (cons 'tempel iff-snippet)
       ";iee" (cons 'tempel iee-snippet)
       ";iei" (cons 'tempel iei-snippet)
