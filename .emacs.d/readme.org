@@ -3456,6 +3456,13 @@ Settings for... coding.
 
 **** General
 
+***** Testing API Endpoints
+#+begin_src emacs-lisp :lexical yes
+  (use-package restclient)
+
+  (use-package ob-restclient
+    :straight (:host github :repo "alf/ob-restclient.el"))
+#+end_src
 ***** Debugging
 
 I will learn real debugging at some point, but in the meantime, here are two quick help commands.
