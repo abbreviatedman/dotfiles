@@ -314,9 +314,11 @@ And adding some buffer commands, including some custom ones.
     (leader
       "bz" #'(bury-buffer :which-key "Bury buffer.")
       "br" #'(revert-buffer :which-key "Revert buffer.")
+      "bR" #'(rename-buffer :which-key "Rename buffer.")
       "bW" #'(kill-buffer-and-window :which-key "Kill buffer and close window.")
       "bd" #'(crj-kill-or-bury-current-buffer :which-key "Kill buffer.")
       "fr" #'(rename-visited-file :which-key "Rename current file.")
+      "fR" #'(recover-this-file :which-key "Load auto-save version of current file.")
       "bq" #'(crj-save-and-kill-or-bury-current-buffer :which-key "Save and kill buffer.")
       "fq" #'(crj-save-and-kill-or-bury-current-buffer :which-key "Save and kill buffer.")))
 #+end_src
