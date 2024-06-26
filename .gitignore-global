@@ -1,13 +1,10 @@
 node\_modules
+\.env
 DS\_Store
 .*\.sw.
 \.dir-locals\.el
 \.projectile
 /.log/
-rest\.org
-REST\.org
-rest\.txt
-REST\.txt
 SQL\.org
 sql\.org
 \.sqls
