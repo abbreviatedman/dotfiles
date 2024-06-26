@@ -7069,7 +7069,7 @@ This was occasionally useful, should be easy to get back
 
 **** add better shortcut for it
 
-**** rename buffer with project name prefix
+**** rename buffer with project name prefix, convert from projectile to project.el
 
 #+begin_src emacs-lisp :lexical yes :tangle no
   (defun rename-buffer-with-project-name-prefix ()
