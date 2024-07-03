@@ -5649,13 +5649,13 @@ Don't be like me.
   (use-package eglot
     :init
     (setq completion-category-overrides '((eglot (styles orderless))))
-    ;; (general-add-hook '(rjsx-mode-hook typescript-mode-hook clojure-mode-hook) #'eglot-ensure)
+    (general-add-hook '(rjsx-mode-hook typescript-mode-hook clojure-mode-hook) #'eglot-ensure)
 
     ;; This advice might break things... copier beware!
     (defun crj--remove-eglot-modeline-extra-info ()
       (eglot-forget-pending-continuations (eglot-current-server)))
 
-    (advice-add 'eglot--mode-line-format :before #'crj--remove-eglot-modeline-extra-info)
+    ;; (advice-add 'eglot--mode-line-format :before #'crj--remove-eglot-modeline-extra-info)
 
     :config
     (add-to-list 'eglot-server-programs
