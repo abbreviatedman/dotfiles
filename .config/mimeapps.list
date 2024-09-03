@@ -1,9 +1,9 @@
 [Default Applications]
-x-scheme-handler/http=userapp-Floorp-LJERJ2.desktop
-x-scheme-handler/https=userapp-Floorp-LJERJ2.desktop
+x-scheme-handler/http=vivaldi-stable.desktop
+x-scheme-handler/https=vivaldi-stable.desktop
 x-scheme-handler/ftp=google-chrome.desktop
 x-scheme-handler/chrome=userapp-Floorp-LJERJ2.desktop
-text/html=userapp-Floorp-LJERJ2.desktop
+text/html=vivaldi-stable.desktop
 application/x-extension-htm=userapp-Floorp-LJERJ2.desktop
 application/x-extension-html=userapp-Floorp-LJERJ2.desktop
 application/x-extension-shtml=userapp-Floorp-LJERJ2.desktop
@@ -19,6 +19,8 @@ application/pdf=epdfview.desktop
 application/x-bittorrent=deluge.desktop
 x-scheme-handler/postman=Postman.desktop
 x-scheme-handler/webcal=vivaldi-stable.desktop
+x-scheme-handler/about=vivaldi-stable.desktop
+x-scheme-handler/unknown=vivaldi-stable.desktop
 
 [Added Associations]
 x-scheme-handler/http=google-chrome.desktop;userapp-Floorp-6S9RI2.desktop;userapp-Floorp-LJERJ2.desktop;
