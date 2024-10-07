@@ -443,7 +443,7 @@ Here are my font settings.
     (defvar crj--variable-pitch-font "IBM Plex Serif")
     (defvar crj--coding-font crj--variable-pitch-coding-font)
     (defvar crj--emoji-font "Noto Color Emoji")
-    (defvar crj--default-font-size 110)
+    (defvar crj--default-font-size 140)
 
     :config
     (when (member "Noto Color Emoji" (font-family-list))
@@ -4575,6 +4575,38 @@ Only two things aren't easy to figure out here:
     :mode
     (("\\.ts\\'" . typescript-mode)
      ("\\.tsx\\'" . typescript-mode)))
+#+end_src
+
+***** Python
+
+The /other/ lingua franca language.
+
+
+****** Add IDE features
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package ein
+    :init
+    (general-setq ein:jupyter-default-server-command "/usr/sbin/jupyter"))
+
+  (use-package elpy
+    :init
+    (elpy-enable)
+    (general-setq python-shell-interpreter "jupyter"
+                  python-shell-interpreter-args "console --simple-prompt"
+                  python-shell-prompt-detect-failure-warning nil)
+
+    (add-to-list 'python-shell-completion-native-disabled-interpreters "jupyter"))
+#+end_src
+
+
+****** Auto-Format Python Buffers
+
+#+begin_src emacs-lisp :lexical yes
+  (use-package blacken
+    :general
+    (:keymaps 'python-mode-map
+     (leader "bf" '(blacken-buffer :which-key "Auto-format buffer."))))
 #+end_src
 
 ***** Using Prettier To Format Buffers
