@@ -1,7 +1,6 @@
 # Keyboard configs.
 # Still figuring this out, not universal across my systems yet.
 
-# Maybe add xmodmap call here, if it's idempotent now.
 exec --no-startup-id xcape
 exec_always --no-startup-id xset r rate 1000
 exec_always --no-startup-id xmodmap ~/.Xmodmap
@@ -11,7 +10,7 @@ exec --no-startup-id "xrandr --output eDP-1 --mode 1920x1080 --pos 0x0 --rotate 
 
 # battery warning
 # warns at 30% and half that (15)
-exec --no-startup-id i3-battery-popup -L 98 -t 30s
+exec --no-startup-id i3-battery-popup -L 30 -t 30s
 
 # video compositor
 exec --no-startup-id picom
@@ -87,9 +86,9 @@ bindsym $mod+BackSpace exec emacsclient -cn -a "" -e "(multi-vterm)"
 # start non-emacs terminal
 bindsym $mod+Shift+BackSpace exec "kitty"
 # start work browser
-bindsym $mod+Shift+Return exec "floorp"
+bindsym $mod+Shift+Return exec "vivaldi-stable"
 # start personal browser
-bindsym $mod+$alt+Return exec "vivaldi-stable"
+bindsym $mod+$alt+Return exec "floorp"
 # start emacs browser
 bindsym $mod+Return exec emacsclient -cn -a "" -e '(switch-to-buffer "*Messages*") (goto-char (point-max))'
 
